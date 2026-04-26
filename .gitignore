@@ -1,0 +1,22 @@
+*
+
+!.gitignore
+
+# 包主体
+!gb7714.typ
+
+# 用户手册（编译产物）
+!manual.pdf
+
+# GB/T 7714-2015 国标复刻
+!2015国标复刻.typ
+!2015国标复刻.pdf
+
+# 复刻所引用的 .bib 数据
+!2015-appx.bib
+!2015-mainmatter.bib
+
+# GitHub Actions CI 配置
+!.github/
+!.github/workflows/
+!.github/workflows/ci.yml

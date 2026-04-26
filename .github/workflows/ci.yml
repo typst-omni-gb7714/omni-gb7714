@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Compile GB/T 7714-2015 复刻
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            fonts-noto-cjk \
+            fonts-noto-cjk-extra \
+            fonts-libertinus \
+            fonts-lmodern
+
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v3
+        with:
+          typst-version: '0.14.2'
+
+      - name: Compile 2015国标复刻.typ
+        run: typst compile --root . 2015国标复刻.typ /tmp/gb2015-out.pdf
+
+      - name: Upload compiled PDF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gb2015-pdf
+          path: /tmp/gb2015-out.pdf
+          retention-days: 7
+
+      - name: Verify shipped artifacts exist
+        run: |
+          test -f manual.pdf
+          test -f 2015国标复刻.pdf
+          test -f 2015-appx.bib
+          test -f 2015-mainmatter.bib
+          test -f gb7714.typ
