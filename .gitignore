@@ -2,6 +2,9 @@
 
 !.gitignore
 
+# README
+!README.md
+
 # 包主体
 !gb7714.typ
 
