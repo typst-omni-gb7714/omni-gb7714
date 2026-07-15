@@ -35,21 +35,21 @@
   let mode = eff-cite-punct-style
   if type(mode) == dictionary { mode = mode.at(eff-style, default: "by-doc-and-style") }
   if mode == auto { mode = "by-doc-and-style" }
-  let cjk-document = document-lang == "zh" or document-lang == "ja"
-  let cjk-entry = entry-lang == "zh" or entry-lang == "ja"
+  let cj-document = document-lang == "zh" or document-lang == "ja"
+  let cj-entry = entry-lang == "zh" or entry-lang == "ja"
   let is-author-date = eff-style == "author-date"
   if mode == "by-doc-and-style" {
-    if is-author-date { if cjk-document { "full" } else { "half-with-space" } } else { "half" }
+    if is-author-date { if cj-document { "full" } else { "half-with-space" } } else { "half" }
   } else if mode == "by-doc-no-space" {
-    if is-author-date and cjk-document { "full" } else { "half" }
+    if is-author-date and cj-document { "full" } else { "half" }
   } else if mode == "by-doc-with-space" {
-    if is-author-date and cjk-document { "full" } else { "half-with-space" }
+    if is-author-date and cj-document { "full" } else { "half-with-space" }
   } else if mode == "by-entry-and-style" {
-    if cjk-entry { "full" } else if is-author-date { "half-with-space" } else { "half" }
+    if cj-entry { "full" } else if is-author-date { "half-with-space" } else { "half" }
   } else if mode == "by-entry-no-space" {
-    if cjk-entry { "full" } else { "half" }
+    if cj-entry { "full" } else { "half" }
   } else if mode == "by-entry-with-space" {
-    if cjk-entry { "full" } else { "half-with-space" }
+    if cj-entry { "full" } else { "half-with-space" }
   } else { mode }
 
 }
@@ -93,9 +93,9 @@
 }
 
 #let resolve-bib-document(punct-style, document-lang) = {
-  let cjk-document = document-lang == "zh" or document-lang == "ja"
-  if punct-style == "by-doc-with-space" { if cjk-document { "full" } else { "half-with-space" } }
-  else if punct-style == "by-doc-no-space" { if cjk-document { "full" } else { "half" } }
+  let cj-document = document-lang == "zh" or document-lang == "ja"
+  if punct-style == "by-doc-with-space" { if cj-document { "full" } else { "half-with-space" } }
+  else if punct-style == "by-doc-no-space" { if cj-document { "full" } else { "half" } }
   else { punct-style }
 }
 
