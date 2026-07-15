@@ -1,0 +1,32 @@
+[package]
+name = "omni-gb7714"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["吴俊豪"]
+license = "Apache-2.0"
+description = "GB/T 7714 参考文献格式化包（基于 citegeist），支持 2015/2025、双语、多列表、脚注引用等"
+repository = "https://github.com/"
+keywords = ["bibliography", "citation", "GB/T 7714", "Chinese", "reference"]
+categories = ["text"]
+# 发布物只保留：lib.typ + src/ + typst.toml + README.md + LICENSE。
+# 其余（构建产物 / 测试 / 手册工程 / 草稿 / 基准 / 本地 quan 旧副本）一律排除。
+exclude = [
+  "quan",
+  "tests",
+  "easy-zh-manual",
+  "bench",
+  "ci",
+  "_probe",
+  ".backup",
+  ".github",
+  "*.pdf",
+  "2015国标复刻.typ",
+  "eg1.typ",
+  "notes-typst-cite-ref.typ",
+  "2015-mainmatter.bib",
+  "2015-appx.bib",
+  ".gitignore",
+  ".git",
+  ".claude",
+  ".DS_Store",
+]
