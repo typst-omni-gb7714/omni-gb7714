@@ -53,6 +53,8 @@
   name-suffix-separator: auto,
   /// 译者截断词（等/et al.）与角色词（译/trans.）间分隔符：auto（跟社区 CSL：中西逗号「等, 译」）/ ""（GB 原文紧贴形「等译」）/ 标点字符（感知）/ 任意字符串
   et-al-translator-separator: auto,
+  /// 析出文献题名与其出处（母体）间的分隔符——GB 里那个 `//`（biblatex-gb7714 的「析出文献标识符号」gbpunctin）：默认 "//"（全语言通用）/ 任意字符串 / 多语言字典（如 (zh: ". 见: ", en: ". In: ")，未点名的回落 //）
+  component-part-separator: "//",
   /// 参考文献表「著者 ↔ 出版日期」分隔符：auto（随 version：2005 句点、2015/2025 逗号，全半角感知）/ 标点字符 / 任意字符串（字面量）
   bib-name-date-separator: auto,
   /// 参考文献表「等 / et al」触发阈值：作者多于 N 才截断（国标默认 3）
@@ -267,7 +269,7 @@
     cite-et-al-use-first: cite-et-al-use-first, cite-et-al-use-last: cite-et-al-use-last, cite-terms-lang: cite-terms-lang, cite-name-style: cite-name-style,
     cite-name-date-separator: cite-name-date-separator,
     cite-completion: cite-completion,
-    bib-name-style: bib-name-style, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, bib-name-date-separator: bib-name-date-separator, bib-et-al-min: bib-et-al-min, bib-et-al-use-first: bib-et-al-use-first, bib-et-al-use-last: bib-et-al-use-last,
+    bib-name-style: bib-name-style, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, bib-name-date-separator: bib-name-date-separator, bib-et-al-min: bib-et-al-min, bib-et-al-use-first: bib-et-al-use-first, bib-et-al-use-last: bib-et-al-use-last,
     show-anon: show-anon, show-no-date: show-no-date, date-fallback: date-fallback, show-et-al: show-et-al, dedup-author-editor: dedup-author-editor, creator-idem: creator-idem,
     title: title, entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, entry-spacing: entry-spacing, number-gutter: number-gutter,
     numbering-style: numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width,

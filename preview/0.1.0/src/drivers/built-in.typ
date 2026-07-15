@@ -207,7 +207,7 @@
     let event-and-year = if event != none and year != none { [#event#p("comma")#year] }
       else if event != none { event } else { year }
     let body = title
-    if event-and-year != none { body = [#body#"//"#event-and-year] }
+    if event-and-year != none { body = [#body#(punct.resolve-separator(opts.at("component-part-separator", default: "//"), entry, punct-style, custom-punct, "//"))#event-and-year] }
     if pages-part != none {
       let pages-separator = _pages-separator(entry, punct-style, custom-punct, space-before-pages)
       body = [#body#pages-separator#pages-part]
@@ -231,7 +231,7 @@
 
   let container = if host-creator == none and host-title == none { "" } else { _join((host-creator, host-title), p("period")) }
   let title-with-translator = if translator != none { title + p("period") + translator } else { title }
-  let component-part-body = if container != "" { title-with-translator + "//" + container } else { title-with-translator }
+  let component-part-body = if container != "" { title-with-translator + punct.resolve-separator(opts.at("component-part-separator", default: "//"), entry, punct-style, custom-punct, "//") + container } else { title-with-translator }
   if imprint-block != none {
     if pages-part != none {
       let pages-separator = _pages-separator(entry, punct-style, custom-punct, space-before-pages)
