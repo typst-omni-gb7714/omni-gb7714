@@ -901,6 +901,8 @@
   if show-no-date == auto { show-no-date = (style.at("bib", default: style.at("cite", default: "numeric")) == "author-date") }
   let _cite-form-state = state("gb7714-cite-form-override", auto)
   let _cite-style-state = state("gb7714-cite-style-override", auto)
+
+  let _uses-author-date-label = state("gb7714-uses-author-date-label", false)
   let _cite-punct-style-state = state("gb7714-cite-punct-style-override", auto)
   let _cite-supplement-style-state = state("gb7714-cite-supplement-style-override", auto)
   let _cite-name-style-state = state("gb7714-cite-name-style-override", auto)
@@ -1283,7 +1285,11 @@
   let _cite-axis-author-date = style.at("cite", default: "numeric") == "author-date"
   let _escalate-given-name = disambiguate.given-name == true or (disambiguate.given-name == auto and _cite-axis-author-date)
   let _expand-names = disambiguate.names == true or (disambiguate.names == auto and _cite-axis-author-date)
-  let _disambiguation = author-date-cite.disambiguation(bib-data, cite-et-al-min: cite-et-al-min, cite-et-al-use-first: cite-et-al-use-first, name-style: cite-name-style-eff, sort-keys: sort-keys, escalate-given-name: _escalate-given-name, expand-names: _expand-names)
+
+  let _need-global-disambiguation = _cite-axis-author-date or disambiguate.date == true
+  let _disambiguation = if _need-global-disambiguation {
+    author-date-cite.disambiguation(bib-data, cite-et-al-min: cite-et-al-min, cite-et-al-use-first: cite-et-al-use-first, name-style: cite-name-style-eff, sort-keys: sort-keys, escalate-given-name: _escalate-given-name, expand-names: _expand-names)
+  } else { (escalations: (:), cite-suffixes: (:)) }
 
   let _author-date-cite-label(key, name-format: cite-name-style-eff, suffixes: none, escalations: none, name-separator: ", ", et-al-min: auto, et-al-use-first: auto, et-al-use-last: auto, parts: false, name-punct-style: "half-with-space", terms-lang: "by-entry", document-lang: "en") = {
     let entry = bib-data.at(key, default: none)
@@ -1656,7 +1662,8 @@
 
         let eff = if type(style) == str and style in ("numeric", "author-date") { style } else { auto }
         if eff == auto { with-form }
-        else { [#_cite-style-state.update(eff)#with-form#_cite-style-state.update(auto)] }
+
+        else { [#(if eff == "author-date" { _uses-author-date-label.update(_ => true) })#_cite-style-state.update(eff)#with-form#_cite-style-state.update(auto)] }
       }
     let with-punct = if punct-style == auto { with-style }
       else { [#_cite-punct-style-state.update(punct-style)#with-style#_cite-punct-style-state.update(auto)] }
@@ -2064,7 +2071,10 @@
       custom-terms: eff-custom-terms,
     ))
 
-    let _disambiguation = author-date-cite.disambiguation(bib-data, cite-et-al-min: cite-et-al-min, cite-et-al-use-first: cite-et-al-use-first, name-style: cite-name-style-eff, sort-keys: sort-keys, scope-keys: filtered.map(p => p.at(0)), escalate-given-name: eff-escalate-given-name, expand-names: eff-expand-names)
+    let _list-needs-disambiguation = eff-cite-style == "author-date" or eff-bib-style == "author-date" or eff-disambiguate.date == true or _uses-author-date-label.final()
+    let _disambiguation = if _list-needs-disambiguation {
+      author-date-cite.disambiguation(bib-data, cite-et-al-min: cite-et-al-min, cite-et-al-use-first: cite-et-al-use-first, name-style: cite-name-style-eff, sort-keys: sort-keys, scope-keys: filtered.map(p => p.at(0)), escalate-given-name: eff-escalate-given-name, expand-names: eff-expand-names)
+    } else { (escalations: (:), cite-suffixes: (:)) }
 
     let eff-suffixes = if eff-disambiguate.date == false { (:) } else { _disambiguation.cite-suffixes }
     let eff-escalations = _disambiguation.escalations
