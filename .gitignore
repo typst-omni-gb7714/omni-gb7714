@@ -1,0 +1,5 @@
+# 钉版 typst 二进制（~40M，克隆者自备 typst 0.15+）
+tests/bin/
+# 系统 / 构建垃圾
+**/.DS_Store
+**/__pycache__/

@@ -1,0 +1,89 @@
+ footnote-ibid
+ *紧邻*重复（上一条脚注引用就是同一文献）是否简化为「同上(: 页码)」。
+ 期望 auto（缺省）= true：官方 note CSL 梯子的紧邻档。 false：紧邻不特殊化，与隔开重复一样取 footnote-repeat-
+ style 的值。 「紧邻」的判定：上一条脚注引用是同一文献即可，中间夹一条普通脚注不破坏紧邻关系。 「同上」的页码
+ 语义走 CSL position 算法：与上次同页码时不重复页码；上次有页码本次没有时降级为隔开。 引语词按被引条目语言取（中
+ 文条目「同上」、西文条目 Ibid.）。
+
+
+▸ auto（缺省 → true）
+
+首① 邻② 换③ 隔④。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ true
+
+首⑤ 邻⑥ 换⑦ 隔⑧。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ false（紧邻退回 footnote-repeat-style = number）
+
+首⑨ 邻⑩ 换⑪ 隔⑫。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ true · 页码语义（同页不重复、异页带页码、上次有页码本次没有 → 降级为隔开）
+
+首⑬ 同页⑭ 异页⑮ 无页⑯。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+
+▸ true · 中间夹一条普通脚注（不破坏紧邻）
+
+首⑰ 夹⑱ 邻⑲。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+
+▸ true · 西文条目（Ibid.）
+
+首⑳ 邻㉑ 换㉒ 隔㉓。
+[1] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[2] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+
+ ①
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ②
+   同上.
+ ③
+   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ ④
+   同①.
+ ⑤
+   同上.
+ ⑥
+   同上.
+ ⑦
+   See note ③.
+ ⑧
+   同①.
+ ⑨
+   同①.
+ ⑩
+   同①.
+ ⑪
+   See note ③.
+ ⑫
+   同①.
+ ⑬
+   同上：10.
+ ⑭
+   同上.
+ ⑮
+   同上：20.
+ ⑯
+   同①.
+ ⑰
+   同上.
+ ⑱
+   一条普通脚注
+ ⑲
+   同上.
+ ⑳
+   See note ③.
+ ㉑
+   Ibid.
+ ㉒
+   同①.
+ ㉓
+   See note ③.
+

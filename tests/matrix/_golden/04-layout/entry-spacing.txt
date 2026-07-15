@@ -1,0 +1,26 @@
+ entry-spacing
+ 条目之间的垂直间距。
+ 期望 auto（缺省）：跟随文档的段间距（par.spacing）。传长度则固定。 0pt = 条目紧贴（只剩行距）。
+
+
+▸ auto（缺省，跟随 par.spacing）
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+▸ 0pt
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+▸ 1.2em
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+

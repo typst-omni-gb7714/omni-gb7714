@@ -1,0 +1,36 @@
+ end-with-period
+ 条目末尾是否自动补句号。
+ 期望 true（缺省）：条目不以缩写点结尾时补 .。false：不补。 不叠句点：已以缩写点收尾（n.d. / et al. / 3rd ed.）的
+ 条目不会得到 ..。 与 show-annotation 联动：开注释时句点接在注释之后。
+
+
+▸ true（缺省）
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+▸ false
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12
+
+▸ true · 条目以缩写点收尾（不叠成 ..）
+
+正文：[1-2]
+[1] Brown B. No Year English[M]. NY：P.
+[2] 周七. 无年中文[M]. 北京：社.
+
+▸ true + show-annotation（句点接在注释后）
+
+正文：[1]
+[1] 午. 带注释字段的书[M]. 北京：社，2020. 这是注释内容
+
+▸ false + show-annotation
+
+正文：[1]
+[1] 午. 带注释字段的书[M]. 北京：社，2020. 这是注释内容
+

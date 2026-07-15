@@ -1,0 +1,31 @@
+ italic-book-title
+ 西文专著 / 论文集题名（非析出）是否斜体。
+ 期望 false（缺省）   ：正体。true：斜体。只作用于西文的专著类题名（析出文献的析出题名不斜）。             斜体是字形，                       ⚠️
+ pdftotext 抽出来的文本一模一样——两档 golden 相同，差异要开 PDF 看。 字形差异由 parity/ 的复刻对拍与人工审 PDF 兜
+ 底。
+
+
+▸ false（缺省）
+
+正文：[1-4]
+[1] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[2] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[3] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[4] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+
+▸ true
+
+正文：[1-4]
+[1] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[2] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[3] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[4] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+
+▸ true + italic-journal: true（两轴同开）
+
+正文：[1-4]
+[1] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[2] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[3] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[4] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+

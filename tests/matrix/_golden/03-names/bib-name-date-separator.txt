@@ -1,0 +1,42 @@
+ bib-name-date-separator
+ 文献表里责任者与出版年之间的分隔符（著者-出版年制）。
+ 期望 auto 随版本：2005 用句点、2015 / 2025 用逗号，都做全 / 半角感知。 显式字符串走三态；也收多语言字典（按条目
+ 语言挑值，未点到的退回 auto 档派生值）。
+
+
+▸ auto · 2025（缺省）
+
+正文：（张三等，2020；Smith et al.，2021）
+张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸ auto · 2005（句点）
+
+正文：（张三等，2020；Smith et al. 2021）
+张三, 李四, 王五, 等. 2020. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社: 12-25.
+SMITH J, DOE J, ROE R, et al. 2021. English Book Example[M]. 2nd ed. New York: Example Press: 30-45.
+
+▸ ","
+
+正文：（张三等，2020；Smith et al.，2021）
+张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸""
+
+正文：（张三等，2020；Smith et al.，2021）
+张三，李四，王五，等 2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al. 2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸ { — }（verbatim）
+
+正文：（张三等，2020；Smith et al.，2021）
+张三，李四，王五，等 — 2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al. — 2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸ 多语言字典 (zh: 「，」, rest: 「, 」)
+
+正文：（张三等，2020；Smith et al.，2021）
+张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al., 2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+

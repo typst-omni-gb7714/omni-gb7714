@@ -1,0 +1,26 @@
+ namea / nameatype · options
+ 载入期对 biblatex 名字字段的改写，与条目级开关。
+ 期望 namea / nameatype：biblatex 的自定义名字表。底层解析器只把 editora / editorb / editorc 系列解析进姓名结构，
+ namea 不解析——于是以 namea（collaborator）承载编制者作主要责任者 的条目（地图，better.bib 约定）会丢掉责任者。 载
+ 入期把字段名 namea 改写成 editora、nameatype 改写成 editoratype（只匹配字段声明位），把责任者救回来。 条目级
+ options：use-prefix=true 让该条的西文姓名前缀计入排序与标注，优先于全局 sort-use-prefix。
+
+
+▸ namea 承载的编制者（不丢责任者）
+
+[1] 谭其骧. 中国历史地图集：第 2 册[CM]. 北京：地图出版社，1982：6.
+
+▸ namea · 著者-出版年制（标签也拿得到责任者）
+
+谭其骧，1982. 中国历史地图集：第 2 册[CM]. 北京：地图出版社：6.
+
+▸ 条目级 options: use-prefix=true（全局 false）
+
+重八，2020. 多音字用 sortkey 指定排序值[M]. 北京：社.
+Meer J v d，2020. 条目级 options 压全局[M]. NY：P.
+
+▸ 条目级 options 与全局 true 同向
+
+重八，2020. 多音字用 sortkey 指定排序值[M]. 北京：社.
+Meer J v d，2020. 条目级 options 压全局[M]. NY：P.
+

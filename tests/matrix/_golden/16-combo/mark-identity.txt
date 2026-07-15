@@ -1,0 +1,83 @@
+  联动：码即身份
+  标识码怎么定，定了之后牵动格式路由与显示控制。
+  期望 取码链（自上而下，先命中先赢）： note 劫持 > usera > entrytypeid > entrysubtype > mark 字段 > custom-marks > 版
+  本化默认 > auto-table。 条目字段永远压配置，配置压内置默认。 码定了之后：
+  • 格式路由按码走（拿到 D 就走学位论文驱动）——「码即身份」；
+  • show-mark / show-url / show-pid 的大写码键按码匹配（custom-marks 登记的自造码自动并入合法集）；
+  • custom-drivers 的大写码键按码匹配（优先级仍是 entry_type > 码）。
+
+  语料 mk-* 五条正是取码链的五个通道。
+
+
+▸ 缺省（五个通道各自生效，mk-none 兜底）
+
+正文：[1-5]
+[1] 戌. usera 显式码[M/OL]. 2020. h​t​t​p​s​:​/​/​e​.​c​o​m.
+[2] 亥. entrytypeid 显式码[J]. 2020.
+[3] mark 字段显式码[S].
+[4] 乙丑. entrysubtype 等值[DS]. （2020）.
+[5] 丙寅. 无任何标识线索[Z]. 2020.
+
+▸ custom-marks: (misc: "YY") —— 配置压内置默认，但压不过条目字段
+
+正文：[1-5]
+[1] 戌. usera 显式码[M/OL]. 2020. h​t​t​p​s​:​/​/​e​.​c​o​m.
+[2] 亥. entrytypeid 显式码[J]. 2020.
+[3] mark 字段显式码[S].
+[4] 乙丑. entrysubtype 等值[DS]. （2020）.
+[5] 丙寅. 无任何标识线索[YY]. 2020.
+
+▸ show-mark 按码关：(rest: true, S: false)（mk-mark 的 [S] 消失）
+
+正文：[1-5]
+[1] 戌. usera 显式码[M/OL]. 2020. h​t​t​p​s​:​/​/​e​.​c​o​m.
+[2] 亥. entrytypeid 显式码[J]. 2020.
+[3] mark 字段显式码.
+[4] 乙丑. entrysubtype 等值[DS]. （2020）.
+[5] 丙寅. 无任何标识线索[Z]. 2020.
+
+▸ show-mark 按 entry_type 关：(misc: false)（五条全关）
+
+正文：[1-5]
+[1] 戌. usera 显式码. 2020. h​t​t​p​s​:​/​/​e​.​c​o​m.
+[2] 亥. entrytypeid 显式码. 2020.
+[3] mark 字段显式码.
+[4] 乙丑. entrysubtype 等值. （2020）.
+[5] 丙寅. 无任何标识线索. 2020.
+
+▸ 优先级：entry_type 键胜过码键 (misc: true, S: false)
+
+正文：[1-5]
+[1] 戌. usera 显式码[M/OL]. 2020. h​t​t​p​s​:​/​/​e​.​c​o​m.
+[2] 亥. entrytypeid 显式码[J]. 2020.
+[3] mark 字段显式码[S].
+[4] 乙丑. entrysubtype 等值[DS]. （2020）.
+[5] 丙寅. 无任何标识线索[Z]. 2020.
+
+▸ custom-drivers 按码接管：(J: 模板)（mk-entrytypeid 走模板）
+
+正文：[1-5]
+[1] 戌. usera 显式码[M/OL]. 2020. h​t​t​p​s​:​/​/​e​.​c​o​m.
+[2] 【J 模板】亥. entrytypeid 显式码.
+[3] mark 字段显式码[S].
+[4] 乙丑. entrysubtype 等值[DS]. （2020）.
+[5] 丙寅. 无任何标识线索[Z]. 2020.
+
+▸ custom-drivers 按 entry_type 接管：(misc: 模板)（五条全走模板，优先于码键）
+
+正文：[1-5]
+[1] 【misc 模板】戌. usera 显式码.
+[2] 【misc 模板】亥. entrytypeid 显式码.
+[3] 【misc 模板】甲子. mark 字段显式码.
+[4] 【misc 模板】乙丑. entrysubtype 等值.
+[5] 【misc 模板】丙寅. 无任何标识线索.
+
+▸ custom-marks 自造码 + show-mark + custom-drivers 三者按码串起来
+
+正文：[1-5]
+[1] 戌. usera 显式码[M/OL]. 2020. h​t​t​p​s​:​/​/​e​.​c​o​m.
+[2] 亥. entrytypeid 显式码[J]. 2020.
+[3] mark 字段显式码[S].
+[4] 乙丑. entrysubtype 等值[DS]. （2020）.
+[5] 【YY 模板】丙寅. 无任何标识线索[YY].
+

@@ -1,0 +1,50 @@
+ entry-first-line-indent
+ 条目首行的额外缩进。
+ 期望 缺省 0pt。它是条目正文那一段的段落量，与原生 par(first-line-indent:) 同名同义， 四种版式下都参与（成列档
+ 下相对正文列左缘再缩）。 与 entry-hanging-indent 正交、不互斥——原生 par 里首行在 first-line-indent、余行在
+ hanging-indent，两个量各管各。 国标原文式（首行缩进、余行顶格）     ：顺序编码制直接写 entry-first-line-indent: 2em
+（余行缩进在该制 auto 即 0pt）。
+
+
+▸ 0pt（缺省）
+
+正文：[1-2]
+[1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+[2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+▸ 2em
+
+正文：[1-2]
+[1]      孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+[2]      Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+▸ 2em · entry-hanging-indent: 0pt（纯段落缩进式）
+
+正文：[1-2]
+[1]      孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+[2]      Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+▸ 2em · 著者-出版年制
+
+正文：（孙一，2018；Brown et al.，2023）
+      孙一，2018. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社：50-60.
+      Brown B，Green G，2023. English Journal Article[J]. Journal of Examples，12（4）：100-115.
+
+▸ 2em · number-placement: margin
+
+正文：[1-2]
+[1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+[2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+▸ 2em · number-placement: inline
+
+正文：[1-2]
+      [1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+      [2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+▸ 国标原文式：顺序编码制直接写 first-line 2em（余行 auto 即 0pt）
+
+正文：[1-2]
+      [1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+      [2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+

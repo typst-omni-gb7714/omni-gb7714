@@ -1,0 +1,110 @@
+ 联动：占位词是查找键
+ 佚名 / 无日期两个占位词牵动标注、著录、排序、消歧四处。
+ 期望 占位词是查找键——读者拿标签「(责任者, 年份)」在按责任者字顺排的表里定位。因此： 两侧必须同源（行内 佚名 /
+ 表里 Anon 会让读者找不到）； 排序键 = 责任者位实际显示的内容（show-anon: true → 按占位词排；false → 顺延题名）；
+ 消歧后缀：有年 2020a 直接贴；无年 无日期-a 用连字符（官方 GB CSL 里显式的 <group delimiter="-">）； 末句点去重：
+ n.d. 的缩写点兼作责任者元素后的句点，不叠成 n.d..。 show-anon / show-no-date 的 auto = 著者-出版年制出、顺序编码制
+ 留空。 cite-terms-lang 只动正文标注那一侧的取词语言，著录侧硬性跟条目语言—— 它是逃生舱，默认两侧同源（345 个
+ 国标 CSL 里让两侧不一致的：0 个）。
+
+
+▸ auto × 顺序编码制（两个占位词都不出）
+
+正文：[1-6]
+[1] 无责任者中文[M]. 北京：社，2020.
+[2] Anonymous English[M]. NY：P，2021.
+[3] 周七. 无年中文[M]. 北京：社.
+[4] Brown B. No Year English[M]. NY：P.
+[5] 周七. 同责任者无年甲[M]. 北京：社.
+[6] 周七. 同责任者无年乙[M]. 北京：社.
+
+▸ auto × 著者-出版年制（两个占位词都出）
+
+正文：（佚名，2020；周七，无日期-a，无日期-b，无日期-c；Anon，2021；Brown，n.d.）
+佚名，2020. 无责任者中文[M]. 北京：社.
+周七，无日期-a. 同责任者无年甲[M]. 北京：社.
+周七，无日期-b. 同责任者无年乙[M]. 北京：社.
+周七，无日期-c. 无年中文[M]. 北京：社.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+
+▸ show-anon: true × 顺序编码制（只出佚名）
+
+正文：[1-6]
+[1] 佚名. 无责任者中文[M]. 北京：社，2020.
+[2] Anon. Anonymous English[M]. NY：P，2021.
+[3] 周七. 无年中文[M]. 北京：社.
+[4] Brown B. No Year English[M]. NY：P.
+[5] 周七. 同责任者无年甲[M]. 北京：社.
+[6] 周七. 同责任者无年乙[M]. 北京：社.
+
+▸ show-anon: false × 著者-出版年制（排序顺延题名）
+
+正文：（2020；周七，无日期-a，无日期-b，无日期-c；2021；Brown，n.d.）
+2020. 无责任者中文[M]. 北京：社.
+周七，无日期-a. 同责任者无年甲[M]. 北京：社.
+周七，无日期-b. 同责任者无年乙[M]. 北京：社.
+周七，无日期-c. 无年中文[M]. 北京：社.
+2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+
+▸ show-no-date: false × 著者-出版年制
+
+正文：（佚名，2020；周七；周七；周七；Anon，2021；Brown）
+佚名，2020. 无责任者中文[M]. 北京：社.
+周七. 同责任者无年甲[M]. 北京：社.
+周七. 同责任者无年乙[M]. 北京：社.
+周七. 无年中文[M]. 北京：社.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B. No Year English[M]. NY：P.
+
+▸ 消歧后缀：无年用连字符（无日期-a / n.d.-a）
+
+正文：（佚名，2020；周七，无日期-a，无日期-b，无日期-c；Anon，2021；Brown，n.d.）
+佚名，2020. 无责任者中文[M]. 北京：社.
+周七，无日期-a. 同责任者无年甲[M]. 北京：社.
+周七，无日期-b. 同责任者无年乙[M]. 北京：社.
+周七，无日期-c. 无年中文[M]. 北京：社.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+
+▸ disambiguate: false（撞车不管）
+
+正文：（佚名，2020；周七，无日期，无日期，无日期；Anon，2021；Brown，n.d.）
+佚名，2020. 无责任者中文[M]. 北京：社.
+周七，无日期. 同责任者无年甲[M]. 北京：社.
+周七，无日期. 同责任者无年乙[M]. 北京：社.
+周七，无日期. 无年中文[M]. 北京：社.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+
+▸ custom-terms 改占位词（两侧同步改）
+
+正文：（无名氏，2020；周七，无出版年-a，无出版年-b，无出版年-c；Anonymous，2021；Brown，no date）
+无名氏，2020. 无责任者中文[M]. 北京：社.
+周七，无出版年-a. 同责任者无年甲[M]. 北京：社.
+周七，无出版年-b. 同责任者无年乙[M]. 北京：社.
+周七，无出版年-c. 无年中文[M]. 北京：社.
+Anonymous，2021. Anonymous English[M]. NY：P.
+Brown B，no date. No Year English[M]. NY：P.
+
+▸ cite-terms-lang: "zh"（只动标注侧，著录侧不动）
+
+正文：（佚名，2020；周七，无日期-a，无日期-b，无日期-c；Brown，无日期；佚名，2021）
+佚名，2020. 无责任者中文[M]. 北京：社.
+周七，无日期-a. 同责任者无年甲[M]. 北京：社.
+周七，无日期-b. 同责任者无年乙[M]. 北京：社.
+周七，无日期-c. 无年中文[M]. 北京：社.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+
+▸ cite-terms-lang: (anon: "en")（逐词指定）
+
+正文：（Anon，2020；周七，无日期-a，无日期-b，无日期-c；Anon，2021；Brown，n.d.）
+佚名，2020. 无责任者中文[M]. 北京：社.
+周七，无日期-a. 同责任者无年甲[M]. 北京：社.
+周七，无日期-b. 同责任者无年乙[M]. 北京：社.
+周七，无日期-c. 无年中文[M]. 北京：社.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+

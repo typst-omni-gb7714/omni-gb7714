@@ -1,0 +1,59 @@
+ cite-punct-style
+ 标注*内部*标点（分隔逗号、括号、冒号）的全 / 半角与空格。
+ 期望 by-doc-* 按文档语言派生；by-entry-* 按被引条目语言派生；half / half-with-space / full 是绝对档。 -and-style
+ 额外做制度感知（顺序编码制紧凑无空格 [1,2]、著者-出版年制带空格）。 字典可逐制分设。本文件的文档语言是中文、条
+ 目有中有西——两个轴的差别因此都看得见； 末两块用 in-lang("en", ..) 把同一档位裹进西文文档作对照。
+
+
+▸ by-doc-and-style（缺省）· 顺序编码制
+
+正文[1-2] 与[3]7。
+
+▸ by-doc-and-style · 著者-出版年制
+
+正文 （张三等，2020；Smith et al.，2021） 与 （陈九等，2022）7。
+
+▸ by-doc-no-space
+
+正文[1-2] 与[3]7。
+
+▸ by-doc-with-space
+
+正文[1-2] 与[3]7。
+
+▸ by-entry-and-style · 著者-出版年制
+
+正文 （张三等，2020；Smith et al., 2021） 与 （陈九等，2022）7。
+
+▸ by-entry-no-space
+
+正文[1-2] 与[3]7。
+
+▸ by-entry-with-space
+
+正文[1-2] 与[3]7。
+
+▸ half
+
+正文[1-2] 与[3]7。
+
+▸ half-with-space
+
+正文[1-2] 与[3]7。
+
+▸ full
+
+正文[1-2] 与[3]7。
+
+▸ 字典 · (numeric: half, author-date: full)
+
+正文 （张三等，2020；Smith et al.，2021） 与 （陈九等，2022）7。
+
+▸ by-doc-with-space · 西文文档（→ 半角）
+
+正文[1-2] 与[3]7。
+
+▸ by-entry-with-space · 西文文档（不随文档 → 中文条目仍全角）
+
+正文[1-2] 与[3]7。
+

@@ -1,0 +1,18 @@
+ hyphenate
+ 文献表内西文是否允许连字断词。
+ 期望 true（缺省）：长西文词可断行并补连字符。false：不断词（长词整体挪行，行右可能留大空档）。 只管词内断行；
+ URL 的断行是另一套（url-break-every / url-break-hyphen）。
+
+
+▸ true（缺省）
+
+正文：[1-2]
+[1] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ false
+
+正文：[1-2]
+[1] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+

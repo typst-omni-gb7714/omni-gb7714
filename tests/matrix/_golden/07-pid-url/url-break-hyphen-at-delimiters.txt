@@ -1,0 +1,23 @@
+  url-break-hyphen-at-delimiters
+  显连字符时，软连字符是否也出现在 URL *分隔符*的断点处。
+  期望 与 url-break-hyphen 正交：true（缺省）分隔符断点（: / ? # [ ] @ ! $ & ' ( ) * + , ; =）也显 -； false 分隔
+  符断点不显 -，只有 url-break-every 插入的长串救济断点显 -。 三项正交：url-break-every 定在哪里断、url-break-
+  hyphen 定断处是否显 -、本项定分隔符断点是否计入。 url-break-hyphen: false 时本项无影响（下方第三块与第一块的对
+  照）。
+
+
+▸ true（缺省）+ url-break-hyphen: true
+
+[1] 甲. 分隔符密集的长 URL[EB/OL]. （2023）[2024-01-01]. h­t­t­p­s­:­/­/­e­x­a­m­p­l­e­.­c­o­m­/­a­/­b­/­c­/­d­/­e­/­f­/­g­/­h­/­i­/­j­/­k­/­l­/­m­/­n­/­o­/­p­/­q­/­r­/­s­/­t­/­u­/­v­/­w­/­x­/­y­/­z­/­­
+    e­n­d.
+
+▸ false + url-break-hyphen: true（分隔符处不显 -）
+
+[1] 甲. 分隔符密集的长 URL[EB/OL]. （2023）[2024-01-01]. h­t­t­p­s­:​/​/​e­x­a­m­p­l­e­.​c­o­m­/​a­/​b­/​c­/​d­/​e­/​f­/​g­/​h­/​i­/​j­/​k­/​l­/​m­/​n­/​o­/​p­/​q­/​r­/​s­/​t­/​u­/​v­/​w­/​x­/​y­/​z­/​
+    e­n­d.
+
+▸ false + url-break-hyphen: false（本项无影响）
+
+[1] 甲. 分隔符密集的长 URL[EB/OL]. （2023）[2024-01-01]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​a​/​b​/​c​/​d​/​e​/​f​/​g​/​h​/​i​/​j​/​k​/​l​/​m​/​n​/​o​/​p​/​q​/​r​/​s​/​t​/​u​/​v​/​w​/​x​/​y​/​z​/​e​n​
+    d.
+

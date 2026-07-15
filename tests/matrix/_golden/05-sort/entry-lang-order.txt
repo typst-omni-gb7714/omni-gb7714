@@ -1,0 +1,77 @@
+ entry-lang-order
+ 多语种混排时的语种分组次序（靠前的语种排在前面）。
+ 期望 缺省 ("zh","ja","ko","en","fr","ru")。文种是隐式的最高优先级排序键， bib-sort-by 写不写它都先按文种集中
+（GB §9.3.2），本参数只决定文种之间谁先谁后。 未列出的语种排在列出的之后。顺序编码制按引用先后编号，不分组。 ()
+（空数组）= 不分组（有意的公共契约）：所有条目走一趟全局字顺，中文条目按拼音混进西文里 （Adams / 陈明(chen) /
+ Zhao），而不是「中文组在前」。这是偏离国标的逃生舱（§9.3.2 要求 先按文种集中），给要对齐 CSL 与国际惯例的用户——
+ CSL 1.0.2 没有文种分组能力。
+
+
+▸ 缺省 (zh, ja, ko, en, fr, ru)
+
+正文：（张三等，2020；田中太郎他，2019；김철수외，2018；Müller et al.，2015；Smith et al.，2021；Dupont et al.，2016；
+Иванов и др，2017）
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
+Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
+Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+
+▸ ("en", "zh")（西文先、中文后，其余语种随后）
+
+正文：（Müller et al.，2015；Smith et al.，2021；张三等，2020；Иванов и др，2017；김철수외，2018；Dupont et al.，2016；田
+中太郎他，2019）
+Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
+Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+
+▸ ("ru", "fr", "de", "en", "ko", "ja", "zh")（整个翻过来）
+
+正文：（Иванов и др，2017；Dupont et al.，2016；Müller et al.，2015；Smith et al.，2021；김철수외，2018；田中太郎他，
+2019；张三等，2020）
+Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
+Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+
+▸ 顺序编码制：按引用先后，不分组
+
+正文：[1-7]
+[1] 张三，李四，王五，等. 中文书[M]. 北京：社，2020.
+[2] Smith J，Doe J，Roe R，et al. English Book[M]. NY：P，2021.
+[3] 田中太郎，鈴木花子，佐藤次郎，他. 日本語の本[M]. 東京：出版社，2019.
+[4] 김철수，이영희，박민수，외. 한국어 책[M]. 서울：출판사，2018.
+[5] Иванов И，Петров П，Сидоров С，и др. Русская книга[M]. Москва：Издательство，2017.
+[6] Dupont J，Martin M，Bernard P，et al. Livre français[M]. Paris：Éditions，2016.
+[7] Müller H，Schmidt A，Weber K，et al. Deutsches Buch[M]. Berlin：Verlag，2015.
+
+▸ 缺省 · 中文组在前（陈明 → Adams → Zhao）
+
+正文：（陈明，2021；Adams，2019；Zhao，2022）
+陈明，2021. 中文丙[M]. 北京：社.
+Adams A，2019. A book[M]. NY：P.
+Zhao Z，2022. Z book[M]. NY：P.
+
+▸ `()` = 不分组 · 一趟全局字顺（Adams → 陈明 chen → Zhao）
+
+正文：（Adams，2019；陈明，2021；Zhao，2022）
+Adams A，2019. A book[M]. NY：P.
+陈明，2021. 中文丙[M]. 北京：社.
+Zhao Z，2022. Z book[M]. NY：P.
+
+▸ ("en", "zh") · 西文组在前（Adams → Zhao → 陈明）—— 与 `()` 语义不同
+
+正文：（Adams，2019；Zhao，2022；陈明，2021）
+Adams A，2019. A book[M]. NY：P.
+Zhao Z，2022. Z book[M]. NY：P.
+陈明，2021. 中文丙[M]. 北京：社.
+

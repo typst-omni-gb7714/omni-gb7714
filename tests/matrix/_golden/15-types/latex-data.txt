@@ -1,0 +1,37 @@
+ LaTeX 词法全表
+ `latex.bib` 整表——字段里的 LaTeX 命令怎么落地。
+ 期望 字体命令（\textit / \textbf / \emph）转成 Typst 样式； 符号（\LaTeX / \TeX / \S / \P / \copyright /
+ \textregistered）转成对应字符； 重音（\"{u} / \'{e} / \c{c}）合成带音标字符； 转义（\& \_ \# \% \$ \{ \}
+ \textasciitilde \textbackslash \textasciicircum）出字面字符； 花括号保护大小写；数学环境按 Typst 数学渲染；\\ 换
+ 行； verbatim 字段（url / doi / eprint）不做 LaTeX 转换（a_b~c 原样）； CJK 紧贴命令（\textbf 中文）与 \noopsort 是未
+ 定义命令——本文件开 latex-strict-command: false 才编得过。
+
+
+▸ 宽松模式（strict-command / strict-char 都关）
+
+[1]   甲. 字体命令 斜体 与 粗体 与 强调[M]. 北京：社，2020.
+[2]   乙. 符号 LaTeX TeX §¶©®[M]. 北京：社，2020.
+[3]   Müller H. Accents: é à ô ñ ç[M]. NY：P，2020.
+[4]   丙. 转义 & _ # % $ { } ~\^[M]. 北京：社，2020.
+[5]   丁. Preserved CASE and normal[M]. NY：P，2020.
+[6]   戊. 数学 𝐸 = 𝑚𝑐2 与 𝛼 + 𝛽[M]. 北京：社，2020.
+[7]   己. 换行
+      命令[M]. 北京：社，2020.
+[8]   庚. verbatim 字段不展开[M/OL]. 北京：社，2020. h​t​t​p​s​:​/​/​e​.​c​o​m​/​a​_​b​~​c. DOI：1​0​.​1​2​3​4​/​a​_​b.
+[9]   辛. CJK 紧贴 中文 命令[M]. 北京：社，2020.
+[10] 壬. noopsort 排序代理[M]. 北京：社，2020.
+
+▸ 宽松 + 著者-出版年制（\noopsort 作排序代理）
+
+丙，2020. 转义 & _ # % $ { } ~\^[M]. 北京：社.
+庚，2020. verbatim 字段不展开[M/OL]. 北京：社. h​t​t​p​s​:​/​/​e​.​c​o​m​/​a​_​b​~​c. DOI：1​0​.​1​2​3​4​/​a​_​b.
+己，2020. 换行
+  命令[M]. 北京：社.
+甲，2020. 字体命令 斜体 与 粗体 与 强调[M]. 北京：社.
+戊，2020. 数学 𝐸 = 𝑚𝑐2 与 𝛼 + 𝛽[M]. 北京：社.
+辛，2020. CJK 紧贴 中文 命令[M]. 北京：社.
+乙，2020. 符号 LaTeX TeX §¶©®[M]. 北京：社.
+壬，2020. noopsort 排序代理[M]. 北京：社.
+丁，2020. Preserved CASE and normal[M]. NY：P.
+Müller H，2020. Accents: é à ô ñ ç[M]. NY：P.
+

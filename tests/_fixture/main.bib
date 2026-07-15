@@ -1,0 +1,39 @@
+% 主语料：矩阵层绝大多数用例的共享底本。
+% 覆盖轴：八大类型 × 中/英条目语言 × 有/无出版年 × 有/无责任者 × 有/无获取路径。
+% 键名自解释：<类型><语言><特征>。
+
+@book{bm-zh, author = {张三 and 李四 and 王五 and 赵六}, title = {中文专著示例}, subtitle = {副标题},
+  address = {北京}, publisher = {示例出版社}, year = {2020}, pages = {12-25}, edition = {3}, langid = {chinese}}
+@book{bm-en, author = {Smith, John and Doe, Jane and Roe, Richard and Poe, Pamela}, title = {English Book Example},
+  address = {New York}, publisher = {Example Press}, year = {2021}, pages = {30-45}, edition = {2}, langid = {english}}
+@book{bm-noauthor, title = {无责任者的中文书}, address = {上海}, publisher = {某社}, year = {2019}, langid = {chinese}}
+@book{bm-noyear, author = {周七}, title = {无出版年的中文书}, address = {广州}, publisher = {某社}, langid = {chinese}}
+@book{bm-online, author = {钱八}, title = {带获取路径的书}, address = {北京}, publisher = {某社}, year = {2022},
+  url = {https://example.com/book}, urldate = {2024-01-15}, doi = {10.1234/example}, langid = {chinese}}
+
+@article{aj-zh, author = {陈九 and 卫十}, title = {中文期刊文章示例}, journaltitle = {计算机学报},
+  year = {2022}, volume = {45}, number = {3}, pages = {1-12}, langid = {chinese}}
+@article{aj-en, author = {Brown, Bob and Green, Grace}, title = {English Journal Article},
+  journaltitle = {Journal of Examples}, year = {2023}, volume = {12}, number = {4}, pages = {100-115}, langid = {english}}
+
+@incollection{ic-zh, author = {孙一}, title = {析出文献题名}, editor = {李编 and 王编}, booktitle = {母体专著题名},
+  address = {北京}, publisher = {母体出版社}, year = {2018}, pages = {50-60}, langid = {chinese}}
+@inproceedings{cp-zh, author = {吴二}, title = {会议论文题名}, booktitle = {全国示例学术会议论文集},
+  eventtitle = {全国示例学术会议}, address = {南京}, publisher = {会议社}, year = {2021}, pages = {77-88}, langid = {chinese}}
+
+@thesis{dt-zh, author = {郑三}, title = {学位论文示例}, type = {phdthesis}, institution = {示例大学},
+  address = {武汉}, year = {2019}, langid = {chinese}}
+@report{rp-zh, author = {冯四}, title = {研究报告示例}, number = {RPT-2023-001}, institution = {示例研究所},
+  year = {2023}, date = {2023-09-30}, pages = {5-9}, langid = {chinese}}
+@standard{st-zh, author = {全国信息与文献标准化技术委员会}, title = {信息与文献　参考文献著录规则},
+  number = {GB/T 7714—2015}, address = {北京}, publisher = {中国标准出版社}, year = {2015}, langid = {chinese}}
+@patent{pt-zh, holder = {某公司}, author = {褚五}, title = {一种示例装置}, number = {CN12345678A},
+  year = {2022}, date = {2022-05-01}, pages = {8-9}, langid = {chinese}}
+@newspaper{np-zh, author = {蒋六}, title = {报纸文章题名}, journaltitle = {人民日报},
+  date = {2013-03-16}, pages = {1}, langid = {chinese}}
+@online{eb-zh, author = {沈七}, title = {网页示例}, year = {2023}, date = {2023-05-01},
+  url = {https://example.com/page}, urldate = {2024-01-15}, langid = {chinese}}
+@dataset{ds-zh, author = {韩八}, title = {数据集示例}, publisher = {示例数据平台}, year = {2021},
+  date = {2021-08-08}, url = {https://data.example.com/ds1}, urldate = {2024-02-02}, langid = {chinese}}
+@software{sw-zh, author = {杨九}, title = {计算机程序示例}, publisher = {某社}, year = {2020}, version = {1.2.0},
+  url = {https://example.com/sw}, langid = {chinese}}

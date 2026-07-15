@@ -1,0 +1,59 @@
+ custom-fields
+ 把 `.bib` 字段暴露成 `custom-drivers` 模板里可用的 token，可选加本地化前后缀。
+ 期望
+ • auto（纯透传，字段名 == token 名）：(myarxiv: auto) 后模板里 myarxiv 直接读该字段原值；
+ • 字典 (field: "xxx", prefix: .., suffix: ..)：读 xxx 字段并在前 / 后拼固定文本。 prefix / suffix 收字符串或多语言
+   字典（按条目语言择一）；字段缺失则该 token 为空 （于是能被条件组与别名链正常处理）。
+ 字段值同其它显示字段走 LaTeX→Typst 处理（\textbf{} / 引号连字 / 转义正常，未定义命令优雅降级）。 限制：token 名不
+ 与内置 token 同名；field 取值不能与本包内部已用字段名冲突（撞了 panic）。
+
+
+▸ auto（纯透传）
+
+[1] 甲. 有自定义字段. myfield= 自定义值.
+[2] Smith J. English Entry. myfield= custom value.
+[3] 丙. 没有自定义字段.
+[4] 丁. 字段里有 LaTeX. myfield= 粗体 与 & 转义.
+
+▸ (field: "userref", prefix: "abc: ")
+
+[1] 甲. 有自定义字段. abc: hello.
+[2] Smith J. English Entry.
+[3] 丙. 没有自定义字段.
+[4] 丁. 字段里有 LaTeX.
+
+▸ prefix + suffix
+
+[1] 甲. 有自定义字段. 【自定义值】.
+[2] Smith J. English Entry. 【custom value】.
+[3] 丙. 没有自定义字段.
+[4] 丁. 字段里有 LaTeX. 【粗体 与 & 转义】.
+
+▸ 多语言 prefix（按条目语言择一）
+
+[1] 甲. 有自定义字段. 见：自定义值.
+[2] Smith J. English Entry. See: custom value.
+[3] 丙. 没有自定义字段.
+[4] 丁. 字段里有 LaTeX. 见：粗体 与 & 转义.
+
+▸ 字段缺失 → token 为空（条件组正常判空）
+
+[1] 甲. 有自定义字段 附注：【自定义值】. 2020.
+[2] Smith J. English Entry 附注：【custom value】. 2021.
+[3] 丙. 没有自定义字段. 2020.
+[4] 丁. 字段里有 LaTeX 附注：【粗体 与 & 转义】. 2020.
+
+▸ 别名链回退：myfield | 字面量
+
+[1] 甲. 有自定义字段. 自定义值.
+[2] Smith J. English Entry. custom value.
+[3] 丙. 没有自定义字段. （无自定义字段）.
+[4] 丁. 字段里有 LaTeX. 粗体 与 & 转义.
+
+▸ 字段值走 LaTeX 处理
+
+[1] 甲. 有自定义字段. 自定义值.
+[2] Smith J. English Entry. custom value.
+[3] 丙. 没有自定义字段.
+[4] 丁. 字段里有 LaTeX. 粗体 与 & 转义.
+

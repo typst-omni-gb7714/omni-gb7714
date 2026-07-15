@@ -1,0 +1,40 @@
+% 载入 / 解析层语料：字段别名归一、crossref 与 xdata 继承、biblatex 名字表改写、
+% 条目键与字符编码的健壮性、预印本状态标记、排序代理字段。
+% 这些不是「渲染参数」的取值，而是数据*进来之前*那一段的行为。
+
+% ── 字段别名：journal ↔ journaltitle、address ↔ location（两两同义，真名静默胜）
+@article{pa-journal-alias, author = {甲}, title = {用 journal 而非 journaltitle}, journal = {别名学报}, year = {2020}, volume = {1}, number = {2}, pages = {1-9}, langid = {chinese}}
+@article{pa-journal-both, author = {乙}, title = {两个都写（真名 journaltitle 胜）}, journal = {别名学报}, journaltitle = {真名学报}, year = {2020}, volume = {1}, pages = {1-9}, langid = {chinese}}
+@book{pa-location-alias, author = {丙}, title = {用 location 而非 address}, location = {上海}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{pa-location-both, author = {丁}, title = {两个都写}, address = {北京}, location = {上海}, publisher = {社}, year = {2020}, langid = {chinese}}
+
+% ── crossref 继承：析出条目从母体 @proceedings 拿出版地 / 出版者 / 年
+@inproceedings{pa-crossref, author = {戊}, title = {会议论文（靠 crossref 继承出版项）}, crossref = {pa-proc}, pages = {10-20}, langid = {chinese}}
+@proceedings{pa-proc, editor = {某编}, title = {母体论文集}, address = {北京}, publisher = {母体社}, year = {2021}, langid = {chinese}}
+
+% ── xdata 继承：@xdata 条目本身*不进*文献表，只供别人继承
+@xdata{pa-xdata, address = {广州}, publisher = {共享社}}
+@book{pa-xdata-user, author = {己}, title = {靠 xdata 继承出版项}, xdata = {pa-xdata}, year = {2022}, langid = {chinese}}
+
+% ── biblatex 名字表 namea / nameatype：地图等以「编制者」作主要责任者
+@map{pa-namea, namea = {{谭其骧}}, nameatype = {collaborator}, title = {中国历史地图集}, volume = {第 2 册}, location = {北京}, publisher = {地图出版社}, date = {1982}, pages = {6}, langid = {chinese}}
+
+% ── 条目键的健壮性：`@book {key}` 类型名与花括号之间有空白
+@book {pa-key-space, author = {庚}, title = {类型名与花括号之间有空格}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+
+% ── 字符编码：NFD（分解形）重音符——预扫描的语言检测曾在这里崩
+@book{pa-nfd, author = {Müller, Hans}, title = {Café naïve résumé（NFD 分解形）}, address = {NY}, publisher = {P}, year = {2020}, langid = {english}}
+
+% ── 预印本状态：pubstate = prepublished（任何 entry 类型都算预印本，对齐标准 8.15 示例）
+@online{pa-pubstate, author = {辛}, title = {带 pubstate 的在线条目}, pubstate = {prepublished}, url = {https://p.com}, urldate = {2024-01-01}, year = {2023}, langid = {chinese}}
+@article{pa-eprint-no-type, author = {壬}, title = {有 eprint 但没有 eprinttype}, eprint = {2303.00003}, year = {2023}, langid = {english}}
+
+% ── 排序代理：sortkey / key / \noopsort
+@book{pa-sortkey, author = {重八}, title = {多音字用 sortkey 指定排序值}, sortkey = {chong ba}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{pa-key, author = {单一}, title = {用 key 域指定排序值}, key = {shan yi}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+
+% ── 条目级 options：useprefix / 其它 biblatex 开关
+@book{pa-options, author = {van der Meer, Jan}, title = {条目级 options 压全局}, options = {use-prefix=true}, address = {NY}, publisher = {P}, year = {2020}, langid = {english}}
+
+% ── 自造类型透传（上游会压成 unknown，本包原样透传）
+@mytype{pa-rawtype, author = {癸}, title = {自造类型原样透传}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}

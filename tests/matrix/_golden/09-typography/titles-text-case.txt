@@ -1,0 +1,62 @@
+ titles-text-case
+ 长标题类字段的大小写转换。
+ 期望 标量作用于全部白名单字段；字典按字段分设、rest 兜底。 none（缺省）：不转换，按 .bib 原样（raw(theme: none)
+ 同款「关处理、内容照显」语义）。 "sentence"：句首大写、其余小写（CSL text-case="sentence"）。 "title"：实词大写、
+ 小词小写、首末词恒大写（CSL text-case="title"）。 白名单 12 字段：title / subtitle / titleaddon / maintitle /
+ booktitle / booksubtitle / booktitleaddon / journaltitle（journal 是别名键，真名静默胜）/ journalsubtitle /
+ journaltitleaddon / eventtitle / series；其余键 panic。 shortjournal 不受理——缩写刊名的大小写即其规范。 {} 保护的
+ 括号内两档都不动（biblatex 惯例）；含 CJK 的字段值整体跳过（大小写无意义，且内嵌的 DNA 一类拉丁词不得被改）。转
+ 换在解析期由 citegeist（Rust）按字段应用。
+
+
+▸ none（缺省，原样）
+
+[1] Smith J. the STUDY of DNA and rna: a NEW approach：AN important SUBTITLE[J]. journal of EXAMPLES and things，2020，1：
+    1-10.
+[2] Doe J. a chapter IN a book[G]//Roe R. THE great BOOK of examples. NY：P，2021：5-9.
+[3] Poe P. protected DNA and mRNA in lowercase text[M]. NY：P，2022.
+[4] 张三. 中文题名 with DNA inside[M]. 北京：社，2020.
+[5] Roe R. short journal case[J]. Journal of Physical Chemistry，2023，2：1-5.
+
+▸ "sentence"
+
+[1] Smith J. The study of dna and rna: a new approach：An important subtitle[J]. Journal of examples and things，2020，1：1-10.
+[2] Doe J. A chapter in a book[G]//Roe R. The great book of examples. NY：P，2021：5-9.
+[3] Poe P. Protected DNA and mRNA in lowercase text[M]. NY：P，2022.
+[4] 张三. 中文题名 with DNA inside[M]. 北京：社，2020.
+[5] Roe R. Short journal case[J]. Journal of physical chemistry，2023，2：1-5.
+
+▸ "title"
+
+[1] Smith J. The Study of Dna and Rna: a New Approach：An Important Subtitle[J]. Journal of Examples and Things，2020，1：1-10.
+[2] Doe J. A Chapter in a Book[G]//Roe R. The Great Book of Examples. NY：P，2021：5-9.
+[3] Poe P. Protected DNA and mRNA in Lowercase Text[M]. NY：P，2022.
+[4] 张三. 中文题名 with DNA inside[M]. 北京：社，2020.
+[5] Roe R. Short Journal Case[J]. Journal of Physical Chemistry，2023，2：1-5.
+
+▸ (title: "sentence", journaltitle: "title", rest: none)
+
+[1] Smith J. The study of dna and rna: a new approach：AN important SUBTITLE[J]. Journal of Examples and Things，2020，1：
+    1-10.
+[2] Doe J. A chapter in a book[G]//Roe R. THE great BOOK of examples. NY：P，2021：5-9.
+[3] Poe P. Protected DNA and mRNA in lowercase text[M]. NY：P，2022.
+[4] 张三. 中文题名 with DNA inside[M]. 北京：社，2020.
+[5] Roe R. Short journal case[J]. Journal of Physical Chemistry，2023，2：1-5.
+
+▸ (rest: "title", title: none)
+
+[1] Smith J. the STUDY of DNA and rna: a NEW approach：An Important Subtitle[J]. Journal of Examples and Things，2020，1：
+    1-10.
+[2] Doe J. a chapter IN a book[G]//Roe R. The Great Book of Examples. NY：P，2021：5-9.
+[3] Poe P. protected DNA and mRNA in lowercase text[M]. NY：P，2022.
+[4] 张三. 中文题名 with DNA inside[M]. 北京：社，2020.
+[5] Roe R. short journal case[J]. Journal of Physical Chemistry，2023，2：1-5.
+
+▸ "title" + short-journal: true（shortjournal 不受理，原样）
+
+[1] Smith J. The Study of Dna and Rna: a New Approach：An Important Subtitle[J]. Journal of Examples and Things，2020，1：1-10.
+[2] Doe J. A Chapter in a Book[G]//Roe R. The Great Book of Examples. NY：P，2021：5-9.
+[3] Poe P. Protected DNA and mRNA in Lowercase Text[M]. NY：P，2022.
+[4] 张三. 中文题名 with DNA inside[M]. 北京：社，2020.
+[5] Roe R. Short Journal Case[J]. J Phys Chem，2023，2：1-5.
+

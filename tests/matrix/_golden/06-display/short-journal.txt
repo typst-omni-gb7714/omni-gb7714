@@ -1,0 +1,16 @@
+ short-journal
+ 期刊名取 `journal` 还是 `shortjournal`。
+ 期望 false（缺省）用 journal / journaltitle；true 用 shortjournal 代替。 条目没有 shortjournal 字段时回落到全称
+（不留空）。
+
+
+▸ false（缺省）
+
+[1] Brown B. With Short Journal[J]. Journal of Physical Chemistry Letters，2023，12（4）：100-115.
+[2] Green G. Without Short Journal[J]. Journal of Examples，2023，9：1-8.
+
+▸ true
+
+[1] Brown B. With Short Journal[J]. J Phys Chem Lett，2023，12（4）：100-115.
+[2] Green G. Without Short Journal[J]. Journal of Examples，2023，9：1-8.
+

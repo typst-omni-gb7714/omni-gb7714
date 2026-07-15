@@ -1,0 +1,48 @@
+ creator-idem
+ 文献表里*紧邻*的同责任者条目，责任者槽整块替换成给定串。
+ 期望 none（缺省）：每条都印全责任者。传字符串：与上一条责任者相同的条目，责任者槽换成该串 （CSL 的
+ subsequent-author-substitute）。判据只看名单、不看来源角色（与 biblatex 的 fullhash 同义）， 名单为空的条目不参与。
+ 语料里 Smith, John 与 Smith, Jane 姓同名不同 → 不折叠（名册键含名）。逐表可用 bibliography(creator-idem: ..) 覆
+ 盖。
+
+
+▸ none（缺省）
+
+正文：（张三，2020a，2020b；Smith，2020，2021）
+张三，2020a. 同责任者同年甲[M]. 北京：社.
+张三，2020b. 同责任者同年乙[M]. 北京：社.
+Smith J，2021. Same Family B[M]. NY：P.
+Smith J，2020. Same Family A[M]. NY：P.
+
+▸ "———"
+
+正文：（张三，2020a，2020b；Smith，2020，2021）
+张三，2020a. 同责任者同年甲[M]. 北京：社.
+———，2020b. 同责任者同年乙[M]. 北京：社.
+Smith J，2021. Same Family B[M]. NY：P.
+Smith J，2020. Same Family A[M]. NY：P.
+
+▸ "--"
+
+正文：（张三，2020a，2020b；Smith，2020，2021）
+张三，2020a. 同责任者同年甲[M]. 北京：社.
+--，2020b. 同责任者同年乙[M]. 北京：社.
+Smith J，2021. Same Family B[M]. NY：P.
+Smith J，2020. Same Family A[M]. NY：P.
+
+▸ 顺序编码制下同样生效
+
+正文：[1-4]
+[1] 张三. 同责任者同年甲[M]. 北京：社，2020.
+[2] ———. 同责任者同年乙[M]. 北京：社，2020.
+[3] Smith J. Same Family A[M]. NY：P，2020.
+[4] Smith J. Same Family B[M]. NY：P，2021.
+
+▸ 逐表覆盖：全局 none，本表 「———」
+
+正文：（张三，2020a，2020b；Smith，2020，2021）
+张三，2020a. 同责任者同年甲[M]. 北京：社.
+———，2020b. 同责任者同年乙[M]. 北京：社.
+Smith J，2021. Same Family B[M]. NY：P.
+Smith J，2020. Same Family A[M]. NY：P.
+

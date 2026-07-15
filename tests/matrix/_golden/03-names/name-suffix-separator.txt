@@ -1,0 +1,31 @@
+ name-suffix-separator
+ 姓名与世系后缀（Jr. / II）之间的分隔符。
+ 期望 auto 按语言派生。显式字符串走三态（裸标点感知 / {X} verbatim / 字面量）；也收多语言字典， 未点到的语言退回
+ auto 档的派生值。
+
+
+▸ auto（缺省）
+
+正文：[1]
+[1] King J Martin Luther，Ford I Henry. Name Suffix[M]. NY：P，2020.
+
+▸ ","
+
+正文：[1]
+[1] King J，Martin Luther，Ford I，Henry. Name Suffix[M]. NY：P，2020.
+
+▸""
+
+正文：[1]
+[1] King J Martin Luther，Ford I Henry. Name Suffix[M]. NY：P，2020.
+
+▸ ""（无分隔）
+
+正文：[1]
+[1] King JMartin Luther，Ford IHenry. Name Suffix[M]. NY：P，2020.
+
+▸ 多语言字典 (zh: 「·」, rest: 「, 」)
+
+正文：[1]
+[1] King J, Martin Luther，Ford I, Henry. Name Suffix[M]. NY：P，2020.
+

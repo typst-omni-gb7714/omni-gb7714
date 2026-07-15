@@ -1,0 +1,11 @@
+[
+ {"id":"en8","type":"book","title":"English Eight","language":"en",
+  "author":[{"family":"Alpha","given":"A"},{"family":"Bravo","given":"B"},{"family":"Charlie","given":"C"},{"family":"Delta","given":"D"},{"family":"Echo","given":"E"},{"family":"Foxtrot","given":"F"},{"family":"Golf","given":"G"},{"family":"Zulu","given":"Z"}],
+  "publisher":"Univ Press","publisher-place":"NY","issued":{"date-parts":[[2021]]}},
+ {"id":"en7","type":"book","title":"English Seven","language":"en",
+  "author":[{"family":"Alpha","given":"A"},{"family":"Bravo","given":"B"},{"family":"Charlie","given":"C"},{"family":"Delta","given":"D"},{"family":"Echo","given":"E"},{"family":"Foxtrot","given":"F"},{"family":"Zulu","given":"Z"}],
+  "publisher":"Univ Press","publisher-place":"NY","issued":{"date-parts":[[2022]]}},
+ {"id":"en9","type":"book","title":"English Nine","language":"en",
+  "author":[{"family":"Alpha","given":"A"},{"family":"Bravo","given":"B"},{"family":"Charlie","given":"C"},{"family":"Delta","given":"D"},{"family":"Echo","given":"E"},{"family":"Foxtrot","given":"F"},{"family":"Golf","given":"G"},{"family":"Hotel","given":"H"},{"family":"Zulu","given":"Z"}],
+  "publisher":"Univ Press","publisher-place":"NY","issued":{"date-parts":[[2023]]}}
+]

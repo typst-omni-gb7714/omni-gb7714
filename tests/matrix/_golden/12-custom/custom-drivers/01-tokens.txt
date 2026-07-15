@@ -1,0 +1,100 @@
+  custom-drivers · 内置 token
+ 模板里能写哪些标识符。
+ 期望 形如 [a-z][a-z0-9_-]* 的小写标识符，引擎查表解析成内容；表里没有再查 custom-terms。 凡本包识别的有效 .bib
+ 字段都暴露为 token——写得出来、读得到的字段原则上都能直接以字段名取出。 本文件把速查表的 token 逐个渲染出来
+（每行一个 token，前面用 verbatim 标出它的名字）， 好让人一眼核对每个 token 到底吐什么。 块 token（title-block /
+ imprint-block / mark-medium / access / series-block）是打包好的整段， 受各自的 show-* 配置管；原值 token
+（journaltitle / number / type / note）就是字段原文。
+
+
+▸ author · editor · translator · editor-other · bookauthor · holder
+
+正文：[1-6]
+[1] author= 张三，李四，王五，等.
+[2] author= 陈九，卫十.
+[3] author= 孙一 ／editor= 李编，王编 ／editor-other= 李编，王编主编.
+[4] author= 郑三.
+[5] author= 某公司 ／holder= 某公司.
+[6] author= 沈七.
+
+▸ title · subtitle · titleaddon · title-block · component-part-title-block
+
+正文：[1-6]
+[1] title= 中文专著示例：副标题 ／subtitle= 副标题 ／title-block= 中文专著示例：副标题[M] ／cp-title-block= 中文专著示例：
+      副标题[M].
+[2] title= 中文期刊文章示例 ／title-block= 中文期刊文章示例[J] ／cp-title-block= 中文期刊文章示例[J].
+[3] title= 析出文献题名 ／title-block= 析出文献题名[G] ／cp-title-block= 析出文献题名[G].
+[4] title= 学位论文示例 ／title-block= 学位论文示例[D] ／cp-title-block= 学位论文示例[D].
+[5] title= 一种示例装置 ／title-block= 一种示例装置：CN12345678A[P] ／cp-title-block= 一种示例装置[P].
+[6] title= 网页示例 ／title-block= 网页示例[EB/OL] ／cp-title-block= 网页示例[EB/OL].
+
+▸ mark · medium · mark-medium · type · degree-annotation · country
+
+正文：[1-6]
+[1] mark= M ／mark-medium= [M].
+[2] mark= J ／mark-medium= [J].
+[3] mark= G ／mark-medium= [G].
+[4] mark= D ／mark-medium= [D] ／type= phdthesis.
+[5] mark= P ／mark-medium= [P].
+[6] mark= EB ／medium= OL ／mark-medium= [EB/OL].
+
+▸ booktitle · booksubtitle · booktitleaddon · journal · journaltitle · shortjournal
+
+正文：[1-6]
+[1]
+[2] 计算机学报 ／journaltitle= 计算机学报.
+[3] booktitle= 母体专著题名.
+[4]
+[5]
+[6]
+
+▸ series · series-block · edition · version · volume · number · pages
+
+正文：[1-6]
+[1] 3 版 ／pages= 12-25.
+[2] 45 ／number= 3 ／pages= 1-12.
+[3] 50-60.
+[4]
+[5] CN12345678A ／pages= 8-9.
+[6]
+
+▸ year · date · month · day · urldate
+
+正文：[1-6]
+[1] year= 2020 ／date= 2020.
+[2] year= 2022 ／date= 2022.
+[3] year= 2018 ／date= 2018.
+[4] year= 2019 ／date= 2019.
+[5] year= 2022 ／date= 2022-05-01.
+[6] year= 2023 ／date= 2023-05-01 ／urldate= [2024-01-15].
+
+▸ address · publisher · school · organization · institution · imprint-block
+
+正文：[1-6]
+[1] address= 北京 ／publisher= 示例出版社 ／imprint-block= 北京：示例出版社，2020.
+[2] 2022.
+[3] address= 北京 ／publisher= 母体出版社 ／imprint-block= 北京：母体出版社，2018.
+[4] address= 武汉 ／publisher= 示例大学 ／institution= 示例大学 ／imprint-block= 武汉：示例大学，2019.
+[5] 2022.
+[6] 2023.
+
+▸ access · url · doi · isbn · issn · eprint · eprinttype · archiveprefix
+
+正文：[1-6]
+[1]
+[2]
+[3]
+[4]
+[5]
+[6] access= h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​p​a​g​e ／url= https://example.com/page.
+
+▸ keywords · note · scale · dimensions · eventtitle · eventdate
+
+正文：[1-6]
+[1]
+[2]
+[3]
+[4]
+[5]
+[6]
+

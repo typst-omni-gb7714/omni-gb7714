@@ -1,0 +1,12 @@
+[
+ {"id":"a1","type":"book","author":[{"family":"Smith","given":"John"}],"title":"Alpha","issued":{"date-parts":[["2020"]]},"publisher":"P","publisher-place":"NY","language":"en"},
+ {"id":"a2","type":"book","author":[{"family":"Smith","given":"Anne"}],"title":"Beta","issued":{"date-parts":[["2020"]]},"publisher":"P","publisher-place":"NY","language":"en"},
+ {"id":"b1","type":"book","author":[{"family":"Brown","given":"Bob"},{"family":"Wang","given":"Wei"},{"family":"Li","given":"Lei"}],"title":"Gamma","issued":{"date-parts":[["2021"]]},"publisher":"P","publisher-place":"NY","language":"en"},
+ {"id":"b2","type":"book","author":[{"family":"Brown","given":"Bob"},{"family":"Chen","given":"Chao"},{"family":"Li","given":"Lei"}],"title":"Delta","issued":{"date-parts":[["2021"]]},"publisher":"P","publisher-place":"NY","language":"en"},
+ {"id":"c1","type":"book","author":[{"family":"Jones","given":"Jim"}],"title":"Epsilon","issued":{"date-parts":[["2022"]]},"publisher":"P","publisher-place":"NY","language":"en"},
+ {"id":"c2","type":"book","author":[{"family":"Jones","given":"Jim"}],"title":"Zeta","issued":{"date-parts":[["2022"]]},"publisher":"P","publisher-place":"NY","language":"en"},
+ {"id":"d1","type":"book","author":[{"family":"Adams","given":"Amy"},{"family":"Baker","given":"Ben"}],"title":"Eta","issued":{"date-parts":[["2023"]]},"publisher":"P","publisher-place":"NY","language":"en"},
+ {"id":"d2","type":"book","author":[{"family":"Adams","given":"Amy"},{"family":"Baker","given":"Ben"}],"title":"Theta","issued":{"date-parts":[["2023"]]},"publisher":"P","publisher-place":"NY","language":"en"},
+ {"id":"e1","type":"book","author":[{"family":"Stone","given":"Sam"},{"family":"Wang","given":"Wei"},{"family":"Li","given":"Lei"}],"title":"Iota","issued":{"date-parts":[["2024"]]},"publisher":"P","publisher-place":"NY","language":"en"},
+ {"id":"e2","type":"book","author":[{"family":"Stone","given":"Sue"},{"family":"Chen","given":"Chao"},{"family":"Li","given":"Lei"}],"title":"Kappa","issued":{"date-parts":[["2024"]]},"publisher":"P","publisher-place":"NY","language":"en"}
+]

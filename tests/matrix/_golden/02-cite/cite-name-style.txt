@@ -1,0 +1,54 @@
+  cite-name-style
+  标注里西文姓名的格式（八维字典）。
+  期望 auto 缺省：著者-出版年制标注只出姓（family）。字典可逐维覆盖—— order（姓前 / 名前，也可 (first:, rest:) 分
+  设第一责任者与其余）、family-case、 given-form（缩写 / 全名 / 只姓）、given-separator、given-case、given-initial-
+  separator（缩写点）、 family-given-separator、given-family-separator（两个接缝）。
+
+
+ ▸ auto（缺省，只出姓）
+
+ 正文：（Berg，Cruz，2020；King，Ford，2020）
+ Berg J v d，Cruz M d l，2020. Name Prefix[M]. NY：P.
+ King J Martin Luther，Ford I Henry，2020. Name Suffix[M]. NY：P.
+
+ ▸ given-form: initials（补名的首字母）
+
+（King J Martin Luther，Ford I Henry，2020；Picard J-L，Watson M-J，2020；van der Berg J，de la Cruz M，2020）
+
+ ▸ given-form: full（全名）
+
+（King Jr. Martin Luther，Ford II Henry，2020；Picard Jean-Luc，Watson Mary-Jane，2020；van der Berg Jan，de la Cruz Maria，
+2020）
+
+ ▸ order: given-ahead（名前姓后）
+
+（Jan van der Berg，Maria de la Cruz，2020；Jean-Luc Picard，Mary-Jane Watson，2020；Jr. King Martin Luther，II Ford Henry，
+2020）
+
+ ▸ order 字典 (first: family-ahead, rest: given-ahead)
+
+（King Jr. Martin Luther，II Ford Henry，2020；Picard Jean-Luc，Mary-Jane Watson，2020；van der Berg Jan，Maria de la Cruz，
+2020）
+
+ ▸ family-case: uppercase
+
+（BERG，CRUZ，2020；KING，FORD，2020；PICARD，WATSON，2020）
+
+ ▸ family-case: lowercase
+
+（berg，cruz，2020；king，ford，2020；picard，watson，2020）
+
+ ▸ given-initial-separator: 「.」（缩写点）
+
+（King J. Martin Luther，Ford I. Henry，2020；Picard J.-L.，Watson M.-J.，2020；van der Berg J.，de la Cruz M.，2020）
+
+ ▸ given-separator + given-case
+
+（King JR. Martin Luther，Ford II Henry，2020；Picard JEAN-LUC，Watson MARY-JANE，2020；van der Berg JAN，de la Cruz
+MARIA，2020）
+
+ ▸ family-given-separator + given-family-separator
+
+（King、Jr. Martin Luther，Ford、II Henry，2020；Picard、Jean-Luc，Watson、Mary-Jane，2020；van der Berg、Jan，de la Cruz、
+Maria，2020）
+

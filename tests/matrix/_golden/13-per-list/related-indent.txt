@@ -1,0 +1,30 @@
+ bibliography(related-indent)
+ 双语关联条目第二行的缩进（`bibliography` 独有，全局无同名参数）。
+ 期望 show-related: true 时，被 related 指向的第二语言条目另起一行；本参数定那一行的左缩进。 auto（缺省）：与条
+ 目正文左边界对齐（顺序编码制下即编号列宽 + number-gutter）。 传长度则强制。
+
+
+▸ auto（缺省）
+
+正文：[1]
+[1] 张三. 中文原版[M]. 北京：中文社，2020.
+   Zhang S. English Version[M]. NY：EN Press，2020.
+
+▸ 0pt（第二行顶格）
+
+正文：[1]
+[1] 张三. 中文原版[M]. 北京：中文社，2020.
+   0ptZhang S. English Version[M]. NY：EN Press，2020.
+
+▸ 4em
+
+正文：[1]
+[1] 张三. 中文原版[M]. 北京：中文社，2020.
+   4emZhang S. English Version[M]. NY：EN Press，2020.
+
+▸ auto · 著者-出版年制
+
+正文：（张三，2020）
+张三，2020. 中文原版[M]. 北京：中文社.
+Zhang S，2020. English Version[M]. NY：EN Press.
+

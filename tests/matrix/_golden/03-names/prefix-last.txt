@@ -1,0 +1,26 @@
+ prefix-last
+ 西文姓名的前缀（van / de la）排在姓之前还是之后。
+ 期望 控制 van der Berg 著录成「Berg J V D」还是「van der Berg J」。 2025 缺省与 2015 缺省不同——版本感知。条目级
+ options = {useprefix=true} 与全局 sort-use-prefix 与它联动。
+
+
+▸ 2025 缺省
+
+正文：[1]
+[1] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
+
+▸ 2015 缺省
+
+正文：[1]
+[1] VAN DER BERG J, DE LA CRUZ M. Name Prefix[M]. NY: P, 2020.
+
+▸ true
+
+正文：[1]
+[1] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
+
+▸ false
+
+正文：[1]
+[1] van der Berg J，de la Cruz M. Name Prefix[M]. NY：P，2020.
+

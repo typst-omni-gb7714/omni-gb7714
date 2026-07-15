@@ -1,0 +1,33 @@
+ sort-use-prefix
+ 排序键是否把西文姓名前缀（van / de la）算进去。
+ 期望 false（缺省）   ：van der Zee 按 Zee 排（前缀不参与，落到 Wilson 之后）。 true：按 van der Zee 整体排（v < w，落
+ 到 Wilson 之前）。 条目级 options = {useprefix=..} 优先于本参数。
+
+
+▸ false（缺省）· 按 Zee 排；p4 有 options={use-prefix=true} 故按 de la Zorro 排（d）
+
+Adams A，2020. Adams[M]. NY：P.
+Wilson W，2020. Wilson[M]. NY：P.
+Zee J v d，2020. Prefix Zee[M]. NY：P.
+Zorro A d l，2020. Zorro[M]. NY：P.
+
+▸ true · 按 van der Zee 排（Adams → de la Zorro → van der Zee → Wilson）
+
+Adams A，2020. Adams[M]. NY：P.
+Zorro A d l，2020. Zorro[M]. NY：P.
+Zee J v d，2020. Prefix Zee[M]. NY：P.
+Wilson W，2020. Wilson[M]. NY：P.
+
+▸ 顺序编码制（按标注序，与本参数无关）
+
+[1] Zee J v d. Prefix Zee[M]. NY：P，2020.
+[2] Adams A. Adams[M]. NY：P，2020.
+[3] Wilson W. Wilson[M]. NY：P，2020.
+[4] Zorro A d l. Zorro[M]. NY：P，2020.
+
+▸ 逐名字覆盖：author 内写 use-prefix=true（优先于条目级与全局）
+
+Adams A，2020. Adams[M]. NY：P.
+Miller M，2020. Miller[M]. NY：P.
+Zeta A d，2020. Name-level[M]. NY：P.
+

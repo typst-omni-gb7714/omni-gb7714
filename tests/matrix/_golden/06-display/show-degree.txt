@@ -1,0 +1,21 @@
+ show-degree
+ 学位论文是否在 `[D]` 后附学位级别注记（只对标识为 D 的条目生效）。
+ 期望 false（缺省）   ：不附，@thesis / @mastersthesis / @phdthesis 著录相同。 true：[D] 后插入学位级别，按条目语言取
+ 词—— 硕士（@mastersthesis 或 @thesis + type = {mathesis}）：硕士学位论文 / MA thesis； 博士（@phdthesis 或 type =
+ {phdthesis}）：博士学位论文 / PhD thesis。 裸 @thesis 无 type 字段：不附加（无从判级）。
+
+
+▸ false（缺省）
+
+[1] 郑三. 博士论文[D]. 武汉：示例大学，2019.
+[2] 王四. 硕士论文[D]. 武汉：示例大学，2020.
+[3] 李五. 裸 thesis 无 type[D]. 武汉：示例大学，2021.
+[4] Smith J. English PhD[D]. NY：Example University，2022.
+
+▸ true
+
+[1] 郑三. 博士论文[D]. 博士学位论文. 武汉：示例大学，2019.
+[2] 王四. 硕士论文[D]. 硕士学位论文. 武汉：示例大学，2020.
+[3] 李五. 裸 thesis 无 type[D]. 武汉：示例大学，2021.
+[4] Smith J. English PhD[D]. PhD thesis. NY：Example University，2022.
+

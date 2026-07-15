@@ -1,0 +1,35 @@
+ bib-et-al-use-first
+ 文献表截断后保留前 N 位责任者。
+ 期望 缺省 3（GB §7.1.2「录前 3 加，等」）。0 是合法值——只出截断词、不留孤儿分隔符 （官方 GB CSL 设 et-al-use-
+ first="0" 实测输出裸「等」 ）。 也作用于其他责任者（编者、译者）与其角色词的接缝。
+ 末档证明本参数与 bib-et-al-min 同收三档取值（整数 / 语言档 / 角色档，可两轴叠加）： (principal: 1, host: 2,
+ translator: 3, rest: 3) 让同一条目里主责任者只留 1 位、母体责任者留 2 位、 译者留 3 位——「留几位」和「何时截」两
+ 个参数各自都能按位置分设。
+
+
+▸ 0（只出截断词，无孤儿分隔符）
+
+正文：[1-3]
+[1] 等. 显式 and others[M]. 北京：社，2020.
+[2] 等. 只有编者的书[M]. 北京：社，2020.
+[3] Foreign A. 外国名著中译本[M]. 等译. 上海：翻译社，2019.
+
+▸1
+
+正文：[1-3]
+[1] 张三，等. 显式 and others[M]. 北京：社，2020.
+[2] 李编，等. 只有编者的书[M]. 北京：社，2020.
+[3] Foreign A. 外国名著中译本[M]. 译甲，等译. 上海：翻译社，2019.
+
+▸ 3（缺省）
+
+正文：[1-4]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ 角色档 (principal: 1, host: 2, translator: 3, rest: 3)：同条目内三个位置各留不同位数
+
+正文：[1]
+[1] Smith J，et al. Component Part[G]. Trans T，Uma U，Vega V，et al.，trans.//Host H，Ivy I，et al. Host Book. New York：Univ
+     Press，2023：10-20.
+

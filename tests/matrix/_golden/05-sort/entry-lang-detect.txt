@@ -1,0 +1,41 @@
+ entry-lang-detect
+ 条目缺 `langid` / `language` 域时的语言判定方式。
+ 期望 识别六种语言（zh / ja / ko / ru / fr / en，其余回落 en）。已显式标 langid 的条目不受影响。
+ • "auto"（缺省）：预扫书目——含假名或日文独占字（経 / 戸 / 沢 / 辻 / 働 / 込）就用 accurate，否则 fast；
+ • "fast"：纯字符脚本判定（假名→ja、谚文→ko、西里尔→ru，其余汉字→zh、拉丁→en），零额外开销；
+ • "accurate"：中日独占字表 +《百家姓》白名单 + 法英辨识全套。
+
+ 语料 lg-nolangid（无 langid 的中文条目）与 lg-mixed（中西混排）是判定对象； 三档的差异体现在文种分组的落位上（著
+ 者-出版年制才分组）。
+
+
+▸ "auto"（缺省）
+
+正文：（张三，2020；张三，李四等，2020；张三，Smith，2020；田中太郎他，2019；Smith et al.，2021；Dupont et al.，2016）
+张三，2020. 没有 langid 字段的中文书[M]. 北京：社.
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
+
+▸ "fast"
+
+正文：（张三，2020；张三，李四等，2020；张三，Smith，2020；田中太郎他，2019；Smith et al.，2021；Dupont et al.，2016）
+张三，2020. 没有 langid 字段的中文书[M]. 北京：社.
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
+
+▸ "accurate"
+
+正文：（张三，2020；张三，李四等，2020；张三，Smith，2020；田中太郎他，2019；Smith et al.，2021；Dupont et al.，2016）
+张三，2020. 没有 langid 字段的中文书[M]. 北京：社.
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
+

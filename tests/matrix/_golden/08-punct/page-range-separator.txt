@@ -1,0 +1,64 @@
+ page-range-separator
+ 起讫页码的连接符。
+ 期望 缺省 "-"。接受任意字符串： 裸标点字符（"," "." 等九种结构标点）随 bib-punct-style 与条目语言做全 / 半角感
+ 知； verbatim 定界 "{,}" 字面输出、不感知；其余字符串（"～" "–"）就是字面量。 多语言字典按条目语言分设：(zh:
+ "～") 让中文条目出全角波浪线、其余语言照旧（走本参数预设值 "-"）        ； 键是语言码（zh/en/ja/ko/ru/fr），写错的键直接报
+ 错；rest 兜底档改写「其余语言」那一档。 挑出来的值再走上面那三态。字典档对全部 -separator 配置生效，不止本项。
+
+
+▸ "-"（缺省）
+
+正文：[1-4]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[4] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+▸ "～"（全角波浪线，字面量）
+
+正文：[1-4]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12～25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30～45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1～12.
+[4] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100～115.
+
+▸ "–"（en dash，字面量）
+
+正文：[1-4]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12–25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30–45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1–12.
+[4] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100–115.
+
+▸ ","（裸标点 → 随 punct-style 与条目语言感知）
+
+正文：[1-4]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12，25.
+[2] Smith J, Doe J, Roe R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30, 45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1，12.
+[4] Brown B, Green G. English Journal Article[J]. Journal of Examples, 2023, 12(4): 100, 115.
+
+▸ "{,}"（verbatim → 恒半角逗号，不感知）
+
+正文：[1-4]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12,25.
+[2] Smith J, Doe J, Roe R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30,45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1,12.
+[4] Brown B, Green G. English Journal Article[J]. Journal of Examples, 2023, 12(4): 100,115.
+
+▸ (zh: "～")（中文条目波浪线，西文条目回落预设 -）
+
+正文：[1-4]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12～25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1～12.
+[4] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+▸ (zh: "～", rest: "–")（rest 改写「其余语言」档）
+
+正文：[1-4]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12～25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30–45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1～12.
+[4] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100–115.
+

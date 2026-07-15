@@ -1,0 +1,17 @@
+ back-ref
+ 文献表条目末尾是否回链到正文引用处（反向引用）    。
+ 期望 true：每条著录后附回引页码 / 位置，供读者从表跳回正文。false（缺省）：不附。
+
+
+▸ false（缺省）
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ true
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+

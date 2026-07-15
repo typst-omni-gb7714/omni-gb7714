@@ -1,0 +1,11 @@
+% 驱动一：biblatex-gb7714-2015（胡振震样式），著者-出版年制 + 笔画排序。
+% 编译：latexmk -xelatex biblatex.tex（biber 后端自动）。
+% 关键选项：style=gb7714-2015ay（著者-出版年制）、sortlocale=zh__stroke（中文按笔画）。
+\documentclass{article}
+\usepackage{ctex}
+\usepackage[backend=biber, style=gb7714-2015ay, sortlocale=zh__stroke]{biblatex}
+\addbibresource{refs.bib}
+\begin{document}
+\nocite{*}
+\printbibliography
+\end{document}

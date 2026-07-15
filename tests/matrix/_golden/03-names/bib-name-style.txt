@@ -1,0 +1,78 @@
+ bib-name-style
+ 文献表里西文姓名的格式（八维字典）。
+ 期望 auto 缺省：GB 形态——姓全著、首字母大写，名缩写为首字母且不加缩写点（§7.1）。 八维可逐维覆盖，语义同
+ cite-name-style。条目级 nameformat 字段优先于本参数（混合语料逐条标）。
+
+
+▸ auto（缺省）
+
+正文：[1-4]
+[1] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
+[2] King J Martin Luther，Ford I Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard J-L，Watson M-J. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+
+▸ given-form: full
+
+正文：[1-4]
+[1] Berg Jan v d，Cruz Maria d l. Name Prefix[M]. NY：P，2020.
+[2] King Jr. Martin Luther，Ford II Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard Jean-Luc，Watson Mary-Jane. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+
+▸ given-form: none（只姓）
+
+正文：[1-4]
+[1] Berg v d，Cruz d l. Name Prefix[M]. NY：P，2020.
+[2] King Martin Luther，Ford Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard，Watson. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+
+▸ order: given-ahead
+
+正文：[1-4]
+[1] Jan van der Berg，Maria de la Cruz. Name Prefix[M]. NY：P，2020.
+[2] Jr. King Martin Luther，II Ford Henry. Name Suffix[M]. NY：P，2020.
+[3] Jean-Luc Picard，Mary-Jane Watson. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+
+▸ order 字典 (first:, rest:)
+
+正文：[1-4]
+[1] Berg Jan v d，Maria de la Cruz. Name Prefix[M]. NY：P，2020.
+[2] King Jr. Martin Luther，II Ford Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard Jean-Luc，Mary-Jane Watson. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+
+▸ family-case: uppercase / lowercase / none
+
+正文：[1-4]
+[1] berg J v d，cruz M d l. Name Prefix[M]. NY：P，2020.
+[2] king J Martin Luther，ford I Henry. Name Suffix[M]. NY：P，2020.
+[3] picard J-L，watson M-J. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+
+▸ given-initial-separator: 「.」
+
+正文：[1-4]
+[1] Berg J. v d，Cruz M. d l. Name Prefix[M]. NY：P，2020.
+[2] King J. Martin Luther，Ford I. Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard J.-L.，Watson M.-J. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+
+▸ given-separator + given-case
+
+正文：[1-4]
+[1] Berg Jan v d，Cruz Maria d l. Name Prefix[M]. NY：P，2020.
+[2] King Jr. Martin Luther，Ford Ii Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard Jean-luc，Watson Mary-jane. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+
+▸ family-given-separator + given-family-separator
+
+正文：[1-4]
+[1] Berg、Jan v d，Cruz、Maria d l. Name Prefix[M]. NY：P，2020.
+[2] King、Jr. Martin Luther，Ford、II Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard、Jean-Luc，Watson、Mary-Jane. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+

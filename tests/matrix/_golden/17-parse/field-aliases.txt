@@ -1,0 +1,34 @@
+ 字段别名
+ 两个同义字段名，谁胜。
+ 期望 journal 是 journaltitle 的传统别名，address 是 location 的传统别名。 只写别名 → 照常著录；两个都写 → 真名
+ 静默胜（不报错、不合并）。             ⚠️ 底层 crate 的 crossref 继承表只认真名   location、不认别名 address—— 所以
+ @proceedings{.., address={北京}} 被 @inproceedings{.., crossref=..} 继承时会丢出版地。 载入期把 address 归一成
+
+ location 正是为了堵这个洞（见 crossref-xdata.typ）。 模板里 address 与 location 两个 token 都读归一后的值 （      ⚠️
+ location token 目前一写就 panic，见 BUGS 5）。
+
+
+▸ 四条别名条目（2025 · 顺序编码制）
+
+[1] 甲. 用 journal 而非 journaltitle[J]. 别名学报，2020，1（2）：1-9.
+[2] 乙. 两个都写（真名 journaltitle 胜）[J]. 真名学报，2020，1：1-9.
+[3] 丙. 用 location 而非 address[M]. 上海：社，2020.
+[4] 丁. 两个都写[M]. 上海：社，2020.
+
+▸ 同上 · 著者-出版年制
+
+丙，2020. 用 location 而非 address[M]. 上海：社.
+丁，2020. 两个都写[M]. 上海：社.
+甲，2020. 用 journal 而非 journaltitle[J]. 别名学报，1（2）：1-9.
+乙，2020. 两个都写（真名 journaltitle 胜）[J]. 真名学报，1：1-9.
+
+▸ 模板里用 address token 取归一后的值
+
+[1] 丙. 用 location 而非 address. address= 上海.
+[2] 丁. 两个都写. address= 上海.
+
+▸ short-journal 与别名并存（无 shortjournal → 回落全称）
+
+[1] 甲. 用 journal 而非 journaltitle[J]. 别名学报，2020，1（2）：1-9.
+[2] 乙. 两个都写（真名 journaltitle 胜）[J]. 真名学报，2020，1：1-9.
+

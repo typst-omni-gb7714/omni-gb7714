@@ -1,0 +1,20 @@
+ italic-journal
+ 期刊名 / 报纸名是否斜体。
+ 期望      false（缺省）
+                 ：正体。true：斜体。              ⚠️ 同   italic-book-title：字形差异不进文本 golden。
+
+
+▸ false（缺省）
+
+正文：[1-3]
+[1] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[2] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[3] 蒋六. 报纸文章题名[N]. 人民日报，2013-03-16（1）.
+
+▸ true
+
+正文：[1-3]
+[1] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[2] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[3] 蒋六. 报纸文章题名[N]. 人民日报，2013-03-16（1）.
+

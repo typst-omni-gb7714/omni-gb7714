@@ -1,0 +1,30 @@
+ style
+ 著录与标注的样式制度。
+ 期望 标量作用于两轴；字典可逐轴分设（(cite:, bib:)），得到「标注用一制、著录用另一制」的混合形态。 值域外的字
+ 符串（"ieee" / "apa" 等原生 CSL 名）不报错，回落全局。
+
+
+▸ numeric（缺省）
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ author-date
+
+正文：（张三等，2020；Smith et al.，2021）
+张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸ 字典 · cite 顺序编码制 × bib 著者-出版年制
+
+正文：[1-2]
+[1] 张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+[2] Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸ 字典 · cite 著者-出版年制 × bib 顺序编码制
+
+正文：（张三等，2020；Smith et al.，2021）
+张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+

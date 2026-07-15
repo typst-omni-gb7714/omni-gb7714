@@ -1,0 +1,43 @@
+ 联动：多列表
+ 一篇文档多张表时，覆盖链与编号空间怎么走。
+ 期望 覆盖链：cite 显式 > bibliography 逐表 > gb7714 全局。 编号空间：匿名主列表全文连续；命名列表（label:）各自
+ 独立、从 [1] 起（number-offset 恒 0）。 归属：set-bib-label("x") 作用域内的引用归 x；cite(bib-label: "x") 单次归 x。
+ 一份文档只有一套 bib 数据——gb7714() 把全文的 bib 源拼起来一次解析， 所以两份含相同 key 的语料同处一文档会报
+ duplicate key。   ⚠️ typst 0.15 的原生   target: / group: 是另一套路由（见 13-per-list/target-group.typ）。
+
+
+▸ 两张命名列表：各自的 version / style / 编号空间
+
+中文表引用[1-2]； 西文表引用（Smith et al.，2021）。
+
+中文文献（2015 · 顺序编码）
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3): 1-12.
+
+
+西文文献（2025 · 著者-出版年）
+Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+
+
+▸ set-bib-label 分节 + 逐表 numbering-style
+
+第一节的引用[1-2]
+
+第一节
+(1) 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+(2) 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+第二节的引用[1]
+
+第二节
+① Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+
+
+▸ 三级覆盖链：全局 numeric → 本表 author-date → 本次 cite(style: numeric)
+
+本表 author-date，本次引用强制 numeric：[1]； 同表另一次引用跟本表：（陈九等，2022）。
+陈九，卫十，2022. 中文期刊文章示例[J]. 计算机学报，45（3）：1-12.
+张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+

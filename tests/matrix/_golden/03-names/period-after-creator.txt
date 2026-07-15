@@ -1,0 +1,32 @@
+ period-after-creator
+ *责任者元素*之后是否加句点。
+ 期望 true（缺省）加 .，false 改用空格。两制同构——句点落在责任者元素之后，而著者-出版年制的 责任者元素是「责
+ 任者，出版年」整块（ZUO Z, 2020. Titlex → ZUO Z, 2020 Titlex）。 责任者与年份之间那个逗号不归本参数管（那是
+ bib-name-date-separator）。 对应 biblatex 的 \labelnamepunct——胡振震样式实测改成 \addspace 得「ZHEN Z, 2020
+ Titlex[M].」。
+
+
+▸ true（缺省）· 顺序编码制
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ false · 顺序编码制
+
+正文：[1-2]
+[1] 张三，李四，王五，等 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ true（缺省）· 著者-出版年制
+
+正文：（张三等，2020；Smith et al.，2021）
+张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸ false · 著者-出版年制
+
+正文：（张三等，2020；Smith et al.，2021）
+张三，李四，王五，等，2020 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al.，2021 English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+

@@ -1,0 +1,35 @@
+  dedup-url-pid
+  标识符已被 URL 承载时，是否不重复著录（GB/T 7714—2025 允许）。
+  期望 true（= auto 缺省）：双重检测，命中任一即抑制该标识符—— ①值匹配：URL 子串含该标识符的字面值（https://
+  doi.org/10.1234/abc 含 10.1234/abc）； ②类型标记匹配（小写）：URL 含该标识符的形态特征（doi.org/、cstr.cn/、
+  arxiv.org/、isbn:、issn:； 自定义标识符按 <prefix 或 bib-field>: 派生）。 false：关闭去重，标识符不论 URL 内容一
+  律独立输出。 show-pid 里显式置 true 的标识符总是强制显示，本参数只影响 auto 状态者。 语料 pid-all 的 URL 正是
+  https://doi.org/10.1234/example——值与类型标记双双命中。
+
+
+▸ auto（缺省 → true，DOI 被 URL 承载 → 不重复著录）
+
+正文：[1-2]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[2] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ false（关闭去重，DOI 独立输出）
+
+正文：[1-2]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e. DOI：1​0​.​1​2​
+    3​4​/​e​x​a​m​p​l​e.
+[2] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ true + show-pid: (doi: true)（显式 true 强制直通，去重不生效）
+
+正文：[1-2]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e. DOI：1​0​.​1​2​
+    3​4​/​e​x​a​m​p​l​e.
+[2] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ false + max: 1（去重关 → URL 承载的标识符不再计入配额）
+
+正文：[1-2]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[2] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+

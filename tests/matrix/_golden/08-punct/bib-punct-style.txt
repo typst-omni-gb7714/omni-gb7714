@@ -1,0 +1,119 @@
+  bib-punct-style
+  文献表著录标点的全 / 半角风格（正文标注的 `cite-punct-style` 是它的超集）。
+  期望 auto（缺省）随 version——2015 取 "half-with-space"、2025 取 "full"。 绝对三档："half-with-space"（分隔符带
+  尾空格 , . : ）/ "half"（无尾空格）/ "full"（一律全角）。 随文档语言："by-doc-no-space" / "by-doc-with-space"（中
+  日文档全角、西文文档半角）。 随条目语言："by-entry-no-space" / "by-entry-with-space"（各条目按自身语言）           。 受控符
+  号：, : ( ) ; ? !。 句点 . 例外，恒取半角："half-with-space" 与 "full" 档为 . 、"half" 档为 .，末尾去尾空格。 恒半角：
+  句点 .、斜杠 /（护 // 与 /OL）、方括号 []。要改它们得用 custom-punct。 「结构跟文档、内容跟条目」：by-doc-* 只管分
+  隔符；correct-punct 矫正的字段内标点恒按条目语言。 本文件的文档语言是中文（probe 缺省），by-doc-* 因此走全角；末
+  两块用 in-lang("en", ..) 把同一配置裹进西文文档作对照——同样的档位翻成半角。
+
+
+▸ auto · 2025（→ full）
+
+正文：[1-5]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[4] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[5] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ auto · 2015（→ half-with-space）
+
+正文：[1-5]
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
+[3] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3): 1-12.
+[4] BROWN B, GREEN G. English Journal Article[J]. Journal of Examples, 2023, 12(4): 100-115.
+[5] 钱八. 带获取路径的书[M/OL]. 北京: 某社, 2022[2024-01-15]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI:1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ "half-with-space"
+
+正文：[1-5]
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] Smith J, Doe J, Roe R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
+[3] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3): 1-12.
+[4] Brown B, Green G. English Journal Article[J]. Journal of Examples, 2023, 12(4): 100-115.
+[5] 钱八. 带获取路径的书[M/OL]. 北京: 某社, 2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI:1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ "half"（无尾空格）
+
+正文：[1-5]
+[1] 张三,李四,王五,等.中文专著示例:副标题[M].3 版.北京:示例出版社,2020: 12-25.
+[2] Smith J,Doe J,Roe R,et al.English Book Example[M].2nd ed.New York:Example Press,2021: 30-45.
+[3] 陈九,卫十.中文期刊文章示例[J].计算机学报,2022,45(3): 1-12.
+[4] Brown B,Green G.English Journal Article[J].Journal of Examples,2023,12(4): 100-115.
+[5] 钱八.带获取路径的书[M/OL].北京:某社,2022.h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k.DOI:1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ "full"
+
+正文：[1-5]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[4] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[5] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ "by-doc-no-space"（中文文档 → 全角）
+
+正文：[1-5]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[4] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[5] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ "by-doc-with-space"
+
+正文：[1-5]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[4] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[5] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ "by-entry-no-space"（中文条目全角、西文条目半角）
+
+正文：[1-5]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J,Doe J,Roe R,et al.English Book Example[M].2nd ed.New York:Example Press,2021: 30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[4] Brown B,Green G.English Journal Article[J].Journal of Examples,2023,12(4): 100-115.
+[5] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ "by-entry-with-space"
+
+正文：[1-5]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J, Doe J, Roe R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[4] Brown B, Green G. English Journal Article[J]. Journal of Examples, 2023, 12(4): 100-115.
+[5] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ 著者-出版年制 · full（人名↔年份的句点也恒半角）
+
+正文：（陈九等，2022；钱八，2022；张三等，2020；Brown et al.，2023；Smith et al.，2021）
+陈九，卫十，2022. 中文期刊文章示例[J]. 计算机学报，45（3）：1-12.
+钱八，2022. 带获取路径的书[M/OL]. 北京：某社. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Brown B，Green G，2023. English Journal Article[J]. Journal of Examples，12（4）：100-115.
+Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸ "by-doc-no-space" · 西文文档（→ 半角）
+
+正文：[1-5]
+[1] 张三,李四,王五,等.中文专著示例:副标题[M].3 版.北京:示例出版社,2020: 12-25.
+[2] Smith J,Doe J,Roe R,et al.English Book Example[M].2nd ed.New York:Example Press,2021: 30-45.
+[3] 陈九,卫十.中文期刊文章示例[J].计算机学报,2022,45(3): 1-12.
+[4] Brown B,Green G.English Journal Article[J].Journal of Examples,2023,12(4): 100-115.
+[5] 钱八.带获取路径的书[M/OL].北京:某社,2022.h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k.DOI:1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ "by-entry-no-space" · 西文文档（不随文档 → 中文条目仍全角）
+
+正文：[1-5]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J,Doe J,Roe R,et al.English Book Example[M].2nd ed.New York:Example Press,2021: 30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[4] Brown B,Green G.English Journal Article[J].Journal of Examples,2023,12(4): 100-115.
+[5] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+

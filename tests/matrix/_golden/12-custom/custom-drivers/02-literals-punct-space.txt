@@ -1,0 +1,94 @@
+ custom-drivers · 字面量 / 标点 / 空白
+ 模板里非 token 的那些字符怎么落地。
+ 期望 花括号字面量 {…}：原样进条目（含 CJK、空格、标点），不受标点矫正与软空格影响； 要写花括号本身用 \{ \}（模
+ 板本身是 Typst 字符串，源码里写 \\{ \\}）。反引号不再是元字符。 裸标点（. , : ; / ( ) 及任何 CJK 标点）原样进条目
+ 并受 bib-punct-style 矫正—— 中文条目下裸写的半角 , 渲染成 ，、( 渲染成 （；要原样半角就放进花括号 {,}。 方括号 [ ]
+ 是普通字面标点（恒半角、不自适应），直接写 [M] 就出 [M]。 软空格：单个空格按排版规则决定落不落——一般落 1 个；但
+ 贴左标点（. , : ; ? ! ) ] 及所有全角标点）前不落、 全角标点或开括号后不落。要确切的空格，写两个及以上空格（落
+ n−1 个硬空格），或用花括号把空格裹进去。 元字符 ?< &< > { } => | 要字面输出，用花括号 verbatim 裹起来。
+
+
+▸ 软空格：author . title → 句点贴前、后留一空
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题.
+[2] Brown B，Green G. English Journal Article.
+
+▸ 软空格：title , year → 中文条目逗号转全角、两侧不留空
+
+正文：[1-2]
+[1] 中文专著示例：副标题，2020.
+[2] English Journal Article，2023.
+
+▸ 软空格：两个 token 之间落 1 空格
+
+正文：[1-2]
+[1] 张三，李四，王五，等 中文专著示例：副标题 2020.
+[2] Brown B，Green G English Journal Article 2023.
+
+▸ 硬空格：三个空格 → 落 2 个
+
+正文：[1-2]
+[1] 张三，李四，王五，等 中文专著示例：副标题.
+[2] Brown B，Green G English Journal Article.
+
+▸ 花括号把空格裹进去：author { , } title → 原样
+
+正文：[1-2]
+[1] 张三，李四，王五，等 , 中文专著示例：副标题.
+[2] Brown B，Green G , English Journal Article.
+
+▸ verbatim 不受标点矫正：{,} 恒半角，裸 , 随条目语言
+
+正文：[1-2]
+[1] 张三，李四，王五，等, 中文专著示例：副标题，2020.
+[2] Brown B，Green G, English Journal Article，2023.
+
+▸ verbatim 吃掉相邻软空格：{《} title {》}
+
+正文：[1-2]
+[1] 张三，李四，王五，等《中文专著示例：副标题》2020.
+[2] Brown B，Green G《English Journal Article》2023.
+
+▸ 方括号恒半角：直接写 [M]
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题 [M]. 2020.
+[2] Brown B，Green G. English Journal Article [M]. 2023.
+
+▸ 裸 [ ] 也是普通字面标点
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题 [M]. 2020.
+[2] Brown B，Green G. English Journal Article [M]. 2023.
+
+▸ 转义花括号 \{ \}
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题 {备注}. 2020.
+[2] Brown B，Green G. English Journal Article {备注}. 2023.
+
+▸ 元字符字面输出：{?<} {&<} {>} {|} {=>}
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题?< &< > | =>. 2020.
+[2] Brown B，Green G. English Journal Article?< &< > | =>. 2023.
+
+▸ CJK 标点直接写：、 · 《 》
+
+正文：[1-2]
+[1] 张三，李四，王五，等、中文专著示例：副标题《2020》.
+[2] Brown B，Green G、English Journal Article《2023》.
+
+▸ title 与 mark-medium 贴紧：用中性组 title<mark-medium>
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 示例出版社.
+[2] Brown B，Green G. English Journal Article[J].
+
+▸ 对照：title mark-medium（软空格落地 → 有空格）
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题 [M]. 示例出版社.
+[2] Brown B，Green G. English Journal Article [J].
+

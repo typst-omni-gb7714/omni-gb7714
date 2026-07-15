@@ -1,0 +1,23 @@
+  url-break-hyphen
+  URL 断点落在行末时是否显示连字符（总开关）。
+  期望 false（缺省）：断点用零宽空格（U+200B）——任意位置可断行，行末不显连字符， URL 复制干净、不会把连字符误
+  读成 URL 的一部分。 true：断点用软连字符（U+00AD），落行末才显 -，便于识别续行； URL 自带的真实 - 不叠加、不会
+  出现 --。覆盖范围由 url-break-hyphen-at-delimiters 决定。                                               ⚠️ 软连字符只在实际断行处显形——本用例把 URL 做得足够
+  长以逼出断行。
+
+
+▸ false（缺省，零宽空格）
+
+[1] 甲. 长 URL 逼出断行[EB/OL]. （2023）[2024-01-01]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​a​v​e​r​y​l​o​n​g​p​a​t​h​s​e​g​m​e​n​t​w​i​t​h​o​u​t​a​n​y​s​e​p​a​r​a​t​o​r​s​a​t​a​l​l​x​y​z​/​a​n​o​
+    t​h​e​r​v​e​r​y​l​o​n​g​s​e​g​m​e​n​t​h​e​r​e​/​f​i​n​a​l.
+
+▸ true（软连字符）
+
+[1] 甲. 长 URL 逼出断行[EB/OL]. （2023）[2024-01-01]. h­t­t­p­s­:­/­/­e­x­a­m­p­l­e­.­c­o­m­/­a­v­e­r­y­l­o­n­g­p­a­t­h­s­e­g­m­e­n­t­w­i­t­h­o­u­t­a­n­y­s­e­p­a­r­a­t­o­r­s­a­t­a­l­l­x­y­z­/­a­­
+    n­o­t­h­e­r­v­e­r­y­l­o­n­g­s­e­g­m­e­n­t­h­e­r­e­/­f­i­n­a­l.
+
+▸ true + url-break-every: none（只在天然分隔符处断，且显 -）
+
+[1] 甲. 长 URL 逼出断行[EB/OL]. （2023）[2024-01-01]. https:­/­/­example.­com/­averylongpathsegmentwithoutanyseparatorsatallxyz/­­
+    anotherverylongsegmenthere/­final.
+

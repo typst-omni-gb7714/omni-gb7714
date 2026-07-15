@@ -1,0 +1,89 @@
+  show-pid
+  永久标识符（DOI / CSTR / ISBN / ISSN / eprint 及自定义 PID）的显示。
+  期望 逐标识符取值：true 强制显示（即使 URL 已含同串、即使被 CSTR / DOI 互斥压制）；false 隐藏； "online-only" 仅
+  网络文献显示（联机判据见 show-url；不含强制直通豁免，URL 去重仍生效）； 缺省 / auto 自动（URL 含同串或同类型标记
+  则隐藏）。 默认显示：DOI 恒显示；CSTR 仅 version: 2025 默认显示；eprint 默认显示；ISBN / ISSN 默认不显示（国标列为
+  任选项）。 元键：max = 著录数量上限（max: 1 对齐 2025「只须著录一个标识符」，取 pid-priority 下首个有值者； dedup-
+  url-pid 开启时 URL 已承载的标识符计入配额）            ；rest = 未点名标识符的兜底档。 条目词汇键（与 show-mark 同一套：
+  entry_type > 码 > rest）按条目关停全部标识符；标识符名键优先于条目词汇键。 CSTR / DOI 互斥：cstr 命中时抑制 doi；
+  在 show-pid 里显式给 doi 任一值后互斥失效。
+
+
+▸ (:)（缺省：DOI 显示、CSTR 2025 显示且压住 DOI、ISBN 不显示）
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020.
+
+▸ version: 2015（CSTR 默认关，DOI 出场）
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报, 2023, 1: 1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. DOI:1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[A/OL]. 2023. arXiv:2301.00001.
+[3] 酉. 带 ISBN 的书[M]. 北京: 社, 2020.
+
+▸ (isbn: true)
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020. ISBN：978-7-111-11111-1.
+
+▸ (doi: true)（显式给 doi 值 → CSTR 互斥失效，两个都出）
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e. DOI：1​0​.​1​2​
+    3​4​/​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020.
+
+▸ (rest: false, doi: true)（只留 DOI）
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020.
+
+▸ (rest: true)（全出，含默认不显的 ISBN）
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020. ISBN：978-7-111-11111-1.
+
+▸ (max: 1)（至多一个，取 pid-priority 首个有值者）
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020. ISBN：978-7-111-11111-1.
+
+▸ (rest: "online-only")
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020.
+
+▸ (article: false)（条目词汇键：按 entry_type 全关）
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020.
+
+▸ 标识符名键优先于条目词汇键 (article: false, doi: true)
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020.
+
+▸ (eprint: false)
+
+正文：[1-3]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[2] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+[3] 酉. 带 ISBN 的书[M]. 北京：社，2020.
+

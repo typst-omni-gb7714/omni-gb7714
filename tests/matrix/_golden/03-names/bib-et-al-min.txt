@@ -1,0 +1,73 @@
+ bib-et-al-min
+ 文献表里责任者数量*达到*此值就截断。
+ 期望 缺省 4（GB §7.1.2：≤3 全录，>3 录前 3 加「，等」——即「达到 4 位」就截断）。 语义与 CSL 的 et-al-min 逐字同义
+ ——责任者数达到此数就截断（>=），CSL 样式里的 et-al-min="4" 就是本项的 4，照搬即可、不必换算。（曾是「超过此数才
+ 截断」，默认值也因此 小一位；语义等价，但每次跟 CSL 样式对照都要在脑子里 ±1，迁移样式时极易错位。） 语料条目有 4
+ 位责任者——缺省下正好触发截断。设 5 恰好不截，设 999 关闭截断。
+ 后三档是字典取值，语料换成 roles.bib（每条都让多个截断位置各站 4 位责任者， 这样单独改一个位置的阈值就看得出
+ 来）：
+ • 语言档 (zh: 3, rest: 9)：中文条目 3 位就截，西文条目 9 位才截（4 位全出）。按条目语言分设。
+ • 角色档 (principal: 9, host: 2, editor: 2, translator: 3, rest: 4)：同一条目内，主责任者 4 位全出（阈值 9），而
+   母体责任者、译者、编者都截断——四个截断位置各用各的阈值。
+ • 两级 (editor: (en: 2, rest: 9), rest: 9)：除编者外一律不截（rest: 9）；编者里只有西文 条目截断（en: 2），中文编
+   者走 rest: 9 不截。角色与语言两轴同时生效。
+ 角色分设的来路是真实需求：Zotero 中文社区语料里「中国政法大学」「中外法学」「法学引注手册」等 样式给编者单设了
+ 比著者更宽的阈值（西文条目 et-al-min="5" 而著者是 4），日文条目又收到 3。
+
+
+▸2
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ 4（缺省，GB §7.1.2）
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ 5（> 责任者数，不截断）
+
+正文：[1-2]
+[1] 张三，李四，王五，赵六. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，Poe P. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ 999（关闭截断）
+
+正文：[1-2]
+[1] 张三，李四，王五，赵六. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，Poe P. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ 对照：标量 4（roles 语料，四个位置同阈值）
+
+正文：[1-3]
+[1] Smith J，Brown B，Chen C，et al. Component Part[G]. Trans T，Uma U，Vega V，et al.，trans.//Host H，Ivy I，Jones J，et
+     al. Host Book. New York：Univ Press，2023：10-20.
+[2] Smith J，Brown B，Chen C，et al. With Editors[M]. Edgar E，Fisher F，Gray G，et al.，ed. New York：Univ Press，2022.
+[3] 张三，李四，王五，等. 中文专著[M]. 甲编，乙编，丙编，等主编. 北京：科学出版社，2020.
+
+▸ 语言档 (zh: 3, rest: 9)
+
+正文：[1-3]
+[1] Smith J，Brown B，Chen C，Davis D. Component Part[G]. Trans T，Uma U，Vega V，West W，trans.//Host H，Ivy I，Jones
+     J，King K. Host Book. New York：Univ Press，2023：10-20.
+[2] Smith J，Brown B，Chen C，Davis D. With Editors[M]. Edgar E，Fisher F，Gray G，Hall H，ed. New York：Univ Press，2022.
+[3] 张三，李四，王五，等. 中文专著[M]. 甲编，乙编，丙编，等主编. 北京：科学出版社，2020.
+
+▸ 角色档 (principal: 9, host: 2, editor: 2, translator: 3, rest: 4)
+
+正文：[1-3]
+[1] Smith J，Brown B，Chen C，Davis D. Component Part[G]. Trans T，Uma U，Vega V，et al.，trans.//Host H，Ivy I，Jones J，
+     et al. Host Book. New York：Univ Press，2023：10-20.
+[2] Smith J，Brown B，Chen C，Davis D. With Editors[M]. Edgar E，Fisher F，Gray G，et al.，ed. New York：Univ Press，2022.
+[3] 张三，李四，王五，赵六. 中文专著[M]. 甲编，乙编，丙编，等主编. 北京：科学出版社，2020.
+
+▸ 角色×语言两级 (editor: (en: 2, rest: 9), rest: 9)
+
+正文：[1-3]
+[1] Smith J，Brown B，Chen C，Davis D. Component Part[G]. Trans T，Uma U，Vega V，West W，trans.//Host H，Ivy I，Jones
+     J，King K. Host Book. New York：Univ Press，2023：10-20.
+[2] Smith J，Brown B，Chen C，Davis D. With Editors[M]. Edgar E，Fisher F，Gray G，et al.，ed. New York：Univ Press，2022.
+[3] 张三，李四，王五，赵六. 中文专著[M]. 甲编，乙编，丙编，丁编主编. 北京：科学出版社，2020.
+

@@ -1,0 +1,87 @@
+ 多语种全表
+ `lang.bib` 整表——六语种 + 缺 `langid` + 中西混排 + 中文排序四条。
+ 期望 条目语言决定：本地化词（等 / et al. / 编 / 译 / 佚名 / 无日期 / 出版地不详）、 by-entry-* 标点档的全 / 半角、多语言
+ 字典 -separator 的取值、文种分组的落位。 缺 langid 的条目按 entry-lang-detect 判定。 著者-出版年制下按 entry-lang-
+ order 先分文种、组内再按责任者字顺（中文按 bib-sort-zh-by）       。
+
+
+▸ 2025 · 顺序编码制（缺省）
+
+[1]   张三，李四，王五，等. 中文书[M]. 北京：社，2020.
+[2]   Smith J，Doe J，Roe R，et al. English Book[M]. NY：P，2021.
+[3]   田中太郎，鈴木花子，佐藤次郎，他. 日本語の本[M]. 東京：出版社，2019.
+[4]   김철수，이영희，박민수，외. 한국어 책[M]. 서울：출판사，2018.
+[5]   Иванов И，Петров П，Сидоров С，и др. Русская книга[M]. Москва：Издательство，2017.
+[6]   Dupont J，Martin M，Bernard P，et al. Livre français[M]. Paris：Éditions，2016.
+[7]   Müller H，Schmidt A，Weber K，et al. Deutsches Buch[M]. Berlin：Verlag，2015.
+[8]   无责任者中文[M]. 北京：社，2020.
+[9]   Anonymous English[M]. NY：P，2021.
+[10] 周七. 无年中文[M]. 北京：社.
+[11] Brown B. No Year English[M]. NY：P.
+[12] 张三. 没有 langid 字段的中文书[M]. 北京：社，2020.
+[13] 张三，Smith J. Mixed 中英 Title[M]. 北京：社，2020.
+[14] 丁一. 丁书[M]. 北京：社，2020.
+[15] 万二. 万书[M]. 北京：社，2020.
+[16] 习三. 习书[M]. 北京：社，2020.
+[17] 乔四. 乔书[M]. 北京：社，2020.
+
+▸ 2025 · 著者-出版年制（文种分组 + 组内字顺）
+
+丁一，2020. 丁书[M]. 北京：社.
+乔四，2020. 乔书[M]. 北京：社.
+万二，2020. 万书[M]. 北京：社.
+习三，2020. 习书[M]. 北京：社.
+佚名，2020. 无责任者中文[M]. 北京：社.
+张三，2020. 没有 langid 字段的中文书[M]. 北京：社.
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
+周七，无日期. 无年中文[M]. 北京：社.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
+Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+
+▸ by-entry-with-space（各条目按自身语言定标点）
+
+[1]   张三，李四，王五，等. 中文书[M]. 北京：社，2020.
+[2]   Smith J, Doe J, Roe R, et al. English Book[M]. NY: P, 2021.
+[3]   田中太郎，鈴木花子，佐藤次郎，他. 日本語の本[M]. 東京：出版社，2019.
+[4]   김철수, 이영희, 박민수, 외. 한국어 책[M]. 서울: 출판사, 2018.
+[5]   Иванов И, Петров П, Сидоров С, и др. Русская книга[M]. Москва: Издательство, 2017.
+[6]   Dupont J, Martin M, Bernard P, et al. Livre français[M]. Paris: Éditions, 2016.
+[7]   Müller H, Schmidt A, Weber K, et al. Deutsches Buch[M]. Berlin: Verlag, 2015.
+[8]   无责任者中文[M]. 北京：社，2020.
+[9]   Anonymous English[M]. NY: P, 2021.
+[10] 周七. 无年中文[M]. 北京：社.
+[11] Brown B. No Year English[M]. NY: P.
+[12] 张三. 没有 langid 字段的中文书[M]. 北京：社，2020.
+[13] 张三，Smith J. Mixed 中英 Title[M]. 北京：社，2020.
+[14] 丁一. 丁书[M]. 北京：社，2020.
+[15] 万二. 万书[M]. 北京：社，2020.
+[16] 习三. 习书[M]. 北京：社，2020.
+[17] 乔四. 乔书[M]. 北京：社，2020.
+
+▸ 占位词全开（佚名 / 无日期 按条目语言取词）
+
+丁一，2020. 丁书[M]. 北京：社.
+乔四，2020. 乔书[M]. 北京：社.
+万二，2020. 万书[M]. 北京：社.
+习三，2020. 习书[M]. 北京：社.
+佚名，2020. 无责任者中文[M]. 北京：社.
+张三，2020. 没有 langid 字段的中文书[M]. 北京：社.
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
+周七，无日期. 无年中文[M]. 北京：社.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
+Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+

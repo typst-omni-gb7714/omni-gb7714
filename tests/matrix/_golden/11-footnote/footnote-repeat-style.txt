@@ -1,0 +1,137 @@
+ footnote-repeat-style
+ 脚注制下*重复*引用同一文献时脚注里装什么。
+ 期望 首次恒为完整著录（官方 note CSL 与全部社区方言一致）。本参数只管重复位； 紧邻位的「同上」简化由 footnote-
+ ibid 独立控制，两参正交出全部有据体例：
+ • auto（缺省）= "number"：配合缺省 footnote-ibid: true 即官方 note CSL 的梯子——紧邻「同上(: 页码)」、隔开「同③(: 页
+   码)」；
+ • "full"：重复著录整条（GB §9.2.1.3「重复著录」正统，社区方言主流）；
+ • "number"：同③（首注号；圈码自动镜像文档当前的脚注编号样式）；
+ • "shortened"：缩略「责任者. 题名[标识].」（完整注的缩减产物，CMOS 术语；页码接独立著录段）；
+ • "reuse"：不发新注，正文上标复用首注号——唯一装不下页码的值。
+
+「同上」「同」两词可经 custom-terms 的 ibid（纯词）与 footnote-number（前后缀对）覆写，按文档语言取词。
+
+
+▸ auto（缺省 → number）
+
+首① 邻② 换③ 隔④ 带页码⑤。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "full"（重复著录整条）
+
+首⑥ 邻⑦ 换⑧ 隔⑨ 带页码⑩。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "number"
+
+首⑪ 邻⑫ 换⑬ 隔⑭ 带页码⑮。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "shortened"
+
+首⑯ 邻⑰ 换⑱ 隔⑲ 带页码⑳。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "reuse"（不发新注，正文复用首注号；装不下页码）
+
+首① 邻㉑ 换③ 隔① 带页码㉒。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "full" + footnote-ibid: false（GB 纯重复著录）
+
+首㉓ 邻㉔ 换㉕ 隔㉖ 带页码㉗。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "shortened" + footnote-ibid: false（Chicago 17th 全缩略）
+
+首㉘ 邻㉙ 换㉚ 隔㉛ 带页码㉜。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ custom-terms 覆写 ibid（纯词或 (text:, supplement-separator:) 字典）与 footnote-number（三槽）
+
+首㉝ 邻㉞ 换㉟ 隔㊱ 带页码㊲。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+ ①
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ②
+   同上.
+ ③
+   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ ④
+   同①.
+ ⑤
+   同上：88.
+ ⑥
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ⑦
+   同上.
+ ⑧
+   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ ⑨
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ⑩
+   同上：88.
+ ⑪
+   同①.
+ ⑫
+   同上.
+ ⑬
+   See note ③.
+ ⑭
+   同①.
+ ⑮
+   同上：88.
+ ⑯
+   张三，李四，王五，等. 中文专著示例：副标题[M].
+ ⑰
+   同上.
+ ⑱
+   Smith J，Doe J，Roe R，et al. English Book Example[M].
+ ⑲
+   张三，李四，王五，等. 中文专著示例：副标题[M].
+ ⑳
+   同上：88.
+ ㉑
+   同上.
+ ㉒
+   同上：88.
+ ㉓
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ㉔
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ㉕
+   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ ㉖
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ㉗
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：88.
+ ㉘
+   张三，李四，王五，等. 中文专著示例：副标题[M].
+ ㉙
+   张三，李四，王五，等. 中文专著示例：副标题[M].
+ ㉚
+   Smith J，Doe J，Roe R，et al. English Book Example[M].
+ ㉛
+   张三，李四，王五，等. 中文专著示例：副标题[M].
+ ㉜
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 88.
+ ㉝
+   见注①.
+ ㉞
+   同前注.
+ ㉟
+   See note ③.
+ ㊱
+   见注①.
+ ㊲
+   同前注：88.
+

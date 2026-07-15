@@ -1,0 +1,80 @@
+% 边角语料：字段与结构的边界情形。矩阵里需要边角的参数点名引用它。
+% 每条只为一个边角而生，键名说明它测什么。
+
+% —— 姓名 ——
+@book{nm-prefix, author = {van der Berg, Jan and de la Cruz, Maria}, title = {Name Prefix},
+  address = {NY}, publisher = {P}, year = {2020}, langid = {english}}
+@book{nm-suffix, author = {King, Martin Luther, Jr. and Ford, Henry, II}, title = {Name Suffix},
+  address = {NY}, publisher = {P}, year = {2020}, langid = {english}}
+@book{nm-hyphen, author = {Jean-Luc Picard and Mary-Jane Watson}, title = {Hyphenated Given},
+  address = {NY}, publisher = {P}, year = {2020}, langid = {english}}
+@book{nm-others, author = {张三 and 李四 and others}, title = {显式 and others}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{nm-corp, author = {{中国科学院计算技术研究所}}, title = {机关团体责任者}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{nm-editor-only, editor = {李编 and 王编}, title = {只有编者的书}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{nm-translator, author = {Foreign, Author}, translator = {译甲 and 译乙}, title = {外国名著中译本},
+  address = {上海}, publisher = {翻译社}, year = {2019}, langid = {chinese}}
+@book{nm-nameformat, author = {李四}, title = {条目级 nameformat}, nameformat = {pinyin}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{nm-same-a, author = {张三}, title = {同责任者同年甲}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{nm-same-b, author = {张三}, title = {同责任者同年乙}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{nm-samename-a, author = {Smith, John}, title = {Same Family A}, address = {NY}, publisher = {P}, year = {2020}, langid = {english}}
+@book{nm-samename-b, author = {Smith, Jane}, title = {Same Family B}, address = {NY}, publisher = {P}, year = {2021}, langid = {english}}
+@book{nm-noyear-a, author = {周七}, title = {同责任者无年甲}, address = {北京}, publisher = {社}, langid = {chinese}}
+@book{nm-noyear-b, author = {周七}, title = {同责任者无年乙}, address = {北京}, publisher = {社}, langid = {chinese}}
+
+% —— 题名 ——
+@book{ti-multivolume, author = {李约瑟}, maintitle = {中国科学技术史}, volume = {2}, title = {科学思想史},
+  address = {北京}, publisher = {科学出版社}, year = {1990}, langid = {chinese}}
+@book{ti-series, author = {甲}, title = {丛书中的一本}, series = {示例丛书}, number = {3},
+  address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{ti-addon, author = {乙}, title = {主题名}, subtitle = {副题名}, titleaddon = {其他题名信息},
+  address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{ti-notitle, author = {丙}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{ti-punct, author = {丁}, title = {题名里有半角逗号, 分号; 问号? 叹号!}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+
+% —— 出版信息 ——
+@book{im-nopub, author = {戊}, title = {出版地与出版者都缺}, year = {2020}, langid = {chinese}}
+@book{im-noloc, author = {己}, title = {只缺出版地}, publisher = {某社}, year = {2020}, langid = {chinese}}
+@book{im-placeholder, author = {庚}, title = {用户手写占位符}, address = {[S.l.]}, publisher = {[s.n.]}, year = {2020}, langid = {chinese}}
+% 电子资源的出版年只读 `year`（它的 `date` 字段是创建或修改日期，GB §7.6）。缺出版年时引文页码前
+% 仍是冒号（§8.2.2「出版年: 引文页码」），不能挪到出版年的逗号位上假装自己是年份。
+% 只有 2015 档走「出版地: 出版者: 页码」这条路——2025 版的 EB 是平台式（§8.11 的格式串里没有
+% 出版地、出版者、页码），所以本条在默认版本下只出「[EB/OL].[引用日期]. 获取路径」。
+@online{im-online-nopubyear, author = {丙子}, title = {电子资源缺出版年有页码}, location = {北京}, publisher = {某社}, pages = {12-15}, url = {https://example.com/np}, urldate = {2024-01-01}, langid = {chinese}}
+
+% —— 卷期页 ——
+@article{vp-noissue, author = {辛}, title = {有卷无期}, journaltitle = {学报}, year = {2022}, volume = {10}, pages = {1-9}, langid = {chinese}}
+@article{vp-novol, author = {壬}, title = {有期无卷}, journaltitle = {学报}, year = {2022}, number = {2}, pages = {1-9}, langid = {chinese}}
+@article{vp-online-first, author = {癸}, title = {网络首发无卷期}, journaltitle = {学报}, date = {2024-05-09}, pages = {1-9}, langid = {chinese}}
+@article{vp-artno, author = {子}, title = {无页码有文章编号}, journaltitle = {学报}, year = {2022}, volume = {5}, pages = {e12345}, langid = {chinese}}
+@article{vp-issue-str, author = {丑}, title = {非数字期号}, journaltitle = {学报}, year = {2022}, volume = {5}, issue = {增刊2}, pages = {1-9}, langid = {chinese}}
+@book{vp-pagerange, author = {寅}, title = {起讫页码折叠}, address = {北京}, publisher = {社}, year = {2020}, pages = {1234-1236}, langid = {chinese}}
+
+% —— 日期 ——
+@book{dt-edtf, author = {卯}, title = {EDTF 不确定日期}, address = {北京}, publisher = {社}, year = {2020~}, langid = {chinese}}
+@book{dt-range, author = {辰}, title = {年份区间}, address = {北京}, publisher = {社}, year = {1998/2005}, langid = {chinese}}
+
+% —— 结构 ——
+@book{set-a, author = {张三}, title = {条目集成员甲}, address = {北京}, publisher = {社}, year = {2018}, langid = {chinese}}
+@book{set-b, author = {李四}, title = {条目集成员乙}, address = {北京}, publisher = {社}, year = {2017}, langid = {chinese}}
+@set{set-main, entryset = {set-a, set-b}}
+@book{set-c, author = {王五}, title = {条目集成员丙}, address = {北京}, publisher = {社}, year = {2019}, langid = {chinese}}
+@set{set-labeled, entryset = {set-c}, label = {王五, 等, 2019}}
+@book{rel-zh, author = {张三}, title = {中文原版}, address = {北京}, publisher = {中文社}, year = {2020},
+  related = {rel-en}, relatedtype = {lanversion}, langid = {chinese}}
+@book{rel-en, author = {Zhang, San}, title = {English Version}, address = {NY}, publisher = {EN Press}, year = {2020}, langid = {english}}
+@book{kw-a, author = {巳}, title = {带关键词的书}, keywords = {示例关键词}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+@book{an-a, author = {午}, title = {带注释字段的书}, annotation = {这是注释内容}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+
+% —— 永久标识符 ——
+@article{pid-all, author = {未}, title = {DOI 与 CSTR 与 URL 齐备}, journaltitle = {学报}, year = {2023}, volume = {1}, pages = {1-10},
+  doi = {10.1234/example}, cstr = {32003.11.example}, url = {https://doi.org/10.1234/example}, langid = {chinese}}
+@article{pid-eprint, author = {申}, title = {arXiv 预印本}, eprint = {2301.00001}, archiveprefix = {arXiv},
+  eprinttype = {arXiv}, year = {2023}, langid = {english}}
+@book{pid-isbn, author = {酉}, title = {带 ISBN 的书}, isbn = {978-7-111-11111-1}, address = {北京}, publisher = {社}, year = {2020}, langid = {chinese}}
+
+% —— 显式标识码通道 ——
+@misc{mk-usera, author = {戌}, title = {usera 显式码}, usera = {M/OL}, url = {https://e.com}, year = {2020}, langid = {chinese}}
+@misc{mk-entrytypeid, author = {亥}, title = {entrytypeid 显式码}, entrytypeid = {J}, year = {2020}, langid = {chinese}}
+@misc{mk-mark, author = {甲子}, title = {mark 字段显式码}, mark = {S}, year = {2020}, langid = {chinese}}
+@misc{mk-subtype, author = {乙丑}, title = {entrysubtype 等值}, entrysubtype = {dataset}, year = {2020}, langid = {chinese}}
+@misc{mk-none, author = {丙寅}, title = {无任何标识线索}, year = {2020}, langid = {chinese}}

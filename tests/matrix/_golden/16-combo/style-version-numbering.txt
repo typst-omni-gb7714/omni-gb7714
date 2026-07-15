@@ -1,0 +1,77 @@
+ 联动：style × version × numbering-style
+样式轴与版本轴怎样一起决定标注与著录。
+期望 style 是四轴的合成：cite（标注形态）× bib（著录格式）；字典形收严要求双轴都给。 version 决定：标点缺省档
+（2015 半角带空格 / 2025 全角）、prefix-last 缺省、 预印本码（2025 PP / 2015 A / 2005 Z）、CSTR 默认开关、AY 文献表句
+点。 numbering-style 只在顺序编码制下有意义，且文献表与行内标注同源。 disambiguate 的 given-name / names 两档在
+auto 下跟标注形态轴—— 混合制（(cite: "numeric", bib: "author-date")）想要表侧效果得显式 true。
+
+
+▸ numeric × 2025（缺省）
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+▸ numeric × 2015
+
+正文：[1-3]
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
+[3] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3): 1-12.
+
+▸ author-date × 2025
+
+正文：（陈九等，2022；张三等，2020；Smith et al.，2021）
+陈九，卫十，2022. 中文期刊文章示例[J]. 计算机学报，45（3）：1-12.
+张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸ author-date × 2015
+
+正文：（张三等，2020；Smith et al.，2021；陈九等，2022）
+陈九, 卫十, 2022. 中文期刊文章示例[J]. 计算机学报, 45(3): 1-12.
+张三, 李四, 王五, 等, 2020. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社: 12-25.
+SMITH J, DOE J, ROE R, et al., 2021. English Book Example[M]. 2nd ed. New York: Example Press: 30-45.
+
+▸ author-date × 2005（AY 文献表句点）
+
+正文：（张三等，2020；Smith et al. 2021；陈九等，2022）
+陈九, 卫十. 2022. 中文期刊文章示例[J]. 计算机学报, 45(3): 1-12.
+张三, 李四, 王五, 等. 2020. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社: 12-25.
+SMITH J, DOE J, ROE R, et al. 2021. English Book Example[M]. 2nd ed. New York: Example Press: 30-45.
+
+▸ 混合制 (cite: numeric, bib: author-date)
+
+正文：[1-3]
+[1] 张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+[2] Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+[3] 陈九，卫十，2022. 中文期刊文章示例[J]. 计算机学报，45（3）：1-12.
+
+▸ 混合制 + disambiguate: true（表侧才有消歧）
+
+正文：[1-2]
+[1] 张三，2020a. 同责任者同年甲[M]. 北京：社.
+[2] 张三，2020b. 同责任者同年乙[M]. 北京：社.
+
+▸ 混合制 (cite: author-date, bib: numeric)
+
+正文：（陈九等，2022；张三等，2020；Smith et al.，2021）
+陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ numbering-style 同源：文献表 (1) → 行内也 (1)
+
+正文：[1-3]
+(1) 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+(2) Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+(3) 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+▸ numbering-style: none + 顺序编码制（无号可标）
+
+正文：[1-3]
+张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+

@@ -1,0 +1,65 @@
+ cite 的脚注专属四参
+ 只在 `footnote: true` 时生效的四个参数。
+ 期望
+ • footnote-related-indent：脚注里双语关联条目第二行的缩进；auto 与首行首字对齐（实测注号前缀宽）；
+ • footnote-punct-style：脚注注文的标点风格（与正文标注的 punct-style 分开——注文是著录，不是标注）；
+ • footnote-custom-punct：脚注注文的标点覆写；
+ • footnote-url-break-every：脚注注文里 URL 的断点密度。
+
+ 这四个都是 auto 继承全局对应项。cite() 的 custom-drivers / custom-terms / custom-fields / custom-pids / show-pid / pid-
+ priority / dedup-url-pid / show-annotation 也都只在 footnote: true 时生效 （正文标注里没有著录可言）       。
+
+
+▸ footnote-related-indent: auto（缺省）
+
+关联条目①。
+[1] 张三. 中文原版[M]. 北京：中文社，2020.
+      Zhang S. English Version[M]. NY：EN Press，2020.
+
+▸ footnote-related-indent: 0pt
+
+关联条目②。
+[1] 张三. 中文原版[M]. 北京：中文社，2020.
+      Zhang S. English Version[M]. NY：EN Press，2020.
+
+▸ footnote-punct-style: "half-with-space"（注文半角，正文标注不变）
+
+注文半角③。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+
+▸ footnote-custom-punct: (",": " ### ")
+
+覆写注文标点④。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+
+▸ footnote-url-break-every: none
+
+长 URL⑤。
+[1] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+
+▸ footnote 专属：custom-drivers 只在脚注生效
+
+模板注⑥。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+
+▸ footnote 专属：show-annotation 只在脚注生效
+
+带注释⑦。
+[1] 午. 带注释字段的书[M]. 北京：社，2020.
+
+  ①
+    张三. 中文原版[M]. 北京：中文社，2020.
+   Zhang S. English Version[M]. NY：EN Press，2020.
+  ②
+    同上.
+  ③
+    张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+  ④
+    同上.
+  ⑤
+    钱八. 带获取路径的书[M/OL]. 北京：某社，2022. https:​/​/​example.​com/​book. DOI：10.​1234/​example.
+  ⑥
+    同③.
+  ⑦
+    午. 带注释字段的书[M]. 北京：社，2020. 这是注释内容
+

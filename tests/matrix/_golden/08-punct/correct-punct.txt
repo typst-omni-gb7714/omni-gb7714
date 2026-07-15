@@ -1,0 +1,45 @@
+ correct-punct
+ 是否矫正*用户字段文本*里的标点。
+ 期望 false（缺省）        ：不矫正，字段文本原样。 true：对长文本字段（title / subtitle / titleaddon / maintitle / book* /
+ journal* / eventtitle / series / note，以及 custom-terms.bib-field 透传字段）做单字符替换： ,↔，、;↔；、!↔！、?
+ ↔？，方向由 bib-punct-style 与条目语言决定。 句点与冒号不在矫正表里（句点是缩写点与句末点的歧义源）。 花括号保
+ 护：{…} 包裹的子串整段跳过矫正（花括号本身被剥离）。 矫正在初始化解析 .bib 前一次性完成——不支持 cite() /
+ bibliography() 单次覆盖， 要切换得换一个 gb7714(..) 实例。
+
+
+▸ false（缺省，原样）
+
+[1] 丁. 题名里有半角逗号, 分号; 问号? 叹号![M]. 北京：社，2020.
+[2] Smith J. Title with, comma; semicolon? question![M]. NY: P, 2020.
+[3] 戊. 外面;内部;不矫正外面;[M]. 北京：社，2020.
+
+▸ true + by-entry-with-space（中文条目→全角，西文条目不动）
+
+[1] 丁. 题名里有半角逗号，分号；问号？叹号！[M]. 北京：社，2020.
+[2] Smith J. Title with, comma; semicolon? question![M]. NY: P, 2020.
+[3] 戊. 外面；内部;不矫正外面；[M]. 北京：社，2020.
+
+▸ true + half（一律半角：全角标点被拉回半角）
+
+[1] 丁.题名里有半角逗号, 分号; 问号? 叹号![M].北京:社,2020.
+[2] Smith J.Title with, comma; semicolon? question![M].NY:P,2020.
+[3] 戊.外面;内部;不矫正外面;[M].北京:社,2020.
+
+▸ true + full（一律全角）
+
+[1] 丁. 题名里有半角逗号，分号；问号？叹号！[M]. 北京：社，2020.
+[2] Smith J. Title with，comma；semicolon？question！[M]. NY：P，2020.
+[3] 戊. 外面；内部;不矫正外面；[M]. 北京：社，2020.
+
+▸ true + by-doc-with-space · 中文文档（结构标点跟文档 → 全角；字段内矫正跟*条目* → 西文条目不动）
+
+[1] 丁. 题名里有半角逗号，分号；问号？叹号！[M]. 北京：社，2020.
+[2] Smith J. Title with, comma; semicolon? question![M]. NY：P，2020.
+[3] 戊. 外面；内部;不矫正外面；[M]. 北京：社，2020.
+
+▸ true + by-doc-with-space · 西文文档（结构标点翻半角；字段内矫正仍跟条目 → 中文条目照样全角）
+
+[1] 丁. 题名里有半角逗号，分号；问号？叹号！[M]. 北京: 社, 2020.
+[2] Smith J. Title with, comma; semicolon? question![M]. NY: P, 2020.
+[3] 戊. 外面；内部;不矫正外面；[M]. 北京: 社, 2020.
+

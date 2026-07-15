@@ -1,0 +1,45 @@
+ footnote-numbering-use-quan
+ 脚注编号的圈码用哪个绘制引擎。
+ 期望 应用本包即接管脚注编号为带圈数字（国标示例的圈码形）。 false（缺省）：用 Unicode 带圈字符 ①～㊿（超过 50 退
+ 化为 (N)，依赖字体覆盖）。 true：改由 @preview/quan 包绘制带圈数字（不受字体限制）。 引擎是实现不是样式——与
+ numbering-style: (circled: "quan") 同一哲学。 其它编号样式不设配置项：直接 set footnote(numbering: ..) 覆盖即可
+
+（set 在 show 之内、后设者胜）； 「同③」的引语号自动镜像文档当前的脚注编号样式，任何样式都跟对。                     用户没配                      ⚠️
+quan-init / quan-style 时，quan 吐的就是 Unicode 圈码 ①—— 与缺省引擎逐字节相同，下方两档的 golden 因此一模一样。
+它真正派上用场是在：字体缺带圈数字，或编号超过 ㊿（缺省引擎退化成 (N)，quan 还能画）。
+
+
+▸ false（缺省，Unicode ①）
+
+首① 换② 隔③。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ true（quan 绘制）
+
+首④ 换⑤ 隔⑥。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ set footnote(numbering: "1")（自设样式 → 「同③」镜像成「同 1」）
+
+首7 换8 隔9。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+ ①
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ②
+   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ ③
+   同①.
+ ④
+   同上.
+ ⑤
+   See note ②.
+ ⑥
+   同①.
+ 7同上.
+ 8See note 2.
+ 9同 1.
+

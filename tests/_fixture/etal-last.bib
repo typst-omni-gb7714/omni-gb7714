@@ -1,0 +1,9 @@
+% `et-al-use-last` 专用语料：8 位责任者，正好卡在心理学报的 et-al-min="8" 上。
+% roles.bib 的 4 位太少（use-first 6 + use-last 1 要求 min >= 8），main.bib 的条目也不够长。
+@book{el-zh, author = {张三 and 李四 and 王五 and 赵六 and 钱七 and 孙八 and 周九 and 吴十},
+  title = {中文八责任者}, address = {北京}, publisher = {科学出版社}, year = {2020}, langid = {chinese}}
+@book{el-en, author = {Alpha, A and Bravo, B and Charlie, C and Delta, D and Echo, E and Foxtrot, F and Golf, G and Zulu, Z},
+  title = {English Eight}, address = {NY}, publisher = {Univ Press}, year = {2021}, langid = {english}}
+% `and others`：名单本身不完整，取不出真正的「最后一位」，所以不走 use-last，仍出截断词。
+@book{el-others, author = {Alpha, A and Bravo, B and others},
+  title = {With And-Others}, address = {NY}, publisher = {P}, year = {2022}, langid = {english}}

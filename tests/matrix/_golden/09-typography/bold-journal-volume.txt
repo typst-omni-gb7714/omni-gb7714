@@ -1,0 +1,22 @@
+ bold-journal-volume
+ 期刊卷号是否加粗。
+ 期望      false（缺省）
+                 ：正常字重。true：卷号加粗。                  ⚠️ 字重不进文本 golden，两档相同。
+▸ false（缺省）
+
+正文：[1-2]
+[1] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[2] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+▸ true
+
+正文：[1-2]
+[1] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[2] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+▸ true + italic-journal: true
+
+正文：[1-2]
+[1] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+[2] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+

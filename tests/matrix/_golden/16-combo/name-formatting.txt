@@ -1,0 +1,99 @@
+ 联动：西文姓名的成形
+ 一个西文姓名要过八维字典、前缀档、后缀接缝、版本默认四关。
+ 期望 bib-name-style 八维：order（可拆 (first:, rest:) 双键）/ family-case / given-form / given-initial-separator /
+ given-separator / given-case / family-given-separator / given-family-separator。 prefix-last 与它正交：管前缀（van
+ der）排在姓前还是缩为首字母置于名后；随版本——2025 true、2015 false。 name-suffix-separator 管世系后缀（Jr. / II）
+ 的接缝。 条目级 nameformat 字段优先于本参数（混合语料逐条标）。 大小写仍由 name-style 决定：family-case:
+ "uppercase" 档下 prefix-last: true 得 VEEN P H V D。
+
+
+▸ 2025 缺省（prefix-last: true）
+
+正文：[1-5]
+[1] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
+[2] King J Martin Luther，Ford I Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard J-L，Watson M-J. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京：社，2020.
+
+▸ 2015 缺省（prefix-last: false）
+
+正文：[1-5]
+[1] VAN DER BERG J, DE LA CRUZ M. Name Prefix[M]. NY: P, 2020.
+[2] KING J, Martin Luther, FORD I, Henry. Name Suffix[M]. NY: P, 2020.
+[3] PICARD J L, WATSON M J. Hyphenated Given[M]. NY: P, 2020.
+[4] 李四. 条目级 nameformat[M]. 北京: 社, 2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京: 社, 2020.
+
+▸ + family-case: uppercase（前缀首字母也大写）
+
+正文：[1-5]
+[1] BERG J V D，CRUZ M D L. Name Prefix[M]. NY：P，2020.
+[2] KING J Martin Luther，FORD I Henry. Name Suffix[M]. NY：P，2020.
+[3] PICARD J-L，WATSON M-J. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京：社，2020.
+
+▸ + given-form: full（名全拼）
+
+正文：[1-5]
+[1] Berg Jan v d，Cruz Maria d l. Name Prefix[M]. NY：P，2020.
+[2] King Jr. Martin Luther，Ford II Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard Jean-Luc，Watson Mary-Jane. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京：社，2020.
+
+▸ + given-initial-separator: 「.」（缩写点）
+
+正文：[1-5]
+[1] Berg J. v d，Cruz M. d l. Name Prefix[M]. NY：P，2020.
+[2] King J. Martin Luther，Ford I. Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard J.-L.，Watson M.-J. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京：社，2020.
+
+▸ + order: given-ahead（名在前）
+
+正文：[1-5]
+[1] Jan van der Berg，Maria de la Cruz. Name Prefix[M]. NY：P，2020.
+[2] Jr. King Martin Luther，II Ford Henry. Name Suffix[M]. NY：P，2020.
+[3] Jean-Luc Picard，Mary-Jane Watson. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京：社，2020.
+
+▸ + order 双键 (first: family-ahead, rest: given-ahead)
+
+正文：[1-5]
+[1] Berg Jan v d，Maria de la Cruz. Name Prefix[M]. NY：P，2020.
+[2] King Jr. Martin Luther，II Ford Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard Jean-Luc，Mary-Jane Watson. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京：社，2020.
+
+▸ + name-suffix-separator: 「, 」
+
+正文：[1-5]
+[1] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
+[2] King J, Martin Luther，Ford I, Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard J-L，Watson M-J. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京：社，2020.
+
+▸ 八维全给 + prefix-last: false
+
+正文：[1-5]
+[1] VAN DER BERG, J.，DE LA CRUZ, M. Name Prefix[M]. NY：P，2020.
+[2] KING, J. Martin Luther，FORD, I. Henry. Name Suffix[M]. NY：P，2020.
+[3] PICARD, J. L.，WATSON, M. J. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京：社，2020.
+
+▸ 条目级 nameformat 压全局
+
+正文：[1-5]
+[1] Berg v d，Cruz d l. Name Prefix[M]. NY：P，2020.
+[2] King Martin Luther，Ford Henry. Name Suffix[M]. NY：P，2020.
+[3] Picard，Watson. Hyphenated Given[M]. NY：P，2020.
+[4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+[5] 中国科学院计算技术研究所. 机关团体责任者[M]. 北京：社，2020.
+

@@ -1,0 +1,73 @@
+  cite-terms-lang
+  *cite 侧*（正文标注与脚注标注）术语的语言来源。管 5 个词：`et-al`、`anon`、`no-date`、`ibid`、`footnote-number`。
+  期望 缺省 "by-entry"：跟被引条目语言——GB/T 7714 §9.3.1.2 明写「欧美第一责任者姓 + et al.， 中国第一责任者姓名 +
+  等」，按著者语种。"by-doc" 跟文档语言（= citeproc 的实际行为）。 也可强制具体语种，或给按 term 项展开的字典逐词分
+  设。 著录侧没有这个轴——文献表里的术语恒跟条目语言，不给开关。 本用例文档语言为中文，条目有中英日俄——差别应
+  当可见。
+
+
+▸ by-entry（缺省）
+
+正文：（张三等，2020；田中太郎他，2019；Anon，2021；Brown，n.d.；Smith et al.，2021）
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+
+▸ by-doc
+
+正文：（张三等，2020；田中太郎等，2019；Brown，无日期；Smith 等，2021；佚名，2021）
+张三，李四，王五，等，2020. 中文书[M]. 北京：社.
+田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+Anon，2021. Anonymous English[M]. NY：P.
+Brown B，n.d. No Year English[M]. NY：P.
+Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
+
+▸ 强制 zh
+
+（张三等，2020；田中太郎等，2019；Brown，无日期；Smith 等，2021；佚名，2021）
+
+▸ 强制 ja
+
+（张三他，2020；田中太郎他，2019；Brown，日付なし；匿名，2021；Smith 他，2021）
+
+▸ 强制 ko
+
+（张三외，2020；田中太郎외，2019；anon，2021；Brown，일자 없음；Smith외，2021）
+
+▸ 强制 ru
+
+（张三 и др，2020；田中太郎 и др，2019；анон.，2021；Brown，б. д.；Smith и др，2021）
+
+▸ 强制 en
+
+（张三 et al.，2020；田中太郎 et al.，2019；Anon，2021；Brown，n.d.；Smith et al.，2021）
+
+▸ 强制 fr
+
+（张三 et al.，2020；田中太郎 et al.，2019；anon.，2021；Brown，s. d.；Smith et al.，2021）
+
+▸ 强制 de
+
+（张三 et al.，2020；田中太郎 et al.，2019；Brown，o. J.；o. A.，2021；Smith et al.，2021）
+
+▸ 字典 · (et-al: by-doc)——只让截断词跟文档语言
+
+（张三等，2020；田中太郎等，2019；Anon，2021；Brown，n.d.；Smith 等，2021）
+
+▸ 字典 · (ibid: by-doc)——只让脚注引语词跟文档语言
+
+首① 邻② 换③ 隔④。
+[1] Smith J，Doe J，Roe R，et al. English Book[M]. NY：P，2021.
+[2] 张三，李四，王五，等. 中文书[M]. 北京：社，2020.
+
+  ①
+    Smith J，Doe J，Roe R，et al. English Book[M]. NY：P，2021.
+  ②
+    同上.
+  ③
+    张三，李四，王五，等. 中文书[M]. 北京：社，2020.
+  ④
+    See note ①.
+

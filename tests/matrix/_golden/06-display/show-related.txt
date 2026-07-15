@@ -1,0 +1,23 @@
+ show-related
+ 双语关联条目（`related` + `relatedtype = {lanversion}`）的第二行。
+ 期望 true（缺省）：主条目下另起一行渲染被 related 指向的第二语言条目。 false：只渲染主条目。第二行不进文献表的
+ 独立条目位（不占编号、不参与排序、不参与 creator-idem）。 引用的是主条目键。
+
+
+▸ true（缺省）
+
+正文：[1]
+[1] 张三. 中文原版[M]. 北京：中文社，2020.
+   Zhang S. English Version[M]. NY：EN Press，2020.
+
+▸ false
+
+正文：[1]
+[1] 张三. 中文原版[M]. 北京：中文社，2020.
+
+▸ true · 著者-出版年制
+
+正文：（张三，2020）
+张三，2020. 中文原版[M]. 北京：中文社.
+Zhang S，2020. English Version[M]. NY：EN Press.
+

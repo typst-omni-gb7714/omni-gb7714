@@ -1,0 +1,74 @@
+     entry-hanging-indent
+     条目回行的悬挂缩进。
+     期望 它是条目正文那一段的段落量（与原生 par(hanging-indent:) 同名同义），量的是 「余行相对正文块左缘」——不是
+    「距版心左缘的绝对位置」。四种版式下都生效。 auto：著者-出版年制 1.5em（对齐官方 CSL 的 hanging-indent="true"）；
+     顺序编码制 0pt ——官方 numeric CSL 根本没有这个属性，它那个「余行贴正文列」的效果全部来自 second-field-
+     align="flush" 的编号列，与本量无关。 所以成列档（"column" / "margin"）下，正文列本身就是那一段，本量相对正文列
+
+                ⚠️
+     左缘再缩。 「余行顶格」不归本参数管——那是「编号不占一列」，用 number-placement: "inline"。 本量刻意不与编号
+     列宽挂钩：编号列宽随条目数变（[9] 涨到 [120] 宽出 1.4em）， 若本量是「距版心左缘的绝对值」，用户写死的数随时可能
+     小于编号列宽，余行就倒插到首行文字左边 ——加减几条参考文献就能把版式弄崩。段落量与编号列宽解耦，才没有这种耦
+     合病。 与 entry-first-line-indent 正交、同一坐标系，可同时生效。
+
+
+   ▸ auto · 顺序编码制（= 编号列宽 + gutter）
+
+   正文：[1-2]
+   [1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+   [2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+   ▸ auto · 著者-出版年制（= 2em）
+
+   正文：（孙一，2018；Brown et al.，2023）
+   孙一，2018. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社：50-60.
+   Brown B，Green G，2023. English Journal Article[J]. Journal of Examples，12（4）：100-115.
+
+   ▸ 0pt · 成列档（= auto 的顺序编码制派生值 → 余行贴正文列）
+
+   正文：[1-2]
+   [1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+   [2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+   ▸ 4em · 成列档（正文列左缘基础上再缩 4em）
+
+   正文：[1-2]
+   [1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+   [2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+   ▸ 4em · number-placement: margin
+
+   正文：[1-2]
+[1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+[2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+   ▸ 4em · number-placement: inline（编号不占列 → 余行顶格由此档给）
+
+   正文：[1-2]
+   [1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+   [2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+   ▸ 0pt · number-placement: inline（回行顶格）
+
+   正文：[1-2]
+   [1] 孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+   [2] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+   ▸ 两量同时生效：hanging 4em + first-line 2em（成列档）
+
+   正文：[1-2]
+   [1]      孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+   [2]      Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+   ▸ number-width 3em + hanging 4em（成列档：与编号列宽解耦，余行 = 正文列 + 4em）
+
+   正文：[1-2]
+   [1]     孙一. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+   [2]     Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+   ▸ 4em · 著者-出版年制
+
+   正文：（孙一，2018；Brown et al.，2023）
+   孙一，2018. 析出文献题名[G]//李编，王编. 母体专著题名. 北京：母体出版社：50-60.
+   Brown B，Green G，2023. English Journal Article[J]. Journal of Examples，12（4）：100-115.
+

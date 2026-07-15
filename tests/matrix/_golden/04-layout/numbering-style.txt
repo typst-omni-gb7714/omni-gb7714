@@ -1,0 +1,85 @@
+  numbering-style
+  顺序编码制的编号形态（文献表与行内标注*同源*）。
+  期望 auto（缺省）→ "bracket"（[1]）。改形时文献表与行内标注一起改——二者必须同源， 否则读者拿标注找不到条
+  目。"circled" 缺省用 Unicode 带圈数字（超过 ㊿ 退化成 (N)）； 字典形 (circled: "quan") 改由 quan 包绘制（引擎是实现
+  不是样式，故不占顶层值）。 none = 不出编号，文献表退化成无编号的悬挂段落（行内标注也无号可标）。 著者-出版年制下
+  无编号，本参数不参与。
+
+
+ ▸ auto（缺省 → bracket）
+
+ 正文：[1-3]
+ [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ [3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ "bracket"
+
+ 正文：[1-3]
+ [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ [3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ "paren"
+
+ 正文：[1-3]
+ (1) 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ (2) Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ (3) 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ "dot"
+
+ 正文：[1-3]
+ 1. 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ 2. Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ 3. 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ "plain"
+
+ 正文：[1-3]
+ 1 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ 2 Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ 3 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ "fullwidth-bracket"
+
+ 正文：[1-3]
+〔1〕 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+〔2〕 Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+〔3〕 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ "fullwidth-paren"
+
+ 正文：[1-3]
+（1） 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+（2） Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+（3） 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ "circled"（Unicode 引擎）
+
+ 正文：[1-3]
+ ① 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ② Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ ③ 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ (circled: "quan")（quan 包绘制引擎）
+
+ 正文：[1-3]
+ ① 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ② Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ ③ 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ none（不出编号）
+
+ 正文：[1-3]
+ 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+ ▸ 著者-出版年制：本参数不参与
+
+ 正文：（陈九等，2022；张三等，2020；Smith et al.，2021）
+ (1) 陈九，卫十，2022. 中文期刊文章示例[J]. 计算机学报，45（3）：1-12.
+ (2) 张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+ (3) Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+

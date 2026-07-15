@@ -1,0 +1,37 @@
+  url-break-every
+  长 URL 里每 N 个连续不可断字符后插入一个断点机会。
+  期望 分隔符（. / - _ : ; , ? & = # +）是 URL 的天然断点，本参数只作用于其间的连续字母数字串。 1（缺省）：每个非分
+  隔符字符后都插入断点，URL 任意位置可断行。 none：不插入额外断点（长片段整体挪行，右边可能留大空档）。 <int>：
+每 N 个字符一个断点机会。 作用于 URL / DOI / CSTR / 自定义 PID（短号 ISBN / ISSN / eprint 不处理）。   断点是零宽字符                                                                                     ⚠️
+（url-break-hyphen: false 时为 U+200B），pdftotext 抽出来看得见 ——golden 里 URL 字符之间那些不可见分隔就是断点。
+
+
+▸ 1（缺省）
+
+[1] 甲. 长 URL[EB/OL]. （2023）[2024-01-01]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​a​/​v​e​r​y​-⁠l​o​n​g​-⁠e​n​d​p​o​i​n​t​-⁠n​a​m​e​-⁠f​o​r​-⁠t​e​s​t​i​n​g​/​r​e​s​o​u​r​c​e​?​q​u​e​r​y​=​a​b​c​d​e​f​g​h​i​j​
+    k​l​m​n​o​p​q​r​s​t​u​v​w​x​y​z​&​p​a​g​e​=​1.
+
+▸ none（不插断点）
+
+[1] 甲. 长 URL[EB/OL]. （2023）[2024-01-01]. https:​/​/​example.​com/​a/​very-⁠long-⁠endpoint-⁠name-⁠for-⁠testing/​resource?​query=​
+    abcdefghijklmnopqrstuvwxyz&​page=​1.
+
+▸ 8（每 8 字符一个断点）
+
+[1] 甲. 长 URL[EB/OL]. （2023）[2024-01-01]. https:​/​/​example.​com/​a/​very-⁠long-⁠endpoint​-⁠name-⁠for-⁠testing/​resource​?​query=​abcdefgh​
+    ijklmnop​qrstuvwx​yz&​page=​1.
+
+▸ 1 · 作用于 DOI / CSTR
+
+正文：[1-2]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e. DOI：1​0​.​1​2​
+    3​4​/​e​x​a​m​p​l​e.
+[2] 酉. 带 ISBN 的书[M]. 北京：社，2020. ISBN：978-7-111-11111-1.
+
+▸ none · DOI / CSTR 也不断
+
+正文：[1-2]
+[1] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. https:​/​/​doi.​org/​10.​1234/​example. CSTR：32003.​11.​example. DOI：10.​
+    1234/​example.
+[2] 酉. 带 ISBN 的书[M]. 北京：社，2020. ISBN：978-7-111-11111-1.
+

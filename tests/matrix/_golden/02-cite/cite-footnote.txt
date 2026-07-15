@@ -1,0 +1,49 @@
+ cite-footnote
+ 引用是否走脚注制（完整著录落在脚注里，正文只留注号）。
+ 期望 true：正文出圈码注号，脚注里给出完整著录；首次全著录，紧邻重复「同上」，隔开重复「同③」 （官方 note CSL
+ 的梯子）。相邻引用合成一个脚注。false（缺省）：常规行内标注。 脚注里的引语词（同上 / Ibid.）按被引条目语言取。
+
+
+▸ false（缺省）
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ true · 首次 + 紧邻重复 + 隔开重复
+
+首① 邻② 换③ 隔④。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ true · 相邻引用合成一个脚注
+
+合注⑤。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ true · 西文条目的引语词（Ibid. / See note）
+
+首⑥ 邻⑦ 换⑧ 隔⑨。
+[1] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[2] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+
+ ①
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ②
+   同上.
+ ③
+   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ ④
+   同①.
+ ⑤
+   同上；See note ③.
+ ⑥
+   See note ③.
+ ⑦
+   Ibid.
+ ⑧
+   同①.
+ ⑨
+   See note ③.
+

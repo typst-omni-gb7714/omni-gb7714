@@ -1,0 +1,145 @@
+ disambiguate
+ 引用标注的消歧机制（三键：`date` / `given-name` / `names`）。
+ 期望 标量是三键同值的简写；字典逐机制指定，缺的键按 auto。 梯子次序与官方 CSL 同：展开名单 → 补名 → 剩下的真
+ 同人同年落年份后缀。
+ • date：auto 只在著者-出版年制著录处与其标注加 a/b；true 则 numeric 著录格式下条目末尾的出版年也带后缀。 分组判
+   据是「行内渲染出的那个标签」（含 et al. 截断词、含前两档的升级），不是「数据里是不是同一批人」—— 梯子的兜底
+   档要兜住的正是「前两档过后纸面上仍然撞车」的条目。真 citeproc + 官方社区 GB 著者-出版年制样式 实测（该样式关着
+   add-names、开着 add-year-suffix）：Brown/Wang/Li (2021) 与 Brown/Chen/Li (2021) 名册 不同、标签都截成 Brown et al.,
+   2021，citeproc 照样落 2021a / 2021b。 反过来，张三，李四，等 与 张三 的标签本来就不同，不进同一组、不加后缀（旧实现
+   按「第一作者」分组， 把它也拉了进来，反而误导读者）；
+ • given-name：同姓不同人时补名（姓 → 姓+首字母 → 全名），GB §9.3.1 →§7.1.1，对齐 CSL 的 disambiguate-add-
+   givenname；
+ • names：首责任者同、合作者不同时逐条展开被「等」截断的名单，对齐 CSL 的 disambiguate-add-names。
+
+ given-name / names 的 auto 跟标注形态轴：style.cite 是著者-出版年制才生效。 梯子次序是「①补名 ②展开名单 ③年份后
+ 缀」——能用轻的手段分开就不用重的。d9 / d10 两条路都走得通 （Stone Sam/Wang/Li 与 Stone Sue/Chen/Li 截断后都是
+ Stone et al.）   ：先补名得 Stone S… et al. 而不是 Stone, Wang et al.。citeproc-lua 的 build_fully_disambiguated_ir 就
+ 是 add_givenname → add_names → add_year_suffix，实测同形。 （d3 / d4 的第一责任者是同一个人，补名无能为力，才轮
+ 到展开名单。） d7 / d8 是估计的出版年（date={2019~}）撞车：后缀落进方括号内（[2019a]，不是 [2019]a）—— 官方社区
+ CSL 经真 citeproc 实测就是「（张三，［2020a］）」，CSL 的 year-suffix 附在 year 这个 date-part 之后，而方括号是整个日期元素
+ 的 prefix / suffix。
+
+
+▸ auto · 著者-出版年制（三机制全开）
+
+正文：（Brown，Chen et al.，2021；Brown，Wang et al.，2021；Jones，2022a，2022b；Smith A，2020；Smith J，2020；Stone
+Sam et al.，2024；Stone Sue et al.，2024；Vague，[2019a]，[2019b]）
+Brown B，Chen C，Li L，2021. Delta[M]. NY：P.
+Brown B，Wang W，Li L，2021. Gamma[M]. NY：P.
+Jones J，2022a. Epsilon[M]. NY：P.
+Jones J，2022b. Zeta[M]. NY：P.
+Smith A，2020. Beta[M]. NY：P.
+Smith J，2020. Alpha[M]. NY：P.
+Stone Sam，Wang W，Li L，2024. Iota[M]. NY：P.
+Stone Sue，Chen C，Li L，2024. Kappa[M]. NY：P.
+Vague V，[2019a]. Eta[M]. NY：P.
+Vague V，[2019b]. Theta[M]. NY：P.
+
+▸ 无责任者、同年 → 佚名 2013a/b（正文与文献表同源；author-short 返回 none 也要参与消歧）
+
+正文：（佚名，2013a，2013b）
+佚名，2013a. 无责任者甲[M]. 京：社.
+佚名，2013b. 无责任者乙[M]. 京：社.
+
+▸ false（全关：标注撞车不管）
+
+正文：（Brown et al.，2021，2021；Jones，2022，2022；Smith，2020，2020；Stone et al.，2024，2024；Vague，[2019]，[2019]）
+Brown B，Chen C，Li L，2021. Delta[M]. NY：P.
+Brown B，Wang W，Li L，2021. Gamma[M]. NY：P.
+Jones J，2022. Epsilon[M]. NY：P.
+Jones J，2022. Zeta[M]. NY：P.
+Smith A，2020. Beta[M]. NY：P.
+Smith J，2020. Alpha[M]. NY：P.
+Stone S，Wang W，Li L，2024. Iota[M]. NY：P.
+Stone S，Chen C，Li L，2024. Kappa[M]. NY：P.
+Vague V，[2019]. Eta[M]. NY：P.
+Vague V，[2019]. Theta[M]. NY：P.
+
+▸ true · 顺序编码制（date 一律加 → 条目末尾出版年带后缀）
+
+正文：[1-10]
+[1]   Smith J. Alpha[M]. NY：P，2020.
+[2]   Smith A. Beta[M]. NY：P，2020.
+[3]   Brown B，Wang W，Li L. Gamma[M]. NY：P，2021.
+[4]   Brown B，Chen C，Li L. Delta[M]. NY：P，2021.
+[5]   Jones J. Epsilon[M]. NY：P，2022a.
+[6]   Jones J. Zeta[M]. NY：P，2022b.
+[7]   Vague V. Eta[M]. NY：P，[2019a].
+[8]   Vague V. Theta[M]. NY：P，[2019b].
+[9]   Stone S，Wang W，Li L. Iota[M]. NY：P，2024.
+[10] Stone S，Chen C，Li L. Kappa[M]. NY：P，2024.
+
+▸ auto · 顺序编码制（[1] 无标签可消歧，著录处也不加）
+
+正文：[1-10]
+[1]   Smith J. Alpha[M]. NY：P，2020.
+[2]   Smith A. Beta[M]. NY：P，2020.
+[3]   Brown B，Wang W，Li L. Gamma[M]. NY：P，2021.
+[4]   Brown B，Chen C，Li L. Delta[M]. NY：P，2021.
+[5]   Jones J. Epsilon[M]. NY：P，2022.
+[6]   Jones J. Zeta[M]. NY：P，2022.
+[7]   Vague V. Eta[M]. NY：P，[2019].
+[8]   Vague V. Theta[M]. NY：P，[2019].
+[9]   Stone S，Wang W，Li L. Iota[M]. NY：P，2024.
+[10] Stone S，Chen C，Li L. Kappa[M]. NY：P，2024.
+
+▸ (date: true, given-name: false, names: false)
+
+正文：（Brown et al.，2021a，2021b；Jones，2022a，2022b；Smith，2020a，2020b；Stone et al.，2024a，2024b；Vague，
+[2019a]，[2019b]）
+Brown B，Chen C，Li L，2021a. Delta[M]. NY：P.
+Brown B，Wang W，Li L，2021b. Gamma[M]. NY：P.
+Jones J，2022a. Epsilon[M]. NY：P.
+Jones J，2022b. Zeta[M]. NY：P.
+Smith A，2020a. Beta[M]. NY：P.
+Smith J，2020b. Alpha[M]. NY：P.
+Stone S，Wang W，Li L，2024a. Iota[M]. NY：P.
+Stone S，Chen C，Li L，2024b. Kappa[M]. NY：P.
+Vague V，[2019a]. Eta[M]. NY：P.
+Vague V，[2019b]. Theta[M]. NY：P.
+
+▸ (given-name: true, names: false, date: true)
+
+正文：（Brown et al.，2021a，2021b；Jones，2022a，2022b；Smith A，2020；Smith J，2020；Stone Sam et al.，2024；Stone Sue
+et al.，2024；Vague，[2019a]，[2019b]）
+Brown B，Chen C，Li L，2021a. Delta[M]. NY：P.
+Brown B，Wang W，Li L，2021b. Gamma[M]. NY：P.
+Jones J，2022a. Epsilon[M]. NY：P.
+Jones J，2022b. Zeta[M]. NY：P.
+Smith A，2020. Beta[M]. NY：P.
+Smith J，2020. Alpha[M]. NY：P.
+Stone Sam，Wang W，Li L，2024. Iota[M]. NY：P.
+Stone Sue，Chen C，Li L，2024. Kappa[M]. NY：P.
+Vague V，[2019a]. Eta[M]. NY：P.
+Vague V，[2019b]. Theta[M]. NY：P.
+
+▸ (names: true, given-name: false, date: true)
+
+正文：（Brown，Chen et al.，2021；Brown，Wang et al.，2021；Jones，2022a，2022b；Smith，2020a，2020b；Stone，Chen et
+al.，2024；Stone，Wang et al.，2024；Vague，[2019a]，[2019b]）
+Brown B，Chen C，Li L，2021. Delta[M]. NY：P.
+Brown B，Wang W，Li L，2021. Gamma[M]. NY：P.
+Jones J，2022a. Epsilon[M]. NY：P.
+Jones J，2022b. Zeta[M]. NY：P.
+Smith A，2020a. Beta[M]. NY：P.
+Smith J，2020b. Alpha[M]. NY：P.
+Stone S，Wang W，Li L，2024. Iota[M]. NY：P.
+Stone S，Chen C，Li L，2024. Kappa[M]. NY：P.
+Vague V，[2019a]. Eta[M]. NY：P.
+Vague V，[2019b]. Theta[M]. NY：P.
+
+▸ 混合制 (cite: numeric, bib: author-date) + 显式 true
+
+正文：[1-10]
+[1]   Smith J，2020. Alpha[M]. NY：P.
+[2]   Smith A，2020. Beta[M]. NY：P.
+[3]   Brown B，Wang W，Li L，2021. Gamma[M]. NY：P.
+[4]   Brown B，Chen C，Li L，2021. Delta[M]. NY：P.
+[5]   Jones J，2022a. Epsilon[M]. NY：P.
+[6]   Jones J，2022b. Zeta[M]. NY：P.
+[7]   Vague V，[2019a]. Eta[M]. NY：P.
+[8]   Vague V，[2019b]. Theta[M]. NY：P.
+[9]   Stone Sam，Wang W，Li L，2024. Iota[M]. NY：P.
+[10] Stone Sue，Chen C，Li L，2024. Kappa[M]. NY：P.
+

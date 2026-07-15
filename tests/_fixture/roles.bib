@@ -1,0 +1,23 @@
+% et-al 阈值的「角色档」专用语料：每条都让*多个截断位置*同时站满 4 位责任者，
+% 这样一个位置的阈值变了、别的位置没变，一眼就看得出来。
+%
+% 现有的 main.bib 做不到这件事——`bm-zh` / `bm-en` 只有 author，`ic-zh` 只有 1 位著者加 2 位编者，
+% 任何角色档配置在它们身上都看不出差别。
+
+% 析出文献：主责任者 4 + 母体责任者 4（bookauthor）+ 译者 4，三个位置一次到齐。
+@incollection{rl-part-en,
+  author = {Smith, John and Brown, Bob and Chen, Cathy and Davis, Dan},
+  bookauthor = {Host, Hal and Ivy, Ida and Jones, Jim and King, Ken},
+  translator = {Trans, Tom and Uma, Ula and Vega, Vic and West, Wes},
+  title = {Component Part}, booktitle = {Host Book},
+  address = {New York}, publisher = {Univ Press}, year = {2023}, pages = {10--20}, langid = {english}}
+
+% 专著：主责任者 4 + 其他责任者·编者 4。英文与中文各一条，用来看语言档。
+@book{rl-editor-en,
+  author = {Smith, John and Brown, Bob and Chen, Cathy and Davis, Dan},
+  editor = {Edgar, Ed and Fisher, Fay and Gray, Gus and Hall, Hank},
+  title = {With Editors}, address = {New York}, publisher = {Univ Press}, year = {2022}, langid = {english}}
+@book{rl-editor-zh,
+  author = {张三 and 李四 and 王五 and 赵六},
+  editor = {甲编 and 乙编 and 丙编 and 丁编},
+  title = {中文专著}, address = {北京}, publisher = {科学出版社}, year = {2020}, langid = {chinese}}

@@ -1,0 +1,61 @@
+ bibliography(style / version / footnote)
+ 逐表的样式轴、版本轴、脚注轴。
+ 期望 style："numeric" / "author-date" 是本包的 GB 实现（原生国标 CSL 名 "gb-7714-2015-numeric" / "gb-7714-2015-
+ author-date" 自动映射到它们）    ； 其它原生 CSL 名（"ieee" / "apa" 等 91 种）或 CSL bytes → 本列表整个交 typst 原生渲染；
+ none（缺省）跟随全局。 version：2015 / 2025 / 2005；auto 跟随全局；与 style 的国标全名锁定矛盾时报错（名实一致）                   。
+ footnote：true 时归属本表的引用走脚注；auto 跟随全局 cite-footnote （链：cite 显式 > 本参数 > 全局）            。
+
+
+▸ style: none（跟随全局 numeric）
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+▸ style: "author-date"（逐表切样式）
+
+正文：（陈九等，2022；张三等，2020；Smith et al.，2021）
+陈九，卫十，2022. 中文期刊文章示例[J]. 计算机学报，45（3）：1-12.
+张三，李四，王五，等，2020. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社：12-25.
+Smith J，Doe J，Roe R，et al.，2021. English Book Example[M]. 2nd ed. New York：Example Press：30-45.
+
+▸ style: "gb-7714-2015-numeric"（国标 CSL 名 → 自动映射到本包实现）
+
+正文：[1-3]
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
+[3] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3): 1-12.
+
+▸ version: 2015（逐表切版本）
+
+正文：[1-3]
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
+[3] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3): 1-12.
+
+▸ version: 2005
+
+正文：[1-3]
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
+[3] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3): 1-12.
+
+▸ 全局 2025 + 本表 2015（两表并存时各按各的）
+
+正文：[1-3]
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
+[3] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3): 1-12.
+
+▸ footnote: true（归属本表的引用走脚注）
+
+脚注引用① 与②。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+ ①
+     张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ②
+     Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+

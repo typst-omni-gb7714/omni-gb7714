@@ -1,0 +1,57 @@
+ 联动：标点的三档
+ 三个参数管三件不同的事，正交。
+ 期望
+ • bib-punct-style：结构标点的全 / 半角与尾空格（引擎产出的分隔符）；
+ • custom-punct：精确覆写某个结构标点的字面量，优先级高于 bib-punct-style，且覆写值绝对、不再感知；
+ • correct-punct：矫正用户字段文本里的标点，方向由 bib-punct-style 与条目语言决定。
+
+ 三者的分界：bib-punct-style 与 custom-punct 只动结构标点，correct-punct 只动字段文本。 唯一的交叉点：correct-
+ punct 矫正出的目标字形跟随 custom-punct 的 text 值 （矫正是否发生由 correct-punct 决定，custom-punct 只定字形）。
+「结构跟文档、内容跟条目」：by-doc-* 只管结构分隔符；字段内矫正恒按条目语言。
+
+
+▸ ① 只有 punct-style（结构标点全角，字段文本不动）
+
+[1] 丁. 题名里有半角逗号, 分号; 问号? 叹号![M]. 北京：社，2020：1-9.
+[2] Smith J. Title with, comma; semicolon? question![M]. NY：P，2020：1-9.
+
+▸ ① punct-style: half（结构标点半角）
+
+[1] 丁.题名里有半角逗号, 分号; 问号? 叹号![M].北京:社,2020: 1-9.
+[2] Smith J.Title with, comma; semicolon? question![M].NY:P,2020: 1-9.
+
+▸ ② + custom-punct（覆写优先于 punct-style，且绝对不感知）
+
+[1] 丁.题名里有半角逗号, 分号; 问号? 叹号![M].北京：社，2020：1-9.
+[2] Smith J.Title with, comma; semicolon? question![M].NY：P，2020：1-9.
+
+▸ ③ + correct-punct（字段文本随条目语言矫正）
+
+[1] 丁. 题名里有半角逗号，分号；问号？叹号！[M]. 北京：社，2020：1-9.
+[2] Smith J. Title with, comma; semicolon? question![M]. NY: P, 2020: 1-9.
+
+▸ ②③ 交叉点：矫正的目标字形跟 custom-punct 的 text 值
+
+[1] 丁. 题名里有半角逗号，分号 ；； 问号？叹号！[M]. 北京：社，2020：1-9.
+[2] Smith J. Title with, comma ；； semicolon? question![M]. NY: P, 2020: 1-9.
+
+▸ correct-punct 单独开、punct-style 是 half（把全角拉回半角）
+
+[1] 丁.题名里有半角逗号, 分号; 问号? 叹号![M].北京:社,2020: 1-9.
+[2] Smith J.Title with, comma; semicolon? question![M].NY:P,2020: 1-9.
+
+▸ by-doc（结构跟文档=中文→全角；字段矫正跟条目→西文条目不动）
+
+[1] 丁. 题名里有半角逗号，分号；问号？叹号！[M]. 北京：社，2020：1-9.
+[2] Smith J. Title with, comma; semicolon? question![M]. NY：P，2020：1-9.
+
+▸ 同上，但在西文文档里（结构翻半角，字段矫正仍跟条目）
+
+[1] 丁. 题名里有半角逗号，分号；问号？叹号！[M]. 北京: 社, 2020: 1-9.
+[2] Smith J. Title with, comma; semicolon? question![M]. NY: P, 2020: 1-9.
+
+▸ custom-punct 破「恒半角」：句点与斜杠改全角
+
+[1] 丁。题名里有半角逗号, 分号; 问号? 叹号![M]。北京：社，2020：1-9。
+[2] Smith J。Title with, comma; semicolon? question![M]。NY：P，2020：1-9。
+

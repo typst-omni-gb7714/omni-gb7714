@@ -1,0 +1,41 @@
+ space-before-pages
+ 页码冒号之后是否留空格。
+ 期望 true（缺省）：: 123。false：:123。 与 bib-punct-style 的尾空格档正交——本参数只管页码位那个冒号后面的空
+ 格。 全角档（full）下冒号本身是 ：（自带宽度），空格仍按本参数加。
+
+
+▸ true（缺省）· 2025 full 档
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[3] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+▸ false · 2025 full 档
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+[3] Brown B，Green G. English Journal Article[J]. Journal of Examples，2023，12（4）：100-115.
+
+▸ true · 2015 half-with-space 档
+
+正文：[1-3]
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3): 1-12.
+[3] BROWN B, GREEN G. English Journal Article[J]. Journal of Examples, 2023, 12(4): 100-115.
+
+▸ false · 2015 half-with-space 档
+
+正文：[1-3]
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020:12-25.
+[2] 陈九, 卫十. 中文期刊文章示例[J]. 计算机学报, 2022, 45(3):1-12.
+[3] BROWN B, GREEN G. English Journal Article[J]. Journal of Examples, 2023, 12(4):100-115.
+
+▸ false · half 档（无尾空格）
+
+正文：[1-3]
+[1] 张三,李四,王五,等.中文专著示例:副标题[M].3 版.北京:示例出版社,2020:12-25.
+[2] 陈九,卫十.中文期刊文章示例[J].计算机学报,2022,45(3):1-12.
+[3] Brown B,Green G.English Journal Article[J].Journal of Examples,2023,12(4):100-115.
+

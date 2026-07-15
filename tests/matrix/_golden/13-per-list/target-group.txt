@@ -1,0 +1,40 @@
+ bibliography(target / group)
+ typst 0.15 的原生引用路由与编号分组。
+ 期望 target：原生 cite 路由选择器，如 selector(std.cite).within(<ch1>)——把某个范围内的引用 路由到本表。group：
+ 原生编号分组，auto 全文档连续编号；两表用同一 group 名即跨表连续编号。 两者都需要 typst 0.15+（0.14 下报「label 不
+ 存在」）；本文件由 runner 用 0.15 二进制跑。 与 label（命名列表）是两套并行方案：label 在 0.14 也能用，target / group
+ 是原生路由。
+
+
+▸ target：按章路由（各表独立编号）
+
+甲章
+引用[1-2]
+
+甲章参考文献
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+乙章
+引用[3]
+
+乙章参考文献
+[3] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+
+
+▸ target + 同一 group：跨表连续编号（乙章从 [3] 起）
+
+甲章
+引用[1-2]
+
+甲章
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] 陈九，卫十. 中文期刊文章示例[J]. 计算机学报，2022，45（3）：1-12.
+
+乙章
+引用[3]
+
+乙章
+[3] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
