@@ -3,7 +3,7 @@
   "number-align": ("left", "right", "center"),
 
   "number-placement": ("column", "margin", "inline"),
-  "cite-form": ("super", "inline", "normal", "prose", "author", "year", none),
+  "cite-form": ("super", "inline", "normal", "prose", "author", "year", "full", none),
   "supplement-style": ("compact", "split"),
 
   "punct-style": ("half", "half-no-space", "half-with-space", "full",

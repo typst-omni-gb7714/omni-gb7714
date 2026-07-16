@@ -18,7 +18,7 @@
   version:             2025,
   /// true 时参考文献表输出全部条目（未引用的追加在已引用之后）
   full:                false,
-  /// 引用形态：auto / "super" 上标 / "inline" 行内 / "normal" / "prose" 叙事（括号前间隙随标点方向）/ "author" 仅作者 / "year" 裸出版年（对齐原生）/ none 不显示
+  /// 引用形态：auto / "super" 上标 / "inline" 行内 / "normal" / "prose" 叙事 / "author" / "year" / "full" 原位完整条目 / none（括号前间隙随标点方向）/ "author" 仅作者 / "year" 裸出版年（对齐原生）/ none 不显示
   cite-form:           auto,
   /// 相邻引用合并为一组：@a@b@c 行内渲染为 [1-3]；脚注制下合成一个脚注（条目分号接排）
   cite-merge:          true,
@@ -934,8 +934,10 @@
       if eff-title != none { heading(level: 1, numbering: none, eff-title) } else { none }
     } else {
       let f = instance.print-bib
-      if label == none { f(bib-file: auto-key, number-offset: number-offset, ..common-args) }
-      else { f(bib-file: auto-key, label: str(label), number-offset: number-offset, ..common-args) }
+
+      let _nbi = if native-mode { my-bib-index } else { none }
+      if label == none { f(bib-file: auto-key, number-offset: number-offset, native-bib-index: _nbi, ..common-args) }
+      else { f(bib-file: auto-key, label: str(label), number-offset: number-offset, native-bib-index: _nbi, ..common-args) }
     }
     state("gb7714-render-payloads", ()).update(ps => ps + (payload,))
   } else {
@@ -966,7 +968,7 @@
   supplement:      none,
   /// 本次引用样式："numeric" / "author-date"；auto 跟随列表或全局
   style:           auto,
-  /// 引用形态：auto / "super" / "inline" / "normal" / "prose" / "author" / "year" / none（单次覆盖 cite-form）
+  /// 引用形态：auto / "super" / "inline" / "normal" / "prose" / "author" / "year" / "full"（原位完整条目）/ none（单次覆盖 cite-form）
   form:            auto,
   /// 西文姓名格式：auto 跟随全局 / 五维字典（order / family-case / given-form / given-separator / given-case）
   name-style:     auto,

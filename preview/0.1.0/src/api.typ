@@ -178,6 +178,7 @@
     /// - `"prose"`：叙述式——著者-出版年制作 `Stieg (1981)` / `张三（2020）`、顺序编码制作 `Author [1]`。括号前间隙随标点方向感知（与括号同源）：全角档紧贴（CJK 行文惯例，全角括号自带视觉空隙）、半角档空格；
     /// - `"author"`：仅著者（含「等 / et al」截断）；
     /// - `"year"`：*裸出版年*（无括号无著者），带 a/b/c 消歧后缀——对齐原生 `cite(form: "year")`。「正文已提及责任者姓名，()内只著录出版年」（GB §10.2）的场景：括号随正文自己写，或直接用 `"prose"` 让包整体渲染；
+    /// - `"full"`：*原位*完整著录条目——把该条像参考文献表里那样打在标注位置（顺序编码制带 `[N]` 编号、著者-出版年制带「作者，年」前缀），对齐原生 `cite(form: "full")`「mimics a bibliography entry」。条目在正文原位再现一份，文献表里照样保留（不是脚注，与 #arg-ref("cite", "footnote")[`footnote`] 两条独立的路径）；
     /// - `none`：不出标注（条目仍计入参考文献表）。\
     /// 多键引用（如 `@a@b@c`）：`"prose"` 回落 `"inline"` / `"normal"`；`"author"` / `"year"` 各键以分号连列，如 张三；李四 / 2020；2019。\
     /// 单次可用 #arg-ref("cite", "form")[ ```typ #cite()``` 的 `form` 参数]覆盖。|
@@ -1897,6 +1898,10 @@
     number-offset:    0,      /// <- `int`
       /// 编号起始偏移。本列表第一条编号 = `number-offset + 1`。\
       /// 供多 bib 场景使多个独立列表之间编号全局连续。|
+    native-bib-index: none,   /// <- `none` | `int`
+      /// 纯内部：native 模式（0.15 多 bib 原生路由）下本 bib 在 `gb7714-bib-list` 里的索引，\
+      /// 由 `bibliography()` 壳传入。消歧后缀表 `_list-suffix-map` 据此按 bib 实例建键（而非 list-label），\
+      /// 让多张主表各存各的后缀、cite 标签按其 marker 携带的 bib-index 合并回读（BUGS #20 深层）。|
     footnote:      auto,   /// <- `auto` | `boolean`
       /// 本列表的脚注制开关：归属本列表的引用走脚注（完整著录于脚注处）。\
       /// - `auto`（默认）：跟随全局 #arg-ref("gb7714", "cite-footnote")[`cite-footnote`]；
@@ -1942,6 +1947,10 @@
       _list-style-map.update(m => { m.insert(list-label, eff-cite-style); m })
       if footnote != auto { _list-footnote-map.update(m => { m.insert(list-label, footnote); m }) }
     } else if footnote != auto { _main-footnote.update(footnote) }
+
+    if native-bib-index != none {
+      _list-style-map.update(m => { m.insert("\u{0}b" + str(native-bib-index), eff-cite-style); m })
+    }
 
     let cited-keys = omni-aux.cited-keys(bib-data, list-label)
     let source-keys = if keys != none {
@@ -2089,7 +2098,14 @@
     let eff-suffixes = if eff-disambiguate.date == false { (:) } else { _disambiguation.cite-suffixes }
     let eff-escalations = _disambiguation.escalations
 
-    _list-suffix-map.update(m => { m.insert(if list-label != none { list-label } else { "" }, (suffixes: eff-suffixes, escalations: eff-escalations)); m })
+    _list-suffix-map.update(m => {
+      let k = if native-bib-index != none { "\u{0}b" + str(native-bib-index) } else if list-label != none { list-label } else { "" }
+      let new-empty = eff-suffixes.len() == 0 and eff-escalations.len() == 0
+      let prev = m.at(k, default: none)
+      let prev-nonempty = prev != none and (prev.suffixes.len() > 0 or prev.escalations.len() > 0)
+      if not (new-empty and prev-nonempty) { m.insert(k, (suffixes: eff-suffixes, escalations: eff-escalations)) }
+      m
+    })
 
     if filtered.len() == 0 { return }
 
@@ -2345,6 +2361,20 @@
     let _native-seen = state("gb7714-native-seen", ()).final()
     let _native = _native-seen.len() > 0
 
+    if _native and raw-items.len() > 1 {
+      let runs = ()
+      let cur = ()
+      let cur-bib = auto
+      for it in raw-items {
+        let bi = it.at("list", default: none)
+        if cur-bib != auto and bi != cur-bib { runs.push(cur); cur = () }
+        cur-bib = bi
+        cur.push(it)
+      }
+      if cur.len() > 0 { runs.push(cur) }
+      if runs.len() > 1 { return runs.map(run => _render-inline-cite-run(run)).join() }
+    }
+
     let my-list = if _native or my-list-id == none { none }
       else {
         let id-map = _list-ids.final()
@@ -2386,6 +2416,11 @@
 
     let cite-style-override = _cite-style-state.at(here())
     let eff-style = if cite-style-override != auto and (type(cite-style-override) == str and cite-style-override in ("numeric", "author-date")) { cite-style-override }
+
+      else if _native and my-list-id != none {
+        let bib-style = _list-style-map.final().at("\u{0}b" + str(int(my-list-id)), default: none)
+        if bib-style != none and bib-style in ("numeric", "author-date") { bib-style } else { global-style-cite }
+      }
       else if my-list != none {
         let list-style-val = _list-style-map.final().at(my-list, default: none)
         if list-style-val != none and list-style-val in ("numeric", "author-date") { list-style-val } else { global-style-cite }
@@ -2464,7 +2499,10 @@
     let eff-cite-range-separator = punct.resolve-cite-separator(eff-cite-range-separator, eff-cite-punct-style, document-lang, document-lang, eff-style, "-")
 
     let _suffix-map = _list-suffix-map.final()
-    let _list-disambiguation = _suffix-map.at(if my-list != none { my-list } else { "" },
+
+    let _bib-key = if _native and my-list-id != none { "\u{0}b" + str(int(my-list-id)) }
+      else if my-list != none { my-list } else { "" }
+    let _list-disambiguation = _suffix-map.at(_bib-key,
       default: (suffixes: _disambiguation.cite-suffixes, escalations: _disambiguation.escalations))
     let suffix-table = if disambiguate.date == false { (:) } else { _list-disambiguation.suffixes }
     let escalation-table = _list-disambiguation.escalations
@@ -2528,6 +2566,16 @@
 
     let _render-items(items, _group-merge) = {
       if eff-form == none {  }
+
+      else if eff-form == "full" {
+        items.map(it => {
+          let key = _key-of(it)
+          let entry = bib-data.at(key, default: none)
+          if entry == none { return [] }
+          if eff-style == "author-date" { _emit-entry-author-date(entry, suffix-key: key, suffixes: suffix-table) }
+          else { [\[#_num-link(key, it.number)\] ] + _emit-entry(entry) }
+        }).join(document-comma)
+      }
       else if eff-style == "author-date" { author-date-cite.render-run(items, _group-merge, cite-opts) }
       else { numeric-cite.render-run(items, _group-merge, cite-opts) }
     }
