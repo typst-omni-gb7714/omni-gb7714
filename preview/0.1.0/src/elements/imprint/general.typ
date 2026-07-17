@@ -65,20 +65,26 @@
     let _sine-loco = terms.sine-loco(entry, custom-terms: custom-terms)
     let _sine-nomine = terms.sine-nomine(entry, custom-terms: custom-terms)
 
-    if show-sine-anno and year == none and not skip-date {
-      year = "[" + terms.sine-anno(entry, custom-terms: custom-terms) + "]"
-    }
+    let _date-supplied = show-sine-anno and year == none and not skip-date
+    let _sine-anno-word = if _date-supplied { terms.sine-anno(entry, custom-terms: custom-terms) } else { none }
     let need-sine-loco = location-value == none and show-sine-loco
     let need-sine-nomine = publisher-value == none and show-sine-nomine
     if need-sine-loco and need-sine-nomine {
 
-      if year != none {
+      if _date-supplied {
+        return "[" + _sine-loco + p("colon") + _sine-nomine + p("comma") + _sine-anno-word + "]"
+      } else if year != none {
         return "[" + _sine-loco + p("colon") + _sine-nomine + "]" + p("comma") + year
       }
+    } else if need-sine-nomine and _date-supplied {
+
+      publisher-value = "[" + _sine-nomine + p("comma") + _sine-anno-word + "]"
+      year = none
     } else {
 
       if need-sine-loco { location-value = "[" + _sine-loco + "]" }
       if need-sine-nomine { publisher-value = "[" + _sine-nomine + "]" }
+      if _date-supplied { year = "[" + _sine-anno-word + "]" }
     }
   }
 

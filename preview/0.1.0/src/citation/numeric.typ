@@ -17,7 +17,7 @@
 }
 
 #let render-run(items, _group-merge, opts) = {
-  let (eff-form, _key-of, _cite-author, _order-items, _name-punct-direction, bib-data, publication-date, p, _num-link, supplement-mode, document-comma, document-semi, seen, eff-compress-min, eff-cite-range-separator) = opts
+  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, _name-punct-direction, bib-data, publication-date, p, _num-link, supplement-mode, document-comma, document-semi, block-sep, seen, eff-compress-min, eff-cite-range-separator) = opts
 
   let items = _order-items(items)
   if items.len() == 1 and eff-form == "prose" {
@@ -39,7 +39,7 @@
     let display = if eff-form == "author" {
       _cite-author(entry)
     } else {
-      if entry != none { publication-date.year(entry) } else { "" }
+      _cite-year(entry, "")
     }
     let lbl = _num-link(k, item.number, display: display)
     if item.supplement != none { [#lbl#item.supplement] } else { lbl }
@@ -50,7 +50,7 @@
       let display = if eff-form == "author" {
         _cite-author(entry)
       } else {
-        if entry != none { publication-date.year(entry) } else { "" }
+        _cite-year(entry, "")
       }
       _num-link(k, item.number, display: display)
     })
@@ -118,11 +118,13 @@
             }
             [\[#inner\]]
           }
-          if supplement != none { [#bracketed#supplement] } else { bracketed }
+
+          if supplement != none { [#bracketed#(if use-super { supplement } else { super[#supplement] })] } else { bracketed }
         })
         let result = []
         for (i, part) in parts.enumerate() {
-          if i > 0 { result += document-comma }
+
+          if i > 0 { result += block-sep }
           result += part
         }
         if use-super { super[#result] } else { result }

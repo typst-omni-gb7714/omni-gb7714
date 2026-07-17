@@ -1,6 +1,7 @@
 #import "mark-medium/built-in.typ" as mark-medium
 #import "../punct/built-in.typ" as punct
 #import "../parse/field.typ"
+#import "../parse/lang-detect.typ" as language
 #import "../category.typ"
 #import "../terms/built-in.typ" as terms
 
@@ -62,7 +63,9 @@
 
   else if version == 2025 and _mark == "S" {
     let number = punct.field-text(entry, "number", correct-punct: correct-punct, punct-style: punct-style)
-    if number != none { [#number #_emph(title)#mark-block] } else { _emph(title) + mark-block }
+
+    let _num-sep = if language.is-cjk-entry(entry) { "\u{3000}" } else { " " }
+    if number != none { [#number#_num-sep#_emph(title)#mark-block] } else { _emph(title) + mark-block }
   }
 
   else if _mark == "P" {

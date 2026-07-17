@@ -359,20 +359,21 @@
     /// 参考文献表条目截断后保留前 _N_ 位著者，余者合并为「等 / et al」。\
     /// 默认 `3`：与 #arg-ref("gb7714", "bib-et-al-min")[`bib-et-al-min`] 默认 `4` 配合，得 GB/T 7714 的「4 位及以上列前 3 位 + 等」。\
     /// 同收 `bib-et-al-min` 的*三档取值*（整数 / 语言档 / 角色档，可两轴叠加），配置对照与角色键表见 #arg-ref("gb7714", "bib-et-al-min")[`bib-et-al-min`]。|
-  show-anon:           auto,      /// <- `auto` | `boolean`
-    /// 责任者缺失时的占位。\
+  show-anon:           auto,      /// <- `auto` | `boolean` | `dictionary`
+    /// 责任者缺失时，文献表条目**及**著者-出版年制标注的占位。\
     /// - `auto`（默认）：著者-出版年制显示「佚名」（无责任者则无法构成「著者-年」标签），顺序编码制留空（以题名打头）；
     /// - `false`：留空；
     /// - `true`：无著者条目按语言显示占位：
     /// #table( columns: 6,
     ///   [*语言代码*], [`zh`], [`ja`], [`ko`], [`ru`], [`en`、`fr` 及其他],
     ///   [*标题*], [佚名], [#text(font: "MS Mincho")[著者不明]], [#text(font: "Batang")[미상]], [Аноним], [Anon],
-    /// )|
-  show-no-date:        auto,      /// <- `auto` | `boolean`
-    /// 出版日期不明时的占位。与 #arg-ref("gb7714", "show-anon")[`show-anon`] *逐字同构*——两个占位词同为「查找键」（读者拿标签 `(责任者, 年份)` 在文献表里定位），行为一致。\
-    /// - `auto`（默认）：著者-出版年制显示「无日期」（无年份则构不成「著者-年」标签），顺序编码制留空（标签是数字序号，没这个问题）。官方 GB CSL 两制实测就是这样；
-    /// - `false`：留空；
-    /// - `true`：按语言显示占位：
+    /// )
+    /// - *字典* ```typc (numeric: .., "author-date": ..)```：逐制度显式覆盖上述布尔默认，未列出的制度回落 `auto`（AY 显示「佚名」、numeric 留空）。如 ```typc show-anon: (numeric: true)``` 让顺序编码制的文献表也补占位。|
+  show-no-date:        true,      /// <- `boolean`
+    /// 出版日期不明时的占位。与 #arg-ref("gb7714", "show-anon")[`show-anon`] 同为「查找键」（读者拿标签 `(责任者, 年份)` 在文献表里定位）。\
+    /// *不像 `show-anon` 那样带制度感知的 `auto`*：本参数只在著者-出版年制语境渲染（AY 文献表责任者后的年份位 + AY 正文标注），顺序编码制既无此槽（缺年占位在出版项末尾，归 #arg-ref("gb7714", "show-sine-anno")[`show-sine-anno`] 管）、标签又是数字序号，碰不到它。故无需按制度分档，默认恒 `true`（AY 要它当查找键）。\
+    /// - `false`：留空（AY 标签退化成光年份，读者按年份定位）；
+    /// - `true`（默认）：按语言显示占位：
     /// #table( columns: 8,
     ///   [*语言代码*], [`zh`], [`ja`], [`ko`], [`ru`], [`fr`], [`de`], [`en` 及其他],
     ///   [*占位词*], [无日期], [#text(font: "MS Mincho")[日付なし]], [#text(font: "Batang")[일자 없음]], [б. д.], [s. d.], [o. J.], [n.d.],
@@ -505,10 +506,10 @@
     /// 西文姓名前缀（van / von / de / della 等）是否计入排序与著者-出版年制正文标注：\
     /// - `false`（默认）：前缀不参与——`Ludwig van Beethoven` 排在 B 区（按 `Beethoven`）、正文标注作 (Beethoven, 2020)；
     /// - `true`：前缀计入——排在 V 区、正文标注作 (van Beethoven, 2020)。\
-    /// 参考文献表著录不受影响（姓在前不倒装，`van` 始终随姓著录，如 `VAN BEETHOVEN L`）。中文姓名无前缀，两档一致。\
-    /// 本项为全局默认，可被逐条目、逐名字覆盖，优先级为逐名字 > 逐条目 > 全局：\
-    /// - 逐条目：在 `.bib` 条目写 ```bib options = {use-prefix=true}```（对该条全部名字生效）；
-    /// - 逐名字：用扩展人名格式 ```bib author = {family=Beethoven, given=Ludwig, prefix=van, use-prefix=true}```（名字内含 `=` 即触发，可多名字各设、以 `and` 连接）。\
+    /// 本项*全局*只管排序与正文标注；参考文献表*著录处*的前缀位置由 #arg-ref("gb7714", "prefix-last")[`prefix-last`] 独立控制——二者是 biblatex `useprefix` 的排序半与显示半，全局各自解耦以便 GB 灵活配置。中文姓名无前缀，两档一致。\
+    /// 本项为全局默认，可被逐条目、逐名字的 biblatex `useprefix` 覆盖，优先级为逐名字 > 逐条目 > 全局；且逐条目/逐名字的 `useprefix` 会*同时*翻转该名字的著录位置（覆写 `prefix-last`），与 biblatex 一致：\
+    /// - 逐条目：在 `.bib` 条目写 ```bib options = {useprefix=true}```（对该条全部名字生效）；
+    /// - 逐名字：用扩展人名格式 ```bib author = {family=Beethoven, given=Ludwig, prefix=van, useprefix=true}```（名字内含 `=` 即触发，可多名字各设、以 `and` 连接）。拼法随 biblatex，为无连字符的 `useprefix`。\
     /// `bibliography` 接受单次覆盖（仍可被条目 / 名字级再覆盖）。|
   entry-lang-order: ("zh", "ja", "ko", "en", "fr", "ru"), /// <- `array`
     /// 多语言混排时的语种分组顺序，靠前的语种排在前面；未列出的语种排在列出的之后。\
@@ -620,7 +621,8 @@
     /// `s.n.`），第三项在国标体系内类推拉丁才自洽。\
     /// *只对顺序编码制有意义*：著者-出版年制把出版年移到责任者后（§8.1），著录位本来就没有年——
     /// 那一侧的占位归 #arg-ref("gb7714", "show-no-date")[`show-no-date`] 管（缺省就是开的）。两个参数管两个槽，不重叠。\
-    /// 与 #arg-ref("gb7714", "show-sine-loco")[`show-sine-loco`] 同规：手册、档案、学位论文（标识码 A、D、S）与联机电子资源不补。|
+    /// 与 #arg-ref("gb7714", "show-sine-loco")[`show-sine-loco`] 同规：手册、档案、学位论文（标识码 A、D、S）与联机电子资源不补。\
+    /// 出版地、出版者、出版年*都缺且都补*时，按 ISBD 补白通则合并进*同一对*方括号：`[出版地不详: 出版者不详, 日期不详]`（对齐 ISBD `[S.l. : s.n., s.a.]`）；地或者在场打断连续时，日期自成一对（`北京: 某社, [日期不详]`）。|
   show-degree:         false,     /// <- `boolean`
     /// 学位论文条目是否附加学位级别注记（仅文献类型标识为 D 的条目生效）。\
     /// - `false`（默认）：不附加，`@thesis` / `@mastersthesis` / `@phdthesis` 著录相同；
@@ -639,7 +641,8 @@
     /// - `auto`（默认）：随版本——2025 取 `true`、2015 取 `false`；
     /// - `true`：前缀缩为各段首字母、置于名缩写之后——`Pieternella H. van der Veen` → `Veen P H v d`（GB/T 7714—2025 示例形态）；
     /// - `false`：前缀全拼、置于姓之前——`van der Veen P H`。\
-    /// 与 #arg-ref("gb7714", "bib-name-style")[`bib-name-style`] 正交：大小写仍由 `name-style` 决定（`uppercase` 档下 `true` 得 `VEEN P H V D`）。仅作用于参考文献表著录，正文引用标注用姓氏、不受此项影响。|
+    /// 与 #arg-ref("gb7714", "bib-name-style")[`bib-name-style`] 正交：大小写仍由 `name-style` 决定（`uppercase` 档下 `true` 得 `VEEN P H V D`）。仅作用于参考文献表著录，正文引用标注用姓氏、不受此项影响。\
+    /// 本项是全局默认；逐条目 `options={useprefix=..}` 与逐名字扩展格式的 `useprefix` 会逐名覆盖它——`useprefix=true` ⇔ 前缀前置（`false` 档），`useprefix=false` ⇔ 前缀后置（`true` 档），与 biblatex 一致。|
   show-series:         false,     /// <- `boolean`
     /// 是否著录丛书项（`series` 字段，如「经济科学译库」）。\
     /// - `false`（默认）：不著录。GB/T 7714—2015 / 2025 的著录格式不含丛书项（仅 2005 版有）；
@@ -906,9 +909,18 @@
 
   let _format-footnote-number(n) = numbering(std.footnote.numbering, n)
 
-  if show-anon == auto { show-anon = (style.at("bib", default: style.at("cite", default: "numeric")) == "author-date") }
+  let _anon-system = style.at("bib", default: style.at("cite", default: "numeric"))
 
-  if show-no-date == auto { show-no-date = (style.at("bib", default: style.at("cite", default: "numeric")) == "author-date") }
+  let _resolve-anon-like(v, system) = if type(v) == dictionary {
+    v.at(system, default: system == "author-date")
+  } else if v == auto {
+    system == "author-date"
+  } else { v }
+
+  let _cite-show-anon = _resolve-anon-like(show-anon, "author-date")
+  show-anon = _resolve-anon-like(show-anon, _anon-system)
+
+  if show-no-date == auto { show-no-date = true }
   let _cite-form-state = state("gb7714-cite-form-override", auto)
   let _cite-style-state = state("gb7714-cite-style-override", auto)
 
@@ -1322,7 +1334,7 @@
 
       if entry.entry_type == "set" { return if parts { (author: key, year: "", delim: "") } else { key } }
 
-      if show-anon {
+      if _cite-show-anon {
         author = terms.anon-for(terms.cite-term-lang(terms-lang, "anon", entry, document-lang), custom-terms: custom-terms)
       } else { author = ""; creator-empty = true }
     }
@@ -1811,7 +1823,7 @@
       /// #arg-ref("gb7714", "sort-use-prefix")。|
     name-style:   auto,   /// <- `auto` | `string`
       /// #arg-ref("gb7714", "bib-name-style")。|
-    show-anon:     auto,   /// <- `auto` | `boolean`
+    show-anon:     auto,   /// <- `auto` | `boolean` | `dictionary`
       /// #arg-ref("gb7714", "show-anon")。|
     show-no-date:  auto,   /// <- `auto` | `boolean`
       /// #arg-ref("gb7714", "show-no-date")。|
@@ -2030,7 +2042,8 @@
 
     let eff-et-al-translator-separator = _global-config.at("et-al-translator-separator", default: auto)
     let eff-component-part-separator = _global-config.at("component-part-separator", default: "//")
-    let eff-show-anon           = _api-pick(show-anon, _global-config.show-anon)
+
+    let eff-show-anon           = _resolve-anon-like(_api-pick(show-anon, _global-config.show-anon), eff-bib-style)
     let eff-show-no-date        = _api-pick(show-no-date, _global-config.show-no-date)
     let eff-show-et-al           = _api-pick(show-et-al, _global-config.show-et-al)
     let eff-dedup-author-editor      = _api-pick(dedup-author-editor, _global-config.dedup-author-editor)
@@ -2496,6 +2509,8 @@
     let document-comma = p("comma")
     let document-semi  = p("semicolon")
 
+    let _cite-block-sep = if punct.cite-direction(eff-cite-punct-style, document-lang, document-lang, eff-style) == "half-with-space" { [ ] } else { [] }
+
     let eff-cite-range-separator = punct.resolve-cite-separator(eff-cite-range-separator, eff-cite-punct-style, document-lang, document-lang, eff-style, "-")
 
     let _suffix-map = _list-suffix-map.final()
@@ -2517,7 +2532,22 @@
     let _key-of(item) = if item.at("key", default: none) != none { item.key } else { seen.at(item.number - 1, default: "") }
 
     let _name-punct-direction(entry) = punct.cite-direction(eff-cite-punct-style, document-lang, if entry != none { language.get(entry) } else { document-lang }, eff-style)
-    let _cite-author(entry) = if entry != none { author-date-cite.author-short(entry, cite-et-al-min: eff-cite-et-al-min, cite-et-al-use-first: eff-cite-et-al-use-first, cite-et-al-use-last: eff-cite-et-al-use-last, name-style: eff-name-style, terms-lang: eff-cite-terms-lang, document-lang: document-lang, sort-use-prefix: sort-use-prefix, name-separator: p("comma", entry: entry), name-suffix-separator: name-suffix-separator, custom-terms: _global-config.custom-terms, punct-style: _name-punct-direction(entry)) } else { "" }
+    let _cite-author(entry) = {
+      if entry == none { return "" }
+      let a = author-date-cite.author-short(entry, cite-et-al-min: eff-cite-et-al-min, cite-et-al-use-first: eff-cite-et-al-use-first, cite-et-al-use-last: eff-cite-et-al-use-last, name-style: eff-name-style, terms-lang: eff-cite-terms-lang, document-lang: document-lang, sort-use-prefix: sort-use-prefix, name-separator: p("comma", entry: entry), name-suffix-separator: name-suffix-separator, custom-terms: _global-config.custom-terms, punct-style: _name-punct-direction(entry))
+
+      if a == none { if _cite-show-anon { terms.anon-for(terms.cite-term-lang(eff-cite-terms-lang, "anon", entry, document-lang), custom-terms: _global-config.custom-terms) } else { "" } } else { a }
+    }
+
+    let _cite-year(entry, suffix) = {
+      if entry == none { return "" }
+      let y = publication-date.year(entry)
+      if y != none { publication-date.with-suffix(y, suffix) }
+      else if show-no-date {
+        let w = terms.no-date-for(terms.cite-term-lang(eff-cite-terms-lang, "no-date", entry, document-lang), custom-terms: _global-config.custom-terms)
+        if suffix != "" { w + "-" + suffix } else { w }
+      } else { "" }
+    }
 
     let _entry-of(item) = bib-data.at(_key-of(item), default: none)
     let _order-items(run-items) = {
@@ -2552,11 +2582,12 @@
 
     let cite-opts = (
       eff-form: eff-form,
-      _key-of: _key-of, _cite-author: _cite-author, _order-items: _order-items,
+      _key-of: _key-of, _cite-author: _cite-author, _cite-year: _cite-year, _order-items: _order-items,
       bib-data: bib-data, publication-date: publication-date, p: p,
       _bib-link: _bib-link, _num-link: _num-link, _author-date-cite-label: _author-date-cite-label,
       lbl-prefix: lbl-prefix, my-list: my-list, suffix-table: suffix-table, escalation-table: escalation-table,
       supplement-mode: supplement-mode, document-semi: document-semi, document-comma: document-comma,
+      block-sep: _cite-block-sep,
       seen: seen,
       eff-name-style: eff-name-style, eff-cite-et-al-min: eff-cite-et-al-min, eff-cite-et-al-use-first: eff-cite-et-al-use-first,
       eff-cite-terms-lang: eff-cite-terms-lang, document-lang: document-lang,

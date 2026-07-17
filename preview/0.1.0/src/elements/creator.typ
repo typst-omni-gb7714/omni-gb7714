@@ -5,6 +5,7 @@
 #import "../punct/built-in.typ" as punct
 #import "mark-medium/built-in.typ" as mark-medium
 #import "../parse/latex.typ"
+#import "../parse/field.typ"
 
 #let _is-org(name) = {
   name.at("given", default: "") == "" and name.at("family", default: "").contains(" ")
@@ -93,6 +94,9 @@
   let given = _norm-name(name.at("given", default: ""))
   let prefix = _norm-name(name.at("prefix", default: ""))
   let suffix = _norm-name(name.at("suffix", default: ""))
+
+  let _up-explicit = field.use-prefix-explicit(name, if entry != none { field.use-prefix-entry(entry) } else { none })
+  let prefix-last = if _up-explicit != none { not _up-explicit } else { prefix-last }
   if family == "" and given == "" { return "" }
   if _is-org(name) { return family }
 
