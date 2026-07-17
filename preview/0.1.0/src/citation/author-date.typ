@@ -236,7 +236,7 @@
 }
 
 #let render-run(items, _group-merge, opts) = {
-  let (eff-form, _key-of, _cite-author, _order-items, bib-data, publication-date, p, _bib-link, _author-date-cite-label, lbl-prefix, my-list, suffix-table, escalation-table, supplement-mode, document-semi, eff-name-style, eff-cite-et-al-min, eff-cite-et-al-use-first, eff-cite-terms-lang, document-lang, eff-collapse-date, _name-punct-direction) = opts
+  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, bib-data, publication-date, p, _bib-link, _author-date-cite-label, lbl-prefix, my-list, suffix-table, escalation-table, supplement-mode, document-semi, eff-name-style, eff-cite-et-al-min, eff-cite-et-al-use-first, eff-cite-terms-lang, document-lang, eff-collapse-date, _name-punct-direction) = opts
 
   let items = _order-items(items)
   if items.len() == 1 and eff-form in ("author", "year") {
@@ -244,9 +244,8 @@
     let k = _key-of(item)
     let entry = bib-data.at(k, default: none)
     let author = _cite-author(entry)
-    let year = if entry != none { publication-date.year(entry) } else { "" }
     let _suffix = suffix-table.at(k, default: "")
-    if year != none { year = publication-date.with-suffix(year, _suffix) }
+    let year = _cite-year(entry, _suffix)
 
     let display = if eff-form == "author" { author } else { year }
     let lbl = _bib-link(lbl-prefix + k, my-list, k, display)
@@ -256,9 +255,8 @@
       let k = _key-of(item)
       let entry = bib-data.at(k, default: none)
       let author = _cite-author(entry)
-      let year = if entry != none { publication-date.year(entry) } else { "" }
       let _suffix = suffix-table.at(k, default: "")
-      if year != none { year = publication-date.with-suffix(year, _suffix) }
+      let year = _cite-year(entry, _suffix)
       let display = if eff-form == "author" { author } else { year }
       _bib-link(lbl-prefix + k, my-list, k, display)
     })
@@ -274,12 +272,11 @@
     let k = _key-of(item)
     let entry = bib-data.at(k, default: none)
     let author = _cite-author(entry)
-    let year = if entry != none { publication-date.year(entry) } else { "" }
     let _suffix = suffix-table.at(k, default: "")
-    if year != none { year = publication-date.with-suffix(year, _suffix) }
+    let year = _cite-year(entry, _suffix)
     let lbl = _bib-link(lbl-prefix + k, my-list, k, year)
 
-    let gap = if _name-punct-direction(entry) == "full" { "" } else { " " }
+    let gap = if author == "" or _name-punct-direction(entry) == "full" { "" } else { " " }
 
     let no-year = (year == none or year == "") and item.supplement == none
     if no-year { author }

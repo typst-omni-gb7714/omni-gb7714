@@ -2,7 +2,7 @@
 #import "parse/field.typ"
 #import "elements/mark-medium/built-in.typ" as mark-medium
 
-#let is-platform-form(entry, version: 2015) = version == 2025 and mark-medium.mark(entry) in ("EB", "DS", "PP")
+#let is-platform-form(entry, version: 2015) = version == 2025 and mark-medium.mark(entry) in ("EB", "CP", "DS", "PP")
 
 #let get(entry, version: 2015) = {
   let entry-type = entry.entry_type

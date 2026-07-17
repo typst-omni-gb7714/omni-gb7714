@@ -34,3 +34,9 @@
   if entry-use-prefix != none { return entry-use-prefix }
   global-use-prefix
 }
+
+#let use-prefix-explicit(name, entry-use-prefix) = {
+  let name-use-prefix = name.at("use-prefix", default: none)
+  if name-use-prefix != none { return name-use-prefix == true }
+  entry-use-prefix
+}

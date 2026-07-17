@@ -419,7 +419,7 @@
     if date-block == "" { date-block = none }
 
     let parts = (creator, title, editor-other, translator)
-    if _2025-version-field != none { parts.push(_2025-version-field) }
+    if _2025-version-field != none and mark-2025 not in ("EB", "CP") { parts.push(_2025-version-field) }
     parts.push(date-block)
     parts.push(access)
     _join(parts, p("period"))
