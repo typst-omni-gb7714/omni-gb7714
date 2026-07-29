@@ -1,8 +1,24 @@
 #import "../category.typ"
 #import "../elements/mark-medium/built-in.typ" as mark-medium
 #import "../punct/built-in.typ" as punct
+#import "../parse/field.typ"
 #import "built-in.typ" as built-in-driver
 #import "custom.typ" as custom-driver
+
+#let count-data-groups(entry) = {
+  let has(..names) = names.pos().any(n => field.get(entry, n) != none)
+  let mark = mark-medium.mark(entry)
+  let groups = (
+    has("author", "editor", "translator"),
+    has("title", "journaltitle", "maintitle", "booktitle", "issuetitle") or (mark == "S" and field.get(entry, "number") != none),
+    has("edition", "version"),
+    has("location", "address", "publisher", "date", "year", "institution", "organization", "school", "pages"),
+    field.get(entry, "series") != none,
+    field.get(entry, "url") != none,
+    has("doi", "isbn", "issn", "cstr", "eprint"),
+  )
+  groups.filter(g => g).len()
+}
 
 #let _maybe-annotation(rendered, entry, show-annotation) = {
   if not show-annotation { return rendered }
@@ -12,16 +28,19 @@
   [#rendered. #a]
 }
 
-#let entry(entry, registered-marks: (), show-sine-loco: true, show-sine-nomine: true, show-sine-anno: false, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-url: true, show-mark: true, show-medium: true, show-patent-country: false, short-journal: false, show-urldate: true, end-with-period: true, hyperlink: true, italic-journal: false, bold-journal-volume: false, italic-book-title: false, space-before-mark: false, space-before-pages: true, page-range-separator: "-", page-range-style: none, period-after-creator: true, show-anon: false, show-et-al: true, name-style: (:), hyperlink-title: false, dedup-author-editor: false, skip-date: false, date-suffix: "", pages-override: none, skip-creator: false, creator-override: none, show-degree: false, show-series: false, prefix-last: false, custom-drivers: (:), custom-terms: (:), custom-fields: (:), custom-pids: (:), correct-punct: false, punct-style: "half-with-space", custom-punct: (:), url-break-every: 1, url-break-hyphen: true, url-break-hyphen-at-delimiters: true, version: 2015, name-suffix-separator: auto, et-al-translator-separator: auto, component-part-separator: "//", show-pid: (:), pid-priority: (), dedup-url-pid: true, show-annotation: false, volume-title-gutter: auto) = {
+#let entry(entry, registered-marks: (), show-sine-loco: true, show-sine-nomine: true, show-sine-anno: false, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-url: true, show-mark: true, show-medium: true, show-patent-country: false, short-journal: false, show-urldate: true, show-end-period: true, hyperlink: true, italic-journal: false, bold-journal-volume: false, italic-book-title: false, space-before-mark: false, space-before-pages: true, page-range-separator: "-", page-range-style: none, period-after-creator: true, show-anon: false, show-et-al: true, name-style: (:), hyperlink-title: false, dedup-author-editor: false, skip-date: false, date-suffix: "", pages-override: none, skip-creator: false, creator-override: none, show-degree: false, show-series: false, prefix-last: false, custom-drivers: (:), custom-terms: (:), custom-fields: (:), custom-pids: (:), correct-punct: false, punct-style: "half-with-space", custom-punct: (:), url-break-every: 1, url-break-hyphen: true, url-break-hyphen-at-delimiters: true, version: 2015, name-suffix-separator: auto, et-al-translator-separator: auto, component-part-separator: "//", show-pid: (:), pid-priority: (), dedup-url-pid: true, show-annotation: false, volume-title-gutter: auto) = {
   let entry-category = category.get(entry, version: version)
 
   let show-urldate = show-urldate and not mark-medium.online-suppressed(show-url, entry, version: version)
+
+  let mark-is-auto = (show-mark == auto)
+  let eff-mark = if mark-is-auto { true } else { show-mark }
 
   let _format-args = (
     show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno,
     et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last,
     show-url: show-url,
-    show-mark: show-mark, show-medium: show-medium,
+    show-mark: eff-mark, show-medium: show-medium,
     show-patent-country: show-patent-country,
     short-journal: short-journal, show-urldate: show-urldate,
     hyperlink: hyperlink,
@@ -40,21 +59,35 @@
     volume-title-gutter: volume-title-gutter,
   )
 
+  let run-built-in(args) = if entry-category == "component-part" { built-in-driver.component-part(entry, args) }
+    else if entry-category == "preprint" { built-in-driver.preprint(entry, args) }
+    else if entry-category == "serial-article" { built-in-driver.serial-article(entry, args) }
+    else if entry-category == "serial-newspaper" { built-in-driver.serial-newspaper(entry, args) }
+    else if entry-category == "patent" { built-in-driver.patent(entry, args) }
+    else if entry-category == "electronic" { built-in-driver.electronic(entry, args) }
+    else if entry-category == "serial" { built-in-driver.serial(entry, args) }
+    else { built-in-driver.monograph(entry, args) }
+
+  let strip-mark(render, args, body, single-block) = {
+    if mark-is-auto and single-block and mark-medium.mark(entry) != none {
+      let re = render((..args, show-mark: false))
+      if type(re) == array { re.first() } else { re }
+    } else { body }
+  }
+
   if custom-drivers != none and custom-drivers != (:) {
     custom-driver.validate-driver-keys(custom-drivers, extra-marks: registered-marks)
     let template = custom-drivers.at(entry.entry_type, default: none)
     if template == none { template = custom-drivers.at(mark-medium.base-mark(entry), default: none) }
     if template != none {
-      return _maybe-annotation(custom-driver.render(entry, template, _format-args, custom-terms, end-with-period: end-with-period), entry, show-annotation)
+      let render-custom(args) = custom-driver.render(entry, template, args, custom-terms, show-end-period: show-end-period)
+      let (body, single-block) = render-custom(_format-args)
+      body = strip-mark(render-custom, _format-args, body, single-block)
+      return (_maybe-annotation(body, entry, show-annotation), single-block)
     }
   }
-  let _result = if entry-category == "component-part" { built-in-driver.component-part(entry, _format-args) }
-  else if entry-category == "preprint" { built-in-driver.preprint(entry, _format-args) }
-  else if entry-category == "serial-article" { built-in-driver.serial-article(entry, _format-args) }
-  else if entry-category == "serial-newspaper" { built-in-driver.serial-newspaper(entry, _format-args) }
-  else if entry-category == "patent" { built-in-driver.patent(entry, _format-args) }
-  else if entry-category == "electronic" { built-in-driver.electronic(entry, _format-args) }
-  else if entry-category == "serial" { built-in-driver.serial(entry, _format-args) }
-  else { built-in-driver.monograph(entry, _format-args) }
-  _maybe-annotation(_result, entry, show-annotation)
+
+  let single-block = count-data-groups(entry) <= 1
+  let body = strip-mark(run-built-in, _format-args, run-built-in(_format-args), single-block)
+  (_maybe-annotation(body, entry, show-annotation), single-block)
 }

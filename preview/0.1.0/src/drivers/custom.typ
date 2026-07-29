@@ -543,16 +543,23 @@
   entry.entry_type in custom-drivers or mark-medium.base-mark(entry) in custom-drivers
 }
 
-#let render(entry, template, opts, custom-terms, end-with-period: false) = {
+#let render(entry, template, opts, custom-terms, show-end-period: false) = {
   let nodes = _parse(_tokenize(template))
   let parts = nodes.map(n => _render-node(n, entry, opts, custom-terms))
 
   let body = _smart-join(nodes, parts, keep-trailing: true)
 
-  if end-with-period and body != none {
+  let data-blocks = 0
+  for (i, node) in nodes.enumerate() {
+    if node.at(0) not in ("sp", "punct", "text") and node.at(1, default: none) not in ("mark", "medium", "mark-medium") and not _is-empty(parts.at(i)) { data-blocks += 1 }
+  }
+  let single-block = data-blocks <= 1
+
+  let period-on = if show-end-period == auto { not single-block } else { show-end-period }
+  if period-on and body != none {
     let dot = punct.get("period", entry, opts.punct-style, opts.custom-punct)
     if type(dot) == str { dot = dot.trim() }
     body = punct.append-end-period(body, dot)
   }
-  body
+  (body, single-block)
 }

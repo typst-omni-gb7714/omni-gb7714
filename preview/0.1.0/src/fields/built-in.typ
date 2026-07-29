@@ -17,7 +17,7 @@
   "title", "subtitle", "titleaddon", "title-block", "component-part-title-block",
   "booktitle", "booksubtitle", "booktitleaddon",
   "journal", "journaltitle", "journalsubtitle", "journaltitleaddon", "shortjournal",
-  "series", "series-block", "edition", "version", "volume", "number",
+  "series", "series-block", "serial-block", "edition", "version", "volume", "number",
   "pages", "date", "year", "month", "day", "urldate", "eventdate",
   "publisher", "address", "location", "country", "institution", "school", "organization", "holder",
   "imprint-block", "mark", "mark-medium", "medium", "note", "access",
@@ -156,6 +156,8 @@
   if name == "imprint-block" {
     return imprint.format(entry, show-sine-loco: opts.show-sine-loco, show-sine-nomine: opts.show-sine-nomine, show-sine-anno: opts.at("show-sine-anno", default: false), skip-date: opts.skip-date, date-suffix: opts.at("date-suffix", default: ""), punct-style: opts.punct-style, custom-punct: opts.custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: opts.version)
   }
+
+  if name == "serial-block" { return built-in-driver.serial-year-volume(entry, opts).block }
   if name == "access" {
     return access(entry, show-url: opts.show-url, hyperlink: opts.hyperlink, show-pid: opts.show-pid, pid-priority: opts.pid-priority, dedup-url-pid: opts.dedup-url-pid, custom-pids: opts.at("custom-pids", default: (:)), punct-style: opts.punct-style, custom-punct: opts.custom-punct, url-break-every: opts.url-break-every, url-break-hyphen: opts.url-break-hyphen, url-break-hyphen-at-delimiters: opts.url-break-hyphen-at-delimiters, version: opts.version)
   }

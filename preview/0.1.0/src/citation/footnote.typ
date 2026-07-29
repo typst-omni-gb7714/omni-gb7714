@@ -17,8 +17,8 @@
   value
 }
 
-#let normalize-footnote-ibid(value) = {
-  if value == auto { return true }
+#let normalize-footnote-ibid(value, version) = {
+  if value == auto { return version != 2025 }
   if value == true or value == false { return value }
   errors.raise("footnote-ibid.bad-value", got: repr(value))
 }
@@ -55,22 +55,23 @@
   }
   let first-sidecar = _sidecar-at(base)
   let opts = options-thunk(if first-sidecar == none { (:) } else { first-sidecar.value.at("overrides", default: (:)) })
-  let (indent, eff-style, bib-style, show-url, eff-show-annotation, end-with-period, eff-custom-drivers, version, eff-punct-style, eff-custom-punct, _emit-entry-author-date, _emit-entry, eff-custom-terms, eff-custom-fields, eff-custom-pids, eff-correct-punct, eff-url-break-every, eff-show-pid, eff-pid-priority, eff-dedup-url-pid, _get-related, _set-redirect, bib-data, footnote-repeat-style, footnote-ibid, footnote-repeat-reset, cite-terms-lang, format-footnote-number, _active-list, _bib-link, show-anon, show-et-al, _global-config, show-mark, show-medium, space-before-mark, correct-punct) = opts
+  let (indent, eff-style, bib-style, show-url, eff-show-annotation, show-end-period, eff-custom-drivers, version, eff-punct-style, eff-custom-punct, _emit-entry-author-date, _emit-entry, eff-custom-terms, eff-custom-fields, eff-custom-pids, eff-correct-punct, eff-url-break-every, eff-show-pid, eff-pid-priority, eff-dedup-url-pid, _get-related, _set-redirect, bib-data, footnote-repeat-style, footnote-ibid, footnote-repeat-reset, cite-terms-lang, format-footnote-number, _active-list, _bib-link, show-anon, show-et-al, _global-config, show-mark, show-medium, space-before-mark, correct-punct) = opts
 
   let my-list = _active-list.at(here())
   let document-lang = text.lang
 
+      let _period-on(single-block) = if show-end-period == auto { not single-block } else { show-end-period }
       let _footnote-full-body(entry, k, supplement, with-end-period: true) = {
         let skip-date = bib-style == "author-date"
         let annotation-tail = bib.annotation-tail(entry, show-annotation: eff-show-annotation)
-        let end-suffix = if end-with-period and not annotation-tail and not custom-driver.uses-override(entry, eff-custom-drivers, version: version) { punct.end-period(entry, eff-punct-style, eff-custom-punct) } else { "" }
-        let formatted = if skip-date { _emit-entry-author-date(entry, suffix-key: k, pages-override: supplement, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) } else { _emit-entry(entry, pages-override: supplement, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) }
+        let (formatted, entry-single) = if skip-date { _emit-entry-author-date(entry, suffix-key: k, pages-override: supplement, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) } else { _emit-entry(entry, pages-override: supplement, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) }
+        let end-suffix = if _period-on(entry-single) and not annotation-tail and not custom-driver.uses-override(entry, eff-custom-drivers, version: version) { punct.end-period(entry, eff-punct-style, eff-custom-punct) } else { "" }
         let related = _get-related(entry)
         if related != none {
           let related-key = str(entry.fields.at("related", default: ""))
           let related-annotation-tail = bib.annotation-tail(related, show-annotation: eff-show-annotation)
-          let related-end-suffix = if end-with-period and not related-annotation-tail and not custom-driver.uses-override(related, eff-custom-drivers, version: version) { punct.end-period(related, eff-punct-style, eff-custom-punct) } else { "" }
-          let related-formatted = if skip-date { _emit-entry-author-date(related, suffix-key: related-key, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) } else { _emit-entry(related, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) }
+          let (related-formatted, related-single) = if skip-date { _emit-entry-author-date(related, suffix-key: related-key, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) } else { _emit-entry(related, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) }
+          let related-end-suffix = if _period-on(related-single) and not related-annotation-tail and not custom-driver.uses-override(related, eff-custom-drivers, version: version) { punct.end-period(related, eff-punct-style, eff-custom-punct) } else { "" }
           [#punct.append-end-period(formatted, end-suffix)#linebreak()#indent#punct.append-end-period(related-formatted, if with-end-period { related-end-suffix } else { "" })]
         } else { punct.append-end-period(formatted, if with-end-period { end-suffix } else { "" }) }
       }
@@ -96,7 +97,8 @@
 
       let _short-body(entry, supplement, with-end-period: true) = {
         let author = creators.principal(entry, et-al-min: _global-config.et-al-min, et-al-use-first: _global-config.et-al-use-first, show-anon: show-anon, show-et-al: show-et-al, name-style: _global-config.name-style, punct-style: eff-punct-style, custom-punct: eff-custom-punct, custom-terms: _global-config.custom-terms, name-suffix-separator: _global-config.name-suffix-separator, prefix-last: _global-config.prefix-last)
-        let short-title = titles.format(entry, show-mark: show-mark, show-medium: show-medium, show-url: false, space-before-mark: space-before-mark, hyperlink-title: false, correct-punct: correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, version: _global-config.version, volume-title-gutter: _global-config.volume-title-gutter)
+
+        let short-title = titles.format(entry, show-mark: (if show-mark == auto { true } else { show-mark }), show-medium: show-medium, show-url: false, space-before-mark: space-before-mark, hyperlink-title: false, correct-punct: correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, version: _global-config.version, volume-title-gutter: _global-config.volume-title-gutter)
 
         let parts = if supplement != none { (author, short-title, supplement) } else { (author, short-title) }
 
@@ -129,7 +131,8 @@
           else if adjacent and footnote-ibid { "ibid" }
           else { footnote-repeat-style }
         if content-kind == "reuse" and is-repeat and (in-merged-group or prior-first.value.at("merged", default: false)) { content-kind = "number" }
-        let entry-end-suffix = if end-with-period { punct.end-period(entry, eff-punct-style, eff-custom-punct) } else { "" }
+
+        let entry-end-suffix = if show-end-period != false { punct.end-period(entry, eff-punct-style, eff-custom-punct) } else { "" }
 
         let _ibid-lang = terms.cite-term-lang(cite-terms-lang, "ibid", entry, document-lang)
         let _fnnum-lang = terms.cite-term-lang(cite-terms-lang, "footnote-number", entry, document-lang)
@@ -206,7 +209,8 @@
           }
           joined += [#s.resolved.body]
         }
-        let end-suffix = if end-with-period {
+
+        let end-suffix = if show-end-period != false {
           punct.end-period(bib-data.at(slots.last().item.key, default: none), eff-punct-style, eff-custom-punct)
         } else { "" }
         std.footnote(punct.append-end-period(joined, end-suffix))

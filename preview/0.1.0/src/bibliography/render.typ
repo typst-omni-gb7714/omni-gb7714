@@ -132,7 +132,9 @@
 }
 
 #let render-entries(filtered, opts) = {
-  let (bib-data, _emit-entry, _emit-entry-author-date, _plabel, _get-related, _disambiguation, _active-list, eff-bib-style, eff-suffixes, eff-numeric-date-suffix, eff-numbering-style, eff-show-related, eff-show-url, eff-show-annotation, eff-end-with-period, eff-custom-drivers, eff-version, eff-punct-style, eff-custom-punct, eff-hyphenate, eff-entry-hanging-indent, eff-entry-first-line-indent, eff-number-gutter, eff-number-width, eff-back-ref, eff-number-placement, _column-mode, _margin-mode, list-label, number-offset, lbl-align, related-indent, eff-creator-idem) = opts
+  let (bib-data, _emit-entry, _emit-entry-author-date, _plabel, _get-related, _disambiguation, _active-list, eff-bib-style, eff-suffixes, eff-numeric-date-suffix, eff-numbering-style, eff-show-related, eff-show-url, eff-show-annotation, eff-show-end-period, eff-custom-drivers, eff-version, eff-punct-style, eff-custom-punct, eff-hyphenate, eff-entry-hanging-indent, eff-entry-first-line-indent, eff-number-gutter, eff-number-width, eff-back-ref, eff-number-placement, _column-mode, _margin-mode, list-label, number-offset, lbl-align, related-indent, eff-creator-idem) = opts
+
+  let _period-on(single-block) = if eff-show-end-period == auto { not single-block } else { eff-show-end-period }
 
   let _rows = ()
 
@@ -169,10 +171,11 @@
       let _wrap-member(b) = if _member-lang not in ("zh", "ja", "ko") { text(lang: _member-lang, hyphenate: eff-hyphenate, b) } else { b }
       let _render-member(member-entry) = {
         let annotation-tail-flag = annotation-tail(member-entry, show-annotation: eff-show-annotation)
-        let tail-sep = if eff-end-with-period and not annotation-tail-flag and not custom-driver.uses-override(member-entry, eff-custom-drivers, version: eff-version) { [#punct.end-period(member-entry, eff-punct-style, eff-custom-punct)] } else { [] }
-        if eff-bib-style == "author-date" {
-          punct.append-end-period(_emit-entry-author-date(member-entry, suffix-key: str(member-keys.at(members.position(x => x == member-entry), default: 0)), suffixes: eff-suffixes), tail-sep)
-        } else { punct.append-end-period(_emit-entry(member-entry), tail-sep) }
+        let (member-body, member-single) = if eff-bib-style == "author-date" {
+          _emit-entry-author-date(member-entry, suffix-key: str(member-keys.at(members.position(x => x == member-entry), default: 0)), suffixes: eff-suffixes)
+        } else { _emit-entry(member-entry) }
+        let tail-sep = if _period-on(member-single) and not annotation-tail-flag and not custom-driver.uses-override(member-entry, eff-custom-drivers, version: eff-version) { [#punct.end-period(member-entry, eff-punct-style, eff-custom-punct)] } else { [] }
+        punct.append-end-period(member-body, tail-sep)
       }
       let member-block = members.map(_render-member)
       let element = emit-label(key, list-label: list-label)
@@ -210,9 +213,6 @@
     let related = if eff-show-related { _get-related(entry) } else { none }
     let skip-date = eff-bib-style == "author-date"
     let annotation-tail-v = annotation-tail(entry, show-annotation: eff-show-annotation)
-    let suffix = if eff-end-with-period and not annotation-tail-v and not custom-driver.uses-override(entry, eff-custom-drivers, version: eff-version) { punct.end-period(entry, eff-punct-style, eff-custom-punct) } else { "" }
-    let related-annotation-tail = if related != none { annotation-tail(related, show-annotation: eff-show-annotation) } else { false }
-    let related-suffix = if related != none and eff-end-with-period and not related-annotation-tail and not custom-driver.uses-override(related, eff-custom-drivers, version: eff-version) { punct.end-period(related, eff-punct-style, eff-custom-punct) } else { "" }
 
     let entry-label-tag = emit-label(key, list-label: list-label)
 
@@ -226,10 +226,15 @@
 
       _emit-entry(target-entry, date-suffix: if eff-numeric-date-suffix { eff-suffixes.at(suffix-key, default: "") } else { "" }, creator-override: creator-override)
     }
-    let formatted = _emit(entry, key, creator-override: _creator-override)
+
+    let (formatted, entry-single) = _emit(entry, key, creator-override: _creator-override)
+    let suffix = if _period-on(entry-single) and not annotation-tail-v and not custom-driver.uses-override(entry, eff-custom-drivers, version: eff-version) { punct.end-period(entry, eff-punct-style, eff-custom-punct) } else { "" }
+    let related-annotation-tail = if related != none { annotation-tail(related, show-annotation: eff-show-annotation) } else { false }
     let related-formatted = if related != none {
       let related-key = str(entry.fields.at("related", default: ""))
-      punct.append-end-period(_emit(related, related-key), related-suffix)
+      let (related-body, related-single) = _emit(related, related-key)
+      let related-suffix = if _period-on(related-single) and not related-annotation-tail and not custom-driver.uses-override(related, eff-custom-drivers, version: eff-version) { punct.end-period(related, eff-punct-style, eff-custom-punct) } else { "" }
+      punct.append-end-period(related-body, related-suffix)
     } else { none }
 
     if eff-numbering-style == none {

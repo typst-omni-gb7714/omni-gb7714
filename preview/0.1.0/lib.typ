@@ -116,7 +116,7 @@
   entry-lang-order:          ("zh", "ja", "ko", "en", "fr", "ru"),
   /// 缺 langid 时的语言判定："auto" / "fast" 纯字符脚本 / "accurate" 字符表+姓氏表+模型
   entry-lang-detect:         "auto",
-  /// 显示文献类型标识（如 [M] [J]）：bool / 字典按条目控（键 entry_type|大写码|rest，如 (S: false)）
+  /// 显示文献类型标识（如 [M] [J]）：默认 true（单块也保留码，对齐 §7.3）；auto=单块著录不显示码（§7.2 题名片段无码）；false 隐藏；字典按条目控（键 entry_type|大写码|rest，如 (S: false)）
   show-mark:           true,
   /// 显示文献载体标识（如 /OL）
   show-medium:         true,
@@ -183,8 +183,8 @@
   bold-journal-volume: false,
   /// 作者字段后加句点（false 改空格）
   period-after-creator: true,
-  /// 条目不以缩写点结尾时自动补句号
-  end-with-period:     true,
+  /// 末尾句点：auto=单块著录不补、多块补（§7 单块演示片段无末尾句点）；true 总补；false 不补
+  show-end-period:     auto,
   /// 文献类型标识 [M] 前加空格
   space-before-mark:   false,
   /// 页码前加空格（: 123 与 :123）
@@ -285,7 +285,7 @@
     url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters,
     titles-text-case: titles-text-case, italic-book-title: italic-book-title,
     italic-journal: italic-journal, bold-journal-volume: bold-journal-volume,
-    period-after-creator: period-after-creator, end-with-period: end-with-period,
+    period-after-creator: period-after-creator, show-end-period: show-end-period,
     space-before-mark: space-before-mark, space-before-pages: space-before-pages,
     page-range-separator: page-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, footnote-numbering-use-quan: footnote-numbering-use-quan,
     footnote-repeat-style: footnote-repeat-style, footnote-ibid: footnote-ibid, footnote-repeat-reset: footnote-repeat-reset,
@@ -511,7 +511,7 @@
   page-range-separator:       auto,
   page-range-style:    auto,
   /// 同 gb7714 同名参数；auto 跟随全局
-  end-with-period:     auto,
+  show-end-period:     auto,
   /// 「等 / et al」触发阈值；auto 跟随全局
   et-al-min:           auto,
   /// 截断后保留前 N 位；auto 跟随全局
@@ -877,7 +877,7 @@
     bold-journal-volume: bold-journal-volume,
     page-range-separator: page-range-separator,
     page-range-style: page-range-style,
-    end-with-period: end-with-period,
+    show-end-period: show-end-period,
     et-al-min: et-al-min,
     et-al-use-first: et-al-use-first,
     et-al-use-last: et-al-use-last,

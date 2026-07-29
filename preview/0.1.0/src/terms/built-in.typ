@@ -115,7 +115,7 @@
 #let _EDITION-WRAP = (
   zh: (prefix: "", suffix: "版"), ja: (prefix: "", suffix: "版"),
   ko: (prefix: "", suffix: "판"), ru: (prefix: "", suffix: "-е изд."),
-  fr: (prefix: "", suffix: "e éd."), en: (prefix: "", suffix: " ed."),
+  fr: (prefix: "", suffix: "e éd."), en: (prefix: "", suffix: " ed"),
 )
 #let _VOLUME-WRAP = (
   zh: (prefix: "第", suffix: "卷"), ja: (prefix: "第", suffix: "巻"),
@@ -186,7 +186,7 @@
 
 #let sine-anno(entry, custom-terms: (:)) = {
   let lang = language.get(entry)
-  _term(custom-terms, "sine-anno", lang, (zh: "日期不详", ja: "日付不明", ko: "발행일불명").at(lang, default: "s.a."))
+  _term(custom-terms, "sine-anno", lang, (zh: "出版年不详", ja: "日付不明", ko: "발행일불명").at(lang, default: "s.a."))
 }
 
 #let bib-title(lang, region) = {

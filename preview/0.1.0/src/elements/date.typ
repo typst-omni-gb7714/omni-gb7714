@@ -4,7 +4,10 @@
 
 #let modified(entry) = {
   let date-field = field.get(entry, "date")
-  if date-field != none { publication-date.edtf-year(str(date-field)) } else { none }
+  if date-field == none { return none }
+  let parsed-date = publication-date.parsed(entry, "date")
+  if parsed-date == none { return none }
+  publication-date.format-parsed-date(parsed-date)
 }
 
 #let _URLDATE-TYPES = ("EB", "DB", "CP", "DS", "PP")
@@ -14,5 +17,8 @@
   let urldate-value = field.get(entry, "urldate")
   if urldate-value == none { return none }
   if version == 2025 and mark-medium.mark(entry) not in _URLDATE-TYPES { return none }
-  "[" + str(urldate-value) + "]"
+
+  let parsed-date = publication-date.parsed(entry, "urldate")
+  if parsed-date == none { return none }
+  "[" + publication-date.format-date-point(if "start" in parsed-date { parsed-date.start } else { parsed-date.end }) + "]"
 }

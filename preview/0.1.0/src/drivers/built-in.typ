@@ -467,41 +467,42 @@
   _join-creator(creator, (title-mark, source, imprint-block, access), p("period"), period-after: period-after-creator)
 }
 
-#let serial(entry, opts) = {
-  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, italic-journal, bold-journal-volume, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+#let serial-year-volume(entry, opts) = {
+  let punct-style = opts.punct-style
+  let custom-punct = opts.custom-punct
+  let skip-date = opts.skip-date
   let p = name => punct.get(name, entry, punct-style, custom-punct)
-  let creator = _creator(entry, opts)
-  let title = _title(entry, opts)
   let volume = punct.field-text(entry, "volume")
 
   let number = punct.field-text(entry, "number"); if number == none { number = punct.field-text(entry, "issue") }
 
-  let location = imprint.location(entry)
-  let publisher = imprint.publisher(entry)
-  let urldate = date.urldate(entry, show-urldate: show-urldate, version: version)
-  let access = _access(entry, opts)
-
-  let raw-year = if skip-date { none } else { field.get(entry, "date") }
-  if raw-year == none and not skip-date { raw-year = field.get(entry, "year") }
   let start-year = none
   let end-year = none
-  if raw-year != none {
-    let year-string = str(raw-year)
-    if year-string.contains("/") {
-      let parts = year-string.split("/")
-      start-year = parts.first().trim()
-      end-year = parts.last().trim()
-
-      if end-year == "" { end-year = none }
+  if not skip-date {
+    let date-field = field.get(entry, "date")
+    if date-field != none {
+      let parsed-date = publication-date.parsed(entry, "date")
+      if parsed-date != none {
+        if "start" in parsed-date { start-year = str(parsed-date.start.year) }
+        if "end" in parsed-date { end-year = str(parsed-date.end.year) }
+      }
     } else {
-
-      start-year = year-string.split("-").first()
+      let year-field = field.get(entry, "year")
+      if year-field != none {
+        let year-string = str(year-field)
+        if year-string.contains("/") {
+          let parts = year-string.split("/")
+          start-year = parts.first().trim()
+          end-year = parts.last().trim()
+          if end-year == "" { end-year = none }
+        } else { start-year = year-string.split("-").first() }
+      }
     }
   }
 
   let _composite-volume = type(volume) == str and volume.contains(regex("\\d{4}")) and (volume.contains("，") or volume.contains(",") or volume.contains("（") or volume.contains("("))
 
-  let year-volume-number = if _composite-volume {
+  let block = if _composite-volume {
 
     volume.replace(regex("[-–—]+"), "—")
   } else {
@@ -544,6 +545,24 @@
     else if end-segment != "" { start-segment + "—" + end-segment }
     else { start-segment + "—" }
   }
+  (block: block, start-year: start-year, end-year: end-year)
+}
+
+#let serial(entry, opts) = {
+  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, italic-journal, bold-journal-volume, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+  let p = name => punct.get(name, entry, punct-style, custom-punct)
+  let creator = _creator(entry, opts)
+  let title = _title(entry, opts)
+
+  let location = imprint.location(entry)
+  let publisher = imprint.publisher(entry)
+  let urldate = date.urldate(entry, show-urldate: show-urldate, version: version)
+  let access = _access(entry, opts)
+
+  let _yv = serial-year-volume(entry, opts)
+  let year-volume-number = _yv.block
+  let start-year = _yv.start-year
+  let end-year = _yv.end-year
 
   let location-publisher = imprint.location-publisher(location, publisher, p)
 
