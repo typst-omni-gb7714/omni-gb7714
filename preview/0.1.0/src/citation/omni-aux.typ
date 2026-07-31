@@ -26,14 +26,14 @@
   let keys = ()
   for it in query(selector(std.cite).or(selector(metadata))) {
     let k = if it.func() == std.cite {
-      if str(it.key) in bib-data and (not named-lists or active-list.at(it.location()) == target-list) {
+      if str(it.key) in bib-data and ((not named-lists and target-list == none) or active-list.at(it.location()) == target-list) {
         redirect.at(str(it.key), default: str(it.key))
       } else { none }
     } else {
       let value = it.value
       if type(value) == dictionary and value.at("kind", default: none) == "gb7714-fncite" {
         let anchor-key = str(value.at("key", default: ""))
-        if anchor-key in bib-data and (not named-lists or active-list.at(it.location()) == target-list) {
+        if anchor-key in bib-data and ((not named-lists and target-list == none) or active-list.at(it.location()) == target-list) {
           redirect.at(anchor-key, default: anchor-key)
         } else { none }
       } else { none }

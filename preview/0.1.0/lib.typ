@@ -220,6 +220,7 @@
   import "src/errors.typ" as _errors
   import "src/style.typ" as _style
   import "src/elements/creator.typ" as _creators
+  import "src/parse/csl-json.typ" as _csl-json
 
   _errors.check-enum("cite-form", cite-form, extra: (auto,))
   if std.type(numbering-style) == dictionary {
@@ -617,6 +618,7 @@
   import "src/errors.typ" as _errors
   import "src/style.typ" as _style
   import "src/elements/creator.typ" as _creators
+  import "src/parse/csl-json.typ" as _csl-json
 
   if std.type(numbering-style) == dictionary {
 
@@ -640,6 +642,9 @@
     }
   }
   let bib-str = to-bytes(source)
+
+  let _is-json = _csl-json.looks-like-json(bib-str)
+  let _native-bib-str = if _is-json { _csl-json.to-bibtex(bib-str) } else { bib-str }
 
   {
     let s = bib-str.trim()
@@ -684,7 +689,7 @@
     r
   })
 
-  let _src-keys = _api.bib-keys(bib-str)
+  let _src-keys = if _is-json { _csl-json.keys(bib-str) } else { _api.bib-keys(bib-str) }
 
   let _numeric-csl = ("american-chemical-society", "american-institute-of-aeronautics-and-astronautics", "american-institute-of-physics", "american-medical-association", "american-physics-society", "american-physiological-society", "american-society-for-microbiology", "american-society-of-mechanical-engineers", "angewandte-chemie", "annual-reviews", "association-for-computing-machinery", "biomed-central", "bmj", "british-medical-journal", "cell", "council-of-science-editors", "cse-citation-sequence-brackets-8th-edition", "current-opinion", "elsevier-vancouver", "elsevier-with-titles", "future-medicine", "future-science", "gb-7714-2005-numeric", "gb-7714-2015-numeric", "gost-r-705-2008-numeric", "ieee", "institute-of-electrical-and-electronics-engineers", "institute-of-physics-numeric", "iso-690-numeric", "karger", "mary-ann-liebert-vancouver", "multidisciplinary-digital-publishing-institute", "nature", "nlm-citation-sequence", "nlm-citation-sequence-superscript", "plos", "public-library-of-science", "royal-society-of-chemistry", "sage-vancouver", "sist02", "spie", "springer-basic", "springer-fachzeitschriften-medizin-psychologie", "springer-lecture-notes-in-computer-science", "springer-mathphys", "springer-vancouver", "taylor-and-francis-national-library-of-medicine", "the-institution-of-engineering-and-technology", "the-lancet", "thieme", "trends", "vancouver", "vancouver-superscript")
   let counts-number = if is-native-style {
@@ -725,9 +730,9 @@
 
     state("gb7714-lsp-bib-active", false).update("visible")
     if sys.version >= std.version(0, 15, 0) {
-      std.bibliography(bytes(_sanitize(bib-str)), title: title, full: full, style: style, target: target, group: group)
+      std.bibliography(bytes(_sanitize(_native-bib-str)), title: title, full: full, style: style, target: target, group: group)
     } else {
-      std.bibliography(bytes(_sanitize(bib-str)), title: title, full: full, style: style)
+      std.bibliography(bytes(_sanitize(_native-bib-str)), title: title, full: full, style: style)
     }
     state("gb7714-lsp-bib-active", false).update(false)
   } else if sys.version >= std.version(0, 15, 0) {
@@ -737,7 +742,7 @@
     let csl-style = if eff-style == "author-date" { "gb-7714-2015-author-date" } else { "gb-7714-2015-numeric" }
 
     state("gb7714-lsp-bib-active", false).update("render")
-    std.bibliography(bytes(_sanitize(bib-str)), title: none, full: full, style: csl-style, target: target, group: group)
+    std.bibliography(bytes(_sanitize(_native-bib-str)), title: none, full: full, style: csl-style, target: target, group: group)
     state("gb7714-lsp-bib-active", false).update(false)
   } else {
     context {
@@ -745,7 +750,7 @@
         state("gb7714-stdbib-emitted", false).update(true)
         let all = state("gb7714-sources", (:)).final()
         let combined = ""
-        for (_, v) in all { combined = combined + v + "\n" }
+        for (_, v) in all { combined = combined + (if _csl-json.looks-like-json(v) { _csl-json.to-bibtex(v) } else { v }) + "\n" }
         state("gb7714-lsp-bib-active", false).update(true)
         std.bibliography(bytes(_sanitize(combined)), title: none)
         state("gb7714-lsp-bib-active", false).update(false)
@@ -1027,6 +1032,7 @@
   import "src/errors.typ" as _errors
   import "src/style.typ" as _style
   import "src/elements/creator.typ" as _creators
+  import "src/parse/csl-json.typ" as _csl-json
 
   _errors.check-enum("cite-form", form, extra: (auto,), alias: "form")
   _creators.validate-name-style(name-style)
@@ -1115,3 +1121,5 @@
     })
   }
 }
+
+#let gb7714-frozen-states = (state("gb7714-bib-list", ()), state("gb7714-bib-seq", 0))

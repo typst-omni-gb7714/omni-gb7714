@@ -69,6 +69,19 @@
   out
 }
 
+#let normalize-html(s) = {
+  let out = s
+
+  out = out.replace("{\\textless}", "<").replace("{\\textgreater}", ">")
+  out = out.replace(regex("\\\\textless\\b(\\{\\})?"), "<").replace(regex("\\\\textgreater\\b(\\{\\})?"), ">")
+  for (tag, cmd) in (("i", "textit"), ("b", "textbf"), ("sup", "textsuperscript"), ("sub", "textsubscript"), ("sc", "textsc")) {
+    out = out.replace(regex("(?i)<" + tag + ">"), "\\" + cmd + "{").replace(regex("(?i)</" + tag + ">"), "}")
+  }
+
+  out = out.replace(regex("(?i)<span\\s+class=[\"']nocase[\"']\\s*>"), "{").replace(regex("(?i)</span>"), "}")
+  out
+}
+
 #let _TEX-FONT-ARG = (
   textbf: strong, textit: emph, emph: emph, textsc: smallcaps,
   textsuperscript: super, textsubscript: sub, textup: it => it, textmd: it => it,

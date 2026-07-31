@@ -25,6 +25,7 @@
 
 #let normalize-footnote-repeat-reset(value) = {
   if value == none { return none }
+  if value == "per-page" { return "per-page" }
   if std.type(value) == selector { return value }
   if std.type(value) == label or std.type(value) == function { return selector(value) }
   errors.raise("footnote-repeat-reset.bad-value", got: repr(value))
@@ -167,7 +168,11 @@
       let _prior-anchors(slot-index) = {
         let cut = base + slot-index
         let all = anchors-all.slice(0, cut)
-        let domain = if footnote-repeat-reset == none { all } else {
+        let domain = if footnote-repeat-reset == none { all } else if footnote-repeat-reset == "per-page" {
+
+          let pg = here().page()
+          all.filter(a => a.location().page() == pg)
+        } else {
           let boundaries = query(footnote-repeat-reset.before(here(), inclusive: false))
           if boundaries.len() == 0 { all } else {
             let scoped = query(selector(metadata).after(boundaries.last().location()).before(here(), inclusive: false)).filter(_is-fncite)

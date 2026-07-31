@@ -126,6 +126,7 @@
 
   "load.not-bib-content": "gb7714: {what} 不是有效的 .bib 内容。\n请确保通过 `read()` 读取内容再传入，如 gb7714(read(\"refs.bib\"))。\n收到的值：{value}",
   "load.bad-path-type": "gb7714: path 必须是 read() 内容字符串、字符串数组或标签字典；不支持直接路径字符串（包沙箱读不到调用方文件）。\n请通过 `read()` 读取内容再传入，如 bibliography(read(\"refs.bib\"))。",
+  "csl-json.item-not-object": "gb7714: CSL JSON 顶层数组里存在非对象元素（每个条目应是一个 JSON 对象）。\n收到的值：{value}",
   "load.missing-title": "gb7714: bib 条目 `{key}` 缺 title 字段（或为空）；GB/T 7714 要求每条文献都必须著录题名。请补全 .bib 中该条目的 title，或设 `warn-missing-title: false` 允许空题名。",
 
   "cite.no-keys": "gb7714: cite() 至少需要一个引用键。用 #cite[@k] 或 #cite(<k>) 形式调用。",

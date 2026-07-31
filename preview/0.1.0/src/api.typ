@@ -1,4 +1,6 @@
-#import "/citegeist/lib.typ": load-bibliography
+#import "parse/biblatex.typ": load-bibliography
+#import "parse/csl-json.typ"
+#import "parse/csl-extra.typ"
 
 #import "errors.typ"
 #import "@preview/quan:0.2.1": quan as _quan
@@ -531,7 +533,7 @@
     /// - `auto`：多块著录显示、只剩*一个*著录块时不显示（GB/T 7714 §7.2 题名演示片段 `《西游记》…` 无 \[M\]）；\
     /// - 字典：按条目控制，键 = 小写 entry_type（`.bib` 里的类型名）或大写标识码（GB/T 7714 附录 A，按版本中性语义类匹配——`PP` 在 2015 同样命中预印本），`rest` 兜底；优先级 entry_type > 码 > `rest`。\
     /// 例（表 8 脚注 a「标准的文献类型标识为可选项」）：```typ show-mark: (rest: true, S: false)``` 省去标准的 \[S\]、其余照出。\
-    /// 值只收布尔（无 `"online-only"` 档：标识不是获取途径，联机判据对它无语义）。|
+    /// 值收 `true` / `false` / `auto`——`auto` 让命中该键的条目按*单块退化*显码（单块去码、多块显码，是顶层 `auto` 的逐类型 / 码版）。例 ```typ show-mark: (S: false, rest: auto)``` 标准恒不出码、其余按单块退化；```typ show-mark: (S: auto, rest: true)``` 只标准按单块退化、其余恒显码。无 `"online-only"` 档（标识不是获取途径，联机判据对它无语义）。|
   show-medium:         true,      /// <- `boolean`
     /// - `true`：显示载体标识（如 OL）；
     /// - `false`：隐藏。|
@@ -823,8 +825,9 @@
     /// - `auto`（默认，**版本感知**）：`version: 2015` / `2005` = `true`（紧邻「同上」，对齐 2015 note CSL）；`version: 2025` = `false`（2025 note CSL 弃用 ibid、GB 2025 §9.2.1.3 只标首次序号，紧邻重复也走 #arg-ref("gb7714", "footnote-repeat-style")[`footnote-repeat-style`]）；
     /// - `false`：紧邻不特殊化，与隔开重复一样取 #arg-ref("gb7714", "footnote-repeat-style")[`footnote-repeat-style`] 的值（如 `"full"` 配 `false` = GB 纯重复著录；`"shortened"` 配 `false` = Chicago 17th 全缩略）。\
     /// 「同上」的页码语义走 CSL position 算法：与上次同页码时不重复页码；上次有页码本次没有时降级为隔开。|
-  footnote-repeat-reset: none,    /// <- `none` | `selector`
-    /// 重复判定的重置界（biblatex `citereset` 的对应物）。selector 的每个匹配处都是一道界，判定只认*最近一道界之后*的引用：    /// - `none`（默认）：全文一个域，现状；
+  footnote-repeat-reset: none,    /// <- `none` | `"per-page"` | `selector`
+    /// 重复判定的重置界（biblatex `citereset` 的对应物）。判定只认*最近一道界之后*的引用：    /// - `none`（默认）：全文一个域，现状；
+    /// - `"per-page"`：*每页*重置——判定只认与当前引用*同一页*的先前引用。主要给 Touying 幻灯片用：Touying 的一张 subslide 就是一页，`#pause` 会把整片逐 subslide 重渲，`"per-page"` 让每张 subslide 各自从头判定，从而重复引用的「同上」不会跨 subslide 误判（不设它则脚注制配 `#pause` 会全退化成「同①」）。普通文档里则等价「每页重置」（部分体例的合法做法）。
     /// - selector：如 ```typc heading.where(level: 1)```（章界——同上不跨章、每章首次引用重新完整著录、「同③」只在本章内找注号）、任意标签（```typc <part-break>```，正文写 ```typ #[]<part-break>``` 手工插一道界）、元素函数（`heading` 任意级标题都切）、`.or()` 组合。    /// 只管*判定*，不动脚注编号——每章重编号是文档排版自己的事（```typc show heading.where(level: 1): it => { counter(footnote).update(0); it }```），但*每章重编号的文档必须同设本参数*，否则「同③」会跨章指向上一章的注号。`"reuse"` 内容物复用的是全局首注（原生标签只有一处），不受本参数影响。|
   footnote-numbering-use-quan:      false,      /// <- `boolean`
     /// 应用本包即接管脚注编号为带圈数字（国标示例的圈码形），缺省用 Unicode 带圈字符 ①～㊿
@@ -956,17 +959,18 @@
 
   let _assert-bib-content(s, description) = {
     let str-s = str(s)
-    if not str-s.contains(regex("@\\w+\\s*\\{")) {
+    if not str-s.contains(regex("@\\w+\\s*\\{")) and not csl-json.looks-like-json(str-s) {
       errors.raise("load.not-bib-content", what: description,
         value: if str-s.len() > 60 { str-s.slice(0, 60) + "…" } else { str-s })
     }
   }
 
+  let _content-keys(content) = if csl-json.looks-like-json(content) { csl-json.keys(content) } else { bib-keys(content) }
+
   if type(path) == dictionary {
     for (label, content) in path {
       _assert-bib-content(content, "字典 key `" + label + "` 对应的值")
-      let keys = bib-keys(content)
-      bib-file-keys.insert(label, keys)
+      bib-file-keys.insert(label, _content-keys(content))
       bib-parts.push(content)
     }
   } else if type(path) == array {
@@ -980,7 +984,12 @@
   } else {
     errors.raise("load.bad-path-type")
   }
-  let bib-string = bib-parts.join("\n")
+
+  let _json-parts = bib-parts.filter(p => csl-json.looks-like-json(p))
+  let _bibtex-parts = bib-parts.filter(p => not csl-json.looks-like-json(p))
+  let bib-string = _bibtex-parts.join("\n")
+
+  let bib-data = if _bibtex-parts.len() == 0 { (:) } else {
 
   bib-string = bib-string.replace(
     regex("(?i)(,\\s*)address(\\s*=)"),
@@ -1017,6 +1026,8 @@
   bib-string = bib-string.replace("\\{", _SLBR).replace("\\}", _SRBR)
 
   bib-string = latex.normalize-decls(bib-string)
+
+  bib-string = latex.normalize-html(bib-string)
 
   if calc.rem(bib-string.matches("$").len(), 2) != 0 {
     assert(false, message: "omni-gb7714: bib 中存在未配对的数学定界符 `$`（biblatex 下等价错误：“! Missing $ inserted.”）。\n— 要表示*字面美元符*，请写 `\\$`；\n— 要写*数学公式*，请成对使用 `$...$`（每个字段值内自闭合）。")
@@ -1057,7 +1068,14 @@
     }
   }
   let _ttc-payload = _ttc-parts.join("," , default: "")
-  let bib-data = load-bibliography(bib-string, keep-raw-names: true, sentence-case-titles: false, text-case: _ttc-payload)
+  load-bibliography(bib-string, keep-raw-names: true, sentence-case-titles: false, text-case: _ttc-payload)
+  }
+
+  for content in _json-parts { for (k, e) in csl-json.load(content) { bib-data.insert(k, e) } }
+
+  let _enriched = (:)
+  for (k, e) in bib-data { _enriched.insert(k, csl-extra.enrich(e)) }
+  bib-data = _enriched
 
   let _set-redirect = entryset.redirect(bib-data)
 
@@ -1500,7 +1518,8 @@
       /// 位置参数；可任意混合 `label`（`<key>`，原生兼容）与 `content`（含 `@key` 引用），按出现顺序合并。\
       /// 例如 `#cite(<a>, <b>)[@c]` 等价 `#cite[@a@b@c]`。|
     bib-label:   auto,            /// <- `auto` | `string` | `none`
-      /// 临时把这些引用归属到指定文献列表；`auto` 沿用当前 `set-bib-label` 作用域。|
+      /// 把这些引用归属到指定命名文献列表——可*独立使用*，不必先 `set-bib-label`（与 `set-bib-label` 是
+      /// 两条并列的归属方式：前者管作用域、本参数管单次）；`auto` 沿用当前 `set-bib-label` 作用域，`none` 归主列表。|
     supplement:  none,            /// <- `none` | `content` | `array`
       /// 附加页码或补充说明，两种来源，优先级为逐键自带 > 参数：\
       /// - 逐键自带：在 content 形态里给每个 `@key` 各跟 `[supplement]`，如 ```typ #cite[@a[111]@b[222]]``` 即 a 带 111、b 带 222（与裸写 ```typ @a[111]@b[222]``` 一致）；
@@ -2293,21 +2312,23 @@
       } else { "" }
 
       let _nomerge-flag = if _cite-nomerge.at(here()) { _MNM } else { "" }
+
+      let _fwrap(body) = if it.form == "full" { [#_cite-form-state.update("full-plain")#body#_cite-form-state.update(auto)] } else { body }
       if my-list == none {
         let _marker = _M + _nomerge-flag + str(number) + supplement-part + _M
         if _fast {
 
-          [#state("gb7714-cite-counter", (order: (), map: (:))).update(c => {
+          _fwrap([#state("gb7714-cite-counter", (order: (), map: (:))).update(c => {
             if key in c.map { c } else {
               let order = c.order; order.push(key)
               let key-map = c.map; key-map.insert(key, order.len())
               (order: order, map: key-map)
             }
-          })#_marker]
-        } else { _marker }
+          })#_marker])
+        } else { _fwrap(_marker) }
       } else {
         let list-id = _list-ids.at(here()).at(my-list, default: my-list)
-        _M + _nomerge-flag + _ML + list-id + _ML + str(number) + supplement-part + _M
+        _fwrap(_M + _nomerge-flag + _ML + list-id + _ML + str(number) + supplement-part + _M)
       }
     }
   }
@@ -2602,13 +2623,16 @@
     let _render-items(items, _group-merge) = {
       if eff-form == none {  }
 
-      else if eff-form == "full" {
+      else if eff-form == "full" or eff-form == "full-plain" {
+
+        let _plain = eff-form == "full-plain"
         items.map(it => {
           let key = _key-of(it)
           let entry = bib-data.at(key, default: none)
           if entry == none { return [] }
 
           if eff-style == "author-date" { _emit-entry-author-date(entry, suffix-key: key, suffixes: suffix-table).at(0) }
+          else if _plain { [\[#it.number\] ] + _emit-entry(entry).at(0) }
           else { [\[#_num-link(key, it.number)\] ] + _emit-entry(entry).at(0) }
         }).join(document-comma)
       }

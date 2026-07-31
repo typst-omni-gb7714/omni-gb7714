@@ -114,8 +114,8 @@
 
 #let _EDITION-WRAP = (
   zh: (prefix: "", suffix: "版"), ja: (prefix: "", suffix: "版"),
-  ko: (prefix: "", suffix: "판"), ru: (prefix: "", suffix: "-е изд."),
-  fr: (prefix: "", suffix: "e éd."), en: (prefix: "", suffix: " ed"),
+  ko: (prefix: "", suffix: "판"), ru: (prefix: "", suffix: "-е изд"),
+  fr: (prefix: "", suffix: "e éd"), en: (prefix: "", suffix: " ed"),
 )
 #let _VOLUME-WRAP = (
   zh: (prefix: "第", suffix: "卷"), ja: (prefix: "第", suffix: "巻"),
@@ -156,14 +156,16 @@
 
 #let footnote-number-supplement-separator(lang, custom-terms: (:)) = _footnote-number-resolved(lang, custom-terms).at("supplement-separator")
 
-#let edition(entry, n, custom-terms: (:)) = {
+#let edition(entry, n, version: 2015, custom-terms: (:)) = {
   let lang = language.get(entry)
   let num-text = if lang in ("zh", "ja", "ko", "ru", "fr") { str(n) }
     else {
       let ordinal-suffix = if n == 2 { "nd" } else if n == 3 { "rd" } else { "th" }
       str(n) + ordinal-suffix
     }
-  _wrap-numbered(custom-terms, "edition", lang, num-text, _EDITION-WRAP)
+  let base = _wrap-numbered(custom-terms, "edition", lang, num-text, _EDITION-WRAP)
+  let overridden = custom-terms.at("edition", default: none) != none
+  if lang in ("en", "fr", "ru") and version != 2025 and not overridden { base + "." } else { base }
 }
 
 #let volume(entry, volume-str, custom-terms: (:)) = {

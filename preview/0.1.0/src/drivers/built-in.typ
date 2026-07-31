@@ -139,7 +139,7 @@
   let editor-other = other-creators.editor
   let translator = other-creators.translator
 
-  let edition-part = if _mark != "D" { edition.edition(entry, custom-terms: opts.at("custom-terms", default: (:))) } else { none }
+  let edition-part = if _mark != "D" { edition.edition(entry, version: version, custom-terms: opts.at("custom-terms", default: (:))) } else { none }
   let imprint-block = imprint.format(entry, show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, skip-date: skip-date, date-suffix: opts.at("date-suffix", default: ""), punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: version)
   let pages-part = pages.pages(entry, page-range-separator: page-range-separator, page-range-style: opts.at("page-range-style", default: none), override: opts.at("pages-override", default: none), punct-style: punct-style, custom-punct: custom-punct)
   let urldate = date.urldate(entry, show-urldate: show-urldate, version: version)
@@ -215,7 +215,7 @@
     if urldate != none { body = [#body#urldate] }
     return _join-creator(creator, (body, access), p("period"), period-after: period-after-creator)
   }
-  let edition-part = edition.edition(entry, custom-terms: opts.at("custom-terms", default: (:)))
+  let edition-part = edition.edition(entry, version: version, custom-terms: opts.at("custom-terms", default: (:)))
 
   let _conf-component-part = _mark == "C"
   let imprint-block = imprint.format(entry, show-sine-loco: show-sine-loco and not _conf-component-part, show-sine-nomine: show-sine-nomine and not _conf-component-part, show-sine-anno: show-sine-anno and not _conf-component-part, skip-date: skip-date, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: version)

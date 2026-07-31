@@ -104,7 +104,7 @@
   false
 }
 
-#let _applied-value(setting, entry) = {
+#let applied-value(setting, entry) = {
   if type(setting) == dictionary {
     if entry.entry_type in setting { setting.at(entry.entry_type) }
     else {
@@ -116,7 +116,7 @@
 }
 
 #let gate(setting, entry, version: 2015, default: true, allow-online-only: true) = {
-  let v = _applied-value(setting, entry)
+  let v = applied-value(setting, entry)
   if v == auto { return default }
   if v == "online-only" {
     if not allow-online-only { errors.raise("mark-medium.show-mark-online-only") }
@@ -135,7 +135,7 @@
 }
 
 #let online-suppressed(setting, entry, version: 2015) = {
-  _applied-value(setting, entry) == "online-only" and not is-online(entry, version: version)
+  applied-value(setting, entry) == "online-only" and not is-online(entry, version: version)
 }
 
 #let medium(entry, show-url: true, version: 2015, online: auto) = {

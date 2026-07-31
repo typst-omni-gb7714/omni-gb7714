@@ -1,4 +1,5 @@
 #import "../../parse/field.typ"
+#import "../../parse/latex.typ"
 
 #let edtf-year(s) = {
   if s.ends-with("~") or s.ends-with("?") or s.ends-with("%") {
@@ -11,6 +12,8 @@
 #let _parsed-date-year(parsed-date) = str((if "start" in parsed-date { parsed-date.start } else { parsed-date.end }).year)
 
 #let zero-pad(number) = if number < 10 { "0" + str(number) } else { str(number) }
+
+#let _literal-date(date-field) = latex.to-typst(edtf-year(str(date-field)))
 
 #let format-date-point(point) = {
   let result = str(point.year)
@@ -29,7 +32,7 @@
   let date-field = field.get(entry, "date")
   if date-field != none {
     let parsed-date = parsed(entry, "date")
-    if parsed-date == none { return none }
+    if parsed-date == none { return _literal-date(date-field) }
     let year-str = _parsed-date-year(parsed-date)
     if parsed-date.approximate or parsed-date.uncertain { "[" + year-str + "]" } else { year-str }
   } else {
@@ -43,7 +46,7 @@
   let date-field = field.get(entry, "date")
   if date-field != none {
     let parsed-date = parsed(entry, "date")
-    if parsed-date == none { return none }
+    if parsed-date == none { return _literal-date(date-field) }
     format-parsed-date(parsed-date)
   } else {
     let year-field = field.get(entry, "year")

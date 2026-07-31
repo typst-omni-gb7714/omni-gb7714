@@ -33,14 +33,13 @@
 
   let show-urldate = show-urldate and not mark-medium.online-suppressed(show-url, entry, version: version)
 
-  let mark-is-auto = (show-mark == auto)
-  let eff-mark = if mark-is-auto { true } else { show-mark }
+  let mark-is-auto = (mark-medium.applied-value(show-mark, entry) == auto)
 
   let _format-args = (
     show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno,
     et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last,
     show-url: show-url,
-    show-mark: eff-mark, show-medium: show-medium,
+    show-mark: show-mark, show-medium: show-medium,
     show-patent-country: show-patent-country,
     short-journal: short-journal, show-urldate: show-urldate,
     hyperlink: hyperlink,
