@@ -1,5 +1,6 @@
 #let _ENUMS = (
   "numbering-style": ("bracket", "paren", "dot", "plain", "fullwidth-bracket", "fullwidth-paren", "circled", none),
+  "cite-numbering-style": ("bracket", "paren", "fullwidth-bracket", "fullwidth-paren"),
   "number-align": ("left", "right", "center"),
 
   "number-placement": ("column", "margin", "inline"),

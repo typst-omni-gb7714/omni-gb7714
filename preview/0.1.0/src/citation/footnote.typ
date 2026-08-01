@@ -58,7 +58,7 @@
   let opts = options-thunk(if first-sidecar == none { (:) } else { first-sidecar.value.at("overrides", default: (:)) })
   let (indent, eff-style, bib-style, show-url, eff-show-annotation, show-end-period, eff-custom-drivers, version, eff-punct-style, eff-custom-punct, _emit-entry-author-date, _emit-entry, eff-custom-terms, eff-custom-fields, eff-custom-pids, eff-correct-punct, eff-url-break-every, eff-show-pid, eff-pid-priority, eff-dedup-url-pid, _get-related, _set-redirect, bib-data, footnote-repeat-style, footnote-ibid, footnote-repeat-reset, cite-terms-lang, format-footnote-number, _active-list, _bib-link, show-anon, show-et-al, _global-config, show-mark, show-medium, space-before-mark, correct-punct) = opts
 
-  let my-list = _active-list.at(here())
+  let current-list = _active-list.at(here())
   let document-lang = text.lang
 
       let _period-on(single-block) = if show-end-period == auto { not single-block } else { show-end-period }
@@ -110,7 +110,7 @@
         segments.join([ ])
       }
 
-      let _slot-content(k, prior, my-list, document-lang, in-merged-group, slot-index, bare) = {
+      let _slot-content(k, prior, current-list, document-lang, in-merged-group, slot-index, bare) = {
 
         let supplement = _supplement-at(base + slot-index)
         let redirect-key = _set-redirect.at(k, default: k)
@@ -189,7 +189,7 @@
         let anchor-sets = _prior-anchors(0)
 
         let globally-first = anchor-sets.all.find(m => _redirect-of-anchor(m) == redirect-key) == none
-        let slot = _slot-content(item.key, anchor-sets.domain, my-list, document-lang, false, 0, false)
+        let slot = _slot-content(item.key, anchor-sets.domain, current-list, document-lang, false, 0, false)
         if slot.kind == "reuse" {
 
           std.footnote(std.label("gb7714-fn-" + redirect-key))
@@ -203,7 +203,7 @@
 
         let slots = items.enumerate().map(((slot-index, item)) => {
           let anchor-sets = _prior-anchors(slot-index)
-          (item: item, resolved: _slot-content(item.key, anchor-sets.domain, my-list, document-lang, true, slot-index, true))
+          (item: item, resolved: _slot-content(item.key, anchor-sets.domain, current-list, document-lang, true, slot-index, true))
         })
 
         let joined = []

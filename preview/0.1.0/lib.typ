@@ -88,6 +88,8 @@
   number-placement:    "column",
   /// 编号样式："bracket" [1] / "paren" (1) / "dot" 1. / "plain" 1 / "fullwidth-bracket" 〔1〕 / "fullwidth-paren" （1） / "circled" ①（缺省 Unicode 绘制,展开 (circled: "quan") 用 quan 包）/ none 无编号
   numbering-style:        auto,
+  /// 正文标注编号的括号形态(与 numbering-style 分属两轴,那个管文献表列、本参数管正文 [1])："bracket" [1](默认) / "paren" (1) / "fullwidth-bracket" 〔1〕(旧 GB-1987) / "fullwidth-paren" （1）
+  cite-numbering-style:   "bracket",
   /// 编号对齐："left"(默认,同原生) / "right" / "center"
   number-align:        "left",
   /// 编号列宽度：auto 自动测量最宽编号
@@ -273,7 +275,7 @@
     bib-name-style: bib-name-style, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, bib-name-date-separator: bib-name-date-separator, bib-et-al-min: bib-et-al-min, bib-et-al-use-first: bib-et-al-use-first, bib-et-al-use-last: bib-et-al-use-last,
     show-anon: show-anon, show-no-date: show-no-date, date-fallback: date-fallback, show-et-al: show-et-al, dedup-author-editor: dedup-author-editor, creator-idem: creator-idem,
     title: title, entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, entry-spacing: entry-spacing, number-gutter: number-gutter,
-    numbering-style: numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width,
+    numbering-style: numbering-style, cite-numbering-style: cite-numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width,
     back-ref: back-ref,
     disambiguate: disambiguate, bib-sort-by: bib-sort-by, cite-sort-by: cite-sort-by, sort-keys: sort-keys, bib-sort-zh-by: bib-sort-zh-by, cite-sort-zh-by: cite-sort-zh-by, cite-collapse-date: cite-collapse-date, sort-use-prefix: sort-use-prefix, entry-lang-order: entry-lang-order, entry-lang-detect: entry-lang-detect,
     show-mark: show-mark, show-medium: show-medium, show-url: show-url, show-urldate: show-urldate,
@@ -659,7 +661,7 @@
 
   let sort-keys = if sort-keys == auto { state("gb7714-config", (:)).get().at("sort-keys", default: none) } else { sort-keys }
 
-  let my-bib-index = state("gb7714-bib-seq", 0).at(here())
+  let current-bib-index = state("gb7714-bib-seq", 0).at(here())
   state("gb7714-bib-seq", 0).update(n => n + 1)
 
   let normalized-style = _style.normalize(style)
@@ -678,8 +680,8 @@
   }
   let eff-footnote = if footnote != auto { footnote } else { gb-footnote }
   let auto-key = if label != none { str(label) }
-    else if my-bib-index == 0 { "main" }
-    else { "bib" + str(my-bib-index + 1) }
+    else if current-bib-index == 0 { "main" }
+    else { "bib" + str(current-bib-index + 1) }
 
   state("gb7714-sources", (:)).update(d => {
     let r = d
@@ -822,27 +824,27 @@
       } else { per-bib.at(j).len() }
     }
 
-    let mine = per-bib.at(my-bib-index)
+    let mine = per-bib.at(current-bib-index)
 
     routed-empty = mine.len() == 0 and not full and keys == none
     if full {
-      let my-entry = all-bibs-final.at(my-bib-index)
-      for k in my-entry.source-keys { if k not in mine { mine.push(k) } }
+      let current-entry = all-bibs-final.at(current-bib-index)
+      for k in current-entry.source-keys { if k not in mine { mine.push(k) } }
     }
     routed-keys = mine
 
-    let my-group = all-bibs-final.at(my-bib-index).group
-    if my-group != none {
-      for j in range(my-bib-index) {
+    let current-group = all-bibs-final.at(current-bib-index).group
+    if current-group != none {
+      for j in range(current-bib-index) {
         let bib-at-index-j = all-bibs-final.at(j)
 
-        if bib-at-index-j.group == my-group and bib-at-index-j.at("counts-number", default: true) { number-offset += _bib-count(j) }
+        if bib-at-index-j.group == current-group and bib-at-index-j.at("counts-number", default: true) { number-offset += _bib-count(j) }
       }
     }
   } else if label == none {
 
     let cited = query(std.cite).map(c => str(c.key))
-    for previous-index in range(my-bib-index) {
+    for previous-index in range(current-bib-index) {
       let previous-bib = all-bibs-final.at(previous-index)
       if previous-bib.label != none { continue }
       if not previous-bib.at("counts-number", default: true) { continue }
@@ -940,7 +942,7 @@
     } else {
       let f = instance.print-bib
 
-      let _nbi = if native-mode { my-bib-index } else { none }
+      let _nbi = if native-mode { current-bib-index } else { none }
       if label == none { f(bib-file: auto-key, number-offset: number-offset, native-bib-index: _nbi, ..common-args) }
       else { f(bib-file: auto-key, label: str(label), number-offset: number-offset, native-bib-index: _nbi, ..common-args) }
     }

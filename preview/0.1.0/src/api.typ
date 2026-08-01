@@ -435,6 +435,13 @@
     /// - `"fullwidth-paren"`：（1）；
     /// - `"circled"`：①——圈码。绘制引擎值内二级展开：标量缺省 Unicode 带圈数字（U+2460～U+32BF，超过 ㊿ 以 (N) 显示）；```typc (circled: "quan")``` 改由 ```typ quan``` 包绘制（字体缺带圈数字时用，可在主文档 ```typ #import "@preview/quan:0.2.1": quan-init, quan-style``` 后配置）——引擎是实现不是样式，不占顶层值，与脚注编号的 #arg-ref("gb7714", "footnote-numbering-use-quan")[`footnote-numbering-use-quan`] 同一哲学；
     /// - `none`：不显示编号。|
+  cite-numbering-style: "bracket", /// <- `"bracket"` | `"paren"` | `"fullwidth-bracket"` | `"fullwidth-paren"`
+    /// *正文标注*编号的括号形态，与 #arg-ref("gb7714", "numbering-style")[`numbering-style`] 分属两轴——那个管*文献表*那列的编号、本参数管*正文*里的 `[1]`：\
+    /// - `"bracket"`（默认）：[1]——GB 正文标准；
+    /// - `"paren"`：(1)；
+    /// - `"fullwidth-bracket"`：〔1〕——旧 GB-1987 体例；
+    /// - `"fullwidth-paren"`：（1）。\
+    /// 只作用于顺序编码制正文标注。圈码 / dot / plain / none 不与范围 `[1-3]`、合并 `[1,2]` 组合，故本参数只收括号对四值。|
   number-placement: "column",  /// <- `string`
     /// 编号*放哪*（有编号时才有意义；`numbering-style: none` 时无编号可放）：\
     /// - `"column"`（默认）：编号自成一列贴版心左缘，正文另起一列，余行贴正文列——对齐官方 GB CSL 的 `second-field-align="flush"`（两制官方样式都用它）。这个 flush 是*编号列*给的，与 #arg-ref("gb7714", "entry-hanging-indent")[`entry-hanging-indent`] 无关；那两个段落量在正文列内照常生效（相对正文列左缘再缩）；
@@ -1386,10 +1393,12 @@
     if year-part == "" { author } else { author + _name-date-delim + year-part }
   }
 
+  errors.check-enum("cite-numbering-style", cite-numbering-style)
+
   let global-style-cite = style.at("cite", default: "numeric")
   let global-style-bib = style.at("bib", default: global-style-cite)
 
-  let _global-config = (style-cite: global-style-cite, style-bib: global-style-bib, disambiguate: disambiguate, version: version, entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, hyphenate: hyphenate, entry-spacing: entry-spacing, number-gutter: number-gutter, numbering-style: numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width, bold-journal-volume: bold-journal-volume, page-range-separator: page-range-separator, page-range-style: page-range-style, show-end-period: show-end-period, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, hyperlink: hyperlink, italic-book-title: italic-book-title, italic-journal: italic-journal, entry-lang-order: entry-lang-order, name-style: name-style, show-anon: show-anon, show-no-date: show-no-date, show-et-al: show-et-al, dedup-author-editor: dedup-author-editor, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, name-date-separator: name-date-separator, period-after-creator: period-after-creator, short-journal: short-journal, show-mark: show-mark, show-medium: show-medium, show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, show-patent-country: show-patent-country, show-related: show-related, show-url: show-url, show-urldate: show-urldate, space-before-mark: space-before-mark, space-before-pages: space-before-pages, hyperlink-title: hyperlink-title, back-ref: back-ref, show-degree: show-degree, show-series: show-series, prefix-last: prefix-last, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation, creator-idem: creator-idem, bib-sort-by: bib-sort-by, cite-sort-by: cite-sort-by, bib-sort-zh-by: bib-sort-zh-by, cite-sort-zh-by: cite-sort-zh-by, cite-collapse-date: cite-collapse-date, sort-use-prefix: sort-use-prefix, volume-title-gutter: volume-title-gutter, custom-marks: custom-marks, _registered-marks: _registered-marks, _name-style-raw: _name-style-raw, _version-auto: _version-auto)
+  let _global-config = (style-cite: global-style-cite, style-bib: global-style-bib, disambiguate: disambiguate, version: version, entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, hyphenate: hyphenate, entry-spacing: entry-spacing, number-gutter: number-gutter, numbering-style: numbering-style, cite-numbering-style: cite-numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width, bold-journal-volume: bold-journal-volume, page-range-separator: page-range-separator, page-range-style: page-range-style, show-end-period: show-end-period, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, hyperlink: hyperlink, italic-book-title: italic-book-title, italic-journal: italic-journal, entry-lang-order: entry-lang-order, name-style: name-style, show-anon: show-anon, show-no-date: show-no-date, show-et-al: show-et-al, dedup-author-editor: dedup-author-editor, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, name-date-separator: name-date-separator, period-after-creator: period-after-creator, short-journal: short-journal, show-mark: show-mark, show-medium: show-medium, show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, show-patent-country: show-patent-country, show-related: show-related, show-url: show-url, show-urldate: show-urldate, space-before-mark: space-before-mark, space-before-pages: space-before-pages, hyperlink-title: hyperlink-title, back-ref: back-ref, show-degree: show-degree, show-series: show-series, prefix-last: prefix-last, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation, creator-idem: creator-idem, bib-sort-by: bib-sort-by, cite-sort-by: cite-sort-by, bib-sort-zh-by: bib-sort-zh-by, cite-sort-zh-by: cite-sort-zh-by, cite-collapse-date: cite-collapse-date, sort-use-prefix: sort-use-prefix, volume-title-gutter: volume-title-gutter, custom-marks: custom-marks, _registered-marks: _registered-marks, _name-style-raw: _name-style-raw, _version-auto: _version-auto)
 
   let _format-opts = (show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-url: show-url, show-mark: show-mark, show-medium: show-medium, show-patent-country: show-patent-country, short-journal: short-journal, show-urldate: show-urldate, show-end-period: show-end-period, hyperlink: hyperlink, italic-journal: italic-journal, bold-journal-volume: bold-journal-volume, italic-book-title: italic-book-title, space-before-mark: space-before-mark, space-before-pages: space-before-pages, page-range-separator: page-range-separator, page-range-style: page-range-style, period-after-creator: period-after-creator, show-et-al: show-et-al, name-style: name-style, hyperlink-title: hyperlink-title, dedup-author-editor: dedup-author-editor, show-degree: show-degree, show-series: show-series, prefix-last: prefix-last, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, version: version, volume-title-gutter: volume-title-gutter)
   let _emit-entry(entry, show-anon: show-anon, skip-date: false, date-suffix: "", pages-override: none, creator-override: none, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation) = {
@@ -2278,9 +2287,9 @@
     }
 
     context {
-      let my-list = _active-list.at(here())
+      let current-list = _active-list.at(here())
 
-      let _list-footnote = if my-list != none { _list-footnote-map.final().at(my-list, default: auto) }
+      let _list-footnote = if current-list != none { _list-footnote-map.final().at(current-list, default: auto) }
         else { _main-footnote.final() }
       let _footnote-override = _cite-footnote-override.at(here())
       let _eff-footnote = if _footnote-override == true or _footnote-override == false { _footnote-override }
@@ -2293,12 +2302,12 @@
         return [#metadata((kind: "gb7714-fnsidecar", supplement: supplement-value, overrides: (:)))#(_M + _nomerge-flag + _MF + str(it.key) + _M)]
       }
 
-      let _fast = my-list == none and _list-ids.final().len() == 0 and not state("gb7714-has-fncite", false).final()
+      let _fast = current-list == none and _list-ids.final().len() == 0 and not state("gb7714-has-fncite", false).final()
       let number = if _fast {
         let _counter = state("gb7714-cite-counter", (order: (), map: (:))).at(here())
         _counter.map.at(key, default: _counter.order.len() + 1)
       } else {
-        _cite-context(bib-data, my-list).number-of.at(key, default: none)
+        _cite-context(bib-data, current-list).number-of.at(key, default: none)
       }
       if number == none {
         errors.raise("cite.number-missing", key: str(it.key), redirected: key)
@@ -2306,15 +2315,15 @@
 
       let has-supplement = it.supplement != none and it.supplement != auto
       let supplement-part = if has-supplement {
-        let all-bib-refs = _cite-context(bib-data, my-list).all-refs
-        let my-rank = all-bib-refs.position(r => r.location() == it.location())
-        if my-rank != none { _MS + str(my-rank) } else { "" }
+        let all-bib-refs = _cite-context(bib-data, current-list).all-refs
+        let current-rank = all-bib-refs.position(r => r.location() == it.location())
+        if current-rank != none { _MS + str(current-rank) } else { "" }
       } else { "" }
 
       let _nomerge-flag = if _cite-nomerge.at(here()) { _MNM } else { "" }
 
       let _fwrap(body) = if it.form == "full" { [#_cite-form-state.update("full-plain")#body#_cite-form-state.update(auto)] } else { body }
-      if my-list == none {
+      if current-list == none {
         let _marker = _M + _nomerge-flag + str(number) + supplement-part + _M
         if _fast {
 
@@ -2327,7 +2336,7 @@
           })#_marker])
         } else { _fwrap(_marker) }
       } else {
-        let list-id = _list-ids.at(here()).at(my-list, default: my-list)
+        let list-id = _list-ids.at(here()).at(current-list, default: current-list)
         _fwrap(_M + _nomerge-flag + _ML + list-id + _ML + str(number) + supplement-part + _M)
       }
     }
@@ -2365,8 +2374,8 @@
       let has-supplement = it.supplement != none and it.supplement != auto
       let supplement-part = if has-supplement {
         let all-bib-refs = _cite-context(bib-data, none).all-refs
-        let my-rank = all-bib-refs.position(r => r.location() == it.location())
-        if my-rank != none { _MS + str(my-rank) } else { "" }
+        let current-rank = all-bib-refs.position(r => r.location() == it.location())
+        if current-rank != none { _MS + str(current-rank) } else { "" }
       } else { "" }
 
       [#state("gb7714-native-seen", ()).update(table.seen)#(_M + _nomerge-flag + _ML + str(bib-index) + _ML + str(number) + supplement-part + _M)]
@@ -2394,7 +2403,7 @@
   }
 
   let _render-inline-cite-run(raw-items) = context {
-    let my-list-id = raw-items.first().at("list", default: none)
+    let current-list-id = raw-items.first().at("list", default: none)
 
     let _native-seen = state("gb7714-native-seen", ()).final()
     let _native = _native-seen.len() > 0
@@ -2413,22 +2422,22 @@
       if runs.len() > 1 { return runs.map(run => _render-inline-cite-run(run)).join() }
     }
 
-    let my-list = if _native or my-list-id == none { none }
+    let current-list = if _native or current-list-id == none { none }
       else {
         let id-map = _list-ids.final()
         let list-id-to-label = (:)
         for (lbl, list-id) in id-map { list-id-to-label.insert(list-id, lbl) }
-        list-id-to-label.at(my-list-id, default: my-list-id)
+        list-id-to-label.at(current-list-id, default: current-list-id)
       }
 
     let seen = if _native {
       let flat = ()
       for array in _native-seen { for (index, k) in array.enumerate() { if k != "" { while flat.len() <= index { flat.push("") }; flat.at(index) = k } } }
       flat
-    } else { omni-aux.cited-keys(bib-data, my-list) }
+    } else { omni-aux.cited-keys(bib-data, current-list) }
 
     let _any-supplement = raw-items.any(it => it.at("supplement-rank", default: none) != none)
-    let all-bib-refs = if _any-supplement { _cite-context(bib-data, my-list).all-refs } else { () }
+    let all-bib-refs = if _any-supplement { _cite-context(bib-data, current-list).all-refs } else { () }
 
     let items = raw-items.map(it => {
       let supplement-content = if it.supplement-rank != none {
@@ -2455,12 +2464,12 @@
     let cite-style-override = _cite-style-state.at(here())
     let eff-style = if cite-style-override != auto and (type(cite-style-override) == str and cite-style-override in ("numeric", "author-date")) { cite-style-override }
 
-      else if _native and my-list-id != none {
-        let bib-style = _list-style-map.final().at("\u{0}b" + str(int(my-list-id)), default: none)
+      else if _native and current-list-id != none {
+        let bib-style = _list-style-map.final().at("\u{0}b" + str(int(current-list-id)), default: none)
         if bib-style != none and bib-style in ("numeric", "author-date") { bib-style } else { global-style-cite }
       }
-      else if my-list != none {
-        let list-style-val = _list-style-map.final().at(my-list, default: none)
+      else if current-list != none {
+        let list-style-val = _list-style-map.final().at(current-list, default: none)
         if list-style-val != none and list-style-val in ("numeric", "author-date") { list-style-val } else { global-style-cite }
       }
       else {
@@ -2540,18 +2549,18 @@
 
     let _suffix-map = _list-suffix-map.final()
 
-    let _bib-key = if _native and my-list-id != none { "\u{0}b" + str(int(my-list-id)) }
-      else if my-list != none { my-list } else { "" }
+    let _bib-key = if _native and current-list-id != none { "\u{0}b" + str(int(current-list-id)) }
+      else if current-list != none { current-list } else { "" }
     let _list-disambiguation = _suffix-map.at(_bib-key,
       default: (suffixes: _disambiguation.cite-suffixes, escalations: _disambiguation.escalations))
     let suffix-table = if disambiguate.date == false { (:) } else { _list-disambiguation.suffixes }
     let escalation-table = _list-disambiguation.escalations
-    let lbl-prefix = if my-list == none { "gb7714" + _LSEP } else { "gb7714" + _LSEP + my-list + _LSEP }
+    let lbl-prefix = if current-list == none { "gb7714" + _LSEP } else { "gb7714" + _LSEP + current-list + _LSEP }
 
     let _num-link(k, n, display: none) = {
       let link-text = if display != none { display } else { str(n) }
-      if my-list == none { _bib-link("gb7714" + _LSEP + k, none, k, link-text) }
-      else { _bib-link("gb7714" + _LSEP + my-list + _LSEP + k, my-list, k, link-text) }
+      if current-list == none { _bib-link("gb7714" + _LSEP + k, none, k, link-text) }
+      else { _bib-link("gb7714" + _LSEP + current-list + _LSEP + k, current-list, k, link-text) }
     }
 
     let _key-of(item) = if item.at("key", default: none) != none { item.key } else { seen.at(item.number - 1, default: "") }
@@ -2610,7 +2619,7 @@
       _key-of: _key-of, _cite-author: _cite-author, _cite-year: _cite-year, _order-items: _order-items,
       bib-data: bib-data, publication-date: publication-date, p: p,
       _bib-link: _bib-link, _num-link: _num-link, _author-date-cite-label: _author-date-cite-label,
-      lbl-prefix: lbl-prefix, my-list: my-list, suffix-table: suffix-table, escalation-table: escalation-table,
+      lbl-prefix: lbl-prefix, current-list: current-list, suffix-table: suffix-table, escalation-table: escalation-table,
       supplement-mode: supplement-mode, document-semi: document-semi, document-comma: document-comma,
       block-sep: _cite-block-sep,
       seen: seen,
@@ -2618,6 +2627,7 @@
       eff-cite-terms-lang: eff-cite-terms-lang, document-lang: document-lang,
       eff-compress-min: eff-compress-min, eff-cite-range-separator: eff-cite-range-separator,
       eff-collapse-date: eff-collapse-date, _name-punct-direction: _name-punct-direction,
+      cite-numbering-style: cite-numbering-style,
     )
 
     let _render-items(items, _group-merge) = {

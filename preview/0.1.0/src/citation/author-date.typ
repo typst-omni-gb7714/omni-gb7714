@@ -236,7 +236,7 @@
 }
 
 #let render-run(items, _group-merge, opts) = {
-  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, bib-data, publication-date, p, _bib-link, _author-date-cite-label, lbl-prefix, my-list, suffix-table, escalation-table, supplement-mode, document-semi, eff-name-style, eff-cite-et-al-min, eff-cite-et-al-use-first, eff-cite-terms-lang, document-lang, eff-collapse-date, _name-punct-direction) = opts
+  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, bib-data, publication-date, p, _bib-link, _author-date-cite-label, lbl-prefix, current-list, suffix-table, escalation-table, supplement-mode, document-semi, eff-name-style, eff-cite-et-al-min, eff-cite-et-al-use-first, eff-cite-terms-lang, document-lang, eff-collapse-date, _name-punct-direction) = opts
 
   let items = _order-items(items)
   if items.len() == 1 and eff-form in ("author", "year") {
@@ -248,7 +248,7 @@
     let year = _cite-year(entry, _suffix)
 
     let display = if eff-form == "author" { author } else { year }
-    let lbl = _bib-link(lbl-prefix + k, my-list, k, display)
+    let lbl = _bib-link(lbl-prefix + k, current-list, k, display)
     if item.supplement != none { [#lbl#super[#item.supplement]] } else { lbl }
   } else if items.len() > 1 and eff-form in ("author", "year") {
     let parts = items.map(item => {
@@ -258,7 +258,7 @@
       let _suffix = suffix-table.at(k, default: "")
       let year = _cite-year(entry, _suffix)
       let display = if eff-form == "author" { author } else { year }
-      _bib-link(lbl-prefix + k, my-list, k, display)
+      _bib-link(lbl-prefix + k, current-list, k, display)
     })
     let result = []
     for (i, part) in parts.enumerate() {
@@ -274,7 +274,7 @@
     let author = _cite-author(entry)
     let _suffix = suffix-table.at(k, default: "")
     let year = _cite-year(entry, _suffix)
-    let lbl = _bib-link(lbl-prefix + k, my-list, k, year)
+    let lbl = _bib-link(lbl-prefix + k, current-list, k, year)
 
     let gap = if author == "" or _name-punct-direction(entry) == "full" { "" } else { " " }
 
@@ -308,9 +308,9 @@
       let first = g.members.first()
       let entry = bib-data.at(first.key, default: none)
       let full-text = if first.parts.year == "" { first.parts.author } else { first.parts.author + first.parts.delim + first.parts.year }
-      let result = _bib-link(lbl-prefix + first.key, my-list, first.key, full-text)
+      let result = _bib-link(lbl-prefix + first.key, current-list, first.key, full-text)
       for m in g.members.slice(1) {
-        result += p("comma", entry: entry) + _bib-link(lbl-prefix + m.key, my-list, m.key, m.parts.year)
+        result += p("comma", entry: entry) + _bib-link(lbl-prefix + m.key, current-list, m.key, m.parts.year)
       }
       result
     }

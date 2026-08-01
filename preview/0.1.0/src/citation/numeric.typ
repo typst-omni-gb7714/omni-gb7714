@@ -17,7 +17,14 @@
 }
 
 #let render-run(items, _group-merge, opts) = {
-  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, _name-punct-direction, bib-data, publication-date, p, _num-link, supplement-mode, document-comma, document-semi, block-sep, seen, eff-compress-min, eff-cite-range-separator) = opts
+  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, _name-punct-direction, bib-data, publication-date, p, _num-link, supplement-mode, document-comma, document-semi, block-sep, seen, eff-compress-min, eff-cite-range-separator, cite-numbering-style) = opts
+
+  let (cite-lb, cite-rb) = (
+    "paren": ("(", ")"),
+    "fullwidth-bracket": ("〔", "〕"),
+    "fullwidth-paren": ("（", "）"),
+  ).at(cite-numbering-style, default: ("[", "]"))
+  let br(inner) = [#cite-lb#inner#cite-rb]
 
   let items = _order-items(items)
   if items.len() == 1 and eff-form == "prose" {
@@ -29,8 +36,8 @@
     let lbl = _num-link(k, item.number)
 
     let gap = if _name-punct-direction(entry) == "full" { "" } else { " " }
-    if item.supplement != none { [#author#gap\[#lbl\]#item.supplement] }
-    else { [#author#gap\[#lbl\]] }
+    if item.supplement != none { [#author#gap#br(lbl)#item.supplement] }
+    else { [#author#gap#br(lbl)] }
   } else if items.len() == 1 and eff-form in ("author", "year") {
     let item = items.first()
     let k = _key-of(item)
@@ -67,7 +74,7 @@
       let k = _key-of(item)
       let lbl = _num-link(k, item.number)
       let inner = if item.supplement != none { [#lbl#item.supplement] } else { lbl }
-      if use-super { super[\[#inner\]] } else { [\[#inner\]] }
+      if use-super { super[#br(inner)] } else { br(inner) }
     })
     parts.join()
   } else {
@@ -100,23 +107,23 @@
           if i > 0 { inner += p("comma") }
           inner += part
         }
-        if use-super { super[\[#inner\]] } else { [\[#inner\]] }
+        if use-super { super[#br(inner)] } else { br(inner) }
       } else {
 
         let parts = segments.map(segment => {
           let (start, end, supplement) = segment
           let k = seen.at(start - 1, default: "")
           let bracketed = if start == end {
-            [\[#_num-link(k, start)\]]
+            br(_num-link(k, start))
           } else if end - start + 1 >= eff-compress-min {
-            [\[#_num-link(k, start, display: str(start) + eff-cite-range-separator + str(end))\]]
+            br(_num-link(k, start, display: str(start) + eff-cite-range-separator + str(end)))
           } else {
             let inner = []
             for (index, n) in range(start, end + 1).enumerate() {
               if index > 0 { inner += p("comma") }
               inner += _num-link(seen.at(n - 1, default: ""), n)
             }
-            [\[#inner\]]
+            br(inner)
           }
 
           if supplement != none { [#bracketed#(if use-super { supplement } else { super[#supplement] })] } else { bracketed }
@@ -153,8 +160,8 @@
         if i > 0 { inner += p("comma") }
         inner += part
       }
-      if use-super { super[\[#inner\]] }
-      else { [\[#inner\]] }
+      if use-super { super[#br(inner)] }
+      else { br(inner) }
     }
   }
 }
