@@ -4,8 +4,9 @@
 #import "../parse/lang-detect.typ" as language
 #import "../terms/built-in.typ" as terms
 #import "../punct/built-in.typ" as punct
-#import "../elements/creator.typ" as creators
-#import "../elements/title.typ" as titles
+#import "../elements/creators.typ" as creators
+#import "../elements/titles.typ" as titles
+#import "../elements/emphasis.typ" as emphasis
 #import "../parse/latex.typ"
 #import "../elements/access.typ": access, has-visible-path
 #import "../elements/date.typ"
@@ -71,9 +72,11 @@
 #let _creator(entry, opts, roles: auto) = {
   let (skip-creator, et-al-min, et-al-use-first, et-al-use-last, show-anon, show-et-al, name-style, punct-style, custom-punct, name-suffix-separator, ..) = opts
 
-  if skip-creator { none }
-  else if opts.at("creator-override", default: none) != none { opts.creator-override }
-  else { creators.principal(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-anon: show-anon, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, roles: roles, prefix-last: opts.at("prefix-last", default: false)) }
+  let raw = if skip-creator { none }
+    else if opts.at("creator-override", default: none) != none { opts.creator-override }
+    else { creators.principal(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-anon: show-anon, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, roles: roles, prefix-last: opts.at("prefix-last", default: false)) }
+
+  emphasis.decorate(raw, opts.at("emphasis", default: (:)), "creator", entry)
 }
 
 #let _access(entry, opts) = {
@@ -90,13 +93,13 @@
   version: opts.version,
 )
 
-#let _title(entry, opts, is-component-part: false, italic: false, preprint: false) = titles.format(
+#let _title(entry, opts, is-component-part: false, title-spec: none, preprint: false) = titles.format(
   entry, is-component-part: is-component-part, preprint: preprint, online: _online(entry, opts),
   show-mark: opts.show-mark, show-medium: opts.show-medium, show-url: opts.show-url,
   space-before-mark: opts.space-before-mark, show-patent-country: opts.at("show-patent-country", default: false), hyperlink-title: opts.hyperlink-title,
   correct-punct: opts.correct-punct, punct-style: opts.punct-style, custom-punct: opts.custom-punct,
   custom-terms: opts.at("custom-terms", default: (:)),
-  version: opts.version, italic: italic,
+  version: opts.version, title-spec: title-spec,
   volume-title-gutter: opts.at("volume-title-gutter", default: auto),
 )
 
@@ -120,7 +123,7 @@
 }
 
 #let monograph(entry, opts) = {
-  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, short-journal, show-urldate, hyperlink, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, short-journal, show-urldate, hyperlink, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
   let p = name => punct.get(name, entry, punct-style, custom-punct)
 
   let _mark = mark-medium.mark(entry)
@@ -133,7 +136,7 @@
   }
   let creator = _creator(entry, opts)
 
-  let title = _title(entry, opts, italic: (italic-book-title and not language.is-cjk-entry(entry) and _mark != "D"))
+  let title = _title(entry, opts, title-spec: emphasis.resolve-spec(opts.at("emphasis", default: (:)), "titles", entry))
 
   let other-creators = _other-creators(entry, opts)
   let editor-other = other-creators.editor
@@ -154,6 +157,8 @@
   let _show-series = opts.at("show-series", default: false)
   let series-part = {
     let series = if _show-series { punct.field-text(entry, "series", correct-punct: correct-punct, punct-style: punct-style) } else { none }
+
+    series = emphasis.decorate(series, opts.at("emphasis", default: (:)), "series", entry)
     let _mark = mark-medium.mark(entry)
 
     if series == none or _mark in ("S", "D", "R", "P", "N", "J") { none } else {
@@ -175,7 +180,7 @@
 }
 
 #let component-part(entry, opts) = {
-  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, italic-journal, bold-journal-volume, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
   let p = name => punct.get(name, entry, punct-style, custom-punct)
 
   let creator = _creator(entry, opts, roles: creators.default-roles(entry, component-part: true))
@@ -194,6 +199,8 @@
   if booktitle == none { booktitle = punct.field-text(entry, "journal", correct-punct: correct-punct, punct-style: punct-style) }
 
   booktitle = titles.addons(booktitle, entry, subtitle-key: "booksubtitle", titleaddon-key: "booktitleaddon", correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct)
+
+  booktitle = emphasis.decorate(booktitle, opts.at("emphasis", default: (:)), "booktitles", entry)
   let number = punct.number-field-text(entry, "number", correct-punct: correct-punct, punct-style: punct-style); let _mark = mark-medium.mark(entry)
 
   let _has-host-imprint = field.get(entry, "publisher") != none or field.get(entry, "location") != none or field.get(entry, "address") != none
@@ -259,7 +266,7 @@
 }
 
 #let serial-article(entry, opts) = {
-  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, italic-journal, bold-journal-volume, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
   let p = name => punct.get(name, entry, punct-style, custom-punct)
   let creator = _creator(entry, opts)
   let title = _title(entry, opts)
@@ -278,23 +285,24 @@
   let source = []
 
   let source-empty = true
+  let _emph = opts.at("emphasis", default: (:))
   if journal != none {
-    source += if italic-journal { emph(journal) } else { journal }
+    source += emphasis.decorate(journal, _emph, "journaltitles", entry)
     source-empty = false
   }
   if year != none {
-    source += if source-empty { year } else { p("comma") + year }
+    let year-dec = emphasis.decorate(year, _emph, "date", entry)
+    source += if source-empty { year-dec } else { p("comma") + year-dec }
     source-empty = false
   }
   if volume != none {
 
-    let volume-value = volume
-    let volume-bold = if bold-journal-volume { strong(volume-value) } else { volume-value }
-    source += if source-empty { volume-bold } else { p("comma") + volume-bold }
+    let volume-dec = emphasis.decorate(volume, _emph, "volume", entry)
+    source += if source-empty { volume-dec } else { p("comma") + volume-dec }
     source-empty = false
   }
 
-  if number != none { source += p("lparen") + number + p("rparen") }
+  if number != none { source += p("lparen") + emphasis.decorate(number, _emph, "issue", entry) + p("rparen") }
   if pages-part != none {
     let pages-separator = _pages-separator(entry, punct-style, custom-punct, space-before-pages)
     source += pages-separator + pages-part
@@ -305,7 +313,7 @@
 }
 
 #let serial-newspaper(entry, opts) = {
-  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, italic-journal, bold-journal-volume, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
   let p = name => punct.get(name, entry, punct-style, custom-punct)
   let creator = _creator(entry, opts)
   let title = _title(entry, opts)
@@ -321,22 +329,23 @@
   let editor-other = other-creators.editor
   let translator = other-creators.translator
   let source = []
+  let _emph = opts.at("emphasis", default: (:))
   let has-journal = journal != none
   if has-journal {
-    source += if italic-journal { emph(journal) } else { journal }
+    source += emphasis.decorate(journal, _emph, "journaltitles", entry)
   }
 
   if pub-date != none {
     if has-journal { source += p("comma") }
-    source += pub-date
+    source += emphasis.decorate(pub-date, _emph, "date", entry)
   }
-  if number != none { source += p("lparen") + number + p("rparen") }
+  if number != none { source += p("lparen") + emphasis.decorate(number, _emph, "issue", entry) + p("rparen") }
   if urldate != none { source += urldate }
   _join-creator(creator, (title, editor-other, translator, source, access), p("period"), period-after: period-after-creator)
 }
 
 #let patent(entry, opts) = {
-  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, italic-journal, bold-journal-volume, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
   let p = name => punct.get(name, entry, punct-style, custom-punct)
   let creator = _creator(entry, opts)
 
@@ -356,7 +365,7 @@
 }
 
 #let electronic(entry, opts) = {
-  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, italic-journal, bold-journal-volume, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
   let p = name => punct.get(name, entry, punct-style, custom-punct)
   let creator = _creator(entry, opts)
   let title = _title(entry, opts)
@@ -427,7 +436,7 @@
 }
 
 #let preprint(entry, opts) = {
-  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, italic-journal, bold-journal-volume, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
   let p = name => punct.get(name, entry, punct-style, custom-punct)
   let creator = _creator(entry, opts)
 
@@ -549,7 +558,7 @@
 }
 
 #let serial(entry, opts) = {
-  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, italic-journal, bold-journal-volume, italic-book-title, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
+  let (show-sine-loco, show-sine-nomine, show-sine-anno, et-al-min, et-al-use-first, et-al-use-last, show-url, show-mark, show-medium, show-patent-country, short-journal, show-urldate, hyperlink, space-before-mark, space-before-pages, page-range-separator, period-after-creator, show-anon, show-et-al, name-style, hyperlink-title, dedup-author-editor, skip-date, skip-creator, show-degree, correct-punct, punct-style, custom-punct, url-break-every, url-break-hyphen, name-suffix-separator, version, show-pid, pid-priority, dedup-url-pid, custom-pids, ..) = opts
   let p = name => punct.get(name, entry, punct-style, custom-punct)
   let creator = _creator(entry, opts)
   let title = _title(entry, opts)

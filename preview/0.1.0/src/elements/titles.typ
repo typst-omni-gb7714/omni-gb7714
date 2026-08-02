@@ -1,4 +1,5 @@
 #import "mark-medium/built-in.typ" as mark-medium
+#import "emphasis.typ" as emphasis
 #import "../punct/built-in.typ" as punct
 #import "../parse/field.typ"
 #import "../parse/lang-detect.typ" as language
@@ -37,7 +38,7 @@
   terms.volume(entry, volume-value, custom-terms: custom-terms)
 }
 
-#let format(entry, is-component-part: false, show-mark: true, show-medium: true, show-url: true, space-before-mark: false, show-patent-country: false, preprint: false, hyperlink-title: false, correct-punct: false, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), version: 2015, italic: false, volume-title-gutter: auto, online: auto) = {
+#let format(entry, is-component-part: false, show-mark: true, show-medium: true, show-url: true, space-before-mark: false, show-patent-country: false, preprint: false, hyperlink-title: false, correct-punct: false, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), version: 2015, title-spec: none, volume-title-gutter: auto, online: auto) = {
   let p = name => punct.get(name, entry, punct-style, custom-punct)
   let mark-block = mark-medium.render(entry, show-mark: show-mark, show-medium: show-medium, show-url: show-url, space-before-mark: space-before-mark, version: version, online: online)
   let title = punct.field-text(entry, "title", correct-punct: correct-punct, punct-style: punct-style)
@@ -55,7 +56,7 @@
     if target != none { title = link(target, title) }
   }
 
-  let _emph(x) = if italic { emph(x) } else { x }
+  let _emph(x) = emphasis.apply(x, title-spec)
   let _mark = mark-medium.mark(entry)
   if is-component-part { _emph(title) + mark-block }
 

@@ -1,6 +1,61 @@
 #import "../../sentinel.typ": *
 #import "../../parse/field.typ"
 #import "../../errors.typ"
+#import "../../parse/guard.typ" as guard
+
+#let _eval-mark-guard(ast, entry) = {
+  let k = ast.at(0)
+  if k == "and" { return ast.at(1).all(a => _eval-mark-guard(a, entry)) }
+  if k == "or" { return ast.at(1).any(a => _eval-mark-guard(a, entry)) }
+  if k == "not" { return not _eval-mark-guard(ast.at(1), entry) }
+  if k == "present" {
+    let v = field.get(entry, ast.at(1))
+    return v != none and str(v).trim() != ""
+  }
+
+  let fname = ast.at(1); let op = ast.at(2); let values = ast.at(3)
+  let actual = if fname == "entry-type" { entry.entry_type }
+    else { let v = field.get(entry, fname); if v == none { "" } else { str(v) } }
+  let matches = str(actual) in values
+  if op == "neq" { not matches } else { matches }
+}
+
+#let _mark-toks-to-str(toks) = {
+  let s = ""
+  for t in toks { if t.at(0) == "sp" { s += " " } else if t.len() > 1 { s += t.at(1) } }
+  s.trim()
+}
+
+#let _resolve-mark-guard(value, entry) = {
+  let tokens = guard.tokenize(value)
+  let i = 0
+  while i < tokens.len() {
+    if tokens.at(i).at(0) == "group-open" {
+      let depth = 1; let j = i + 1; let arrow = none
+      let guard-toks = (); let code-toks = ()
+      while j < tokens.len() {
+        let tj = tokens.at(j); let kj = tj.at(0)
+        if kj == "group-open" { depth += 1 }
+        else if kj == "group-close" { depth -= 1; if depth == 0 { break } }
+        if depth >= 1 {
+          if kj == "arrow" and depth == 1 and arrow == none { arrow = j }
+          else if arrow == none { guard-toks.push(tj) }
+          else { code-toks.push(tj) }
+        }
+        j += 1
+      }
+      if arrow != none {
+
+        let has-guard = guard-toks.any(t => t.at(0) != "sp")
+        if not has-guard or _eval-mark-guard(guard.parse-guard-expr(guard-toks), entry) {
+          return _mark-toks-to-str(code-toks)
+        }
+      }
+      i = j + 1
+    } else { i += 1 }
+  }
+  none
+}
 
 #let _auto-table = (
   article: "J",
@@ -62,7 +117,13 @@
   let mark-field = entry.fields.at("mark", default: none)
   if mark-field != none { return mark-field }
   let custom = entry.fields.at("_omni-mark-custom", default: none)
-  if custom != none { return custom }
+  if custom != none {
+
+    if type(custom) == str and "=>" in custom {
+      let resolved = _resolve-mark-guard(custom, entry)
+      if resolved != none and resolved != "" { return resolved }
+    } else { return custom }
+  }
   let override = entry.fields.at("_omni-mark-override", default: none)
   if override != none { return override }
   _auto-table.at(entry.entry_type, default: "Z")

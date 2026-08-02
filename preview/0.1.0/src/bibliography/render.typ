@@ -3,7 +3,7 @@
 #import "../punct/built-in.typ" as punct
 #import "../parse/entryset.typ"
 #import "../elements/mark-medium/built-in.typ" as mark-medium
-#import "../elements/creator.typ" as creators
+#import "../elements/creators.typ" as creators
 #import "../parse/lang-detect.typ" as language
 #import "../drivers/custom.typ" as custom-driver
 

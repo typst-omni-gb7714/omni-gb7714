@@ -177,12 +177,8 @@
   url-break-hyphen-at-delimiters: true,
   /// 长标题字段大小写: none 原样 / "sentence" 句首大写 / "title" Title Case; 字典按字段+rest; {DNA} 花括号保护
   titles-text-case:    none,
-  /// 西文专著题名斜体
-  italic-book-title:   false,
-  /// 期刊 / 报纸名斜体
-  italic-journal:      false,
-  /// 期刊卷号加粗
-  bold-journal-volume: false,
+  /// 按槽位施加斜体 / 加粗 / 包裹符（替代 italic-book-title / italic-journal / bold-journal-volume）
+  emphasis:            (:),
   /// 作者字段后加句点（false 改空格）
   period-after-creator: true,
   /// 末尾句点：auto=单块著录不补、多块补（§7 单块演示片段无末尾句点）；true 总补；false 不补
@@ -215,13 +211,15 @@
   custom-fields:       (:),
   /// 用户自定义永久标识符（field:.., prefix:.., resolver:..），著录于条目末尾
   custom-pids:         (:),
+  /// 注册新语言码（(de: ("german", "deu")) 等），让内置识别外的西文语种能出自己的本地化术语；仅影响显式标注 langid 的西文条目
+  custom-languages:    (:),
   /// 缺题名时是否报错：false 软退化为空题名，true 遇缺 / 空 title 即报错指明该 key
   warn-missing-title:  false,
 ) = {
   import "src/api.typ" as _api
   import "src/errors.typ" as _errors
   import "src/style.typ" as _style
-  import "src/elements/creator.typ" as _creators
+  import "src/elements/creators.typ" as _creators
   import "src/parse/csl-json.typ" as _csl-json
 
   _errors.check-enum("cite-form", cite-form, extra: (auto,))
@@ -286,13 +284,12 @@
     bib-punct-style: bib-punct-style, custom-punct: custom-punct, correct-punct: correct-punct,
     latex-strict-command: latex-strict-command, latex-strict-char: latex-strict-char,
     url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters,
-    titles-text-case: titles-text-case, italic-book-title: italic-book-title,
-    italic-journal: italic-journal, bold-journal-volume: bold-journal-volume,
+    titles-text-case: titles-text-case, emphasis: emphasis,
     period-after-creator: period-after-creator, show-end-period: show-end-period,
     space-before-mark: space-before-mark, space-before-pages: space-before-pages,
     page-range-separator: page-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, footnote-numbering-use-quan: footnote-numbering-use-quan,
     footnote-repeat-style: footnote-repeat-style, footnote-ibid: footnote-ibid, footnote-repeat-reset: footnote-repeat-reset,
-    custom-marks: custom-marks, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, warn-missing-title: warn-missing-title,
+    custom-marks: custom-marks, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, custom-languages: custom-languages, warn-missing-title: warn-missing-title,
   )
 
   if rest.pos().len() == 0 {
@@ -509,7 +506,7 @@
   /// 姓名前缀 van/von/de 是否参与排序与行内标注（对齐 biblatex useprefix）；auto 跟随全局
   sort-use-prefix:     auto,
   /// 同 gb7714 同名参数；auto 跟随全局
-  bold-journal-volume: auto,
+  emphasis: auto,
   /// 页码范围连字符；auto 跟随全局
   page-range-separator:       auto,
   page-range-style:    auto,
@@ -532,10 +529,6 @@
   hyperlink-title:     auto,
   /// 西文断字；auto 跟随全局
   hyphenate:           auto,
-  /// 西文专著题名斜体；auto 跟随全局
-  italic-book-title:   auto,
-  /// 期刊名斜体；auto 跟随全局
-  italic-journal:      auto,
   /// 条目间距；auto 跟随全局
   entry-spacing:            auto,
   /// 编号与正文之间的列间距（「编号后那道间隔」）；auto 跟随全局
@@ -619,7 +612,7 @@
   import "src/api.typ" as _api
   import "src/errors.typ" as _errors
   import "src/style.typ" as _style
-  import "src/elements/creator.typ" as _creators
+  import "src/elements/creators.typ" as _creators
   import "src/parse/csl-json.typ" as _csl-json
 
   if std.type(numbering-style) == dictionary {
@@ -881,7 +874,7 @@
     sort-keys: sort-keys,
     disambiguate: disambiguate, sort-by: sort-by, sort-zh-by: sort-zh-by, creator-idem: creator-idem,
     sort-use-prefix: sort-use-prefix,
-    bold-journal-volume: bold-journal-volume,
+    emphasis: emphasis,
     page-range-separator: page-range-separator,
     page-range-style: page-range-style,
     show-end-period: show-end-period,
@@ -892,8 +885,6 @@
     hyperlink: hyperlink,
     hyperlink-title: hyperlink-title,
     hyphenate: hyphenate,
-    italic-book-title: italic-book-title,
-    italic-journal: italic-journal,
     entry-spacing: entry-spacing,
     number-gutter: number-gutter,
     numbering-style: numbering-style,
@@ -1033,7 +1024,7 @@
   import "src/api.typ" as _api
   import "src/errors.typ" as _errors
   import "src/style.typ" as _style
-  import "src/elements/creator.typ" as _creators
+  import "src/elements/creators.typ" as _creators
   import "src/parse/csl-json.typ" as _csl-json
 
   _errors.check-enum("cite-form", form, extra: (auto,), alias: "form")

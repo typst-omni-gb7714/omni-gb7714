@@ -6,8 +6,8 @@
 #import "../bibliography/render.typ" as bib
 #import "../terms/built-in.typ" as terms
 #import "../parse/entryset.typ"
-#import "../elements/creator.typ" as creators
-#import "../elements/title.typ" as titles
+#import "../elements/creators.typ" as creators
+#import "../elements/titles.typ" as titles
 
 #let footnote-repeat-style-values = ("full", "number", "shortened", "reuse")
 

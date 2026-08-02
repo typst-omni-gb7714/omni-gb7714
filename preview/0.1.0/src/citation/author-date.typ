@@ -2,7 +2,7 @@
 #import "../errors.typ"
 #import "../parse/lang-detect.typ" as language
 #import "../terms/built-in.typ" as terms
-#import "../elements/creator.typ" as creators
+#import "../elements/creators.typ" as creators
 #import "../punct/built-in.typ" as punct
 #import "../elements/imprint/date.typ" as publication-date
 #import "../parse/field.typ"

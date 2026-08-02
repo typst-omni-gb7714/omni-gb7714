@@ -3,10 +3,10 @@
 #import "./built-in.typ": built-in-term-keys
 
 #let reserved-bib-fields = (
-  "author", "editor", "translator", "bookauthor", "holder",
-  "title", "subtitle", "titleaddon",
-  "booktitle", "booksubtitle", "booktitleaddon",
-  "journal", "journaltitle", "shortjournal", "journalsubtitle", "journaltitleaddon",
+  "author", "creator", "editor", "translator", "bookauthor", "holder",
+  "title", "titles", "subtitle", "titleaddon",
+  "booktitle", "booktitles", "booksubtitle", "booktitleaddon",
+  "journal", "journaltitles", "journaltitle", "shortjournal", "journalsubtitle", "journaltitleaddon",
   "series", "edition", "version", "volume", "number", "pages", "eid",
   "year", "date", "urldate", "month", "day",
   "publisher", "school", "organization", "institution",

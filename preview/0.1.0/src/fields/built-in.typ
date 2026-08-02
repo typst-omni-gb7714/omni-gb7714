@@ -1,5 +1,6 @@
-#import "../elements/creator.typ" as creators
-#import "../elements/title.typ" as titles
+#import "../elements/creators.typ" as creators
+#import "../elements/titles.typ" as titles
+#import "../elements/emphasis.typ" as emphasis
 #import "../elements/mark-medium/built-in.typ" as mark-medium
 #import "../punct/built-in.typ" as punct
 #import "../elements/imprint/general.typ" as imprint
@@ -13,10 +14,10 @@
 #import "../drivers/built-in.typ" as built-in-driver
 
 #let built-in-token-names = (
-  "author", "editor-other", "translator", "editor", "bookauthor",
-  "title", "subtitle", "titleaddon", "title-block", "component-part-title-block",
-  "booktitle", "booksubtitle", "booktitleaddon",
-  "journal", "journaltitle", "journalsubtitle", "journaltitleaddon", "shortjournal",
+  "author", "creator", "editor-other", "translator", "editor", "bookauthor",
+  "title", "titles", "subtitle", "titleaddon", "title-block", "component-part-title-block",
+  "booktitle", "booktitles", "booksubtitle", "booktitleaddon",
+  "journal", "journaltitles", "journaltitle", "journalsubtitle", "journaltitleaddon", "shortjournal",
   "series", "series-block", "serial-block", "edition", "version", "volume", "number",
   "pages", "date", "year", "month", "day", "urldate", "eventdate",
   "publisher", "address", "location", "country", "institution", "school", "organization", "holder",
@@ -44,7 +45,8 @@
     custom-terms: opts.at("custom-terms", default: (:)),
     name-suffix-separator: opts.at("name-suffix-separator", default: auto), prefix-last: opts.at("prefix-last", default: false),
   )
-  if name == "author" {
+  if name == "creator" {
+
     if opts.skip-creator { return none }
 
     let creator-override = opts.at("creator-override", default: none)
@@ -66,11 +68,13 @@
     if raw-author.len() == 0 and raw-editor.len() == 0 { return none }
     return creators.other-translator(entry, ..name-options, et-al-translator-separator: opts.at("et-al-translator-separator", default: auto))
   }
-  if name in ("editor", "bookauthor", "holder") {
+  if name in ("author", "editor", "bookauthor", "holder") {
 
     return creators.format(entry.parsed_names, role: name, et-al-role: creators.et-al-role-of-field.at(name, default: "principal"), entry: entry, ..name-options)
   }
-  if name == "title" {
+
+  if name == "title" { return punct.field-text(entry, "title", correct-punct: opts.correct-punct, punct-style: opts.punct-style) }
+  if name == "titles" {
     let title-text = punct.field-text(entry, "title", correct-punct: opts.correct-punct, punct-style: opts.punct-style)
     if title-text == none { return none }
     return titles.addons(title-text, entry, correct-punct: opts.correct-punct, punct-style: opts.punct-style, custom-punct: opts.custom-punct)
@@ -101,16 +105,18 @@
     if mark-text == "" { return none }
     return mark-text
   }
-  if name == "booktitle" {
+
+  if name == "booktitle" { return punct.field-text(entry, "booktitle", correct-punct: opts.correct-punct, punct-style: opts.punct-style) }
+  if name == "booktitles" {
     let book-title = punct.field-text(entry, "booktitle", correct-punct: opts.correct-punct, punct-style: opts.punct-style)
     if book-title == none { return none }
     return titles.addons(book-title, entry, subtitle-key: "booksubtitle", titleaddon-key: "booktitleaddon", correct-punct: opts.correct-punct, punct-style: opts.punct-style, custom-punct: opts.custom-punct)
   }
-  if name == "journal" {
+
+  if name == "journaltitles" {
     let journal-value = titles.journal(entry, opts.correct-punct, opts.punct-style, opts.custom-punct, opts.short-journal)
     if journal-value == none { return none }
-    if opts.italic-journal { return emph(journal-value) }
-    return journal-value
+    return emphasis.decorate(journal-value, opts.at("emphasis", default: (:)), "journaltitles", entry)
   }
   if name == "series" { return punct.field-text(entry, "series", correct-punct: opts.correct-punct, punct-style: opts.punct-style) }
   if name == "series-block" {
@@ -170,7 +176,7 @@
   }
   if name == "note" { return punct.field-text(entry, "note", correct-punct: opts.correct-punct, punct-style: opts.punct-style) }
 
-  if name in ("booksubtitle", "booktitleaddon", "journaltitle", "shortjournal", "journalsubtitle", "journaltitleaddon", "school", "organization", "institution", "keywords", "eventtitle") {
+  if name in ("booksubtitle", "booktitleaddon", "journal", "journaltitle", "shortjournal", "journalsubtitle", "journaltitleaddon", "school", "organization", "institution", "keywords", "eventtitle") {
     return punct.field-text(entry, name, correct-punct: opts.correct-punct, punct-style: opts.punct-style)
   }
 

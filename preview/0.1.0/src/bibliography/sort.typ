@@ -3,7 +3,7 @@
 #import "../sentinel.typ": *
 #import "../errors.typ"
 #import "../parse/field.typ"
-#import "../elements/creator.typ" as creators
+#import "../elements/creators.typ" as creators
 #import "../terms/built-in.typ" as terms
 #import "../parse/lang-detect.typ" as language
 #import "../elements/imprint/date.typ" as publication-date

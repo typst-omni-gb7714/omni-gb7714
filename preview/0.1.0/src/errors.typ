@@ -124,6 +124,15 @@
   "page-range-style.bad-value": "gb7714: page-range-style 收到非法值 {value}；合法值: none（默认，页码原样）/ \"expanded\" / \"minimal\" / \"minimal-two\" / \"chicago-15\" / \"chicago-16\"（CSL 1.0.1 的 \"chicago\" 收作 \"chicago-15\" 的别名）。",
 
   "custom-marks.bad-value": "gb7714: custom-marks `{name}` 的值必须是非空字符串标识码（如 \"SW\"）；载体段不在此写（用 medium 字段或联机判据）。",
+  "emphasis.not-dict": "gb7714: emphasis 必须是字典（槽位 → 规格）。默认 (:) 不装饰。",
+  "emphasis.bad-slot": "gb7714: emphasis 收到未知槽位 \"{slot}\"；合法槽位：{slots}。（槽是渲染位置，不是裸 .bib 字段。）",
+  "emphasis.bad-value": "gb7714: emphasis 槽位 \"{slot}\" 的值必须是规格 (italic:/bold:/prefix:/suffix:)、语言分设 (zh:/rest: → 规格) 或 none。",
+  "emphasis.bad-key": "gb7714: emphasis 槽位 \"{slot}\" 的规格键 \"{key}\" 非法；合法：{keys}。",
+
+  "languages.not-dict": "gb7714: custom-languages 必须是字典（语言码 → langid 别名）。收到：{got}。",
+  "languages.bad-code": "gb7714: custom-languages 的键（语言码）必须是非空字符串（如 \"de\"）。收到：{got}。",
+  "languages.builtin-code": "gb7714: custom-languages 的码 \"{code}\" 与内置码相撞（zh/ja/ko/ru/fr/en 的 langid 识别已内建）；请换一个新码。",
+  "languages.bad-alias": "gb7714: custom-languages 码 \"{code}\" 的别名必须是非空字符串或其数组（如 (\"german\", \"deu\")）。收到：{got}。",
 
   "load.not-bib-content": "gb7714: {what} 不是有效的 .bib 内容。\n请确保通过 `read()` 读取内容再传入，如 gb7714(read(\"refs.bib\"))。\n收到的值：{value}",
   "load.bad-path-type": "gb7714: path 必须是 read() 内容字符串、字符串数组或标签字典；不支持直接路径字符串（包沙箱读不到调用方文件）。\n请通过 `read()` 读取内容再传入，如 bibliography(read(\"refs.bib\"))。",

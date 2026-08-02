@@ -1,5 +1,6 @@
 #import "@preview/glotter:0.1.0" as _glotter
 #import "../sentinel.typ": *
+#import "../errors.typ"
 #import "field.typ"
 
 #let is-cjk(s) = {
@@ -45,9 +46,66 @@
     if lang-text == "russian" or lang-text.starts-with("ru") { return "ru" }
     if lang-text in ("english", "american", "british") or lang-text.starts-with("en") { return "en" }
     if lang-text == "french" or lang-text.starts-with("fr") { return "fr" }
+
+    let custom-code = entry.fields.at("_omni-lang", default: none)
+    if custom-code != none { return custom-code }
   }
 
   _scan-detect(_detection-text(entry))
+}
+
+#let _built-in-lang-codes = ("zh", "ja", "ko", "ru", "fr", "en")
+
+#let validate-languages(custom-languages) = {
+  if type(custom-languages) != dictionary {
+    errors.raise("languages.not-dict", got: repr(custom-languages))
+  }
+  for (code, aliases) in custom-languages {
+    if type(code) != str or code.trim() == "" {
+      errors.raise("languages.bad-code", got: repr(code))
+    }
+    if code in _built-in-lang-codes {
+      errors.raise("languages.builtin-code", code: code)
+    }
+    let alias-list = if type(aliases) == array { aliases } else { (aliases,) }
+    for a in alias-list {
+      if type(a) != str or a.trim() == "" {
+        errors.raise("languages.bad-alias", code: code, got: repr(a))
+      }
+    }
+  }
+}
+
+#let _normalize-langid(s) = {
+  let t = lower(str(s)).trim()
+  let dash = t.position("-")
+  if dash != none { t.slice(0, dash) } else { t }
+}
+
+#let apply-languages(bib-data, custom-languages) = {
+  if custom-languages.len() == 0 { return bib-data }
+
+  let alias-to-code = (:)
+  for (code, aliases) in custom-languages {
+    let alias-list = if type(aliases) == array { aliases } else { (aliases,) }
+    alias-to-code.insert(code, code)
+    for a in alias-list { alias-to-code.insert(_normalize-langid(a), code) }
+  }
+  let out = (:)
+  for (k, e) in bib-data {
+    let langid = field.alias(e, "langid", "language")
+    if langid != none {
+      let norm = _normalize-langid(langid)
+      let code = alias-to-code.at(norm, default: none)
+      if code != none {
+        let new-fields = e.fields
+        new-fields.insert("_omni-lang", code)
+        e.fields = new-fields
+      }
+    }
+    out.insert(k, e)
+  }
+  out
 }
 
 #let _LANG-ZH-ONLY = (
