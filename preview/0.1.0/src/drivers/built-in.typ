@@ -64,7 +64,7 @@
   } else { none }
 
   let translator = if _mark != "D" and (has-real-author or raw-editor.len() > 0) {
-    creators.other-translator(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false), et-al-translator-separator: opts.at("et-al-translator-separator", default: auto))
+    creators.other-translator(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false), et-al-translator-separator: opts.at("et-al-translator-separator", default: auto), version: opts.at("version", default: 2025))
   } else { none }
   (editor: editor-other, translator: translator)
 }
@@ -81,7 +81,7 @@
 
 #let _access(entry, opts) = {
   let (show-url, hyperlink, show-pid, pid-priority, dedup-url-pid, custom-pids, punct-style, custom-punct, url-break-every, url-break-hyphen, url-break-hyphen-at-delimiters, version, ..) = opts
-  access(entry, show-url: show-url, hyperlink: hyperlink, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, custom-pids: custom-pids, punct-style: punct-style, custom-punct: custom-punct, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, version: version)
+  access(entry, show-url: show-url, hyperlink: hyperlink, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, custom-pids: custom-pids, punct-style: punct-style, custom-punct: custom-punct, pid-colon-style: opts.at("pid-colon-style", default: auto), url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, version: version)
 }
 
 #let _online(entry, opts) = has-visible-path(
@@ -185,7 +185,7 @@
 
   let creator = _creator(entry, opts, roles: creators.default-roles(entry, component-part: true))
   let title = _title(entry, opts, is-component-part: true)
-  let translator = creators.other-translator(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false), et-al-translator-separator: opts.at("et-al-translator-separator", default: auto))
+  let translator = creators.other-translator(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false), et-al-translator-separator: opts.at("et-al-translator-separator", default: auto), version: opts.at("version", default: 2025))
 
   let host-bookauthor = creators.format(entry.parsed_names, role: "bookauthor", et-al-role: "host", entry: entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false))
   let host-editor = creators.format(entry.parsed_names, role: "editor", et-al-role: "host", entry: entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false))

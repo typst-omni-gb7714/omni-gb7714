@@ -1,5 +1,5 @@
 #import "@preview/auto-pinyin:0.1.0" as _auto-pinyin
-#import "@preview/auto-bihua:0.1.0": bihua-count as _bihua-count, bihua-order as _bihua-order
+#import "@preview/auto-bihua:0.2.0": bihua-count as _bihua-count, bihua-order as _bihua-order
 #import "../sentinel.typ": *
 #import "../errors.typ"
 #import "../parse/field.typ"

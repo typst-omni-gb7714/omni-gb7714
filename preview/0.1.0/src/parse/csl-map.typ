@@ -190,6 +190,9 @@
   "note": "note",
   "abstract": "abstract",
   "status": "pubstate",
+
+  "scale": "scale",
+  "dimensions": "dimensions",
 )
 #let RAW-FIELDS = (
   "volume": "volume",
@@ -226,14 +229,21 @@
   "series-editor": "collection-editor", "serieseditor": "collection-editor",
 )
 
-#let classify(raw-var) = {
+#let _ARTICLE-LIKE-TYPES = ("article", "newspaper")
+
+#let classify(raw-var, entry-type: none) = {
   let csl-var = _LABEL-ALIAS.at(raw-var, default: raw-var)
   if csl-var in NAME-ROLES { return (kind: "name", key: NAME-ROLES.at(csl-var)) }
   if csl-var in DATE-KEYS { return (kind: "date", key: DATE-KEYS.at(csl-var)) }
   if csl-var in TEXT-FIELDS { return (kind: "text", key: TEXT-FIELDS.at(csl-var)) }
   if csl-var in RAW-FIELDS { return (kind: "raw", key: RAW-FIELDS.at(csl-var)) }
 
-  if csl-var == "number" or csl-var == "issue" { return (kind: "raw", key: "number") }
+  if csl-var == "issue" { return (kind: "raw", key: "issue") }
+  if csl-var == "number" {
+    return (kind: "raw", key: if entry-type in _ARTICLE-LIKE-TYPES { "eid" } else { "number" })
+  }
+
+  if csl-var == "jurisdiction" { if entry-type == "patent" { return (kind: "text", key: "location") } else { return (kind: "unknown", key: none) } }
   if csl-var == "language" { return (kind: "lang", key: "langid") }
   if csl-var == "PMID" { return (kind: "pmid", key: "eprint") }
   if csl-var == "container-title" { return (kind: "container", key: none) }

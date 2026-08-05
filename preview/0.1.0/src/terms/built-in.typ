@@ -54,7 +54,7 @@
 
 #let etal(entry, custom-terms: (:)) = etal-for(if entry != none { language.get(entry) } else { "en" }, custom-terms: custom-terms)
 
-#let role(entry, role, truncated, comma, bare-etal: false, custom-terms: (:), et-al-translator-separator: auto) = {
+#let role(entry, role, truncated, comma, bare-etal: false, custom-terms: (:), et-al-translator-separator: auto, version: 2025) = {
   let lang = language.get(entry)
   let et-al-word = etal(entry, custom-terms: custom-terms)
 
@@ -68,7 +68,7 @@
   if lang == "zh" {
     if role == "ed" { (if truncated { lead(comma) + et-al-word } else { "" }) + role-word }
 
-    else { (if truncated { lead(comma) + et-al-word + translator-gutter("") } else { comma }) + role-word }
+    else { (if truncated { lead(comma) + et-al-word + translator-gutter(if version == 2015 { "" } else { comma }) } else { comma }) + role-word }
   } else if lang == "ja" {
     (if truncated { lead(comma) + et-al-word + translator-gutter("") } else { "" }) + role-word
   } else if lang == "ko" {

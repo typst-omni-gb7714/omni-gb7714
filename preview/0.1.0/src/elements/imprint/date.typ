@@ -7,7 +7,19 @@
   } else { s }
 }
 
-#let parsed(entry, key) = entry.at("parsed_dates", default: (:)).at(key, default: none)
+#let parsed(entry, key) = {
+  let d = entry.at("parsed_dates", default: (:)).at(key, default: none)
+  if d == none { return none }
+  let start-ok = "start" in d and d.start.year != 0
+  let end-ok = "end" in d and d.end.year != 0
+  if "start" in d and not start-ok { let _ = d.remove("start") }
+  if "end" in d and not end-ok { let _ = d.remove("end") }
+  if not start-ok and not end-ok { return none }
+  if d.kind == "between" {
+    if start-ok and not end-ok { d.kind = "after" } else if end-ok and not start-ok { d.kind = "before" }
+  }
+  d
+}
 
 #let _parsed-date-year(parsed-date) = str((if "start" in parsed-date { parsed-date.start } else { parsed-date.end }).year)
 

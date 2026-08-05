@@ -1,4 +1,4 @@
-#import "@preview/jurlstify:0.3.0": jurlstify as _jurlstify
+#import "@preview/jurlstify:0.3.1": jurlstify as _jurlstify
 #import "../sentinel.typ": *
 #import "../parse/field.typ"
 #import "../punct/built-in.typ" as punct
@@ -48,7 +48,7 @@
   false
 }
 
-#let access(entry, show-url: true, hyperlink: true, show-pid: (:), pid-priority: (), dedup-url-pid: true, custom-pids: (:), punct-style: "half-with-space", custom-punct: (:), url-break-every: 1, url-break-hyphen: true, url-break-hyphen-at-delimiters: true, version: 2015) = {
+#let access(entry, show-url: true, hyperlink: true, show-pid: (:), pid-priority: (), dedup-url-pid: true, custom-pids: (:), punct-style: "half-with-space", custom-punct: (:), pid-colon-style: auto, url-break-every: 1, url-break-hyphen: true, url-break-hyphen-at-delimiters: true, version: 2015) = {
 
   if mark-medium.online-suppressed(show-url, entry, version: version) { return none }
 
@@ -90,7 +90,7 @@
     issn: false,
   )
 
-  let pcolon = pids.colon(entry, punct-style, custom-punct)
+  let pcolon = pids.colon(entry, punct-style, custom-punct, pid-colon-style: pid-colon-style)
 
   let _label = (name, dflt) => custom-pid.label-text(_bov(name), entry, dflt)
   let _resolve = (name, value, built-in-target) => {

@@ -66,7 +66,7 @@
     let raw-author = entry.parsed_names.at("author", default: ())
     let raw-editor = entry.parsed_names.at("editor", default: ())
     if raw-author.len() == 0 and raw-editor.len() == 0 { return none }
-    return creators.other-translator(entry, ..name-options, et-al-translator-separator: opts.at("et-al-translator-separator", default: auto))
+    return creators.other-translator(entry, ..name-options, et-al-translator-separator: opts.at("et-al-translator-separator", default: auto), version: opts.at("version", default: 2025))
   }
   if name in ("author", "editor", "bookauthor", "holder") {
 
@@ -165,7 +165,7 @@
 
   if name == "serial-block" { return built-in-driver.serial-year-volume(entry, opts).block }
   if name == "access" {
-    return access(entry, show-url: opts.show-url, hyperlink: opts.hyperlink, show-pid: opts.show-pid, pid-priority: opts.pid-priority, dedup-url-pid: opts.dedup-url-pid, custom-pids: opts.at("custom-pids", default: (:)), punct-style: opts.punct-style, custom-punct: opts.custom-punct, url-break-every: opts.url-break-every, url-break-hyphen: opts.url-break-hyphen, url-break-hyphen-at-delimiters: opts.url-break-hyphen-at-delimiters, version: opts.version)
+    return access(entry, show-url: opts.show-url, hyperlink: opts.hyperlink, show-pid: opts.show-pid, pid-priority: opts.pid-priority, dedup-url-pid: opts.dedup-url-pid, custom-pids: opts.at("custom-pids", default: (:)), punct-style: opts.punct-style, custom-punct: opts.custom-punct, pid-colon-style: opts.at("pid-colon-style", default: auto), url-break-every: opts.url-break-every, url-break-hyphen: opts.url-break-hyphen, url-break-hyphen-at-delimiters: opts.url-break-hyphen-at-delimiters, version: opts.version)
   }
   if name == "degree-annotation" { return built-in-driver.degree(entry, show-degree: opts.show-degree, custom-terms: opts.at("custom-terms", default: (:))) }
   if name == "country" {

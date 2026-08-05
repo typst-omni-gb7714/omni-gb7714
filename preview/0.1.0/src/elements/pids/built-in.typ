@@ -6,18 +6,31 @@
 #let normalize-platform(s) = lower(str(s)).replace(regex("[\\s_-]"), "")
 
 #let _PLATFORM-NAMES = (
-  arxiv: "arXiv", pubmed: "PubMed", chinaxiv: "ChinaXiv", pssxiv: "PSSXiv",
+  arxiv: "arXiv", chinaxiv: "ChinaXiv", pssxiv: "PSSXiv",
   biorxiv: "bioRxiv", medrxiv: "medRxiv", researchsquare: "Research Square", osf: "OSF",
 )
 
 #let _EPRINT-RESOLVERS = (
   arxiv:          "https://arxiv.org/abs/{}",
-  pubmed:         "https://pubmed.ncbi.nlm.nih.gov/{}",
   chinaxiv:       "https://chinaxiv.org/abs/{}",
   biorxiv:        "https://www.biorxiv.org/content/{}",
   researchsquare: "https://www.researchsquare.com/article/{}",
   osf:            "https://osf.io/preprints/{}",
 )
+
+#let is-preprint-platform(name, custom-pids: (:)) = {
+  if name == none or type(name) != str { return false }
+  let key = normalize-platform(name)
+  if key == "" { return false }
+  if key in _PLATFORM-NAMES { return true }
+  if type(custom-pids) == dictionary and "eprint" in custom-pids and type(custom-pids.at("eprint")) == dictionary {
+    let resolver = custom-pids.at("eprint").at("resolver", default: none)
+    if type(resolver) == dictionary {
+      for (platform, _) in resolver { if normalize-platform(platform) == key { return true } }
+    }
+  }
+  false
+}
 
 #let eprint-prefix(entry) = {
   let archive-prefix = field.alias(entry, "archiveprefix", "eprinttype")
@@ -54,7 +67,11 @@
   if template.contains("{}") { template.replace("{}", eprint-value) } else { template + eprint-value }
 }
 
-#let colon(entry, punct-style, custom-punct) = {
+#let colon(entry, punct-style, custom-punct, pid-colon-style: auto) = {
+  if pid-colon-style != auto {
+    let dir = punct.resolve-dir(pid-colon-style, punct.is-cj-entry(entry))
+    return if dir == "full" { "：" } else if dir == "half-with-space" { ": " } else { ":" }
+  }
   if punct.has-override(custom-punct, "colon") {
     let override-value = punct.resolve-value(punct.get-override(custom-punct, "colon"))
     if type(override-value) == str { return override-value.trim(at: end) }

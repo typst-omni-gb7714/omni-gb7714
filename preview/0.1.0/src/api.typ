@@ -3,7 +3,7 @@
 #import "parse/csl-extra.typ"
 
 #import "errors.typ"
-#import "@preview/quan:0.2.1": quan as _quan
+#import "@preview/quan:0.2.2": quan as _quan
 #import "sentinel.typ": *
 #import "elements/mark-medium/built-in.typ" as mark-medium
 #import "elements/mark-medium/custom.typ" as mark-custom
@@ -24,7 +24,8 @@
 #import "drivers/dispatch.typ"
 #import "terms/custom.typ": validate-terms
 #import "fields/custom.typ": validate-fields
-#import "elements/pids/custom.typ": validate-pids
+#import "elements/pids/custom.typ": validate-pids, note-label-candidates
+#import "elements/pids/built-in.typ": is-preprint-platform
 #import "bibliography/render.typ" as bib
 #import "citation/omni-aux.typ" as omni-aux
 
@@ -301,12 +302,15 @@
     /// 后缀自身的尾点（如 `Jr.`）始终去除。|
   et-al-translator-separator: auto,  /// <- `auto` | `string` | `dictionary`
     /// 译者名单被截断时，截断词（等 / et al.）与译者角色词（译 / trans.）之间的分隔符。\
-    /// GB/T 7714 的示例是「，等译．」*紧贴*——**起草人明示**：陈浩元《GB/T 7714 新标准对旧标准的主要修改及实施要点提示》（编辑学报 2015, 27(4)）§3.3-7「当遇到『等』『译』连用时，参照新标准给出的示例，可著录为『，等译．』，即『译』前不必标注『，』」。他是三个版本的主要起草人之一。\
-    /// - `auto`（默认）：**中文紧贴**（`张三，李四，等译`）、日文紧贴、韩文空格、西文逗号（`..., et al., trans.`）；
-    /// - `", "`：回到社区 CSL 的「等, 译」（本项曾以此为缺省——社区样式不是权威，起草人是）；
+    /// 中文缺省*按版本*：2005 / 2025 出「，等，译．」（译前加逗号），2015 出「，等译．」（紧贴）。三版《著录用符号》
+    /// 规则条文一致，都把「，」列在「等」「译」字样之前；2025 §8 示例[3]（罗杰斯《西方文明史》）已著录为
+    /// 「潘惠霞，魏婧，杨艳，等，译」。2015 §8 同一示例却写作「等译」，与其自身 §7.2 规则相左，起草人陈浩元
+    /// 《GB/T 7714 新标准对旧标准的主要修改及实施要点提示》（编辑学报 2015）认可此紧贴形，故 2015 尊其诠释。\
+    /// - `auto`（默认）：中文按上述版本派生、日文紧贴、韩文空格、西文逗号（`..., et al., trans.`）；
+    /// - `""`：强制紧贴「等译」；`", "`：强制加逗号「等, 译」；
     /// - 标点字符 `","` 等（与 `custom-punct` 键同一套）：强制该标点，全 / 半角感知；
     /// - 其它任意字符串：字面量原样；单字符标点要字面不感知，用 verbatim 定界 ```typc "{，}"```。\
-    /// 只管*译者*；编者截断的「等主编」紧贴是 GB 惯例，不受影响。未截断时「, 译」前的逗号是 GB §7.2 明文，也不归本项管。|
+    /// 只管*译者*；编者截断的「等主编」各版本恒紧贴，不受影响。未截断时「, 译」前的逗号是 GB §7.2 明文，也不归本项管。|
   component-part-separator: "//",  /// <- `string` | `dictionary`
     /// 析出文献题名与其*出处*（母体：图书 / 论文集 / 会议名称）之间的分隔符——即 GB/T 7714 里那个 `//`。\
     /// biblatex-gb7714（胡振震）整节称它「*析出文献标识符号*」（`gbpunctin` 选项），标准 3.8 术语是「析出文献 / component part」，
@@ -434,7 +438,7 @@
     /// - `"plain"`：1；
     /// - `"fullwidth-bracket"`：〔1〕；
     /// - `"fullwidth-paren"`：（1）；
-    /// - `"circled"`：①——圈码。绘制引擎值内二级展开：标量缺省 Unicode 带圈数字（U+2460～U+32BF，超过 ㊿ 以 (N) 显示）；```typc (circled: "quan")``` 改由 ```typ quan``` 包绘制（字体缺带圈数字时用，可在主文档 ```typ #import "@preview/quan:0.2.1": quan-init, quan-style``` 后配置）——引擎是实现不是样式，不占顶层值，与脚注编号的 #arg-ref("gb7714", "footnote-numbering-use-quan")[`footnote-numbering-use-quan`] 同一哲学；
+    /// - `"circled"`：①——圈码。绘制引擎值内二级展开：标量缺省 Unicode 带圈数字（U+2460～U+32BF，超过 ㊿ 以 (N) 显示）；```typc (circled: "quan")``` 改由 ```typ quan``` 包绘制（字体缺带圈数字时用，可在主文档 ```typ #import "@preview/quan:0.2.2": quan-init, quan-style``` 后配置）——引擎是实现不是样式，不占顶层值，与脚注编号的 #arg-ref("gb7714", "footnote-numbering-use-quan")[`footnote-numbering-use-quan`] 同一哲学；
     /// - `none`：不显示编号。|
   cite-numbering-style: "bracket", /// <- `"bracket"` | `"paren"` | `"fullwidth-bracket"` | `"fullwidth-paren"`
     /// *正文标注*编号的括号形态，与 #arg-ref("gb7714", "numbering-style")[`numbering-style`] 分属两轴——那个管*文献表*那列的编号、本参数管*正文*里的 `[1]`：\
@@ -720,6 +724,11 @@
     /// 句号 `.` 例外，恒取半角：覆盖字段间隔、著者-出版年制人名↔年份后、条目末尾等所有结构位置，`"half-with-space"` 与 `"full"` 档为 `. `（带尾空格）、`"half"` 档为 `.`（无尾空格）、末尾去尾空格。\
     /// 恒半角的符号：句号 `.`、斜杠 `/`（护析出符号 `//` 与载体标识 /OL）、方括号 `[]`（文献类型标识容器）；如需将斜杠、方括号改全角，用 #arg-ref("gb7714", "custom-punct")[`custom-punct`] 指定。\
     /// 自定义条目格式 ```typ custom-drivers``` 里裸写的 `,` `:` `(` `)` `;` `?` `!` `.` 同走本套风格（句号仍恒半角）；裸 `/` 恒字面；反引号字面量 `` `,` `` 永不变。|
+  pid-colon-style:     auto, /// <- `auto` | "half-with-space" | "half" | "full" | "by-doc-no-space" | "by-doc-with-space" | "by-entry-no-space" | "by-entry-with-space"
+    /// 永久标识符（DOI / CSTR / eprint 及自定义 PID）标签与值之间那**一个冒号**的全 / 半角风格，独立于结构冒号（出版项 `出版地：出版者`、页码定位 `年：页`）。取值同 #arg-ref("gb7714", "bib-punct-style")[`bib-punct-style`]：\
+    /// - `auto`（默认）：跟随 `bib-punct-style`——中文条目部分全角档取全角 `：`、半角档取半角 `:`（恒不带尾空格），并尊重 #arg-ref("gb7714", "custom-punct")[`custom-punct`] 对 `colon` 的覆写。即历史行为。\
+    /// - *非 `auto`*：只把这一个冒号强制成对应风格，其余冒号不动——`"half"` → `DOI:10.xxxx`、`"half-with-space"` → `DOI: 10.xxxx`、`"full"` → `DOI：10.xxxx`；`by-doc-*` 按文档语言、`by-entry-*` 按条目语言定全 / 半角。非 `auto` 时*绕过* `custom-punct` 的 `colon`（专用旋钮更具体、优先）。\
+    /// 用途：国标 8.7.2 等示例把 PID 冒号排成半角，而中文条目其余标点为全角时，用 ```typ pid-colon-style: "half"``` 单独把它调回半角。|
   custom-punct:     (:),       /// <- `dictionary`
     /// 精确覆盖某符号的字面量，优先级高于 `bib-punct-style`：列出的符号恒用用户值。\
     /// *作用对象是结构标点*——引擎产出的著录格式串符号（段间句点、页码冒号、著者间逗号、卷期括号等），*不触碰用户字段文本*（题名、出版者等原样）；唯一例外是显式开 #arg-ref("gb7714", "correct-punct")[`correct-punct`] 时，字段内*矫正*的目标字形跟随本表的 `text` 值（矫正是否发生由 `correct-punct` 决定，本表只定目标字形）。覆写值为*绝对*字面量，不再做全 / 半角感知（要感知用 `punct-style` 档位或各 `-separator` 的裸字符通道）。\
@@ -1090,8 +1099,29 @@
   for content in _json-parts { for (k, e) in csl-json.load(content) { bib-data.insert(k, e) } }
 
   let _enriched = (:)
-  for (k, e) in bib-data { _enriched.insert(k, csl-extra.enrich(e)) }
+  let _pid-labels = note-label-candidates(custom-pids)
+  for (k, e) in bib-data { _enriched.insert(k, csl-extra.enrich(e, pid-labels: _pid-labels)) }
   bib-data = _enriched
+
+  let _is-preprint-platform-field = v => type(v) == str and ":" in v and is-preprint-platform(v.split(":").first(), custom-pids: custom-pids)
+  let _looks-like-preprint = e => {
+    let ps = e.fields.at("pubstate", default: none)
+    if ps != none and lower(str(ps)).trim() == "prepublished" { return true }
+    if is-preprint-platform(e.fields.at("publisher", default: none), custom-pids: custom-pids) { return true }
+    _is-preprint-platform-field(e.fields.at("eprint", default: none)) or _is-preprint-platform-field(e.fields.at("number", default: none))
+  }
+
+  let _pp-inferred = (:)
+  for (k, e) in bib-data {
+    if e.entry_type in ("misc", "article") and _looks-like-preprint(e) {
+      let nf = e.fields
+      if "entrysubtype" not in nf { nf.insert("entrysubtype", "preprint") }
+      if e.entry_type == "misc" { e.entry_type = "article" }
+      e.fields = nf
+    }
+    _pp-inferred.insert(k, e)
+  }
+  bib-data = _pp-inferred
 
   language.validate-languages(custom-languages)
   bib-data = language.apply-languages(bib-data, custom-languages)
@@ -1411,12 +1441,12 @@
   let global-style-cite = style.at("cite", default: "numeric")
   let global-style-bib = style.at("bib", default: global-style-cite)
 
-  let _global-config = (style-cite: global-style-cite, style-bib: global-style-bib, disambiguate: disambiguate, version: version, entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, hyphenate: hyphenate, entry-spacing: entry-spacing, number-gutter: number-gutter, numbering-style: numbering-style, cite-numbering-style: cite-numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width, page-range-separator: page-range-separator, page-range-style: page-range-style, show-end-period: show-end-period, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, hyperlink: hyperlink, emphasis: emphasis, entry-lang-order: entry-lang-order, name-style: name-style, show-anon: show-anon, show-no-date: show-no-date, show-et-al: show-et-al, dedup-author-editor: dedup-author-editor, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, name-date-separator: name-date-separator, period-after-creator: period-after-creator, short-journal: short-journal, show-mark: show-mark, show-medium: show-medium, show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, show-patent-country: show-patent-country, show-related: show-related, show-url: show-url, show-urldate: show-urldate, space-before-mark: space-before-mark, space-before-pages: space-before-pages, hyperlink-title: hyperlink-title, back-ref: back-ref, show-degree: show-degree, show-series: show-series, prefix-last: prefix-last, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation, creator-idem: creator-idem, bib-sort-by: bib-sort-by, cite-sort-by: cite-sort-by, bib-sort-zh-by: bib-sort-zh-by, cite-sort-zh-by: cite-sort-zh-by, cite-collapse-date: cite-collapse-date, sort-use-prefix: sort-use-prefix, volume-title-gutter: volume-title-gutter, custom-marks: custom-marks, _registered-marks: _registered-marks, _name-style-raw: _name-style-raw, _version-auto: _version-auto)
+  let _global-config = (style-cite: global-style-cite, style-bib: global-style-bib, disambiguate: disambiguate, version: version, entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, hyphenate: hyphenate, entry-spacing: entry-spacing, number-gutter: number-gutter, numbering-style: numbering-style, cite-numbering-style: cite-numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width, page-range-separator: page-range-separator, page-range-style: page-range-style, show-end-period: show-end-period, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, hyperlink: hyperlink, emphasis: emphasis, entry-lang-order: entry-lang-order, name-style: name-style, show-anon: show-anon, show-no-date: show-no-date, show-et-al: show-et-al, dedup-author-editor: dedup-author-editor, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, name-date-separator: name-date-separator, period-after-creator: period-after-creator, short-journal: short-journal, show-mark: show-mark, show-medium: show-medium, show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, show-patent-country: show-patent-country, show-related: show-related, show-url: show-url, show-urldate: show-urldate, space-before-mark: space-before-mark, space-before-pages: space-before-pages, hyperlink-title: hyperlink-title, back-ref: back-ref, show-degree: show-degree, show-series: show-series, prefix-last: prefix-last, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, pid-colon-style: pid-colon-style, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation, creator-idem: creator-idem, bib-sort-by: bib-sort-by, cite-sort-by: cite-sort-by, bib-sort-zh-by: bib-sort-zh-by, cite-sort-zh-by: cite-sort-zh-by, cite-collapse-date: cite-collapse-date, sort-use-prefix: sort-use-prefix, volume-title-gutter: volume-title-gutter, custom-marks: custom-marks, _registered-marks: _registered-marks, _name-style-raw: _name-style-raw, _version-auto: _version-auto)
 
   let _format-opts = (show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-url: show-url, show-mark: show-mark, show-medium: show-medium, show-patent-country: show-patent-country, short-journal: short-journal, show-urldate: show-urldate, show-end-period: show-end-period, hyperlink: hyperlink, emphasis: emphasis, space-before-mark: space-before-mark, space-before-pages: space-before-pages, page-range-separator: page-range-separator, page-range-style: page-range-style, period-after-creator: period-after-creator, show-et-al: show-et-al, name-style: name-style, hyperlink-title: hyperlink-title, dedup-author-editor: dedup-author-editor, show-degree: show-degree, show-series: show-series, prefix-last: prefix-last, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, version: version, volume-title-gutter: volume-title-gutter)
-  let _emit-entry(entry, show-anon: show-anon, skip-date: false, date-suffix: "", pages-override: none, creator-override: none, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation) = {
+  let _emit-entry(entry, show-anon: show-anon, skip-date: false, date-suffix: "", pages-override: none, creator-override: none, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, pid-colon-style: pid-colon-style, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation) = {
 
-    dispatch.entry(entry, .._format-opts, show-anon: show-anon, skip-date: skip-date, date-suffix: date-suffix, pages-override: pages-override, creator-override: creator-override, registered-marks: _global-config.at("_registered-marks", default: ()), custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation)
+    dispatch.entry(entry, .._format-opts, show-anon: show-anon, skip-date: skip-date, date-suffix: date-suffix, pages-override: pages-override, creator-override: creator-override, registered-marks: _global-config.at("_registered-marks", default: ()), custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, pid-colon-style: pid-colon-style, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation)
   }
 
   let _get-related(entry) = {
@@ -1424,7 +1454,7 @@
     if k != none { bib-data.at(k, default: none) } else { none }
   }
 
-  let _emit-entry-author-date(entry, suffix-key: none, show-anon: show-anon, suffixes: none, pages-override: none, creator-override: none, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation) = {
+  let _emit-entry-author-date(entry, suffix-key: none, show-anon: show-anon, suffixes: none, pages-override: none, creator-override: none, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, pid-colon-style: pid-colon-style, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation) = {
 
     let _author-date-roles = creators.default-roles(entry, component-part: category.get(entry, version: version) == "component-part")
 
@@ -1437,7 +1467,7 @@
 
     let author-date = _author-date-prefix(author, entry, suffix-table, suffix-key, punct-style: punct-style, custom-punct: custom-punct, version: version, name-date-separator: name-date-separator, show-no-date: show-no-date, custom-terms: custom-terms)
 
-    let (rest, single-block) = dispatch.entry(entry, .._format-opts, show-anon: true, skip-date: true, skip-creator: true, pages-override: pages-override, registered-marks: _global-config.at("_registered-marks", default: ()), custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation)
+    let (rest, single-block) = dispatch.entry(entry, .._format-opts, show-anon: true, skip-date: true, skip-creator: true, pages-override: pages-override, registered-marks: _global-config.at("_registered-marks", default: ()), custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, pid-colon-style: pid-colon-style, url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters, show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid, show-annotation: show-annotation)
     (_author-date-join(author-date, rest, period-after-creator, entry, punct-style, custom-punct), single-block)
   }
 
@@ -1478,6 +1508,8 @@
     let eff-custom-pids = _pick-override("custom-pids", _global-config.custom-pids)
 
     let eff-punct-style  = punct.resolve-bib-document(_pick-override("footnote-punct-style", _global-config.punct-style), text.lang)
+
+    let eff-pid-colon-style = punct.resolve-bib-document(_pick-override("pid-colon-style", _global-config.pid-colon-style), text.lang)
     let eff-custom-punct  = _pick-override("footnote-custom-punct", _global-config.custom-punct)
 
     let eff-correct-punct  = _global-config.correct-punct
@@ -1494,7 +1526,7 @@
     (
       indent: indent, eff-style: eff-style, bib-style: global-style-bib, show-url: show-url, eff-show-annotation: eff-show-annotation,
       show-end-period: show-end-period, eff-custom-drivers: eff-custom-drivers, version: version,
-      eff-punct-style: eff-punct-style, eff-custom-punct: eff-custom-punct,
+      eff-punct-style: eff-punct-style, eff-custom-punct: eff-custom-punct, eff-pid-colon-style: eff-pid-colon-style,
       _emit-entry-author-date: _emit-entry-author-date, _emit-entry: _emit-entry,
       eff-custom-terms: eff-custom-terms, eff-custom-fields: eff-custom-fields, eff-custom-pids: eff-custom-pids,
       eff-correct-punct: eff-correct-punct, eff-url-break-every: eff-url-break-every,
@@ -1933,6 +1965,8 @@
       /// #arg-ref("gb7714", "custom-pids")，仅临时覆盖本次 `bibliography` 调用，不影响主参考文献表与其它命名列表。|
     punct-style:   auto,   /// <- `auto` | `string`
       /// #arg-ref("gb7714", "bib-punct-style")，仅临时覆盖本次调用。|
+    pid-colon-style: auto, /// <- `auto` | `string`
+      /// #arg-ref("gb7714", "pid-colon-style")，仅临时覆盖本次调用。|
     custom-punct: auto, /// <- `auto` | `dictionary`
       /// #arg-ref("gb7714", "custom-punct")，仅临时覆盖本次调用。|
     url-break-every: auto, /// <- `auto` | `none` | `int`
@@ -2113,6 +2147,8 @@
     let eff-custom-pids                     = _api-pick(custom-pids, _global-config.custom-pids)
 
     let eff-punct-style              = punct.resolve-bib-document(_va-derive("punct-style", punct-style, "full", "half-with-space"), text.lang)
+
+    let eff-pid-colon-style          = punct.resolve-bib-document(_api-pick(pid-colon-style, _global-config.pid-colon-style), text.lang)
     let eff-custom-punct          = _api-pick(custom-punct, _global-config.custom-punct)
 
     let eff-correct-punct            = _global-config.correct-punct
@@ -2185,7 +2221,7 @@
     let _margin-mode   = _numbered and eff-number-placement == "margin"
     let eff-hyphenate  = _api-pick(hyphenate, _global-config.hyphenate)
 
-    let _eff-format-opts = (show-sine-loco: eff-show-sine-loco, show-sine-nomine: eff-show-sine-nomine, show-sine-anno: eff-show-sine-anno, et-al-min: eff-et-al-min, et-al-use-first: eff-et-al-use-first, et-al-use-last: eff-et-al-use-last, show-url: eff-show-url, show-mark: eff-show-mark, show-medium: eff-show-medium, show-patent-country: eff-show-patent-country, short-journal: eff-short-journal, show-urldate: eff-show-urldate, show-end-period: eff-show-end-period, hyperlink: eff-hyperlink, emphasis: eff-emphasis, space-before-mark: eff-space-before-mark, space-before-pages: eff-space-before-pages, page-range-separator: eff-page-range-separator, page-range-style: eff-page-range-style, period-after-creator: eff-period-after-creator, show-et-al: eff-show-et-al, name-style: eff-name-style, hyperlink-title: eff-hyperlink-title, dedup-author-editor: eff-dedup-author-editor, show-degree: eff-show-degree, show-series: eff-show-series, prefix-last: eff-prefix-last, name-suffix-separator: eff-name-suffix-separator, et-al-translator-separator: eff-et-al-translator-separator, component-part-separator: eff-component-part-separator, registered-marks: _global-config.at("_registered-marks", default: ()), custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, url-break-every: eff-url-break-every, url-break-hyphen: eff-url-break-hyphen, url-break-hyphen-at-delimiters: eff-url-break-hyphen-at-delimiters, version: eff-version, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation, volume-title-gutter: eff-volume-title-gutter)
+    let _eff-format-opts = (show-sine-loco: eff-show-sine-loco, show-sine-nomine: eff-show-sine-nomine, show-sine-anno: eff-show-sine-anno, et-al-min: eff-et-al-min, et-al-use-first: eff-et-al-use-first, et-al-use-last: eff-et-al-use-last, show-url: eff-show-url, show-mark: eff-show-mark, show-medium: eff-show-medium, show-patent-country: eff-show-patent-country, short-journal: eff-short-journal, show-urldate: eff-show-urldate, show-end-period: eff-show-end-period, hyperlink: eff-hyperlink, emphasis: eff-emphasis, space-before-mark: eff-space-before-mark, space-before-pages: eff-space-before-pages, page-range-separator: eff-page-range-separator, page-range-style: eff-page-range-style, period-after-creator: eff-period-after-creator, show-et-al: eff-show-et-al, name-style: eff-name-style, hyperlink-title: eff-hyperlink-title, dedup-author-editor: eff-dedup-author-editor, show-degree: eff-show-degree, show-series: eff-show-series, prefix-last: eff-prefix-last, name-suffix-separator: eff-name-suffix-separator, et-al-translator-separator: eff-et-al-translator-separator, component-part-separator: eff-component-part-separator, registered-marks: _global-config.at("_registered-marks", default: ()), custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, pid-colon-style: eff-pid-colon-style, url-break-every: eff-url-break-every, url-break-hyphen: eff-url-break-hyphen, url-break-hyphen-at-delimiters: eff-url-break-hyphen-at-delimiters, version: eff-version, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation, volume-title-gutter: eff-volume-title-gutter)
     let _emit-entry(entry, show-anon: eff-show-anon, skip-date: false, date-suffix: "", creator-override: none) = {
       dispatch.entry(entry, .._eff-format-opts, show-anon: show-anon, skip-date: skip-date, date-suffix: date-suffix, creator-override: creator-override)
     }
@@ -2372,6 +2408,7 @@
       let table = _native-route-table(bibs, _set-redirect)
       let hit = _native-route-number(table, it.location())
       if hit == none { return it }
+
       if _footnote-override != false and _any-per-bib-footnote {
         let _routed-footnote = bibs.at(hit.bib-index, default: (:)).at("footnote", default: auto)
         let _eff-footnote = if _routed-footnote == true or _routed-footnote == false { _routed-footnote } else { cite-footnote }

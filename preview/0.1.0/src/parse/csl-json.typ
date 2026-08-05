@@ -31,8 +31,12 @@
     fields.insert(csl-map.container-field(entry-type), csl-map.escape-text(container))
   }
 
-  let number = item.at("number", default: item.at("issue", default: none))
-  if number != none and str(number).trim() != "" { fields.insert("number", str(number)) }
+  let issue = item.at("issue", default: none)
+  if issue != none and str(issue).trim() != "" { fields.insert("issue", str(issue)) }
+  let number = item.at("number", default: none)
+  if number != none and str(number).trim() != "" {
+    fields.insert(csl-map.classify("number", entry-type: entry-type).key, str(number))
+  }
 
   let lang = item.at("language", default: none)
   if lang != none and str(lang).trim() != "" { fields.insert("langid", csl-map.map-lang(lang)) }
@@ -148,7 +152,8 @@
     }
     for (csl-key, bib-key) in csl-map.TEXT-FIELDS { lines += _bib-line(bib-key, item.at(csl-key, default: none)) }
     for (csl-key, bib-key) in csl-map.RAW-FIELDS { lines += _bib-line(bib-key, item.at(csl-key, default: none)) }
-    lines += _bib-line("number", item.at("number", default: item.at("issue", default: none)))
+    lines += _bib-line("issue", item.at("issue", default: none))
+    lines += _bib-line(csl-map.classify("number", entry-type: real-type).key, item.at("number", default: none))
     let lang = item.at("language", default: none)
     if lang != none and str(lang).trim() != "" { lines.push("  langid = {" + csl-map.map-lang(lang) + "}") }
     let issued = item.at("issued", default: none)

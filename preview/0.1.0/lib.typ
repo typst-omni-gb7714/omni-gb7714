@@ -51,7 +51,7 @@
   bib-name-style:     auto,
   /// 西文姓名后缀（Jr/Sr）前分隔符：auto（随 version：2015 取 ", " 逗号、2025 取 " " 空格）/ 任意字符串
   name-suffix-separator: auto,
-  /// 译者截断词（等/et al.）与角色词（译/trans.）间分隔符：auto（跟社区 CSL：中西逗号「等, 译」）/ ""（GB 原文紧贴形「等译」）/ 标点字符（感知）/ 任意字符串
+  /// 译者截断词（等/et al.）与角色词（译/trans.）间分隔符：auto（中文按版本：2005/2025「等，译」、2015「等译」）/ ""（强制紧贴「等译」）/ ", "（强制「等, 译」）/ 标点字符（感知）/ 任意字符串
   et-al-translator-separator: auto,
   /// 析出文献题名与其出处（母体）间的分隔符——GB 里那个 `//`（biblatex-gb7714 的「析出文献标识符号」gbpunctin）：默认 "//"（全语言通用）/ 任意字符串 / 多语言字典（如 (zh: ". 见: ", en: ". In: ")，未点名的回落 //）
   component-part-separator: "//",
@@ -161,6 +161,8 @@
   dedup-url-pid:       auto,
   /// 参考文献表标点(cite 值的子集,无 -and-style)：auto（随 version：2015 取 "half-with-space"、2025 取 "full"，即部分全角对齐 GB/T 7714—2025）/ "half-with-space" / "half"(="half-no-space") / "full" / "by-doc-no-space"/"-with-space"(分隔符跟文档语言) / "by-entry-no-space"/"-with-space"(跟条目)
   bib-punct-style:     auto,
+  /// PID(DOI/CSTR/eprint 等)标签与值间那一个冒号的全/半角,独立于结构冒号(出版项/年:页)。取值同 bib-punct-style：auto(跟随 bib-punct-style,即历史行为) / "half"(DOI:x) / "half-with-space"(DOI: x) / "full"(DOI：x) / "by-doc-*" / "by-entry-*"；非 auto 时绕过 custom-punct 的 colon
+  pid-colon-style:     auto,
   /// 精确覆盖某*结构标点*（著录格式串符号,不碰用户字段文本;值为绝对字面量不感知）,如 (",": "，", ":": "：")
   custom-punct:     (:),
   /// 矫正长文本字段（题名等）里用户输入的标点全/半角
@@ -233,6 +235,7 @@
   _creators.validate-name-style(bib-name-style, param: "bib-name-style")
   _creators.validate-name-style(cite-name-style, param: "cite-name-style")
   if std.type(bib-punct-style) != dictionary { _errors.check-enum("bib-punct-style", bib-punct-style, extra: (auto,)) }
+  _errors.check-enum("bib-punct-style", pid-colon-style, extra: (auto,), alias: "pid-colon-style")
   if std.type(cite-punct-style) != dictionary { _errors.check-enum("punct-style", cite-punct-style, extra: (auto,), alias: "cite-punct-style") }
   _errors.check-enum("supplement-style", cite-supplement-style, extra: (auto,), alias: "cite-supplement-style")
   _errors.check-enum("entry-lang-detect", entry-lang-detect)
@@ -281,7 +284,7 @@
     show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, show-degree: show-degree, show-series: show-series, prefix-last: prefix-last, show-annotation: show-annotation,
     short-journal: short-journal, hyperlink: hyperlink, hyperlink-title: hyperlink-title,
     show-pid: show-pid, pid-priority: pid-priority, dedup-url-pid: dedup-url-pid,
-    bib-punct-style: bib-punct-style, custom-punct: custom-punct, correct-punct: correct-punct,
+    bib-punct-style: bib-punct-style, pid-colon-style: pid-colon-style, custom-punct: custom-punct, correct-punct: correct-punct,
     latex-strict-command: latex-strict-command, latex-strict-char: latex-strict-char,
     url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters,
     titles-text-case: titles-text-case, emphasis: emphasis,
@@ -592,6 +595,8 @@
   custom-pids:         auto,
   /// 标点(同 punct-style)："half-with-space" / "half" / "full" / "by-doc-*" / "by-entry-*"；auto 跟随全局
   punct-style:         auto,
+  /// PID 冒号风格(同 pid-colon-style)；auto 跟随全局
+  pid-colon-style:     auto,
   /// 符号精确覆盖；auto 跟随全局
   custom-punct:     auto,
   /// URL 断点密度；auto 跟随全局
@@ -914,6 +919,7 @@
     custom-fields: custom-fields,
     custom-pids: custom-pids,
     punct-style: punct-style,
+    pid-colon-style: pid-colon-style,
     custom-punct: custom-punct,
     url-break-every: url-break-every,
     url-break-hyphen: url-break-hyphen,

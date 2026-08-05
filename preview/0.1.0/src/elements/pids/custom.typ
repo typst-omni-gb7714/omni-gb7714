@@ -49,6 +49,25 @@
   order
 }
 
+#let note-label-candidates(custom-pids) = {
+  let out = ()
+  for name in _built-in-pid-names {
+    if name == "eprint" { continue }
+    out.push((upper(name), name))
+  }
+  if type(custom-pids) != dictionary { return out }
+  for (name, definition) in custom-pids {
+    if type(definition) != dictionary { continue }
+
+    let field-name = str(definition.at("field", default: str(name)))
+    out.push((str(name), field-name))
+    let prefix = definition.at("prefix", default: none)
+    if type(prefix) == str { out.push((prefix, field-name)) }
+    else if type(prefix) == dictionary { for (_, v) in prefix { out.push((str(v), field-name)) } }
+  }
+  out
+}
+
 #let emit(term-name, custom-pids, entry, effective-fn, pcolon, brk, link) = {
   let definition = custom-pids.at(term-name, default: none)
   if not _is-pid(definition) { return none }

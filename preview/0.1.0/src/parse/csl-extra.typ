@@ -1,5 +1,7 @@
 #import "csl-map.typ"
 
+#let _TEX-NAME-FIELDS = ("author", "editor", "translator", "bookauthor", "holder", "editora", "editorb", "editorc")
+
 #let _normalize-label(label) = {
   let t = lower(label.trim()).replace(" ", "-")
   if t == "archive-location" { return "archive_location" }
@@ -7,11 +9,21 @@
   t
 }
 
-#let _split-line(line) = {
+#let _STANDARD-NUMBER-RE = regex("[A-Z]{2,}(?:/[A-Z]+)?\s+\S+[—:\-](?:19|20)\d{2}")
+
+#let _looks-like-standard(fields) = {
+  let ty = fields.at("type", default: none)
+  if type(ty) == str and (ty.contains("标准") or lower(ty).contains("standard")) { return true }
+  let num = fields.at("number", default: none)
+  if type(num) == str and num.contains(_STANDARD-NUMBER-RE) { return true }
+  false
+}
+
+#let _split-line(line, pid-map: (:), entry-type: none) = {
   let bounds = ()
   for m in line.matches(regex("(?:^|\\s)([A-Za-z][A-Za-z _-]*?)\\s*:")) {
     let norm = _normalize-label(m.captures.at(0))
-    if csl-map.classify(norm).kind != "unknown" {
+    if csl-map.classify(norm, entry-type: entry-type).kind != "unknown" or norm in pid-map {
       bounds.push((mstart: m.start, vstart: m.end, var: norm))
     }
   }
@@ -24,7 +36,9 @@
   (prefix: line.slice(0, bounds.first().mstart), recognized: recognized)
 }
 
-#let enrich(entry) = {
+#let enrich(entry, pid-labels: ()) = {
+  let pid-map = (:)
+  for (label, field-name) in pid-labels { pid-map.insert(_normalize-label(label), field-name) }
   let fields = entry.fields
   let names = entry.parsed_names
   let dates = entry.parsed_dates
@@ -36,17 +50,50 @@
   let note-raw = fields.at("_omni-note-raw", default: false)
   let esc(v) = if note-raw { csl-map.escape-text(v) } else { v }
 
+  let override-type = none
+  for src-key in ("note", "annotation") {
+    let src = fields.at(src-key, default: none)
+    if type(src) != str { continue }
+
+    let tbounds = ()
+    for m in src.matches(regex("(?i)\\btex\\.([a-z0-9_]+)\\s*:")) {
+      tbounds.push((mstart: m.start, vstart: m.end, field: lower(m.captures.at(0))))
+    }
+    for (i, b) in tbounds.enumerate() {
+      let vend = if i + 1 < tbounds.len() { tbounds.at(i + 1).mstart } else { src.len() }
+      let v = src.slice(b.vstart, vend).trim()
+      if b.field == "entrytype" { override-type = lower(v); continue }
+      if v == "" or b.field in real-fields { continue }
+      if b.field in _TEX-NAME-FIELDS {
+
+        let arr = names.at(b.field, default: ())
+        arr.push(csl-map.parse-name-string(v))
+        names.insert(b.field, arr)
+        fields.insert(b.field, csl-map.name-string(arr))
+      } else {
+        fields.insert(b.field, esc(v))
+      }
+    }
+    fields.insert(src-key, src.replace(regex("(?is)\\s*\\btex\\.[a-z0-9_]+\\s*:.*"), ""))
+  }
+
   for src-key in ("note", "annotation") {
     let src = fields.at(src-key, default: none)
     if src == none or type(src) != str { continue }
     let kept = ()
     for line in src.split("\n") {
-      let (prefix, recognized) = _split-line(line)
+      let (prefix, recognized) = _split-line(line, pid-map: pid-map, entry-type: entry.entry_type)
       if recognized.len() == 0 { kept.push(line); continue }
       if prefix.trim() != "" { kept.push(prefix) }
       for (var, value) in recognized {
         if value == "" { continue }
-        let route = csl-map.classify(var)
+
+        if var in pid-map {
+          let target = pid-map.at(var)
+          if target not in real-fields { fields.insert(target, value) }
+          continue
+        }
+        let route = csl-map.classify(var, entry-type: entry.entry_type)
 
         let target = if route.kind == "lang" { "langid" } else if route.kind == "pmid" { "eprint" } else if route.kind == "container" { csl-map.container-field(entry.entry_type) } else { route.key }
         let occupied = if route.kind == "name" { target in real-name-roles } else if route.kind == "date" { target in real-date-keys or target in real-fields } else { target in real-fields }
@@ -81,6 +128,15 @@
   let _ = fields.remove("_omni-note-raw", default: none)
 
   let e = entry
+  if override-type != none {
+    e.entry_type = override-type
+  } else if e.entry_type == "misc" and ("scale" in fields or "dimensions" in fields) {
+
+    e.entry_type = "map"
+  } else if e.entry_type == "misc" and _looks-like-standard(fields) {
+
+    e.entry_type = "standard"
+  }
   e.fields = fields
   e.parsed_names = names
   e.parsed_dates = dates
