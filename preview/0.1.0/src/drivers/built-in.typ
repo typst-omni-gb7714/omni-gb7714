@@ -60,7 +60,7 @@
   let _mark = mark-medium.mark(entry)
 
   let editor-other = if _mark != "D" and has-real-author and not (dedup-author-editor and raw-author == raw-editor) {
-    creators.other-editor(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false))
+    creators.other-editor(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false), version: opts.at("version", default: 2025))
   } else { none }
 
   let translator = if _mark != "D" and (has-real-author or raw-editor.len() > 0) {
@@ -74,7 +74,7 @@
 
   let raw = if skip-creator { none }
     else if opts.at("creator-override", default: none) != none { opts.creator-override }
-    else { creators.principal(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-anon: show-anon, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, roles: roles, prefix-last: opts.at("prefix-last", default: false)) }
+    else { creators.principal(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-anon: show-anon, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, roles: roles, prefix-last: opts.at("prefix-last", default: false), version: opts.at("version", default: 2025)) }
 
   emphasis.decorate(raw, opts.at("emphasis", default: (:)), "creator", entry)
 }
@@ -143,7 +143,9 @@
   let translator = other-creators.translator
 
   let edition-part = if _mark != "D" { edition.edition(entry, version: version, custom-terms: opts.at("custom-terms", default: (:))) } else { none }
-  let imprint-block = imprint.format(entry, show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, skip-date: skip-date, date-suffix: opts.at("date-suffix", default: ""), punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: version)
+
+  let _archival = entry.entry_type in ("archive", "letter", "legislation")
+  let imprint-block = imprint.format(entry, show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno, skip-date: skip-date, use-full-date: _archival and version == 2025, date-suffix: opts.at("date-suffix", default: ""), punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: version)
   let pages-part = pages.pages(entry, page-range-separator: page-range-separator, page-range-style: opts.at("page-range-style", default: none), override: opts.at("pages-override", default: none), punct-style: punct-style, custom-punct: custom-punct)
   let urldate = date.urldate(entry, show-urldate: show-urldate, version: version)
   let access = _access(entry, opts)
@@ -187,8 +189,8 @@
   let title = _title(entry, opts, is-component-part: true)
   let translator = creators.other-translator(entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false), et-al-translator-separator: opts.at("et-al-translator-separator", default: auto), version: opts.at("version", default: 2025))
 
-  let host-bookauthor = creators.format(entry.parsed_names, role: "bookauthor", et-al-role: "host", entry: entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false))
-  let host-editor = creators.format(entry.parsed_names, role: "editor", et-al-role: "host", entry: entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false))
+  let host-bookauthor = creators.format(entry.parsed_names, role: "bookauthor", et-al-role: "host", entry: entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false), version: version)
+  let host-editor = creators.format(entry.parsed_names, role: "editor", et-al-role: "host", entry: entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), name-suffix-separator: name-suffix-separator, prefix-last: opts.at("prefix-last", default: false), version: version)
   let host-creator = if host-bookauthor != none { host-bookauthor } else { host-editor }
 
   if dedup-author-editor and host-creator != none and creator != none and host-creator == creator { host-creator = none }
@@ -262,7 +264,9 @@
       }
     }
   }
-  _join-creator(creator, (component-part-body, edition-part, imprint-block, series-part, access), p("period"), period-after: period-after-creator)
+
+  let dimensions-part = if version == 2025 and _mark == "CM" { punct.field-text(entry, "dimensions") } else { none }
+  _join-creator(creator, (component-part-body, edition-part, imprint-block, series-part, dimensions-part, access), p("period"), period-after: period-after-creator)
 }
 
 #let serial-article(entry, opts) = {
@@ -420,8 +424,12 @@
 
     if _2025-platform != none { date-block += _2025-platform }
 
-    let _platform-issued = if modify-date != none { modify-date } else if _is-2025-platform-form and publication-year != none { publication-year } else { none }
-    if _platform-issued != none { date-block += p("lparen") + _platform-issued + p("rparen") }
+    if version == 2025 and entry.entry_type in ("archive", "letter", "legislation") and modify-date != none {
+      date-block += modify-date
+    } else {
+      let _platform-issued = if modify-date != none { modify-date } else if _is-2025-platform-form and publication-year != none { publication-year } else { none }
+      if _platform-issued != none { date-block += p("lparen") + _platform-issued + p("rparen") }
+    }
 
     if pages-part != none and date-block != "" { date-block += p("colon") + pages-part }
     if urldate != none { date-block += urldate }

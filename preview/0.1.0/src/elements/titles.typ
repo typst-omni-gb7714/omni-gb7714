@@ -58,7 +58,11 @@
 
   let _emph(x) = emphasis.apply(x, title-spec)
   let _mark = mark-medium.mark(entry)
-  if is-component-part { _emph(title) + mark-block }
+  if is-component-part {
+
+    let scale = if version == 2025 and _mark == "CM" { punct.field-text(entry, "scale") } else { none }
+    if scale != none { [#_emph(title)#p("period") #scale#mark-block] } else { _emph(title) + mark-block }
+  }
 
   else if preprint { _emph(title) + mark-block }
 

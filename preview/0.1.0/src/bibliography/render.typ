@@ -132,7 +132,17 @@
 }
 
 #let render-entries(filtered, opts) = {
-  let (bib-data, _emit-entry, _emit-entry-author-date, _plabel, _get-related, _disambiguation, _active-list, eff-bib-style, eff-suffixes, eff-numeric-date-suffix, eff-numbering-style, eff-show-related, eff-show-url, eff-show-annotation, eff-show-end-period, eff-custom-drivers, eff-version, eff-punct-style, eff-custom-punct, eff-hyphenate, eff-entry-hanging-indent, eff-entry-first-line-indent, eff-number-gutter, eff-number-width, eff-back-ref, eff-number-placement, _column-mode, _margin-mode, list-label, number-offset, lbl-align, related-indent, eff-creator-idem) = opts
+  let (bib-data, _emit-entry, _emit-entry-author-date, _plabel, _get-related, _disambiguation, _active-list, eff-bib-style, eff-suffixes, eff-numeric-date-suffix, eff-numbering-style, eff-show-related, eff-show-url, eff-show-annotation, eff-show-end-period, eff-custom-drivers, eff-version, eff-punct-style, eff-custom-punct, eff-hyphenate, eff-entry-hanging-indent, eff-entry-first-line-indent, eff-number-gutter, eff-number-width, eff-back-ref, eff-number-placement, _column-mode, _margin-mode, list-label, number-offset, lbl-align, related-indent, eff-creator-idem, eff-entry-localized-glyphs) = opts
+
+  let _wrap-lang(lang, body) = {
+    let on = if eff-entry-localized-glyphs == false { false }
+      else if eff-entry-localized-glyphs == true { true }
+      else if lang not in ("zh", "ja", "ko") { true }
+      else { eff-version != 2005 }
+    if not on { body }
+    else if lang not in ("zh", "ja", "ko") { text(lang: lang, hyphenate: eff-hyphenate, body) }
+    else { text(lang: lang, body) }
+  }
 
   let _period-on(single-block) = if eff-show-end-period == auto { not single-block } else { eff-show-end-period }
 
@@ -168,7 +178,7 @@
       let members = member-keys.map(m => bib-data.at(m, default: none)).filter(e => e != none and e.entry_type not in _SPECIAL-ENTRY-TYPES)
       if members.len() == 0 { continue }
       let _member-lang = language.get(members.first())
-      let _wrap-member(b) = if _member-lang not in ("zh", "ja", "ko") { text(lang: _member-lang, hyphenate: eff-hyphenate, b) } else { b }
+      let _wrap-member(b) = _wrap-lang(_member-lang, b)
       let _render-member(member-entry) = {
         let annotation-tail-flag = annotation-tail(member-entry, show-annotation: eff-show-annotation)
         let (member-body, member-single) = if eff-bib-style == "author-date" {
@@ -217,7 +227,7 @@
     let entry-label-tag = emit-label(key, list-label: list-label)
 
     let _entry-lang = language.get(entry)
-    let _wrap(body) = if _entry-lang not in ("zh", "ja", "ko") { text(lang: _entry-lang, hyphenate: eff-hyphenate, body) } else { body }
+    let _wrap(body) = _wrap-lang(_entry-lang, body)
 
     let _is-author-date-entry = eff-bib-style == "author-date"
     let _emit(target-entry, suffix-key, creator-override: none) = if _is-author-date-entry {

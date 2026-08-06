@@ -97,7 +97,7 @@
       }
 
       let _short-body(entry, supplement, with-end-period: true) = {
-        let author = creators.principal(entry, et-al-min: _global-config.et-al-min, et-al-use-first: _global-config.et-al-use-first, show-anon: show-anon, show-et-al: show-et-al, name-style: _global-config.name-style, punct-style: eff-punct-style, custom-punct: eff-custom-punct, custom-terms: _global-config.custom-terms, name-suffix-separator: _global-config.name-suffix-separator, prefix-last: _global-config.prefix-last)
+        let author = creators.principal(entry, et-al-min: _global-config.et-al-min, et-al-use-first: _global-config.et-al-use-first, show-anon: show-anon, show-et-al: show-et-al, name-style: _global-config.name-style, punct-style: eff-punct-style, custom-punct: eff-custom-punct, custom-terms: _global-config.custom-terms, name-suffix-separator: _global-config.name-suffix-separator, prefix-last: _global-config.prefix-last, version: version)
 
         let short-title = titles.format(entry, show-mark: (if show-mark == auto { true } else { show-mark }), show-medium: show-medium, show-url: false, space-before-mark: space-before-mark, hyperlink-title: false, correct-punct: correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, version: _global-config.version, volume-title-gutter: _global-config.volume-title-gutter)
 

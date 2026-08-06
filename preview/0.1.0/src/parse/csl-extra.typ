@@ -21,10 +21,23 @@
 
 #let _split-line(line, pid-map: (:), entry-type: none) = {
   let bounds = ()
+  let _known(v) = csl-map.classify(v, entry-type: entry-type).kind != "unknown" or v in pid-map
   for m in line.matches(regex("(?:^|\\s)([A-Za-z][A-Za-z _-]*?)\\s*:")) {
-    let norm = _normalize-label(m.captures.at(0))
-    if csl-map.classify(norm, entry-type: entry-type).kind != "unknown" or norm in pid-map {
+    let raw = m.captures.at(0)
+    let norm = _normalize-label(raw)
+    if _known(norm) {
       bounds.push((mstart: m.start, vstart: m.end, var: norm))
+    } else {
+
+      let words = raw.split(" ")
+      for tl in range(1, words.len()) {
+        let tail = words.slice(words.len() - tl).join(" ")
+        let tnorm = _normalize-label(tail)
+        if _known(tnorm) {
+          bounds.push((mstart: m.end - 1 - tail.len(), vstart: m.end, var: tnorm))
+          break
+        }
+      }
     }
   }
   if bounds.len() == 0 { return (prefix: line, recognized: ()) }
@@ -94,6 +107,8 @@
           continue
         }
         let route = csl-map.classify(var, entry-type: entry.entry_type)
+
+        if route.kind == "drop" { continue }
 
         let target = if route.kind == "lang" { "langid" } else if route.kind == "pmid" { "eprint" } else if route.kind == "container" { csl-map.container-field(entry.entry_type) } else { route.key }
         let occupied = if route.kind == "name" { target in real-name-roles } else if route.kind == "date" { target in real-date-keys or target in real-fields } else { target in real-fields }

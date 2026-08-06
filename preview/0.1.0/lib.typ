@@ -195,6 +195,8 @@
   page-range-style:    none,
   /// 参考文献表内允许西文断字
   hyphenate:           true,
+  /// 每条按条目语种设 text(lang:)：非 CJK 连字、CJK 走 locl 本地化字形；auto=非 CJK 恒开/CJK 仅 2025，true 全开，false 全关
+  entry-localized-glyphs:   auto,
   /// 重复引用的脚注内容物（首次恒完整著录）：auto = "number"（同③，官方梯子）/ "full" 重复著录 / "shortened" 缩略 / "reuse" 复用首注号
   footnote-repeat-style:     auto,
   /// 紧邻重复是否简化为「同上」：auto = true（官方梯子）/ false 紧邻同隔开一样取 footnote-repeat-style
@@ -290,7 +292,7 @@
     titles-text-case: titles-text-case, emphasis: emphasis,
     period-after-creator: period-after-creator, show-end-period: show-end-period,
     space-before-mark: space-before-mark, space-before-pages: space-before-pages,
-    page-range-separator: page-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, footnote-numbering-use-quan: footnote-numbering-use-quan,
+    page-range-separator: page-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, entry-localized-glyphs: entry-localized-glyphs, footnote-numbering-use-quan: footnote-numbering-use-quan,
     footnote-repeat-style: footnote-repeat-style, footnote-ibid: footnote-ibid, footnote-repeat-reset: footnote-repeat-reset,
     custom-marks: custom-marks, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, custom-languages: custom-languages, warn-missing-title: warn-missing-title,
   )
@@ -532,6 +534,8 @@
   hyperlink-title:     auto,
   /// 西文断字；auto 跟随全局
   hyphenate:           auto,
+  /// 每条按条目语种设 text(lang:)（连字 + CJK locl 字形）；auto 跟随全局
+  entry-localized-glyphs:   auto,
   /// 条目间距；auto 跟随全局
   entry-spacing:            auto,
   /// 编号与正文之间的列间距（「编号后那道间隔」）；auto 跟随全局
@@ -890,6 +894,7 @@
     hyperlink: hyperlink,
     hyperlink-title: hyperlink-title,
     hyphenate: hyphenate,
+    entry-localized-glyphs: entry-localized-glyphs,
     entry-spacing: entry-spacing,
     number-gutter: number-gutter,
     numbering-style: numbering-style,

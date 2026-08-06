@@ -7,7 +7,7 @@
 #import "../elements/imprint/date.typ" as publication-date
 #import "../parse/field.typ"
 
-#let author-short(entry, cite-et-al-min: 2, cite-et-al-use-first: 1, cite-et-al-use-last: 0, name-style: (:), first-name-style: none, no-etal: false, terms-lang: "by-entry", document-lang: "en", sort-use-prefix: false, name-separator: ", ", name-suffix-separator: auto, custom-terms: (:), punct-style: "half-with-space") = {
+#let author-short(entry, cite-et-al-min: 2, cite-et-al-use-first: 1, cite-et-al-use-last: 0, name-style: (:), first-name-style: none, no-etal: false, terms-lang: "by-entry", document-lang: "en", sort-use-prefix: false, name-separator: ", ", name-suffix-separator: auto, custom-terms: (:), punct-style: "half-with-space", version: 2025) = {
 
   let name-list = creators.principal-names(entry).names
   if name-list.len() == 0 { return none }
@@ -43,7 +43,7 @@
   if needs-etal {
 
     let lang = terms.cite-term-lang(terms-lang, "et-al", entry, document-lang)
-    let et-al-word = terms.etal-for(lang, custom-terms: custom-terms)
+    let et-al-word = terms.etal-for(lang, custom-terms: custom-terms, version: version)
 
     let etal = if bare-etal { et-al-word }
       else if lang == "ru" { " " + et-al-word }

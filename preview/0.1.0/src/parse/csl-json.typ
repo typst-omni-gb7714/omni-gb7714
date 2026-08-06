@@ -31,6 +31,11 @@
     fields.insert(csl-map.container-field(entry-type), csl-map.escape-text(container))
   }
 
+  let archive = item.at("archive", default: none)
+  if archive != none and str(archive).trim() != "" and entry-type in ("letter", "legislation") and "institution" not in fields {
+    fields.insert("institution", csl-map.escape-text(archive))
+  }
+
   let issue = item.at("issue", default: none)
   if issue != none and str(issue).trim() != "" { fields.insert("issue", str(issue)) }
   let number = item.at("number", default: none)

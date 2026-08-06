@@ -15,7 +15,7 @@
     if entry-type not in ("proceedings", "mvproceedings", "book", "collection", "mvbook", "mvcollection") { return "component-part" }
   }
 
-  if _mark == "CM" and field.alias(entry, "journaltitle", "journal") != none { return "component-part" }
+  if _mark == "CM" and (field.get(entry, "booktitle") != none or field.alias(entry, "journaltitle", "journal") != none) { return "component-part" }
 
   if _mark == "N" { return "serial-newspaper" }
 

@@ -50,13 +50,13 @@
 
 #let no-date(entry, custom-terms: (:)) = no-date-for(language.get(entry), custom-terms: custom-terms)
 
-#let etal-for(lang, custom-terms: (:)) = _term(custom-terms, "et-al", lang, (zh: "等", ja: "他", ko: "외", ru: "и др").at(lang, default: "et al."))
+#let etal-for(lang, custom-terms: (:), version: 2025) = _term(custom-terms, "et-al", lang, (zh: "等", ja: "他", ko: "외", ru: "и др").at(lang, default: if version == 2005 { "et al" } else { "et al." }))
 
-#let etal(entry, custom-terms: (:)) = etal-for(if entry != none { language.get(entry) } else { "en" }, custom-terms: custom-terms)
+#let etal(entry, custom-terms: (:), version: 2025) = etal-for(if entry != none { language.get(entry) } else { "en" }, custom-terms: custom-terms, version: version)
 
 #let role(entry, role, truncated, comma, bare-etal: false, custom-terms: (:), et-al-translator-separator: auto, version: 2025) = {
   let lang = language.get(entry)
-  let et-al-word = etal(entry, custom-terms: custom-terms)
+  let et-al-word = etal(entry, custom-terms: custom-terms, version: version)
 
   let lead(gutter) = if bare-etal { "" } else { gutter }
   let role-word = if role == "ed" {

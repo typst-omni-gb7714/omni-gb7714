@@ -44,7 +44,7 @@
 )
 #let map-type(csl-type) = TYPE-MAP.at(lower(str(csl-type)), default: "misc")
 
-#let CONTAINER-AS-BOOKTITLE = ("incollection", "inproceedings", "inbook", "inreference")
+#let CONTAINER-AS-BOOKTITLE = ("incollection", "inproceedings", "inbook", "inreference", "map")
 
 #let container-field(entry-type) = if entry-type in CONTAINER-AS-BOOKTITLE { "booktitle" } else { "journaltitle" }
 
@@ -61,6 +61,8 @@
 
 #let escape-text(s) = {
   let t = str(s)
+
+  t = t.replace("---", "\u{2014}").replace("--", "\u{2013}")
   t = t.replace("\\", _SBS)
   t = t.replace("$", _SD).replace("~", _ST)
   t = t.replace("&", _SAMP).replace("_", _SUND).replace("#", _SHSH).replace("%", _SPCT).replace("^", _SCIRC)
@@ -217,6 +219,7 @@
   "meeting-name": "event-title", "meetingname": "event-title",
   "conference-name": "event-title", "conferencename": "event-title",
   "publication-title": "container-title", "publicationtitle": "container-title",
+  "book-title": "container-title", "booktitle": "container-title",
   "version-number": "version", "versionnumber": "version",
   "callnumber": "call-number",
 
@@ -231,6 +234,28 @@
 
 #let _ARTICLE-LIKE-TYPES = ("article", "newspaper")
 
+#let _CSL-VARS = (
+
+  "author", "chair", "collection-editor", "compiler", "composer", "container-author", "contributor",
+  "curator", "director", "editor", "editor-translator", "editorial-director", "executive-producer",
+  "guest", "host", "illustrator", "interviewer", "narrator", "organizer", "original-author",
+  "performer", "producer", "recipient", "reviewed-author", "script-writer", "series-creator", "translator",
+
+  "accessed", "available-date", "event-date", "issued", "original-date", "submitted",
+
+  "abstract", "annote", "archive", "archive-collection", "archive-location", "archive-place",
+  "authority", "call-number", "chapter-number", "citation-key", "citation-label", "citation-number",
+  "collection-number", "collection-title", "collection-title-short", "container-title",
+  "container-title-short", "dimensions", "division", "DOI", "edition", "event", "event-title",
+  "event-place", "first-reference-note-number", "genre", "ISBN", "ISSN", "jurisdiction", "keyword",
+  "language", "license", "medium", "note", "number", "number-of-pages", "number-of-volumes",
+  "original-publisher", "original-publisher-place", "original-title", "page", "page-first",
+  "part-number", "part-title", "PMCID", "PMID", "printing-number", "publisher", "publisher-place",
+  "references", "reviewed-genre", "reviewed-title", "scale", "section", "source", "status",
+  "supplement-number", "title", "title-short", "URL", "version", "volume", "volume-title",
+  "volume-title-short", "year-suffix",
+)
+
 #let classify(raw-var, entry-type: none) = {
   let csl-var = _LABEL-ALIAS.at(raw-var, default: raw-var)
   if csl-var in NAME-ROLES { return (kind: "name", key: NAME-ROLES.at(csl-var)) }
@@ -243,9 +268,11 @@
     return (kind: "raw", key: if entry-type in _ARTICLE-LIKE-TYPES { "eid" } else { "number" })
   }
 
-  if csl-var == "jurisdiction" { if entry-type == "patent" { return (kind: "text", key: "location") } else { return (kind: "unknown", key: none) } }
+  if csl-var == "jurisdiction" and entry-type == "patent" { return (kind: "text", key: "location") }
   if csl-var == "language" { return (kind: "lang", key: "langid") }
   if csl-var == "PMID" { return (kind: "pmid", key: "eprint") }
   if csl-var == "container-title" { return (kind: "container", key: none) }
+
+  if csl-var in _CSL-VARS { return (kind: "drop", key: none) }
   (kind: "unknown", key: none)
 }

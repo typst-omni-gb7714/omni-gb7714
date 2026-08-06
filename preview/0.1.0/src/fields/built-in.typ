@@ -53,14 +53,14 @@
     if creator-override != none { return creator-override }
 
     let roles = creators.default-roles(entry, component-part: category.get(entry, version: opts.version) == "component-part")
-    return creators.principal(entry, show-anon: opts.show-anon, roles: roles, ..name-options)
+    return creators.principal(entry, show-anon: opts.show-anon, roles: roles, version: opts.version, ..name-options)
   }
   if name == "editor-other" {
     let raw-author = entry.parsed_names.at("author", default: ())
     let raw-editor = entry.parsed_names.at("editor", default: ())
     if raw-author.len() == 0 { return none }
     if opts.dedup-author-editor and raw-author == raw-editor { return none }
-    return creators.other-editor(entry, ..name-options)
+    return creators.other-editor(entry, ..name-options, version: opts.version)
   }
   if name == "translator" {
     let raw-author = entry.parsed_names.at("author", default: ())
@@ -70,7 +70,7 @@
   }
   if name in ("author", "editor", "bookauthor", "holder") {
 
-    return creators.format(entry.parsed_names, role: name, et-al-role: creators.et-al-role-of-field.at(name, default: "principal"), entry: entry, ..name-options)
+    return creators.format(entry.parsed_names, role: name, et-al-role: creators.et-al-role-of-field.at(name, default: "principal"), entry: entry, version: opts.version, ..name-options)
   }
 
   if name == "title" { return punct.field-text(entry, "title", correct-punct: opts.correct-punct, punct-style: opts.punct-style) }
