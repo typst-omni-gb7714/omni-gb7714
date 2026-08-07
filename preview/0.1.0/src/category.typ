@@ -4,6 +4,8 @@
 
 #let is-platform-form(entry, version: 2015) = version == 2025 and mark-medium.mark(entry) in ("EB", "CP", "DS", "PP")
 
+#let lacks-imprint-slot(entry) = mark-medium.mark(entry) in ("A", "D", "S", "EB", "DB", "CP", "DS", "PP")
+
 #let get(entry, version: 2015) = {
   let entry-type = entry.entry_type
   let _mark = mark-medium.mark(entry)

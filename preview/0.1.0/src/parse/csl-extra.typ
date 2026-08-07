@@ -40,9 +40,13 @@
       }
     }
   }
+
+  bounds += line.matches(regex("10\\.\\d{4,}/\\S+")).map(m => (mstart: m.start, vstart: m.start, var: "__bare-doi-drop"))
   if bounds.len() == 0 { return (prefix: line, recognized: ()) }
+  bounds = bounds.sorted(key: b => b.mstart)
   let recognized = ()
   for (i, b) in bounds.enumerate() {
+    if b.var == "__bare-doi-drop" { continue }
     let vend = if i + 1 < bounds.len() { bounds.at(i + 1).mstart } else { line.len() }
     recognized.push((b.var, line.slice(b.vstart, vend).trim()))
   }
@@ -90,12 +94,14 @@
     fields.insert(src-key, src.replace(regex("(?is)\\s*\\btex\\.[a-z0-9_]+\\s*:.*"), ""))
   }
 
+  let effective-type = if override-type != none { override-type } else { entry.entry_type }
+
   for src-key in ("note", "annotation") {
     let src = fields.at(src-key, default: none)
     if src == none or type(src) != str { continue }
     let kept = ()
     for line in src.split("\n") {
-      let (prefix, recognized) = _split-line(line, pid-map: pid-map, entry-type: entry.entry_type)
+      let (prefix, recognized) = _split-line(line, pid-map: pid-map, entry-type: effective-type)
       if recognized.len() == 0 { kept.push(line); continue }
       if prefix.trim() != "" { kept.push(prefix) }
       for (var, value) in recognized {
@@ -106,11 +112,11 @@
           if target not in real-fields { fields.insert(target, value) }
           continue
         }
-        let route = csl-map.classify(var, entry-type: entry.entry_type)
+        let route = csl-map.classify(var, entry-type: effective-type)
 
         if route.kind == "drop" { continue }
 
-        let target = if route.kind == "lang" { "langid" } else if route.kind == "pmid" { "eprint" } else if route.kind == "container" { csl-map.container-field(entry.entry_type) } else { route.key }
+        let target = if route.kind == "lang" { "langid" } else if route.kind == "pmid" { "eprint" } else if route.kind == "container" { csl-map.container-field(effective-type) } else { route.key }
         let occupied = if route.kind == "name" { target in real-name-roles } else if route.kind == "date" { target in real-date-keys or target in real-fields } else { target in real-fields }
         if occupied { continue }
 
@@ -141,6 +147,8 @@
     if leftover == "" { let _ = fields.remove(src-key, default: none) } else { fields.insert(src-key, esc(leftover)) }
   }
   let _ = fields.remove("_omni-note-raw", default: none)
+
+  fields = csl-map.swap-volume-title(fields)
 
   let e = entry
   if override-type != none {

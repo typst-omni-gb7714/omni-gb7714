@@ -71,7 +71,10 @@
 
     if base in ("A", "DS", "CM") { "Z" } else if base == "Z" { "M" } else { base }
   } else if version == 2025 {
-    if rawtype == "unpublished" { "A" } else { base }
+
+    if rawtype == "unpublished" { "A" }
+    else if rawtype == "incollection" { "M" }
+    else { base }
   } else { base }
 }
 
@@ -611,20 +614,33 @@
     /// - `auto`（默认）：普通词间空格；
     /// - 长度（如 `1em`）：固定横向间距。\
     /// 也接受原样传入的 content / 字符串。|
-  show-sine-loco:      false,    /// <- `boolean`
-    /// `.bib` 里*没有*出版地字段时的处理：\
-    /// - `false`（默认）：留空；
-    /// - `true`：补「[S.l.] / 出版地不详」占位（GB/T 7714 严格著录，占位词随条目语言）。\
-    /// 自己在 `.bib` 里写了 `location = {[S.l.]}` 的，两档都*原样著录*——那是你按标准著录好的
-    /// 数据，本参数只管「字段真的没有时替不替你补」，不改写你写下的字段文本。\
-    /// 手册、档案、学位论文（标识码 A、D、S）与联机电子资源不补占位：GB/T 7714—2025 §7.5.2.3
-    /// 末句「无出版地的电子资源可省略此项」。|
-  show-sine-nomine:    false,    /// <- `boolean`
-    /// `.bib` 里*没有*出版者字段时的处理：\
-    /// - `false`（默认）：留空；
-    /// - `true`：补「[s.n.] / 出版者不详」占位（GB/T 7714 严格著录，占位词随条目语言）。\
-    /// 与 `show-sine-loco` 同规：自己写了 `publisher = {[s.n.]}` 就原样著录；两项都缺且都要补时，
-    /// 合并成一对方括号「[S.l.: s.n.]」。|
+  show-sine-loco:      auto,    /// <- `auto` | `boolean`
+    /// `.bib` 里*没有*出版地字段时，要不要补「[S.l.] / 出版地不详」占位：\
+    /// - `auto`（默认）：*条件补白*——出版地缺、且*出版者在场*时补（凑齐「地：者」一对）；两项都缺则不补
+    ///   （空占位是噪声）。但两种情形 `auto` 下*不*补（下详）；
+    /// - `true`：出版地一缺就补（GB/T 7714 严格著录，占位词随条目语言）；
+    /// - `false`：从不补，留空。\
+    /// *`auto` 的两个不补例外*（仅当条目是「出版信息片段」——无责任者、无题名——时生效；有题名或责任者的
+    /// 完整著录不受影响，如 §8.2.2:7 联机图书仍补 `[S.l.]`）：\
+    /// - *电子资源*（有 `url`）：GB/T 7714—2025 §7.5.2.3 末句「无出版地的电子资源可省略此项」
+    ///   （§7.5.2.3:3「Open University Press, 2025. https://…」）；\
+    /// - *无出版日期的裸元素*（只一个出版地或出版者、无 `date`）：§7.5.2.1 出版地元素示例
+    ///   （「Cambridge, Eng.」单独著录、不补出版者）。\
+    /// 有出版日期的非电子片段（§7.5.2.3:1「[出版地不详]: 三户图书刊行社, 1990」）仍照补。\
+    /// 自己在 `.bib` 里写了 `location = {[S.l.]}` 的，各档都*原样著录*——本参数只管「字段真的没有时替不替
+    /// 你补」，不改写你写下的字段文本。\
+    /// 手册、档案、学位论文（标识码 A、D、S）与电子原生类（EB / DB / CP / DS / PP、[Z/OL]）*任何档*都不补
+    /// ——这些类型本无「出版地: 出版者」槽。|
+  show-sine-nomine:    auto,    /// <- `auto` | `boolean`
+    /// `.bib` 里*没有*出版者字段时，要不要补「[s.n.] / 出版者不详」占位。规则与 `show-sine-loco` 完全对称
+    /// （出版地 ↔ 出版者互换）：\
+    /// - `auto`（默认）：出版者缺、且*出版地在场*时补；两项都缺则不补；同样有「电子资源片段」「无出版日期
+    ///   裸元素」两个不补例外（见 `show-sine-loco`），完整著录与有出版日期的非电子片段照补
+    ///   （§7.5.3.3:1「哈尔滨: [出版者不详], 2013」补、§7.5.3.1「中国标准出版社」单列不补）；\
+    /// - `true`：出版者一缺就补；\
+    /// - `false`：从不补。\
+    /// 自己写了 `publisher = {[s.n.]}` 就原样著录。出版地、出版者*都缺且都补*时，合并进*同一对*方括号
+    /// 「[S.l.: s.n.]」（`auto` 两缺不补、`true` 才出这一对）。|
   show-sine-anno:      false,    /// <- `boolean`
     /// 出版信息里*没有出版年*时，要不要在出版年位补占位（`北京: 某社, [出版年不详]`）。\
     /// - `false`（默认）：留空；
@@ -637,7 +653,7 @@
     /// `s.n.`），第三项在国标体系内类推拉丁才自洽。\
     /// *只对顺序编码制有意义*：著者-出版年制把出版年移到责任者后（§8.1），著录位本来就没有年——
     /// 那一侧的占位归 #arg-ref("gb7714", "show-no-date")[`show-no-date`] 管（缺省就是开的）。两个参数管两个槽，不重叠。\
-    /// 与 #arg-ref("gb7714", "show-sine-loco")[`show-sine-loco`] 同规：手册、档案、学位论文（标识码 A、D、S）与联机电子资源不补。\
+    /// 手册、档案、学位论文（标识码 A、D、S）与电子原生类（EB / DB / CP / DS / PP、[Z/OL]）不补——本无出版信息槽（同 #arg-ref("gb7714", "show-sine-loco")[`show-sine-loco`] 的类型跳过）。\
     /// 出版地、出版者、出版年*都缺且都补*时，合并进*同一对*方括号：`[出版地不详: 出版者不详, 出版年不详]`；地或者在场打断连续时，日期自成一对（`北京: 某社, [出版年不详]`）。|
   show-degree:         false,     /// <- `boolean`
     /// 学位论文条目是否附加学位级别注记（仅文献类型标识为 D 的条目生效）。\
@@ -1188,35 +1204,18 @@
     bib-data = _base-patched
   }
 
-  if version == 2025 {
-    let _ver-type-overrides = (unpublished: "A")
+  if version == 2025 or version == 2005 {
     let _patched-ver = (:)
     for (k, e) in bib-data {
-      let type-override = _ver-type-overrides.at(e.entry_type, default: none)
-      if type-override != none {
-        let new-fields = e.fields; new-fields.insert("_omni-mark-override", type-override)
+      let base = mark-medium.mark(e)
+      let new-mark = if e.entry_type != "preprint" { _version-mark(base, e.entry_type, version) } else { base }
+      if new-mark != base {
+        let new-fields = e.fields; new-fields.insert("_omni-mark-override", new-mark)
         let new-entry = e; new-entry.fields = new-fields
         _patched-ver.insert(k, new-entry)
       } else { _patched-ver.insert(k, e) }
     }
     bib-data = _patched-ver
-  }
-
-  if version == 2005 {
-    let _patched-05 = (:)
-    for (k, e) in bib-data {
-
-      let remap = if e.entry_type != "preprint" {
-        let current-mark = mark-medium.mark(e)
-        if current-mark in ("A", "DS", "CM") { "Z" } else if current-mark == "Z" { "M" } else { none }
-      } else { none }
-      if remap != none {
-        let new-fields = e.fields; new-fields.insert("_omni-mark-override", remap)
-        let new-entry = e; new-entry.fields = new-fields
-        _patched-05.insert(k, new-entry)
-      } else { _patched-05.insert(k, e) }
-    }
-    bib-data = _patched-05
   }
 
   let _has-no-explicit-mark(e) = {

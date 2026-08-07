@@ -2,6 +2,7 @@
 #import "../../terms/built-in.typ" as terms
 #import "../../punct/built-in.typ" as punct
 #import "../mark-medium/built-in.typ" as mark-medium
+#import "../../category.typ"
 #import "location.typ": location
 #import "publisher.typ": publisher, platform
 #import "date.typ" as publication-date
@@ -30,7 +31,13 @@
   else { none }
 }
 
-#let format(entry, show-sine-loco: true, show-sine-nomine: true, show-sine-anno: false, skip-date: false, date-suffix: "", use-full-date: false, date-override: auto, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), version: 2015) = {
+#let _imprint-fragment(entry) = {
+  let empty(..names) = names.pos().all(n => field.get(entry, n) == none)
+  (empty("author", "editor", "translator")
+    and empty("title", "journaltitle", "maintitle", "booktitle", "issuetitle", "number"))
+}
+
+#let format(entry, show-sine-loco: auto, show-sine-nomine: auto, show-sine-anno: false, skip-date: false, date-suffix: "", use-full-date: false, date-override: auto, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), version: 2015) = {
   let p = name => punct.get(name, entry, punct-style, custom-punct)
   let _mark-early = mark-medium.mark(entry)
 
@@ -58,8 +65,8 @@
 
   if year != none and date-suffix != "" { year = publication-date.with-suffix(year, date-suffix) }
 
-  let _mark = mark-medium.mark(entry)
-  let skip-placeholder-by-type = _mark in ("A", "D", "S") or field.has-online(entry)
+  let _mark = _mark-early
+  let skip-placeholder-by-type = category.lacks-imprint-slot(entry) or (_mark == "Z" and field.has-online(entry))
 
   if not skip-placeholder-by-type {
     let _sine-loco = terms.sine-loco(entry, custom-terms: custom-terms)
@@ -67,8 +74,12 @@
 
     let _date-supplied = show-sine-anno and year == none and not skip-date
     let _sine-anno-word = if _date-supplied { terms.sine-anno(entry, custom-terms: custom-terms) } else { none }
-    let need-sine-loco = location-value == none and show-sine-loco
-    let need-sine-nomine = publisher-value == none and show-sine-nomine
+
+    let _has-date = field.get(entry, "date") != none or field.get(entry, "year") != none
+    let _fragment-no-fill = _imprint-fragment(entry) and (field.has-online(entry) or not _has-date)
+    let need = (missing, show-value, other) => missing == none and (show-value == true or (show-value == auto and other != none and not _fragment-no-fill))
+    let need-sine-loco = need(location-value, show-sine-loco, publisher-value)
+    let need-sine-nomine = need(publisher-value, show-sine-nomine, location-value)
     if need-sine-loco and need-sine-nomine {
 
       if _date-supplied {

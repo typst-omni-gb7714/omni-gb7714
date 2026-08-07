@@ -132,10 +132,10 @@
   show-patent-country: false,
   /// 多卷书卷号与分卷名之间的间距 gutter：auto（普通词间空格，对齐官方 CSL）/ 长度（如 1em = 李泽平 \quad 宽间距）
   volume-title-gutter: auto,
-  /// 缺出版地时补 [S.l.] / 出版地不详 占位（sine loco）。默认 false=留空(对齐原生)；true=补占位(GB 严格著录)
-  show-sine-loco:      false,
-  /// 缺出版者时补 [s.n.] / 出版者不详 占位（sine nomine）。默认 false=留空(对齐原生)；true=补占位(GB 严格著录)
-  show-sine-nomine:    false,
+  /// 缺出版地时补 [S.l.] / 出版地不详 占位（sine loco）。默认 auto=条件补白(出版者在场才补)；true=一缺就补(GB 严格著录)；false=留空
+  show-sine-loco:      auto,
+  /// 缺出版者时补 [s.n.] / 出版者不详 占位（sine nomine）。默认 auto=条件补白(出版地在场才补)；true=一缺就补(GB 严格著录)；false=留空
+  show-sine-nomine:    auto,
   /// 出版年缺失时是否补占位（[s.a.] / 日期不详）：GB 没规定这一项，是方言样式的需求，默认关；只对顺序编码制有意义
   show-sine-anno:      false,
   /// 学位论文在 [D] 后附加「硕士学位论文 / 博士学位论文」注记

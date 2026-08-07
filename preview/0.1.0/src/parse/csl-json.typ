@@ -21,6 +21,12 @@
     fields.insert("_omni-note-raw", true)
   }
 
+  let volume-title = item.at("volume-title", default: none)
+  if volume-title != none and str(volume-title).trim() != "" {
+    fields.insert("volume-title", csl-map.escape-text(volume-title))
+    fields = csl-map.swap-volume-title(fields)
+  }
+
   for (csl-key, bib-key) in csl-map.RAW-FIELDS {
     let v = item.at(csl-key, default: none)
     if v != none and str(v).trim() != "" { fields.insert(bib-key, str(v)) }
@@ -31,9 +37,14 @@
     fields.insert(csl-map.container-field(entry-type), csl-map.escape-text(container))
   }
 
+  let _archival = entry-type in ("archive", "letter", "legislation")
   let archive = item.at("archive", default: none)
-  if archive != none and str(archive).trim() != "" and entry-type in ("letter", "legislation") and "institution" not in fields {
+  if archive != none and str(archive).trim() != "" and _archival and "institution" not in fields {
     fields.insert("institution", csl-map.escape-text(archive))
+  }
+  let archive-place = item.at("archive-place", default: none)
+  if archive-place != none and str(archive-place).trim() != "" and _archival and "location" not in fields {
+    fields.insert("location", csl-map.escape-text(archive-place))
   }
 
   let issue = item.at("issue", default: none)
@@ -146,7 +157,7 @@
     let real-type = csl-map.map-type(csl-type)
     let etype = if real-type in _NATIVE-SAFE-TYPES { real-type } else { "misc" }
     let lines = ()
-    lines += _bib-line("title", item.at("title", default: none))
+
     for (csl-role, bib-role) in csl-map.NAME-ROLES {
       let arr = item.at(csl-role, default: none)
       if type(arr) == array and arr.len() > 0 { lines.push("  " + bib-role + " = {" + arr.map(_name-bibtex).join(" and ") + "}") }

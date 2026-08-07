@@ -20,6 +20,13 @@
     if t != "" { t += " " }
     t += str(title)
   }
+
+  if t == "" {
+    for f in ("location", "address", "publisher", "institution", "organization", "school") {
+      let v = field.get(entry, f)
+      if v != none { t += str(v) }
+    }
+  }
   t
 }
 

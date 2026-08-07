@@ -21,7 +21,8 @@
   "dataset": "dataset",
   "software": "software",
   "standard": "standard",
-  "manuscript": "unpublished",
+
+  "manuscript": "archive",
   "entry": "inreference",
   "entry-dictionary": "inreference",
   "entry-encyclopedia": "inreference",
@@ -269,10 +270,24 @@
   }
 
   if csl-var == "jurisdiction" and entry-type == "patent" { return (kind: "text", key: "location") }
+
+  if csl-var == "archive" and entry-type in ("archive", "letter", "legislation") { return (kind: "text", key: "institution") }
+  if csl-var == "archive-place" and entry-type in ("archive", "letter", "legislation") { return (kind: "text", key: "location") }
   if csl-var == "language" { return (kind: "lang", key: "langid") }
   if csl-var == "PMID" { return (kind: "pmid", key: "eprint") }
   if csl-var == "container-title" { return (kind: "container", key: none) }
 
+  if csl-var == "volume-title" { return (kind: "text", key: "volume-title") }
+
   if csl-var in _CSL-VARS { return (kind: "drop", key: none) }
   (kind: "unknown", key: none)
+}
+
+#let swap-volume-title(fields) = {
+  let volume-title = fields.at("volume-title", default: none)
+  if volume-title == none or str(volume-title).trim() == "" { return fields }
+  if "title" in fields and "maintitle" not in fields { fields.insert("maintitle", fields.at("title")) }
+  fields.insert("title", volume-title)
+  let _ = fields.remove("volume-title")
+  fields
 }

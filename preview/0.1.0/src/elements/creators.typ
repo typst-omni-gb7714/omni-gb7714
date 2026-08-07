@@ -1,11 +1,14 @@
 #import "../sentinel.typ": *
 #import "../errors.typ"
 #import "../parse/lang-detect.typ" as language
+#import "../parse/pinyin.typ" as pinyin
 #import "../terms/built-in.typ" as terms
 #import "../punct/built-in.typ" as punct
 #import "mark-medium/built-in.typ" as mark-medium
 #import "../parse/latex.typ"
 #import "../parse/field.typ"
+
+#let _TEX-DROP-PATTERNS = latex.TEX-DROP-ARG.map(sort-command => regex("\\\\" + sort-command + "\\s*\\{[^{}]*\\}"))
 
 #let _is-org(name) = {
   name.at("given", default: "") == "" and name.at("family", default: "").contains(" ")
@@ -40,6 +43,15 @@
       if "first" not in v or "rest" not in v { errors.raise("name-style.order-dict", param: param, got: repr(v)) }
       continue
     }
+
+    if key == "given-form" and std.type(v) == dictionary {
+      for (form-key, form-value) in v {
+        if form-key not in ("pinyin", "rest") or form-value not in (none, "initials", "full") {
+          errors.raise("name-style.bad-value", param: param, key: "given-form." + form-key, got: repr(form-value))
+        }
+      }
+      continue
+    }
     let bad = if key == "order" { v not in _ORDER-VALUES }
       else if key == "family-case" { v not in _FAMILY-CASE-VALUES }
       else if key == "given-form" { v not in _GIVEN-FORM-VALUES }
@@ -58,7 +70,12 @@
     family-case = if side == "cite" { none } else if version == 2025 { none } else { "uppercase" }
   }
   let given-form = dict.at("given-form", default: auto)
-  if given-form == auto { given-form = if side == "cite" { none } else { "initials" } }
+
+  if given-form == auto {
+    given-form = if side == "cite" { none }
+      else if version == 2025 { (pinyin: "full", rest: "initials") }
+      else { "initials" }
+  }
   let given-separator = dict.at("given-separator", default: auto)
   if given-separator == auto { given-separator = if version == 2025 { none } else { " " } }
 
@@ -91,9 +108,10 @@
     fragment = fragment.replace(_SD, "$")
     fragment = fragment.replace("~", "\u{00A0}")
 
-    for sort-command in latex.TEX-DROP-ARG {
-      let pattern = regex("\\\\" + sort-command + "\\s*\\{[^{}]*\\}")
-      while fragment.match(pattern) != none { fragment = fragment.replace(pattern, "") }
+    if "\\" in fragment {
+      for pattern in _TEX-DROP-PATTERNS {
+        while fragment.match(pattern) != none { fragment = fragment.replace(pattern, "") }
+      }
     }
     fragment = fragment.replace("``", "\u{201C}").replace("''", "\u{201D}")
     fragment = fragment.replace("`", "\u{2018}").replace("'", "\u{2019}")
@@ -122,9 +140,14 @@
       else { text-value }
     }
     let formatted-family = _apply-family-case(family)
-    let formatted-prefix = if prefix != "" { _apply-family-case(prefix) + " " } else { "" }
+
+    let formatted-prefix = if prefix != "" { _apply-family-case(prefix).replace(" ", "\u{00A0}") + "\u{00A0}" } else { "" }
 
     let given-form = style.at("given-form", default: "initials")
+    if type(given-form) == dictionary {
+      given-form = if pinyin.is-name-pinyin(name) { given-form.at("pinyin", default: "full") }
+        else { given-form.at("rest", default: "initials") }
+    }
     let given-case = style.at("given-case", default: none)
 
     let _entry-lang = if entry != none { language.get(entry) } else { none }
@@ -173,15 +196,17 @@
           else { s }
         })
       }
+
+      let _tie(separator) = if given-form == "initials" and separator == " " { "\u{00A0}" } else { separator }
       if given-separator == none {
 
         let rejoined = ""
         for (segment-index, s) in shaped.enumerate() {
           rejoined += s
-          if segment-index < connectors.len() { rejoined += connectors.at(segment-index) }
+          if segment-index < connectors.len() { rejoined += _tie(connectors.at(segment-index)) }
         }
         rejoined
-      } else { shaped.join(given-separator) }
+      } else { shaped.join(_tie(given-separator)) }
     }
 
     let formatted-given = if type(formatted-given) == str { formatted-given.trim(regex("\\s+"), at: end) } else { formatted-given }

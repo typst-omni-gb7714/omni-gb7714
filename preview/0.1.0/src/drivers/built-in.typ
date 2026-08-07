@@ -227,7 +227,12 @@
   let edition-part = edition.edition(entry, version: version, custom-terms: opts.at("custom-terms", default: (:)))
 
   let _conf-component-part = _mark == "C"
-  let imprint-block = imprint.format(entry, show-sine-loco: show-sine-loco and not _conf-component-part, show-sine-nomine: show-sine-nomine and not _conf-component-part, show-sine-anno: show-sine-anno and not _conf-component-part, skip-date: skip-date, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: version)
+
+  let off-when-component-part = show-value => if _conf-component-part { false } else { show-value }
+  let sine-loco = off-when-component-part(show-sine-loco)
+  let sine-nomine = off-when-component-part(show-sine-nomine)
+  let sine-anno = off-when-component-part(show-sine-anno)
+  let imprint-block = imprint.format(entry, show-sine-loco: sine-loco, show-sine-nomine: sine-nomine, show-sine-anno: sine-anno, skip-date: skip-date, punct-style: punct-style, custom-punct: custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: version)
   let pages-part = pages.pages(entry, page-range-separator: page-range-separator, page-range-style: opts.at("page-range-style", default: none), override: opts.at("pages-override", default: none), punct-style: punct-style, custom-punct: custom-punct); let urldate = date.urldate(entry, show-urldate: show-urldate, version: version)
   let access = _access(entry, opts)
   let host-title = booktitle
