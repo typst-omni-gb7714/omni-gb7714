@@ -40,7 +40,8 @@
   "musical_score": "misc",
   "pamphlet": "booklet",
   "periodical": "periodical",
-  "collection": "collection",
+
+  "collection": "archive",
   "document": "misc",
 )
 #let map-type(csl-type) = TYPE-MAP.at(lower(str(csl-type)), default: "misc")
@@ -273,6 +274,8 @@
 
   if csl-var == "archive" and entry-type in ("archive", "letter", "legislation") { return (kind: "text", key: "institution") }
   if csl-var == "archive-place" and entry-type in ("archive", "letter", "legislation") { return (kind: "text", key: "location") }
+
+  if csl-var in ("archive-location", "archive_location") and entry-type in ("archive", "letter", "legislation") { return (kind: "raw", key: "number") }
   if csl-var == "language" { return (kind: "lang", key: "langid") }
   if csl-var == "PMID" { return (kind: "pmid", key: "eprint") }
   if csl-var == "container-title" { return (kind: "container", key: none) }

@@ -114,7 +114,8 @@
   }
   if not dedup-url-pid { return true }
 
-  if lower(url-str).contains(lower(str(value))) { return false }
+  let dedup-value = if name == "eprint" and entry != none { custom-pid.strip-label-prefix(str(value), eprint-prefix(entry)) } else { str(value) }
+  if dedup-value != "" and lower(url-str).contains(lower(dedup-value)) { return false }
   true
 }
 

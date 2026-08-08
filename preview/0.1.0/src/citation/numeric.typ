@@ -1,4 +1,4 @@
-#let _collapse-runs(items) = {
+#let _compress-runs(items) = {
   let segments = ()
   let segment-start = none
   let segment-end = none
@@ -80,7 +80,7 @@
   } else {
     let use-super = eff-form == "super" or eff-form == "normal"
 
-    let segments = _collapse-runs(items)
+    let segments = _compress-runs(items)
 
     if supplement-mode == "split" {
 

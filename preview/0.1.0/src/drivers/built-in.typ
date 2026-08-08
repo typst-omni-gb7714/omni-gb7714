@@ -436,7 +436,7 @@
       if _platform-issued != none { date-block += p("lparen") + _platform-issued + p("rparen") }
     }
 
-    if pages-part != none and date-block != "" { date-block += p("colon") + pages-part }
+    if pages-part != none and date-block != "" and not _is-2025-platform-form { date-block += p("colon") + pages-part }
     if urldate != none { date-block += urldate }
     if date-block == "" { date-block = none }
 

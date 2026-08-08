@@ -6,6 +6,11 @@
   let entry-key = str(item.at("id", default: "csl-" + str(position)))
   let entry-type = csl-map.map-type(item.at("type", default: "document"))
 
+  let _has-archive-field = item.at("archive", default: none) != none or item.at("archive_location", default: none) != none
+  if _has-archive-field and entry-type in ("booklet", "misc", "image", "video", "music") {
+    entry-type = "archive"
+  }
+
   let fields = (:)
   let parsed-names = (:)
   let parsed-dates = (:)
@@ -45,6 +50,11 @@
   let archive-place = item.at("archive-place", default: none)
   if archive-place != none and str(archive-place).trim() != "" and _archival and "location" not in fields {
     fields.insert("location", csl-map.escape-text(archive-place))
+  }
+
+  let archive-location = item.at("archive_location", default: none)
+  if archive-location != none and str(archive-location).trim() != "" and _archival and "number" not in fields {
+    fields.insert("number", str(archive-location))
   }
 
   let issue = item.at("issue", default: none)
