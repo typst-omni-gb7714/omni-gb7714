@@ -38,9 +38,9 @@
   terms.volume(entry, volume-value, custom-terms: custom-terms)
 }
 
-#let format(entry, is-component-part: false, show-mark: true, show-medium: true, show-url: true, space-before-mark: false, show-patent-country: false, preprint: false, hyperlink-title: false, correct-punct: false, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), version: 2015, title-spec: none, volume-title-gutter: auto, online: auto) = {
+#let format(entry, is-component-part: false, show-mark: true, show-medium: true, show-url: true, space-before-mark: false, mark-medium-bracket-style: "half", show-patent-country: false, preprint: false, hyperlink-title: false, correct-punct: false, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), version: 2015, title-spec: none, volume-title-gutter: auto, online: auto) = {
   let p = name => punct.get(name, entry, punct-style, custom-punct)
-  let mark-block = mark-medium.render(entry, show-mark: show-mark, show-medium: show-medium, show-url: show-url, space-before-mark: space-before-mark, version: version, online: online)
+  let mark-block = mark-medium.render(entry, show-mark: show-mark, show-medium: show-medium, show-url: show-url, space-before-mark: space-before-mark, version: version, online: online, bracket-style: mark-medium-bracket-style)
   let title = punct.field-text(entry, "title", correct-punct: correct-punct, punct-style: punct-style)
   if title == none {
 

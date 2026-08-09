@@ -101,7 +101,7 @@
   }
   if name == "mark-medium" {
 
-    let mark-text = mark-medium.render(entry, show-mark: opts.show-mark, show-medium: opts.show-medium, show-url: opts.show-url, space-before-mark: opts.space-before-mark, version: opts.version, online: online(entry, opts))
+    let mark-text = mark-medium.render(entry, show-mark: opts.show-mark, show-medium: opts.show-medium, show-url: opts.show-url, space-before-mark: opts.space-before-mark, version: opts.version, online: online(entry, opts), bracket-style: opts.at("mark-medium-bracket-style", default: "half"))
     if mark-text == "" { return none }
     return mark-text
   }

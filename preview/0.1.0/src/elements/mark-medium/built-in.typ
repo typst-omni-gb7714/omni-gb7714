@@ -215,7 +215,7 @@
   return none
 }
 
-#let render(entry, show-mark: true, show-medium: true, show-url: true, space-before-mark: false, version: 2015, online: auto) = {
+#let render(entry, show-mark: true, show-medium: true, show-url: true, space-before-mark: false, version: 2015, online: auto, bracket-style: "half") = {
 
   if not gate(show-mark, entry, version: version, allow-online-only: false) { return "" }
   let show-url = gate(show-url, entry, version: version)
@@ -225,5 +225,6 @@
   if mark-code == "" { return "" }
   let medium-code = if show-medium { medium(entry, show-url: show-url, version: version, online: online) } else { none }
   let prefix = if space-before-mark { " " } else { "" }
-  if medium-code != none { prefix + "[" + mark-code + "/" + medium-code + "]" } else { prefix + "[" + mark-code + "]" }
+  let (lb, rb) = if bracket-style == "full" { ("［", "］") } else { ("[", "]") }
+  if medium-code != none { prefix + lb + mark-code + "/" + medium-code + rb } else { prefix + lb + mark-code + rb }
 }

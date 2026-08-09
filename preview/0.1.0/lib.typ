@@ -86,9 +86,9 @@
   number-gutter:    0.65em,
   /// 编号放哪："column"（默认，自成一列贴版心）/ "margin"（挂到版心外）/ "inline"（排行内）
   number-placement:    "column",
-  /// 编号样式："bracket" [1] / "paren" (1) / "dot" 1. / "plain" 1 / "fullwidth-bracket" 〔1〕 / "fullwidth-paren" （1） / "circled" ①（缺省 Unicode 绘制,展开 (circled: "quan") 用 quan 包）/ none 无编号
+  /// 编号样式："bracket" [1] / "paren" (1) / "dot" 1. / "plain" 1 / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕(六角括号,旧 GB-1987) / "circled" ①（缺省 Unicode 绘制,展开 (circled: "quan") 用 quan 包）/ none 无编号
   numbering-style:        auto,
-  /// 正文标注编号的括号形态(与 numbering-style 分属两轴,那个管文献表列、本参数管正文 [1])："bracket" [1](默认) / "paren" (1) / "fullwidth-bracket" 〔1〕(旧 GB-1987) / "fullwidth-paren" （1）
+  /// 正文标注编号的括号形态(与 numbering-style 分属两轴,那个管文献表列、本参数管正文 [1])："bracket" [1](默认) / "paren" (1) / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕(六角括号,旧 GB-1987)
   cite-numbering-style:   "bracket",
   /// 编号对齐："left"(默认,同原生) / "right" / "center"
   number-align:        "left",
@@ -187,6 +187,8 @@
   show-end-period:     auto,
   /// 文献类型标识 [M] 前加空格
   space-before-mark:   false,
+  /// 文献类型标识方括号半/全角："half" [M](默认,GB 标准)/ "full" ［M］(全角方括号,斜杠恒半角)
+  mark-medium-bracket-style: "half",
   /// 页码前加空格（: 123 与 :123）
   space-before-pages:  true,
   /// 页码范围连字符，如 "-" / "～"
@@ -234,6 +236,7 @@
     }
   } else { _errors.check-enum("numbering-style", numbering-style, extra: (auto,)) }
   _errors.check-enum("number-align", number-align)
+  _errors.check-enum("mark-medium-bracket-style", mark-medium-bracket-style)
   _creators.validate-name-style(bib-name-style, param: "bib-name-style")
   _creators.validate-name-style(cite-name-style, param: "cite-name-style")
   if std.type(bib-punct-style) != dictionary { _errors.check-enum("bib-punct-style", bib-punct-style, extra: (auto,)) }
@@ -291,7 +294,7 @@
     url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters,
     titles-text-case: titles-text-case, emphasis: emphasis,
     period-after-creator: period-after-creator, show-end-period: show-end-period,
-    space-before-mark: space-before-mark, space-before-pages: space-before-pages,
+    space-before-mark: space-before-mark, mark-medium-bracket-style: mark-medium-bracket-style, space-before-pages: space-before-pages,
     page-range-separator: page-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, entry-localized-glyphs: entry-localized-glyphs, footnote-numbering-use-quan: footnote-numbering-use-quan,
     footnote-repeat-style: footnote-repeat-style, footnote-ibid: footnote-ibid, footnote-repeat-reset: footnote-repeat-reset,
     custom-marks: custom-marks, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, custom-languages: custom-languages, warn-missing-title: warn-missing-title,
@@ -540,7 +543,7 @@
   entry-spacing:            auto,
   /// 编号与正文之间的列间距（「编号后那道间隔」）；auto 跟随全局
   number-gutter:    auto,
-  /// 编号样式："bracket" / "paren" / "dot" / "plain" / "fullwidth-bracket" / "fullwidth-paren" / "circled"（可展开 (circled: "quan") 选绘制引擎）/ none；auto 跟随全局
+  /// 编号样式："bracket" / "paren" / "dot" / "plain" / "fullwidth-bracket" ［1］ / "fullwidth-paren" / "shell" 〔1〕 / "circled"（可展开 (circled: "quan") 选绘制引擎）/ none；auto 跟随全局
   numbering-style:        auto,
   /// 语种分组顺序；auto 跟随全局
   entry-lang-order:          auto,
@@ -583,6 +586,8 @@
   show-urldate:        auto,
   /// 类型标识前空格；auto 跟随全局
   space-before-mark:   auto,
+  /// 类型标识方括号半/全角（"half" / "full"）；auto 跟随全局
+  mark-medium-bracket-style: auto,
   /// 页码前空格；auto 跟随全局
   space-before-pages:  auto,
   /// 编号反向跳转；auto 跟随全局
@@ -631,6 +636,7 @@
     }
   } else { _errors.check-enum("numbering-style", numbering-style, extra: (auto,)) }
   _errors.check-enum("number-align", number-align, extra: (auto,))
+  _errors.check-enum("mark-medium-bracket-style", mark-medium-bracket-style, extra: (auto,))
   _creators.validate-name-style(name-style)
   if std.type(punct-style) != dictionary { _errors.check-enum("bib-punct-style", punct-style, extra: (auto,), alias: "punct-style") }
 
@@ -916,6 +922,7 @@
     show-url: show-url,
     show-urldate: show-urldate,
     space-before-mark: space-before-mark,
+    mark-medium-bracket-style: mark-medium-bracket-style,
     space-before-pages: space-before-pages,
     back-ref: back-ref,
     show-degree: show-degree,

@@ -21,7 +21,8 @@
 
   let (cite-lb, cite-rb) = (
     "paren": ("(", ")"),
-    "fullwidth-bracket": ("〔", "〕"),
+    "fullwidth-bracket": ("［", "］"),
+    "shell": ("〔", "〕"),
     "fullwidth-paren": ("（", "）"),
   ).at(cite-numbering-style, default: ("[", "]"))
   let br(inner) = [#cite-lb#inner#cite-rb]

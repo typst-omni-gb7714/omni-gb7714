@@ -96,7 +96,7 @@
 #let _title(entry, opts, is-component-part: false, title-spec: none, preprint: false) = titles.format(
   entry, is-component-part: is-component-part, preprint: preprint, online: _online(entry, opts),
   show-mark: opts.show-mark, show-medium: opts.show-medium, show-url: opts.show-url,
-  space-before-mark: opts.space-before-mark, show-patent-country: opts.at("show-patent-country", default: false), hyperlink-title: opts.hyperlink-title,
+  space-before-mark: opts.space-before-mark, mark-medium-bracket-style: opts.at("mark-medium-bracket-style", default: "half"), show-patent-country: opts.at("show-patent-country", default: false), hyperlink-title: opts.hyperlink-title,
   correct-punct: opts.correct-punct, punct-style: opts.punct-style, custom-punct: opts.custom-punct,
   custom-terms: opts.at("custom-terms", default: (:)),
   version: opts.version, title-spec: title-spec,
