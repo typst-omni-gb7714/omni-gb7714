@@ -184,7 +184,7 @@
       }
       let shaped = if given-form == "initials" {
 
-        segments.map(s => upper(s.clusters().first()) + given-initial-separator)
+        segments.map(s => s.clusters().first() + given-initial-separator)
       } else {
 
         let _capitalize(s) = { let cl = s.clusters(); upper(cl.first()) + lower(cl.slice(1).join("")) }
@@ -219,12 +219,10 @@
       else { formatted-prefix + formatted-family }
     } else if prefix-last and prefix != "" {
 
-      let prefix-initials = prefix.split(regex("\\s+")).filter(p => p.len() > 0).map(p => {
-        let c = p.clusters().first(); if family-case == "uppercase" { upper(c) } else { lower(c) }
-      }).join(" ")
+      let end-prefix = prefix.replace(" ", "\u{00A0}")
       let assembled = formatted-family
       if formatted-given != "" { assembled += family-given-separator + formatted-given }
-      assembled + " " + prefix-initials
+      assembled + " " + end-prefix
     } else {
 
       let assembled = formatted-prefix + formatted-family

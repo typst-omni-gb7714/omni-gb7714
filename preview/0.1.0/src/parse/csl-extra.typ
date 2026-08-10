@@ -1,4 +1,5 @@
 #import "csl-map.typ"
+#import "../sentinel.typ": _SUND
 
 #let _TEX-NAME-FIELDS = ("author", "editor", "translator", "bookauthor", "holder", "editora", "editorb", "editorc")
 
@@ -73,8 +74,8 @@
     if type(src) != str { continue }
 
     let tbounds = ()
-    for m in src.matches(regex("(?i)\\btex\\.([a-z0-9_]+)\\s*:")) {
-      tbounds.push((mstart: m.start, vstart: m.end, field: lower(m.captures.at(0))))
+    for m in src.matches(regex("(?i)\\btex\\.([a-z0-9_\\x{E000}-\\x{F8FF}]+)\\s*:")) {
+      tbounds.push((mstart: m.start, vstart: m.end, field: lower(m.captures.at(0)).replace(_SUND, "_")))
     }
     for (i, b) in tbounds.enumerate() {
       let vend = if i + 1 < tbounds.len() { tbounds.at(i + 1).mstart } else { src.len() }
@@ -91,7 +92,7 @@
         fields.insert(b.field, esc(v))
       }
     }
-    fields.insert(src-key, src.replace(regex("(?is)\\s*\\btex\\.[a-z0-9_]+\\s*:.*"), ""))
+    fields.insert(src-key, src.replace(regex("(?is)\\s*\\btex\\.[a-z0-9_\\x{E000}-\\x{F8FF}]+\\s*:.*"), ""))
   }
 
   let effective-type = if override-type != none { override-type } else { entry.entry_type }

@@ -54,7 +54,6 @@
 }
 
 #let date(entry) = {
-
   let date-field = field.get(entry, "date")
   if date-field != none {
     let parsed-date = parsed(entry, "date")

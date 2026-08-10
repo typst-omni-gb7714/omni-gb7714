@@ -87,7 +87,7 @@
   "sort-by.not-array": "gb7714: `{param}` 须是排序键数组；另可取 `none`（保持引用序 / 写法序）或 `auto`（按标注体系派生）。收到 {got}",
   "sort-by.bad-element": "gb7714: `{param}` 的元素须是键名字符串（如 \"date\"）或单条方向字典（如 `(date: \"descending\")`）。收到 {got}",
   "sort-by.dict-size": "gb7714: `{param}` 的字典元素只能含一个键，如 `(date: \"descending\")`。收到 {got}",
-  "sort-by.unknown-key": "gb7714: `{param}` 收到未知排序键 \"{key}\"；合法键：{keys}。\n文种是隐式的最高优先级键（GB/T 7714 §9.3.2「先按文种集中」），不写进排序键数组；文种先后由 `entry-lang-order` 决定。",
+  "sort-by.unknown-key": "gb7714: `{param}` 收到未知排序键 \"{key}\"；合法键：{keys}。\n文种是隐式的最高优先级键（GB/T 7714 9.3.2「先按文种集中」），不写进排序键数组；文种先后由 `entry-lang-order` 决定。",
   "sort-by.bad-order": "gb7714: `{param}` 里 \"{key}\" 的方向须是 {orders}，收到 {order}",
 
   "collapse-date.bad-value": "gb7714: `{param}` 只收 {allowed}，收到 {got}",
@@ -101,7 +101,7 @@
 
   "template.guard-type-is-bib-field": "gb7714: 卫语句 `type={value}` 里的 `type` 现在指*bib 的 `type` 字段*（报告种类、学位类型），不再是文献类型标识码。。要按标识码判，写 `mark={value}`；要按载体码判，写 `medium=OL`。（真想匹配 `type` 字段值为「{value}」的条目，这条卫语句写不出来——那个值恰好是标识码，无法与误用区分。）",
   "template.guard-expected-field": "gb7714: 卫语句表达式里应是「字段=值」或光秃秃一个字段名（空非空），这里缺字段名（写法如 `<mark=M => …>` / `<doi => …>`）",
-  "template.guard-ambiguous-or": "gb7714: 卫语句里 `{field}=…` 的 `?` 后面跟了一个裸 token 名 `{token}`——两种读法都说得通，写明白一点：\n① 想问「这条目有没有 `{token}`」（空非空），把它包进尖括号：`{field}=… ? <{token}> => …`；\n② 想把 `{token}` 当成 `{field}` 的候选*取值*，把它包进花括号（verbatim）：`{field}=…?{{token}} => …`。\n（`?` 在卫语句里身兼两职：算符「或」与同字段的「值或」。裸值不是 token 名时不会有这个歧义。）",
+  "template.guard-ambiguous-or": "gb7714: 卫语句里 `{field}=…` 的 `?` 后面跟了一个裸 token 名 `{token}`——两种读法都说得通，写明白一点：\n1) 想问「这条目有没有 `{token}`」（空非空），把它包进尖括号：`{field}=… ? <{token}> => …`；\n2) 想把 `{token}` 当成 `{field}` 的候选*取值*，把它包进花括号（verbatim）：`{field}=…?{{token}} => …`。\n（`?` 在卫语句里身兼两职：算符「或」与同字段的「值或」。裸值不是 token 名时不会有这个歧义。）",
   "template.guard-expected-value": "gb7714: 卫语句字段 `{field}` 的 `=` 后缺值（值带空格或冒号请用花括号 verbatim，如 `t={10:30}`）",
   "template.guard-nested-arrow": "gb7714: 卫语句的 `<…>` 分组里不能再出现 `=>`（分组只作布尔括号，不是嵌套卫语句组）",
   "template.guard-arrow-outside-group": "gb7714: `=>` 只能作 `<…>` 卫语句组里的谓词与组体的分界（写法如 `<mark=M => {图书}>`），组外没有这个算符",

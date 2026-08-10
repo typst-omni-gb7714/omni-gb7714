@@ -159,8 +159,8 @@
     /// - `"numeric"`：顺序编码制，如 #super[[1]]；
     /// - `"author-date"`：著者-出版年制，如 (张三, 2020)；\
     /// 标量是「两轴同值」的简写；要分别指定就写逐轴字典 ```typc (cite: .., bib: ..)```：\
-    /// - `cite`：*①正文标注形态*——`[1]` 还是 `(张三, 2020)`。编号、排序、消歧后缀、`cite-punct-style` 的制感知都跟这根轴；
-    /// - `bib`：*②著录格式*——参考文献表条目里出版日期的位置（`"numeric"` 在末尾、`"author-date"` 提到责任者之后）；未写时跟 `cite`。\
+    /// - `cite`：*正文标注形态*——`[1]` 还是 `(张三, 2020)`。编号、排序、消歧后缀、`cite-punct-style` 的制感知都跟这根轴；
+    /// - `bib`：*著录格式*——参考文献表条目里出版日期的位置（`"numeric"` 在末尾、`"author-date"` 提到责任者之后）；未写时跟 `cite`。\
     /// 于是「著者-出版年制标注 + 编号表」写 ```typc style: "author-date", numbering-style: "bracket"```；
     /// 「顺序编码制标注 + 著者-出版年制著录」写 ```typc style: (cite: "numeric", bib: "author-date")```。\
     /// 也收国标 CSL 全名（`"gb-7714-{2005,2015,2025}-{numeric,author-date,note}"`），它同时锁 `version`，只能写成标量。|
@@ -184,7 +184,7 @@
     /// - `"normal"`：该样式默认形态——顺序编码制上标 #super[\[1\]]，著者-出版年制圆括号 (Author, year)；
     /// - `"prose"`：叙述式——著者-出版年制作 `Stieg (1981)` / `张三（2020）`、顺序编码制作 `Author [1]`。括号前间隙随标点方向感知（与括号同源）：全角档紧贴（CJK 行文惯例，全角括号自带视觉空隙）、半角档空格；
     /// - `"author"`：仅著者（含「等 / et al」截断）；
-    /// - `"year"`：*裸出版年*（无括号无著者），带 a/b/c 消歧后缀——对齐原生 `cite(form: "year")`。「正文已提及责任者姓名，()内只著录出版年」（GB §10.2）的场景：括号随正文自己写，或直接用 `"prose"` 让包整体渲染；
+    /// - `"year"`：*裸出版年*（无括号无著者），带 a/b/c 消歧后缀——对齐原生 `cite(form: "year")`。「正文已提及责任者姓名，()内只著录出版年」（GB 10.2）的场景：括号随正文自己写，或直接用 `"prose"` 让包整体渲染；
     /// - `"full"`：*原位*完整著录条目——把该条像参考文献表里那样打在标注位置（顺序编码制带 `[N]` 编号、著者-出版年制带「作者，年」前缀），对齐原生 `cite(form: "full")`「mimics a bibliography entry」。条目在正文原位再现一份，文献表里照样保留（不是脚注，与 #arg-ref("cite", "footnote")[`footnote`] 两条独立的路径）；
     /// - `none`：不出标注（条目仍计入参考文献表）。\
     /// 多键引用（如 `@a@b@c`）：`"prose"` 回退 `"inline"` / `"normal"`；`"author"` / `"year"` 各键以分号连列，如 张三；李四 / 2020；2019。\
@@ -193,12 +193,12 @@
     /// 相邻引用是否合并为一组标注。\
     /// - `true`（默认）：```typ @a@b#cite[@c]``` 合并为 ```typ [1-3]``` / ```typ (A, 2020; B, 2021; C, 2022)```；
     /// - `false`：各引用独立成组，作 ```typ [1][2][3]``` / ```typ (A, 2020)(B, 2021)(C, 2022)```。\
-    /// 脚注制下同理：相邻的 ```typ @a@b``` 与相邻的两次 ```typ #cite()``` 都合成*一个*脚注（注内条目分号接排、整注一枚句点，对齐官方 note CSL 的 citation delimiter）。\
+    /// 脚注制下同理：相邻的 ```typ @a@b``` 与相邻的两次 ```typ #cite()``` 都合成*一个*脚注（注内条目分号接排、整注一枚句点，对齐社区 note CSL 的 citation delimiter）。\
     /// 合并组内的条目次序由 #arg-ref("gb7714", "cite-sort-by")[`cite-sort-by`] 决定（缺省：顺序编码制编号升序，著者-出版年制按版本派生）。\
     /// 单次可用 #arg-ref("cite", "merge")[ ```typ #cite()``` 的 `merge` 参数]覆盖，语义为「完全孤立」：设 `merge: false` 的引用只拆开自身、不与相邻引用合并，其外的引用照常合并。如 ```typ #cite(merge: false)[@a] @b@c``` -> ```typ [1][2-3]```。|
   cite-collapse-date:  true,      /// <- `boolean`
     /// 著者-出版年制合并组内的*年份折叠*：组内排序后，相邻且著者标签相同的条目并入一组，著者只出一次、年份连列。\
-    /// - `true`（默认，官方 2015 / 2025 CSL 均开启，即 CSL 的 `collapse="year"`）：```typ @zhang2020@zhang2021@li2021``` 得 `（张三，2020，2021；李四，2021）`，同著者同年经消歧后缀连列（`（张三，2020a，2020b）`）；
+    /// - `true`（默认，社区 2015 / 2025 CSL 均开启，即 CSL 的 `collapse="year"`）：```typ @zhang2020@zhang2021@li2021``` 得 `（张三，2020，2021；李四，2021）`，同著者同年经消歧后缀连列（`（张三，2020a，2020b）`）；
     /// - `false`：逐条完整著者，`（张三，2020；张三，2021；李四，2021）`。\
     /// 判据是*消歧后的著者标签串*（含「等 / et al」截断与姓名消歧升级），标签不同不折叠；带引文页码（supplement）的条目不参与折叠（页码要贴住它所属的那条）。年份间分隔符沿用 #arg-ref("gb7714", "cite-name-date-separator")[`cite-name-date-separator`] 的有效值。\
     /// 仅作用于行内著者-出版年制标注（顺序编码制有自己的区间压缩，脚注制著录完整条目，均不适用）。单次可用 #arg-ref("cite", "collapse-date")[ ```typ #cite(collapse-date: ..)``` ]覆盖。|
@@ -225,7 +225,7 @@
     /// 顺序编码制中，≥_N_ 个连续编号时压缩为范围。|
   cite-range-separator: "-",      /// <- `string` | `dictionary`
     /// 顺序编码制连续引用压为区间（如 `[1-5]`）时，起讫序号间的连接符。默认短横线 `-`（国标规定）。\
-    /// 裸标点字符（`","` 等）随 `cite-punct-style` 按*文档语言*那套感知（区间横跨多条目，无单一条目语言，与「多组括号之间的分隔符总是按文档语言派生」同规）；verbatim 定界 ```typc "{,}"``` 字面不感知。\
+    /// 裸标点字符（`","` 等）随 `cite-punct-style` 按*文档语言*那套感知（区间横跨多条目，无单一条目语言，与「多组括号之间的分隔符总是按文档语言派生」做法相同）；verbatim 定界 ```typc "{,}"``` 字面不感知。\
     /// 与 #arg-ref("gb7714", "page-range-separator")[`page-range-separator`]（起讫页码连接符）平行独立，互不影响。\
     /// `cite()` 接受 `range-separator` 单次覆盖。仅顺序编码制有区间压缩，著者-出版年制不适用。|
   cite-footnote:       false,     /// <- `boolean`
@@ -248,7 +248,7 @@
     ///   - `"by-doc"`：随*文档*语言（= citeproc 的实际行为，一键复刻）；
     ///   - `"zh"` / `"ja"` / `"ko"` / `"ru"` / `"en"` / `"fr"` / `"de"`：强制该语种。
     /// - *字典*（按 term 项展开，未列出的走默认 `"by-entry"`）：```typc cite-terms-lang: (et-al: "by-doc", ibid: "zh")``` 只让截断词跟文档语言、只让「同上」总是中文。\
-    /// 默认 `"by-entry"` 的依据：GB/T 7714 §9.3.1.2 要求「欧美第一责任者姓 + et al.，中国第一责任者姓名 + 等」，即按著者语种取词；Zotero 中文社区国标 CSL、胡振震 BibLaTeX 也都按条目语言。CSL 1.0.2 引擎只能跟文档语言，那是技术限制、不是设计意图。\
+    /// 默认 `"by-entry"` 的依据：GB/T 7714 9.3.1.2 要求「欧美第一责任者姓 + et al.，中国第一责任者姓名 + 等」，即按著者语种取词；Zotero 中文社区国标 CSL、胡振震 BibLaTeX 也都按条目语言。CSL 1.0.2 引擎只能跟文档语言，那是技术限制、不是设计意图。\
     /// 词本身用 #arg-ref("gb7714", "custom-terms")[`custom-terms`] 覆写（本参数决定取哪个语言键，`custom-terms` 决定那个键是什么字，两者正交）。\
     /// 单次可用 #arg-ref("cite", "terms-lang")[ ```typ #cite(terms-lang: ..)``` ]覆盖。|
   cite-et-al-use-last: 0,         /// <- `integer` | `dictionary`
@@ -260,8 +260,8 @@
     /// 通常应满足 `cite-et-al-use-first <= cite-et-al-min`，否则等同不截断。\
     /// 同收 #arg-ref("gb7714", "bib-et-al-min")[`bib-et-al-min`] 的*三档取值*（整数 / 语言档 / 角色档）。|
   cite-name-style:    auto,      /// <- `auto` | `dictionary`
-    /// 著者-出版年制正文引用中的西文姓名格式，收与 #arg-ref("gb7714", "bib-name-style")[`bib-name-style`] 同形的维度字典。\
-    /// `auto`（默认）与各维缺省按*正文标注侧*派生：`given-form` 取 `none`（只姓，GB §9.3.1.2 的「著者姓氏」，如 `(Smith, 2020)`）、`family-case` 取 `none`（保留原大小写）。\
+    /// 著者-出版年制正文引用中的西文姓名格式，收与 #arg-ref("gb7714", "bib-name-style")[`bib-name-style`] 相同结构的维度字典。\
+    /// `auto`（默认）与各维缺省按*正文标注侧*派生：`given-form` 取 `none`（只姓，GB 9.3.1.2 的「著者姓氏」，如 `(Smith, 2020)`）、`family-case` 取 `none`（保留原大小写）。\
     /// `bib-name-style` 管参考文献表著录处的姓名，本项管正文引用处的姓名，二者各自独立：\
     /// - 著录处（`bib-name-style`）：#text(fill: red)[CRANE D], 1972. Invisible College[M]. Chicago: Univ. of Chicago Press.
     /// - 引用处（`cite-name-style`）：The notion of an invisible college has been explored in the sciences (#text(fill: red)[Crane], 1972).\
@@ -280,10 +280,10 @@
 
   bib-name-style:     auto,        /// <- `auto` | `dictionary`
     /// 西文姓名格式（中文姓名不受影响）：八维正交字典，键全可省，`auto` 等价空字典。以 `Zhao, Yu Xin` 与 `Godard, Jean-Luc` 为例：\
-    /// - `order`：姓名顺序，标量作用全体：`"family-ahead"`（缺省，GB §7.1 姓前名后）/ `"given-ahead"`（名前，`Y X Zhao`）；另收 `(first:, rest:)` 字典*分设*第一责任者与其余责任者（必须双键全给）——`(first: "family-ahead", rest: "given-ahead")` 即「只倒装第一责任者」的西文期刊惯例 `Crane, D. R., P. Smith`（首名走 `family-given-separator` 接缝、余名走 `given-family-separator`，各随其序）；
+    /// - `order`：姓名顺序，标量作用全体：`"family-ahead"`（缺省，GB 7.1 姓前名后）/ `"given-ahead"`（名前，`Y X Zhao`）；另收 `(first:, rest:)` 字典*分设*第一责任者与其余责任者（必须双键全给）——`(first: "family-ahead", rest: "given-ahead")` 即「只倒装第一责任者」的西文期刊惯例 `Crane, D. R., P. Smith`（首名走 `family-given-separator` 接缝、余名走 `given-family-separator`，各随其序）；
     /// - `family-case`：姓（连同 van der 前缀）的大小写，`auto`（缺省，随 `version`——2005 / 2015 全大写 `ZHAO`、2025 不处理）/ `"uppercase"` / `"lowercase"` / `none`（不处理，照 `.bib` 原样）；
-    /// - `given-form`：名的形态，`auto`（缺省，文献表侧取 `"initials"`）/ `none`（*无名、只姓*）/ `"initials"`（缩首字母，`Y X`，GB §7.1）/ `"full"`（全拼 `Yu Xin`）；
-    /// - `given-initial-separator`：每个缩写字母后接的字符串，`auto`（缺省，空串——GB §7.1 无点 `Y X`）/ 任意字符串。裸标点字符（`"."` / 全角 `"．"`）享受感知并剥掉槽位间距——总是得紧凑点（```typc given-separator: ""``` 下 `X.L.` 可达），间距归 `given-separator` 管；含空格的字面串逐字尊重（CSL 的 `initialize-with: ". "` 直搬即用，名部末尾自动修剪悬空空格）；
+    /// - `given-form`：名的形态，`auto`（缺省，文献表侧取 `"initials"`）/ `none`（*无名、只姓*）/ `"initials"`（缩首字母，`Y X`，GB 7.1）/ `"full"`（全拼 `Yu Xin`）；
+    /// - `given-initial-separator`：每个缩写字母后接的字符串，`auto`（缺省，空串——GB 7.1 无点 `Y X`）/ 任意字符串。裸标点字符（`"."` / 全角 `"．"`）享受感知并剥掉槽位间距——总是得紧凑点（```typc given-separator: ""``` 下 `X.L.` 可达），间距归 `given-separator` 管；含空格的字面串逐字尊重（CSL 的 `initialize-with: ". "` 直搬即用，名部末尾自动修剪悬空空格）；
     /// - `given-separator`：名各段的连接，`auto`（缺省，随 `version`——2005 / 2015 各段一律空格 `J P`、2025 保留来源连接符 `J-P`）/ `none`（保留来源）/ 任意字符串（`" "` / `"-"` / `""` 拼接 / 其它）；
     /// - `given-case`：名的大小写（只对 `"full"` 有意义，缩写字母总是大写），`none`（缺省，不处理）/ `"uppercase"` / `"lowercase"` / `"capitalize-first"`（首段大写头、余段全小，`Yu xin`）/ `"capitalize-each"`（每段大写头，`Yu Xin`）；
     /// - `family-given-separator`：*姓前名后*时姓↔名的分隔，`auto`（缺省，空格 `ZHAO Y X`）/ 任意字符串（`", "` 得 `Zhao, Y. X.` 倒装逗号形，即 CSL 的 `sort-separator`）；
@@ -306,14 +306,14 @@
   et-al-translator-separator: auto,  /// <- `auto` | `string` | `dictionary`
     /// 译者名单被截断时，截断词（等 / et al.）与译者角色词（译 / trans.）之间的分隔符。\
     /// 中文缺省*按版本*：2005 / 2025 出「，等，译．」（译前加逗号），2015 出「，等译．」（紧贴）。三版《著录用符号》
-    /// 规则条文一致，都把「，」列在「等」「译」字样之前；2025 §8 示例[3]（罗杰斯《西方文明史》）已著录为
-    /// 「潘惠霞，魏婧，杨艳，等，译」。2015 §8 同一示例却写作「等译」，与其自身 §7.2 规则相左，起草人陈浩元
+    /// 规则条文一致，都把「，」列在「等」「译」字样之前；2025 版第 8 章示例[3]（罗杰斯《西方文明史》）已著录为
+    /// 「潘惠霞，魏婧，杨艳，等，译」。2015 版第 8 章同一示例却写作「等译」，与其自身 7.2 规则相左，起草人陈浩元
     /// 《GB/T 7714 新标准对旧标准的主要修改及实施要点提示》（编辑学报 2015）认可此紧贴形，所以 2015 尊其诠释。\
     /// - `auto`（默认）：中文按上述版本派生、日文紧贴、韩文空格、西文逗号（`..., et al., trans.`）；
     /// - `""`：强制紧贴「等译」；`", "`：强制加逗号「等, 译」；
     /// - 标点字符 `","` 等（与 `custom-punct` 键同一套）：强制该标点，全 / 半角感知；
     /// - 其它任意字符串：字面量原样；单字符标点要字面不感知，用 verbatim 定界 ```typc "{，}"```。\
-    /// 只管*译者*；编者截断的「等主编」各版本总是紧贴，不受影响。未截断时「, 译」前的逗号是 GB §7.2 规定的，也不归本项管。|
+    /// 只管*译者*；编者截断的「等主编」各版本总是紧贴，不受影响。未截断时「, 译」前的逗号是 GB 7.2 规定的，也不归本项管。|
   component-part-separator: "//",  /// <- `string` | `dictionary`
     /// 析出文献题名与其*出处*（母体：图书 / 论文集 / 会议名称）之间的分隔符——即 GB/T 7714 里那个 `//`。\
     /// biblatex-gb7714（胡振震）整节称它「*析出文献标识符号*」（`gbpunctin` 选项），标准 3.8 术语是「析出文献 / component part」，
@@ -330,17 +330,17 @@
     /// 与正文引用的 #arg-ref("gb7714", "cite-name-date-separator")[`cite-name-date-separator`] 对应，本项管文献表、那项管正文标注，互不影响。|
   bib-et-al-min:       4,         /// <- `integer` | `dictionary`
     /// 参考文献表条目里「等 / et al」的触发阈值：著者 / 编者 / 译者达到此数就截断，少于则完整列出。\
-    /// 默认 `4`：1～3 位完整列出，4 位及以上截断（GB/T 7714 §7.1.2「≤3 全录，>3 录前 3 加『等』」）。\
+    /// 默认 `4`：1～3 位完整列出，4 位及以上截断（GB/T 7714 7.1.2「≤3 全录，>3 录前 3 加『等』」）。\
     /// *与 CSL 的 `et-al-min` 逐字同义*——CSL 样式里的 ```xml et-al-min="4"``` 就是本项的 `4`，照搬即可，不必换算。\
-    /// *三档取值*（`bib-et-al-use-first` 与两个 `cite-` 同款同规）：\
+    /// *三档取值*（`bib-et-al-use-first` 与两个 `cite-` 用法一致）：\
     /// - *整数* — `4`：一刀切，所有位置、所有语言同一个阈值。\
     /// - *语言档* — ```typc (zh: 3, rest: 4)```：按*条目语言*分设。语言键与各 `-separator` 的多语言字典同一套（`zh` / `en` / `ja` / `ko` / `ru` / `fr`）。\
     /// - *角色档* — ```typc (principal: 4, host: 5, editor: 2, translator: 3, rest: 4)```：按*截断发生的位置*分设。每个位置的值本身还能再是一个语言档 —— ```typc (editor: (en: 5, ja: 3, rest: 4), rest: 4)``` —— 于是「角色 × 语言」两轴都能表达。\
     /// 四个角色键对应四个*截断位置*，不是 .bib 的字段名：\
     /// #table( columns: 2,
     ///   [*角色键*], [*截断位置*],
-    ///   [`principal`], [主责任者。谁顶上由顶替链定（一般 `author`，缺了让 `editor` 顶替，专利先取 `holder`）。行内标注只出主责任者，同走此键。],
-    ///   [`host`], [母体责任者，即析出文献 `//` 之后那一格（`bookauthor` 缺了让 `editor` 顶替）。],
+    ///   [`principal`], [主责任者。作主责任者的角色由回退链定（一般 `author`，缺失时回退到 `editor`，专利先取 `holder`）。行内标注只出主责任者，同走此键。],
+    ///   [`host`], [母体责任者，即析出文献 `//` 之后那一格（`bookauthor` 缺失时回退到 `editor`）。],
     ///   [`editor`], [其他责任者·编者（专著里与 `author` 并存的那位）。],
     ///   [`translator`], [其他责任者·译者。],
     /// )
@@ -359,7 +359,7 @@
     /// 不支持单次覆盖；某处需不同截断规则时，另建 `gb7714` 实例或写自定义 `custom-drivers` 模板。|
   bib-et-al-use-last: 0,          /// <- `integer` | `dictionary`
     /// 截断后，在省略号之后再保留*原名单末尾* _N_ 位著者：`A，B，C，… Z`。`0`（默认）= 关。\
-    /// 开启后不再出「等 / et al」——省略号与截断词互斥（citeproc 同判）。\
+    /// 开启后不再出「等 / et al」——省略号与截断词互斥（citeproc 结果一致）。\
     /// *前置条件*：`et-al-use-first + et-al-use-last <= et-al-min - 1`，违反即报错。责任者数*恰好达到* `et-al-min` 时（截断刚触发那一刻），显示的是「前 use-first 位 + 省略号 + 末 use-last 位」共 `use-first + use-last` 位——若它不比 `et-al-min` 小，一位都没省掉，省略号就名不副实。\
     /// 同收 #arg-ref("gb7714", "bib-et-al-min")[`bib-et-al-min`] 的*三档取值*（整数 / 语言档 / 角色档）。\
     /// 省略号字形走 #arg-ref("gb7714", "custom-punct")[`custom-punct`] 的 `…` 键（默认单个 `…`，与 citeproc 实测一致；中文排版规范的六点写 ```typc custom-punct: ("…": "……")```）。\
@@ -371,7 +371,7 @@
     /// 同收 `bib-et-al-min` 的*三档取值*（整数 / 语言档 / 角色档，可两轴叠加），配置对照与角色键表见 #arg-ref("gb7714", "bib-et-al-min")[`bib-et-al-min`]。|
   show-anon:           auto,      /// <- `auto` | `boolean` | `dictionary`
     /// 责任者缺失时，文献表条目及著者-出版年制标注的占位。\
-    /// - `auto`（默认）：著者-出版年制显示「佚名」（无责任者则无法构成「著者-年」标签），顺序编码制留空（以题名打头）；
+    /// - `auto`（默认）：著者-出版年制显示「佚名」（无责任者则无法构成「著者-年」标签），顺序编码制留空（以题名开头）；
     /// - `false`：留空；
     /// - `true`：无著者条目按语言显示占位：
     /// #table( columns: 6,
@@ -388,18 +388,18 @@
     ///   [*语言代码*], [`zh`], [`ja`], [`ko`], [`ru`], [`fr`], [`de`], [`en` 及其他],
     ///   [*占位词*], [无日期], [#text(font: "MS Mincho")[日付なし]], [#text(font: "Batang")[일자 없음]], [б. д.], [s. d.], [o. J.], [n.d.],
     /// )
-    /// 内置词照抄 CSL 官方 locale 的 `no date` short 形（`zh` 取官方 GB CSL 自己的 `<locale xml:lang="zh">` 覆写）；可用 #arg-ref("gb7714", "custom-terms")[`custom-terms`] 的 `no-date` 键覆写。\
+    /// 内置词照抄 CSL 项目 locale 的 `no date` short 形（`zh` 取社区 GB CSL 自己的 `<locale xml:lang="zh">` 覆写）；可用 #arg-ref("gb7714", "custom-terms")[`custom-terms`] 的 `no-date` 键覆写。\
     /// 语言由 #arg-ref("gb7714", "cite-terms-lang")[`cite-terms-lang`] 定（cite 侧），著录侧总是跟条目语言——两侧同源，否则读者按标签在表里定位不到。\
-    /// 同责任者多条无年文献靠消歧后缀区分，形态是「无日期-a」（连字符，对齐官方 GB CSL 里显式的 ```xml <group delimiter="-">```；有年的仍是 `2020a`，直接贴）。|
+    /// 同责任者多条无年文献靠消歧后缀区分，形态是「无日期-a」（连字符，对齐社区 GB CSL 里显式的 ```xml <group delimiter="-">```；有年的仍是 `2020a`，直接附加）。|
   date-fallback:       none,      /// <- `none` | `"urldate"`
     /// 条目*没有出版年*（`date` 与 `year` 都缺）时，从哪个字段推定一个。\
     /// - `none`（默认）：不推定。出版年就是空的——著者-出版年制下由 #arg-ref("gb7714", "show-no-date")[`show-no-date`] 补占位词；
-    /// - `"urldate"`：取引用日期的*年份*，著录为 `[2024]`（方括号=推定值，GB/T 7714—2025 §7.5.4.3「估计的出版年应置于「[]」内」）。\
+    /// - `"urldate"`：取引用日期的*年份*，著录为 `[2024]`（方括号=推定值，GB/T 7714—2025 7.5.4.3「估计的出版年应置于「[]」内」）。\
     /// 值是*字段名*而不是布尔，将来收别的推定源是加一个值、不是加一个参数。\
-    /// *2025 版平台式电子资源（EB / DS / PP）不推定*——它们的日期槽是「（创建或修改日期）[引用日期]」，没有传统出版年槽，引用日期已当日期，再推一个出版年是造数据。官方 2025 CSL 同判（网页走 `creation-accessed-date`，无回退），citeproc-lua 实测网页 / 数据集 / 预印本缺出版年都只出 `[引用日期]`。联机图书（`@book` + url）等有真出版年槽的照常推定。\
-    /// *默认关的理由*：官方 compliant CSL（2015 与 2025）做这件事（`issued` 缺失时取 `accessed` 的年，加方括号），但胡振震 biblatex 不做，GB 原文也只规定了「估计的出版年怎么写」、没规定「从哪里推”。推定一个作者从未声明过的年份是造数据，必须显式同意（同 #arg-ref("gb7714", "page-range-style")[`page-range-style`] 的裁断）。\
-    /// 推定出的年*参与一切*：文献表的出版年位、著者-出版年制的正文标注、排序键、消歧后缀（`[2024a]`）。与「引用日期显不显示」无关——2025 版 `[M/OL]` 不著录引用日期，官方 CSL 照样拿它推定（推的是数据，不是显示）。\
-    /// 连引用日期也没有的条目，出版年仍是空的（不造「日期不详」——两版官方 CSL 实测都留空）。|
+    /// *2025 版平台式电子资源（EB / DS / PP）不推定*——它们的日期槽是「（创建或修改日期）[引用日期]」，没有传统出版年槽，引用日期已当日期，再推一个出版年是造数据。社区 2025 CSL 结果一致（网页走 `creation-accessed-date`，无回退），citeproc-lua 实测网页 / 数据集 / 预印本缺出版年都只出 `[引用日期]`。联机图书（`@book` + url）等有真出版年槽的照常推定。\
+    /// *默认关的理由*：社区 compliant 变体 CSL（2015 与 2025）做这件事（`issued` 缺失时取 `accessed` 的年，加方括号），但胡振震 biblatex 不做，GB 原文也只规定了「估计的出版年怎么写」、没规定「从哪里推”。推定一个作者从未声明过的年份是造数据，必须显式同意（同 #arg-ref("gb7714", "page-range-style")[`page-range-style`] 的裁断）。\
+    /// 推定出的年*参与一切*：文献表的出版年位、著者-出版年制的正文标注、排序键、消歧后缀（`[2024a]`）。与「引用日期显不显示」无关——2025 版 `[M/OL]` 不著录引用日期，社区 CSL 照样用它推定（推的是数据，不是显示）。\
+    /// 连引用日期也没有的条目，出版年仍是空的（不造「日期不详」——两版社区 CSL 实测都留空）。|
   show-et-al:           true,     /// <- `boolean`
     /// 截断时末尾是否保留「等 / et al」标记词（不改变截断位数，位数由 #arg-ref("gb7714", "bib-et-al-min")[`bib-et-al-min`] / #arg-ref("gb7714", "bib-et-al-use-first")[`bib-et-al-use-first`] 定）。\
     /// - `true`（默认）：超阈值截断后保留「等 / et al」；
@@ -421,7 +421,7 @@
     /// - `content`：传入自定义内容作为标题。|
   entry-hanging-indent:     auto,       /// <- `auto` | `length`
     /// 条目*余行*缩进量，与原生 ```typc par(hanging-indent: ..)``` 同名同义——量的是「余行相对*正文块*左缘」，是个段落量，不是「距版心左缘的绝对位置」。\
-    /// `auto`（默认）按制度派生：著者-出版年制 `1.5em`（对齐官方 CSL 的 `hanging-indent="true"`，原生渲成 16.5pt）；顺序编码制 `0pt`——官方 numeric CSL 根本没有这个属性，它那个「余行贴正文列」的效果全部来自 `second-field-align="flush"` 的*编号列*，与本量无关。\
+    /// `auto`（默认）按制度派生：著者-出版年制 `1.5em`（对齐社区 CSL 的 `hanging-indent="true"`，原生渲成 16.5pt）；顺序编码制 `0pt`——社区 numeric CSL 根本没有这个属性，它那个「余行贴正文列」的效果全部来自 `second-field-align="flush"` 的*编号列*，与本量无关。\
     /// *四种版式下都生效*。编号成列时（`number-placement: "column"` / `"margin"`），正文列本身就是那一段，本量相对*正文列左缘*再缩（缺省 `0pt` 即什么也不动）。\
     /// 「余行顶格」不归本参数管——那是「编号不占一列」，用 #arg-ref("gb7714", "number-placement")[`number-placement: "inline"`]。本量刻意*不*与编号列宽挂钩：编号列宽随条目数变（`[9]` 涨到 `[120]` 宽出 1.4em），若本量是「距版心左缘的绝对值」，用户写死的数随时可能小于编号列宽，余行就倒插到首行文字左边——加减几条参考文献就能把版式弄崩。\
     /// 与 #arg-ref("gb7714", "entry-first-line-indent")[`entry-first-line-indent`] *正交*，可同时生效（首行缩进 A、余行缩进 B）——与原生 ```typc par``` 同义，两个量各管各、同一个坐标系。|
@@ -454,8 +454,8 @@
     /// 只作用于顺序编码制正文标注。圈码 / dot / plain / none 不与范围 `[1-3]`、合并 `[1,2]` 组合，所以本参数只收括号对五值。|
   number-placement: "column",  /// <- `string`
     /// 编号*放哪*（有编号时才有意义；`numbering-style: none` 时无编号可放）：\
-    /// - `"column"`（默认）：编号自成一列贴版心左缘，正文另起一列，余行贴正文列——对齐官方 GB CSL 的 `second-field-align="flush"`（两制官方样式都用它）。这个 flush 是*编号列*给的，与 #arg-ref("gb7714", "entry-hanging-indent")[`entry-hanging-indent`] 无关；那两个段落量在正文列内照常生效（相对正文列左缘再缩）；
-    /// - `"margin"`：编号*挂到版心外*，正文与余行都贴版心左缘——对齐 CSL 的 `second-field-align="margin"`（原生 typst 未实现该值，渲染同 flush；本包实现之）；
+    /// - `"column"`（默认）：编号自成一列贴版心左缘，正文另起一列，余行贴正文列——对齐社区 GB CSL 的 `second-field-align="flush"`（两制社区样式都用它）。这个 flush 是*编号列*给的，与 #arg-ref("gb7714", "entry-hanging-indent")[`entry-hanging-indent`] 无关；那两个段落量在正文列内照常生效（相对正文列左缘再缩）；
+    /// - `"margin"`：编号*移到版心外*，正文与余行都贴版心左缘——对齐 CSL 的 `second-field-align="margin"`（原生 typst 未实现该值，渲染同 flush；本包实现之）；
     /// - `"inline"`：编号排在*行内*，不成列——余行与首行全由那两个段落量决定（没有编号列给 flush）。\
     /// #arg-ref("gb7714", "number-width")[`number-width`] / #arg-ref("gb7714", "number-align")[`number-align`] / #arg-ref("gb7714", "number-gutter")[`number-gutter`] 只在成列两档（`"column"` / `"margin"`）有意义。|
   number-align:    "left",    /// <- `string`
@@ -472,25 +472,25 @@
     /// 仅当条目实际带编号时生效（即 #arg-ref("gb7714", "numbering-style")[`numbering-style`] 非 `none`、且非著者-出版年制）。|
   disambiguate:        auto,      /// <- `auto` | `boolean` | `dictionary`
     /// 引用标注的消歧机制。标量是三键同值的简写，字典逐机制指定（缺的键按 `auto`）：\
-    /// - `date`（`auto` / `true` / `false`）：同一责任者、同一出版日期的多条给日期加 `a` / `b` / `c` 后缀。`auto`（缺省）只出现在*著者-出版年制的著录处*（`张三, 2020a. …`）与其正文标注；`true` *一律加*——②著录格式轴为 `numeric` 时条目末尾的出版年也带后缀（`…社, 2020a.`）；`false` 一律不加；
-    /// - `given-name`（`auto` / `true` / `false`）：*同姓不同人*时给行内标签补名——姓 -> 姓+首字母（`(Smith J, 2020)` / `(Smith A, 2020)`）-> 首字母仍撞再升全名（`(Miller John, 2020)`，此时文献表第一责任者同步全名），GB/T 7714 §9.3.1「倘若只标注责任者姓氏无法识别该人名时，可标注责任者姓名」-> §7.1.1，对齐官方 CSL 的 `disambiguate-add-givenname`。只动第一责任者、只动撞名的条目；
-    /// - `names`（`auto` / `true` / `false`）：第一责任者相同、合作者不同的撞名条目，逐条展开被「等 / et al」截断的名单直到分开（`(Brown, Wang et al., 2020)` / `(Brown, Chen et al., 2020)`），对齐官方 CSL 的 `disambiguate-add-names`。\
+    /// - `date`（`auto` / `true` / `false`）：同一责任者、同一出版日期的多条给日期加 `a` / `b` / `c` 后缀。`auto`（缺省）只出现在*著者-出版年制的著录处*（`张三, 2020a. …`）与其正文标注；`true` *一律加*——著录格式轴（bib-style）为 `numeric` 时条目末尾的出版年也带后缀（`…社, 2020a.`）；`false` 一律不加；
+    /// - `given-name`（`auto` / `true` / `false`）：*同姓不同人*时给行内标签补名——姓 -> 姓+首字母（`(Smith J, 2020)` / `(Smith A, 2020)`）-> 首字母仍相同再升全名（`(Miller John, 2020)`，此时文献表第一责任者同步全名），GB/T 7714 9.3.1「倘若只标注责任者姓氏无法识别该人名时，可标注责任者姓名」-> 7.1.1，对齐社区 CSL 的 `disambiguate-add-givenname`。只动第一责任者、只动重名的条目；
+    /// - `names`（`auto` / `true` / `false`）：第一责任者相同、合作者不同的重名条目，逐条展开被「等 / et al」截断的名单直到分开（`(Brown, Wang et al., 2020)` / `(Brown, Chen et al., 2020)`），对齐社区 CSL 的 `disambiguate-add-names`。\
     /// 梯子次序（CSL 同序）：展开名单 -> 补名 -> 剩下的（真同人同年）落年份后缀。\
-    /// `given-name` 与 `names` 的 `auto` 跟*①正文标注形态轴*：`style.cite` 是著者-出版年制才生效（顺序编码制的 `[1]` 无标签可消歧）；混合制（如 ```typc style: (cite: "numeric", bib: "author-date")```）想要表侧效果，显式设 `true`。|
+    /// `given-name` 与 `names` 的 `auto` 跟*正文标注形态轴（cite）*：`style.cite` 是著者-出版年制才生效（顺序编码制的 `[1]` 无标签可消歧）；混合制（如 ```typc style: (cite: "numeric", bib: "author-date")```）想要表侧效果，显式设 `true`。|
 
   bib-sort-by:         auto,      /// <- `auto` | `none` | `array`
     /// 参考文献表的排序键，按优先级从高到低排列：\
-    /// - `auto`（默认）：按本表的标注体系派生——著者-出版年制取 ```typc ("name", "date", "title")```（GB/T 7714 §9.3.2），顺序编码制取 `none`（GB §9.2.1.1 按引用先后编号）；
+    /// - `auto`（默认）：按本表的标注体系派生——著者-出版年制取 ```typc ("name", "date", "title")```（GB/T 7714 9.3.2），顺序编码制取 `none`（GB 9.2.1.1 按引用先后编号）；
     /// - `none`：不排序，保持引用 / `.bib` 原序；
     /// - `array`：排序键数组。元素是键名字符串（默认升序），要指定方向就展开成单条字典：\
-    ///   - 合法键：`"name"`（首要责任者姓名，取值链 sortkey -> key -> author -> editor -> title，即 GB §3.14「name and date」里的那个 name）、`"date"`（出版日期）、`"title"`（题名）；\
+    ///   - 合法键：`"name"`（首要责任者姓名，取值链 sortkey -> key -> author -> editor -> title，即 GB 3.14「name and date」里的那个 name）、`"date"`（出版日期）、`"title"`（题名）；\
     ///   - 合法方向：`"ascending"`（升序）、`"descending"`（降序）；\
     ///   - 例：```typc ("name", "date", "title")``` 全升序；```typc ("date": "descending")``` 写作 ```typc (("date": "descending"), "author")``` 即先按出版日期降序、再按责任者升序。\
-    /// *文种*（语种）总是最高优先级的隐式键，不写进本项也不可省（GB §9.3.2「先按文种集中」）；文种之间的先后由 #arg-ref("gb7714", "entry-lang-order")[`entry-lang-order`] 决定。\
+    /// *文种*（语种）总是最高优先级的隐式键，不写进本项也不可省（GB 9.3.2「先按文种集中」）；文种之间的先后由 #arg-ref("gb7714", "entry-lang-order")[`entry-lang-order`] 决定。\
     /// 正文合并引用组内的次序由 #arg-ref("gb7714", "cite-sort-by")[`cite-sort-by`] 独立控制。逐表可用 #arg-ref("print-bib", "sort-by")[```typ #bibliography(sort-by: ..)```] 覆盖。|
   cite-sort-by:        auto,      /// <- `auto` | `none` | `array`
     /// 正文*合并引用组内*的条目排序键（`@a@b@c` 合并成一组标注时组内的先后）：\
-    /// - `auto`（默认）：按本组标注体系与 `version` 派生——顺序编码制取编号升序（`@c@a` 得 `[1-2]`）；著者-出版年制 2025 取 ```typc ("name", "date")```（官方 2025 CSL 的组内排序键），2015 / 2005 保写法序（官方 2015 CSL 无组内排序）；
+    /// - `auto`（默认）：按本组标注体系与 `version` 派生——顺序编码制取编号升序（`@c@a` 得 `[1-2]`）；著者-出版年制 2025 取 ```typc ("name", "date")```（社区 2025 CSL 的组内排序键），2015 / 2005 保写法序（社区 2015 CSL 无组内排序）；
     /// - `none`：保写法序（顺序编码制此时只压缩写法序里天然连续递增的编号段）；
     /// - `array`：排序键数组，形制同 #arg-ref("gb7714", "bib-sort-by")[`bib-sort-by`] 而合法键只有 `"name"` 与 `"date"`（组内同著者同年的次序由消歧后缀先行决定，无题名判据）。任一标注体系下显式键数组都生效。\
     /// 排序对象与显示对象一致：`name` 键取*行内实际渲染的著者标签串*（经「等 / et al」截断与姓名消歧升级），中文按 #arg-ref("gb7714", "cite-sort-zh-by")[`cite-sort-zh-by`] 取拼音 / 笔画键；`date` 键为出版年数值加消歧后缀。*文种*总是最高优先级的隐式键（与 `bib-sort-by` 同一条规则）。\
@@ -516,9 +516,9 @@
     /// 「同前一人」的正名，与脚注域的 ibid「同前一处」分工；biblatex 的 dashed、AMS 的
     /// \bysame、CSL 的 subsequent-author-substitute 同一特性）：\
     /// - `none`（默认）：不替换（GB 无此惯例）；
-    /// - 字符串（如 `"———"`，MLA / Chicago 的三连横线；社科中文刊同形）：替换串。\
+    /// - 字符串（如 `"———"`，MLA / Chicago 的三连横线；社科中文刊也用）：替换串。\
     /// 判定与 biblatex fullhash 同义：比*完整名册*（非显示串，et-al 截断偶合不误判），只看
-    /// 名单不看顶替来源角色（author 与 editor 顶替同人也替，biber 实测同形）；佚名（名册为空）
+    /// 名单不看回退来源角色（author 与 editor 回退到同人也替，biber 实测形态相同）；佚名（名册为空）
     /// 不替；`A、B、A` 序列里隔开的重复不替（CSL preceding-entry 语义）；双语关联条目第二行不参与。\
     /// 逐表可用 ```typ #bibliography(creator-idem: ..)``` 覆盖。|
   sort-use-prefix:     false,  /// <- `boolean`
@@ -532,9 +532,9 @@
     /// `bibliography` 接受单次覆盖（仍可被条目 / 名字级再覆盖）。|
   entry-lang-order: ("zh", "ja", "ko", "en", "fr", "ru"), /// <- `array`
     /// 多语言混排时的语种分组顺序，靠前的语种排在前面；未列出的语种排在列出的之后。\
-    /// *文种是隐式的最高优先级排序键*——#arg-ref("gb7714", "bib-sort-by")[`bib-sort-by`] 写不写它，文献表都先按文种集中（GB/T 7714—2025 §9.3.2）。\
+    /// *文种是隐式的最高优先级排序键*——#arg-ref("gb7714", "bib-sort-by")[`bib-sort-by`] 写不写它，文献表都先按文种集中（GB/T 7714—2025 9.3.2）。\
     /// `()`（空数组）= 不分组：所有条目走*一趟全局字顺*，`Adams` / `陈明`（chen）/ `Zhao` 按拼音混排在一起，而不是「中文组在前」。
-    /// 这是偏离国标的选项（§9.3.2 要求先按文种集中），给要对齐 CSL 与国际惯例的用户——CSL 1.0.2 没有文种分组能力。\
+    /// 这是偏离国标的选项（9.3.2 要求先按文种集中），给要对齐 CSL 与国际惯例的用户——CSL 1.0.2 没有文种分组能力。\
     /// 顺序编码制按引用先后编号，本参数只影响合引组内的排序（`[3,1]` 合并时组内谁先谁后）。|
   entry-lang-detect:         "auto",    /// <- "auto" | "fast" | "accurate"
     /// 条目 `langid` / `language` 域缺失时的语言判定方式（已显式标注语种的条目不受影响）。\
@@ -546,8 +546,8 @@
 
   show-mark:           true,      /// <- `auto` | `boolean` | `dictionary`
     /// 文献类型标识显示控制。\
-    /// - `true`（默认）：显示（如 J），单块著录也保留类型码（对齐 GB/T 7714 §7.3「文献类型标识」演示 `马寅初讲义[M]`）；`false`：隐藏；\
-    /// - `auto`：多块著录显示、只剩*一个*著录块时不显示（GB/T 7714 §7.2 题名演示片段 `《西游记》…` 无 \[M\]）；\
+    /// - `true`（默认）：显示（如 J），单块著录也保留类型码（对齐 GB/T 7714 7.3「文献类型标识」演示 `马寅初讲义[M]`）；`false`：隐藏；\
+    /// - `auto`：多块著录显示、只剩*一个*著录块时不显示（GB/T 7714 7.2 题名演示片段 `《西游记》…` 无 \[M\]）；\
     /// - 字典：按条目控制，键 = 小写 entry_type（`.bib` 里的类型名）或大写标识码（GB/T 7714 附录 A，按版本中性语义类匹配——`PP` 在 2015 同样命中预印本），`rest` 回退；优先级 entry_type > 码 > `rest`。\
     /// 例（表 8 脚注 a「标准的文献类型标识为可选项」）：```typ show-mark: (rest: true, S: false)``` 省去标准的 \[S\]、其余照出。\
     /// 值收 `true` / `false` / `auto`——`auto` 让命中该键的条目按*单块退化*显码（单块去码、多块显码，是顶层 `auto` 的逐类型 / 码版）。例 ```typ show-mark: (S: false, rest: auto)``` 标准总是不出码、其余按单块退化；```typ show-mark: (S: auto, rest: true)``` 只标准按单块退化、其余总是显码。无 `"online-only"` 档（标识不是获取途径，联机判据对它无语义）。|
@@ -623,12 +623,12 @@
     /// - `true`：出版地一缺就补（GB/T 7714 严格著录，占位词随条目语言）；
     /// - `false`：从不补，留空。\
     /// *`auto` 的两个不补例外*（仅当条目是「出版信息片段」——无责任者、无题名——时生效；有题名或责任者的
-    /// 完整著录不受影响，如 §8.2.2:7 联机图书仍补 `[S.l.]`）：\
-    /// - *电子资源*（有 `url`）：GB/T 7714—2025 §7.5.2.3 末句「无出版地的电子资源可省略此项」
-    ///   （§7.5.2.3:3「Open University Press, 2025. https://…」）；\
-    /// - *无出版日期的裸元素*（只一个出版地或出版者、无 `date`）：§7.5.2.1 出版地元素示例
+    /// 完整著录不受影响，如 8.2.2:7 联机图书仍补 `[S.l.]`）：\
+    /// - *电子资源*（有 `url`）：GB/T 7714—2025 7.5.2.3 末句「无出版地的电子资源可省略此项」
+    ///   （7.5.2.3:3「Open University Press, 2025. https://…」）；\
+    /// - *无出版日期的裸元素*（只一个出版地或出版者、无 `date`）：7.5.2.1 出版地元素示例
     ///   （「Cambridge, Eng.」单独著录、不补出版者）。\
-    /// 有出版日期的非电子片段（§7.5.2.3:1「[出版地不详]: 三户图书刊行社, 1990」）仍照补。\
+    /// 有出版日期的非电子片段（7.5.2.3:1「[出版地不详]: 三户图书刊行社, 1990」）仍照补。\
     /// 自己在 `.bib` 里写了 `location = {[S.l.]}` 的，各档都*原样著录*——本参数只管「字段真的没有时替不替
     /// 你补」，不改写你写下的字段文本。\
     /// 手册、档案、学位论文（标识码 A、D、S）与电子原生类（EB / DB / CP / DS / PP、[Z/OL]）*任何档*都不补
@@ -638,7 +638,7 @@
     /// （出版地 ↔ 出版者互换）：\
     /// - `auto`（默认）：出版者缺、且*出版地在场*时补；两项都缺则不补；同样有「电子资源片段」「无出版日期
     ///   裸元素」两个不补例外（见 `show-sine-loco`），完整著录与有出版日期的非电子片段照补
-    ///   （§7.5.3.3:1「哈尔滨: [出版者不详], 2013」补、§7.5.3.1「中国标准出版社」单列不补）；\
+    ///   （7.5.3.3:1「哈尔滨: [出版者不详], 2013」补、7.5.3.1「中国标准出版社」单列不补）；\
     /// - `true`：出版者一缺就补；\
     /// - `false`：从不补。\
     /// 自己写了 `publisher = {[s.n.]}` 就原样著录。出版地、出版者*都缺且都补*时，合并进*同一对*方括号
@@ -647,13 +647,13 @@
     /// 出版信息里*没有出版年*时，要不要在出版年位补占位（`北京: 某社, [出版年不详]`）。\
     /// - `false`（默认）：留空；
     /// - `true`：补「[s.a.] / 出版年不详」占位（占位词随条目语言，可经 #arg-ref("gb7714", "custom-terms")[`custom-terms`] 的 `sine-anno` 键覆写）。\
-    /// *与前两项的地位不同*：GB/T 7714 对无出版地（§7.5.2.3）、无出版者（§7.5.3.3）给了拉丁著录形式；
-    /// 对缺出版年，§7.5.4.3 要求的是估计一个年份（版权年 `c1988` / 印刷年 / 估计年 `[1936]`）、并未规定占位词。
+    /// *与前两项的地位不同*：GB/T 7714 对无出版地（7.5.2.3）、无出版者（7.5.3.3）给了拉丁著录形式；
+    /// 对缺出版年，7.5.4.3 要求的是估计一个年份（版权年 `c1988` / 印刷年 / 估计年 `[1936]`）、并未规定占位词。
     /// 补占位词（日期不详／s.a.）是「连估计都做不到」时部分方言的自选（345 个社区 CSL 里 16 个顺序编码方言
     /// 在著录位补它，西文全 `n.d.`／`no date`、无一 `s.a.`），所以默认关——GB 正解是估计年（见 `date-fallback`）。\
     /// 西文取拉丁 `s.a.`（sine anno）而非 CSL 的 `n.d.`：GB 对前两项明确选了拉丁体系（`S.l.` /
     /// `s.n.`），第三项在国标体系内类推拉丁才自洽。\
-    /// *只对顺序编码制有意义*：著者-出版年制把出版年移到责任者后（§8.1），著录位本来就没有年——
+    /// *只对顺序编码制有意义*：著者-出版年制把出版年移到责任者后（8.1），著录位本来就没有年——
     /// 那一侧的占位归 #arg-ref("gb7714", "show-no-date")[`show-no-date`] 管（缺省就是开的）。两个参数管两个槽，不重叠。\
     /// 手册、档案、学位论文（标识码 A、D、S）与电子原生类（EB / DB / CP / DS / PP、[Z/OL]）不补——本无出版信息槽（同 #arg-ref("gb7714", "show-sine-loco")[`show-sine-loco`] 的类型跳过）。\
     /// 出版地、出版者、出版年*都缺且都补*时，合并进*同一对*方括号：`[出版地不详: 出版者不详, 出版年不详]`；地或者在场打断连续时，日期自成一对（`北京: 某社, [出版年不详]`）。|
@@ -672,10 +672,11 @@
     /// `bibliography` / `cite(footnote: true)` 接受同名参数，`auto` 继承全局值。|
   prefix-last:         auto,       /// <- `auto` | `boolean`
     /// 西文姓名前缀（van der / von / de 等）的著录形态（中文姓名不受影响）：\
-    /// - `auto`（默认）：随版本——2025 取 `true`、2015 取 `false`；
-    /// - `true`：前缀缩为各段首字母、置于名缩写之后——`Pieternella H. van der Veen` -> `Veen P H v d`（GB/T 7714—2025 示例形态）；
-    /// - `false`：前缀全拼、置于姓之前——`van der Veen P H`。\
-    /// 与 #arg-ref("gb7714", "bib-name-style")[`bib-name-style`] 正交：大小写仍由 `name-style` 决定（`uppercase` 档下 `true` 得 `VEEN P H V D`）。仅作用于参考文献表著录，正文引用标注用姓氏、不受此项影响。\
+    /// - `auto`（默认）= `false`，不随版本；
+    /// - `false`（缺省）：前缀*全拼*置于姓前——`van der Veen, P. H.` -> `van der Veen P H`（对齐李泽平 .bst 各版本现默认、biblatex `useprefix=true`）；
+    /// - `true`：前缀*全拼*移到名之后——`van der Veen, P. H.` -> `Veen P H van der`（对齐 ISO 690:2021「KARAJAN, H. von」、biblatex `useprefix=false`）。\
+    /// 前缀著录进*名*字段时（`Veen, P. H. van der`）跟名一起缩、保原大小写，得 `Veen P H v d`（GB/T 7714—2025 示例形态），与本参数无关。\
+    /// 与 #arg-ref("gb7714", "bib-name-style")[`bib-name-style`] 正交：`family-case` 作用于姓与*前置*前缀（`uppercase` 档 `false` 得 `VAN DER VEEN P H`），*后置*前缀（`true` 档）保原小写、不随姓大写。仅作用于参考文献表著录，正文引用标注用姓氏、不受此项影响。\
     /// 本项是全局默认；逐条目 `options={useprefix=..}` 与逐名字扩展格式的 `useprefix` 会逐名覆盖它——`useprefix=true` ⇔ 前缀前置（`false` 档），`useprefix=false` ⇔ 前缀后置（`true` 档），与 biblatex 一致。|
   show-series:         false,     /// <- `boolean`
     /// 是否著录丛书项（`series` 字段，如「经济科学译库」）。\
@@ -703,8 +704,8 @@
     /// 内置标识符的默认显示：DOI 总是显示；CSTR 仅 #arg-ref("gb7714", "version")[`version: 2025`] 默认显示；eprint 默认显示（唯 2025 预印本 PP 且出版平台已由 `eprinttype` / `archiveprefix` 著录时抑制）；ISBN / ISSN 默认不显示（国标列为任选项，需要时显式 ```typ show-pid: (isbn: true)```）。\
     /// 元配置键（不视作标识符名）：\
     /// - `max`：著录数量上限（不设 = 不限）。`max: 1` = 至多著录一个，取 #arg-ref("gb7714", "pid-priority")[`pid-priority`] 次序下首个*能著录*者。\
-    ///   数的是实际印出来的标识符个数——获取和访问路径（GB/T 7714—2025 §7.8）是另一个著录项目，不占这个配额；被 URL 去重抑制的标识符也不占。\
-    ///   *缺省不限的依据*：§7.9 全文只有两条（7.9.1 路径含 PID 时可不重复著录、7.9.2 不含时可按原文如实著录），没有数量上限。「一般只印一个」是惯例不是国标，想要就显式写 `max: 1`；
+    ///   数的是实际印出来的标识符个数——获取和访问路径（GB/T 7714—2025 7.8）是另一个著录项目，不占这个配额；被 URL 去重抑制的标识符也不占。\
+    ///   *缺省不限的依据*：7.9 全文只有两条（7.9.1 路径含 PID 时可不重复著录、7.9.2 不含时可按原文如实著录），没有数量上限。「一般只印一个」是惯例不是国标，想要就显式写 `max: 1`；
     /// - `rest`：未点名标识符的回退档。`rest: false` 全部隐藏（显式置 `true` 者仍生效，如 ```typ show-pid: (rest: false, doi: true)``` 仅留 DOI）；`rest: true` 全部显示（含默认不显示的 ISBN / ISSN）；`rest: "online-only"` 仅网络文献显示。\
     /// 条目词汇键（与 #arg-ref("gb7714", "show-mark")[`show-mark`] / #arg-ref("gb7714", "show-url")[`show-url`] 同一套）：小写 entry_type 或大写标识码，按条目关停全部标识符，如 ```typ show-pid: (book: false)```；标识符名键的显式设置优先于条目词汇键。\
     /// 内置标识符的特殊行为：\
@@ -721,10 +722,10 @@
     /// *不必随版本变*：2015 版的 CSTR 由 #arg-ref("gb7714", "show-pid")[`show-pid`] 默认关掉，排在次序里也不会印出来。\
     /// *次序只看本参数*：#arg-ref("gb7714", "show-pid")[`show-pid`] 是开关，它的书写顺序不影响次序（```typ show-pid: (issn: true, isbn: true)``` 与 ```typ (isbn: true, issn: true)``` 输出一致）。\
     /// 与 #arg-ref("gb7714", "show-pid")[`show-pid`] 的 `max` 配合：`max: 1` 时印出来的就是本次序下*首个能著录*的标识符（被 URL 去重抑制的不算）。\
-    /// *国标没有规定 PID 之间的次序*——GB/T 7714—2025 §7.9 全文只有两条（7.9.1 路径含 PID 时可不重复著录、7.9.2 不含时可按原文如实著录），既没有数量上限，也没有优先级。本参数的缺省值是本包的取舍。|
+    /// *国标没有规定 PID 之间的次序*——GB/T 7714—2025 7.9 全文只有两条（7.9.1 路径含 PID 时可不重复著录、7.9.2 不含时可按原文如实著录），既没有数量上限，也没有优先级。本参数的缺省值是本包的取舍。|
   dedup-url-pid:       auto,      /// <- `auto` | `boolean`
-    /// 获取和访问路径与永久标识符去重：路径里已经含了这个标识符时，不重复著录它。依据 GB/T 7714—2025 §7.9.1「获取和访问路径中含永久标识符时，可不重复著录永久标识符」。\
-    /// - `auto`（默认）：随 #arg-ref("gb7714", "version")[`version`]——2025 版开（§7.9.1 是那一版的条款），2015 版关；
+    /// 获取和访问路径与永久标识符去重：路径里已经含了这个标识符时，不重复著录它。依据 GB/T 7714—2025 7.9.1「获取和访问路径中含永久标识符时，可不重复著录永久标识符」。\
+    /// - `auto`（默认）：随 #arg-ref("gb7714", "version")[`version`]——2025 版开（7.9.1 是那一版的条款），2015 版关；
     /// - `true` / `false`：显式开关。\
     /// 判据是「印出来的路径里含这一个标识符」，大小写不敏感（DOI 规范本身大小写不敏感）：\
     /// - `show-url: false` 时路径根本不印，就没有「已经著录过」这回事，标识符照常著录；
@@ -745,7 +746,7 @@
   pid-colon-style:     auto, /// <- `auto` | "half-with-space" | "half" | "full" | "by-doc-no-space" | "by-doc-with-space" | "by-entry-no-space" | "by-entry-with-space"
     /// 永久标识符（DOI / CSTR / eprint 及自定义 PID）标签与值之间那一个冒号的全 / 半角风格，独立于结构冒号（出版项 `出版地：出版者`、页码定位 `年：页`）。取值同 #arg-ref("gb7714", "bib-punct-style")[`bib-punct-style`]：\
     /// - `auto`（默认）：跟随 `bib-punct-style`——中文条目部分全角档取全角 `：`、半角档取半角 `:`（总是不带尾空格），并尊重 #arg-ref("gb7714", "custom-punct")[`custom-punct`] 对 `colon` 的覆写。即历史行为。\
-    /// - *非 `auto`*：只把这一个冒号强制成对应风格，其余冒号不动——`"half"` -> `DOI:10.xxxx`、`"half-with-space"` -> `DOI: 10.xxxx`、`"full"` -> `DOI：10.xxxx`；`by-doc-*` 按文档语言、`by-entry-*` 按条目语言定全 / 半角。非 `auto` 时*绕过* `custom-punct` 的 `colon`（专用旋钮更具体、优先）。\
+    /// - *非 `auto`*：只把这一个冒号强制成对应风格，其余冒号不动——`"half"` -> `DOI:10.xxxx`、`"half-with-space"` -> `DOI: 10.xxxx`、`"full"` -> `DOI：10.xxxx`；`by-doc-*` 按文档语言、`by-entry-*` 按条目语言定全 / 半角。非 `auto` 时*规避* `custom-punct` 的 `colon`（专用旋钮更具体、优先）。\
     /// 用途：国标 8.7.2 等示例把 PID 冒号排成半角，而中文条目其余标点为全角时，用 ```typ pid-colon-style: "half"``` 单独把它调回半角。|
   custom-punct:     (:),       /// <- `dictionary`
     /// 精确覆盖某符号的字面量，优先级高于 `bib-punct-style`：列出的符号总是用用户值。\
@@ -796,7 +797,7 @@
   titles-text-case:    none,      /// <- `none` | `string` | `dictionary`
     /// 长标题类字段的大小写转换（替代已废除的 `sentence-case-title` 布尔）。\
     /// 标量值作用于全部白名单字段；字典按字段分设，`rest` 回退。取值：\
-    /// - `none`（默认）：不转换，按 `.bib` 原样（`raw(theme: none)` 同款「关处理、内容照显」语义）；
+    /// - `none`（默认）：不转换，按 `.bib` 原样（与 `raw(theme: none)` 一致的「关处理、内容照显」语义）；
     /// - `"sentence"`：句首大写、其余小写（CSL `text-case="sentence"`）；
     /// - `"title"`：实词大写、小词小写、首末词总是大写（CSL `text-case="title"`，即 Title Case）。\
     /// 白名单 12 字段：`title` / `subtitle` / `titleaddon` / `maintitle` / `booktitle` / `booksubtitle` / `booktitleaddon` / `journaltitle`（`journal` 为其别名键，真名静默胜）/ `journalsubtitle` / `journaltitleaddon` / `eventtitle` / `series`；其余键 panic。`shortjournal` 不受理——缩写刊名的大小写即其规范。\
@@ -822,7 +823,7 @@
     /// 对应 biblatex 的 `\labelnamepunct`。|
   show-end-period:     auto,      /// <- `auto` | `boolean`
     /// 著录末尾句点。\
-    /// - `auto`（默认）：只剩*一个*著录块被著录时不追加句号（GB/T 7714 §7 各著录元素的单块演示片段本就无末尾句点），多块照常追加。块 = 顶层著录项（责任者 / 题名 / 版本 / 出版信息 / 获取路径 / 标识符…）。\
+    /// - `auto`（默认）：只剩*一个*著录块被著录时不追加句号（GB/T 7714 第 7 章各著录元素的单块演示片段本就无末尾句点），多块照常追加。块 = 顶层著录项（责任者 / 题名 / 版本 / 出版信息 / 获取路径 / 标识符…）。\
     /// - `true`：条目不以缩写点结尾时总追加句号 `.`；
     /// - `false`：不追加。|
   space-before-mark:   false,     /// <- `boolean`
@@ -842,7 +843,7 @@
     /// *多语言字典* 按条目语言分设：```typc page-range-separator: (zh: "～")``` 让中文条目出全角波浪线，其余语言仍用预设值（这里是 `"-"`）。键是条目语言码（`zh` / `en` / `ja` / `ko` / `ru` / `fr`），写错的键报错。`rest` 档改写「其余语言」：```typc (zh: "～", rest: "–")``` 让未点名的语言出 en dash（`rest` 的用法同 `show-url` / `titles-text-case`）。字典挑出的值仍按上面的全 / 半角规则感知。字典写法对*所有* `-separator` 参数生效（姓名四接缝、`name-date-separator`、`et-al-translator-separator`、`cite-range-separator` 等），不止本项。|
   page-range-style:    none,      /// <- `none` | `string`
     /// 起讫页码的*位数形态*——把 `pages` 里的起讫页重排成折叠或展开写法。与 #arg-ref("gb7714", "page-range-separator")[`page-range-separator`]（管*连接符*）正交：本项产出数字，连接符仍由它给。\
-    /// - `none`（默认）：*页码原样*，一个数字都不动。GB/T 7714—2025 §7.7 对页码只规定「阿拉伯数字」，没有规定折叠还是展开——标准不要求，就不替用户决定；开档位即是用户显式同意「改写我的 `pages` 数据」。\
+    /// - `none`（默认）：*页码原样*，一个数字都不动。GB/T 7714—2025 7.7 对页码只规定「阿拉伯数字」，没有规定折叠还是展开——标准不要求，就不替用户决定；开档位即是用户显式同意「改写我的 `pages` 数据」。\
     /// - `"expanded"`：结束页补全（```bib pages={321-28}``` 得 `321-328`）；
     /// - `"minimal"`：只留变化的位（`321-328` 得 `321-8`）；
     /// - `"minimal-two"`：同上但至少两位（`321-328` 得 `321-28`）；
@@ -860,22 +861,22 @@
     ///   韩文走韩文字形。需文档为该语种配了*带 `locl` 的泛 CJK 字体*（如未区域化的思源宋体 / Noto Serif CJK）才见效；
     ///   区域锁定字体（Noto Serif CJK SC / JP 等）字形由字体本身决定，设 `lang` 不切。\
     /// 取值：\
-    /// - `auto`（默认）：非 CJK 总是开（连字，版本中性）；CJK *除 2005 版外都开*（2015 / 2025 按 §5.1「参考文献应用信息资源
+    /// - `auto`（默认）：非 CJK 总是开（连字，版本中性）；CJK *除 2005 版外都开*（2015 / 2025 按 5.1「参考文献应用信息资源
     ///   本身的语种著录」走本地化字形——2026 夏勘误把日文示例的「大辭典」改为日文字形「大辞典」即为佐证；2005 版从旧、字形不切）；\
     /// - `true`：所有语种、所有版本都开（2005 也切 CJK 字形）；\
     /// - `false`：全关，所有条目跟随文档语言（连非 CJK 连字也不按条目走）。|
   footnote-repeat-style:     auto,      /// <- `auto` | `string`
-    /// 重复引用同一文献时脚注装什么（首次总是完整著录——官方 note CSL 与全部社区方言一致）。
+    /// 重复引用同一文献时脚注装什么（首次总是完整著录——社区 note CSL 与全部方言一致）。
     /// 单值；紧邻位的「同上」简化由 #arg-ref("gb7714", "footnote-ibid")[`footnote-ibid`] 独立控制，两参正交出全部有据体例：\
-    /// - `auto`（默认）：`"number"`——`version: 2015` 配缺省 `footnote-ibid: auto`（=`true`）即官方 2015 note CSL 的梯子：紧邻「同上(: 页码)」、隔开「同③(: 页码)」；`version: 2025` 下 `footnote-ibid` 缺省转 `false`，全程「同③(: 页码)」，对齐 2025 note CSL 与 GB 2025 §9.2.1.3；
-    /// - `"full"`：重复著录整条（GB §9.2.1.3「重复著录」正统，社区方言主流；与 `"shortened"` 对仗，即 CMOS 的 full note / shortened citation 逐字术语）；
+    /// - `auto`（默认）：`"number"`——`version: 2015` 配缺省 `footnote-ibid: auto`（=`true`）即社区 2015 note CSL 的梯子：紧邻「同上(: 页码)」、隔开「同③(: 页码)」；`version: 2025` 下 `footnote-ibid` 缺省转 `false`，全程「同③(: 页码)」，对齐 2025 note CSL 与 GB 2025 9.2.1.3；
+    /// - `"full"`：重复著录整条（GB 9.2.1.3「重复著录」正统，社区方言主流；与 `"shortened"` 对仗，即 CMOS 的 full note / shortened citation 逐字术语）；
     /// - `"number"`：同③（首注号,圈码自动镜像文档脚注编号样式，序号假定脚注全文连续编号；custom-terms 的 `footnote-number` 模式词键管它的前后缀与页码分隔——词汇表键在全局空间需完整域名，参数值在本参数域内无需重复前缀）；
     /// - `"shortened"`：缩略「责任者. 题名[标识].」（完整注的*缩减产物*，CMOS 术语；页码接独立著录段）；
     /// - `"reuse"`：*不发新注*，正文上标复用首注号——唯一装不下页码的值。\
     /// 「同上」「同」两词可经 #arg-ref("gb7714", "custom-terms")[`custom-terms`] 的 `ibid`（纯词）与 `footnote-number`（前后缀对）覆写，按*文档语言*取词。|
   footnote-ibid:       auto,      /// <- `auto` | `boolean`
     /// *紧邻*重复（上一条脚注引用就是同一文献，中间夹普通脚注不破坏）是否简化为「同上(: 页码)」：\
-    /// - `auto`（默认，版本感知）：`version: 2015` / `2005` = `true`（紧邻「同上」，对齐 2015 note CSL）；`version: 2025` = `false`（2025 note CSL 弃用 ibid、GB 2025 §9.2.1.3 只标首次序号，紧邻重复也走 #arg-ref("gb7714", "footnote-repeat-style")[`footnote-repeat-style`]）；
+    /// - `auto`（默认，版本感知）：`version: 2015` / `2005` = `true`（紧邻「同上」，对齐 2015 note CSL）；`version: 2025` = `false`（2025 note CSL 弃用 ibid、GB 2025 9.2.1.3 只标首次序号，紧邻重复也走 #arg-ref("gb7714", "footnote-repeat-style")[`footnote-repeat-style`]）；
     /// - `false`：紧邻不特殊化，与隔开重复一样取 #arg-ref("gb7714", "footnote-repeat-style")[`footnote-repeat-style`] 的值（如 `"full"` 配 `false` = GB 纯重复著录；`"shortened"` 配 `false` = Chicago 17th 全缩略）。\
     /// 「同上」的页码语义走 CSL position 算法：与上次同页码时不重复页码；上次有页码本次没有时降级为隔开。|
   footnote-repeat-reset: none,    /// <- `none` | `"per-page"` | `selector`
@@ -893,7 +894,7 @@
   custom-marks:      (:),       /// <- `dictionary`
     /// 配置级「条目类型 -> 默认标识码」登记表——自造类型设码的正道入口，也可覆写内置类型的默认码。\
     /// - 键 = entry_type（小写，开放集）：```typ custom-marks: (dissertation: "D", software: "SW")``` 让 `@dissertation` 出 \[D\]、`@software` 改出 \[SW\]；
-    /// - 值 = 标识码本体（非空字符串），*也可是卫语句串* ```typ (misc: "<url ? doi => EB>< => M>")```：复用 `custom-drivers` 的 `<GUARD => body>` DSL 按*字段*分派码（first-match，`< => X>` 回退），求值进类型码派生链——`mark(entry)` 拿到的即解析后码，下游（2025 引用日期限定 / `show-*` 码键 / category 路由）全部一致；卫语句是 field-only（只读 bib 字段与 entry-type）。\
+    /// - 值 = 标识码本体（非空字符串），*也可是卫语句串* ```typ (misc: "<url ? doi => EB>< => M>")```：复用 `custom-drivers` 的 `<GUARD => body>` DSL 按*字段*分派码（first-match，`< => X>` 回退），求值进类型码派生链——`mark(entry)` 取到的即解析后码，下游（2025 引用日期限定 / `show-*` 码键 / category 路由）全部一致；卫语句是 field-only（只读 bib 字段与 entry-type）。\
     /// - 载体段不在此写——`/OL` 由 `medium` 字段与联机判据决定。\
     /// 链位：条目数据五通道（note 劫持 / usera / entrytypeid / entrysubtype / mark）之下、版本化类型默认之上——条目字段永远压配置，配置压内置默认。\
     /// 登记的自造码自动并入大写码键的合法集：`show-mark` / `show-url` / `show-pid` 字典与 `custom-drivers` 都能用 ```typ (SW: ..)``` 点名；码变则格式路由随之（码即身份）。|
@@ -951,7 +952,6 @@
   punct-custom.validate-punct(custom-punct)
 
   let _version-auto = (
-    prefix-last: prefix-last == auto,
     dedup-url-pid: dedup-url-pid == auto,
     punct-style: punct-style == auto,
     name-suffix-separator: name-suffix-separator == auto,
@@ -960,7 +960,7 @@
   let _name-style-raw = name-style
   let name-style = creators.resolve-name-style(name-style, version: version, side: "bib")
 
-  if prefix-last == auto { prefix-last = (version == 2025) }
+  if prefix-last == auto { prefix-last = false }
 
   if dedup-url-pid == auto { dedup-url-pid = (version == 2025) }
 
@@ -1811,7 +1811,7 @@
   /**
   = `bibliography` — 生成参考文献表 <print-bib>
 
-  与 Typst 原生 `bibliography` 同形：首位置参数收 bib 内容（`read("refs.bib")` 的结果，
+  与 Typst 原生 `bibliography` 一致：首位置参数收 bib 内容（`read("refs.bib")` 的结果，
   仅多这一层 `read()` 是 Typst 包沙箱的限制），`title` / `full` / `style` / `target` / `group`
   与原生同名同义（后两者需 typst 0.15+）。在此之上扩展：`label` 命名列表、按类型 / 关键词 /
   自定义函数过滤、多种排序与布局覆盖。多次调用即多个独立列表，编号自动全局连续。
@@ -1864,7 +1864,7 @@
       /// 对条目 `keywords` 字段做大小写敏感的子串匹配，仅著录含该关键词的条目；需更精准的正则匹配请用 `filter` 自行构建。|
     mark:          none,   /// <- `none` | `string` | `array`
       /// 按*文献类型标识码*过滤，如 `"M"`、`"J"`、`("C", "G")`。匹配条目标识等于该值，载体不影响匹配，如 `"EB"` 可匹配 EB/OL。\
-      /// 曾叫 `type:`——那个名字与 bib 的 `type` 字段（报告种类、学位类型）撞名，还遮蔽了 Typst 内置的 `type()` 函数。\
+      /// 不叫 `type:`——那个名字会与 bib 的 `type` 字段（报告种类、学位类型）重名，还遮蔽 Typst 内置的 `type()` 函数。\
       /// 按*条目类型*筛用 #arg-ref("print-bib", "entry-type")[`entry-type`]。|
 
     label:         none,   /// <- `none` | `string`
@@ -2013,7 +2013,7 @@
     native-bib-index: none,   /// <- `none` | `int`
       /// 纯内部：native 模式（0.15 多 bib 原生路由）下本 bib 在 `gb7714-bib-list` 里的索引，\
       /// 由 `bibliography()` 壳传入。消歧后缀表 `_list-suffix-map` 据此按 bib 实例建键（而非 list-label），\
-      /// 让多张主表各存各的后缀、cite 标签按其 marker 携带的 bib-index 合并回读（BUGS #20 深层）。|
+      /// 让多张主表各存各的后缀、cite 标签按其 marker 携带的 bib-index 合并回读。|
     footnote:      auto,   /// <- `auto` | `boolean`
       /// 本列表的脚注制开关：归属本列表的引用走脚注（完整著录于脚注处）。\
       /// - `auto`（默认）：跟随全局 #arg-ref("gb7714", "cite-footnote")[`cite-footnote`]；
@@ -2167,7 +2167,7 @@
     let eff-back-ref                 = _api-pick(back-ref, _global-config.back-ref)
     let eff-show-degree              = _api-pick(show-degree, _global-config.show-degree)
     let eff-show-series              = _api-pick(show-series, _global-config.show-series)
-    let eff-prefix-last             = _va-derive("prefix-last", prefix-last, true, false)
+    let eff-prefix-last             = _api-pick(prefix-last, _global-config.prefix-last)
     let eff-custom-drivers         = _api-pick(custom-drivers, _global-config.custom-drivers)
     let eff-custom-terms                    = _api-pick(custom-terms, _global-config.custom-terms)
     let eff-custom-fields                   = _api-pick(custom-fields, _global-config.custom-fields)
