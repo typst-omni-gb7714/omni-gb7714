@@ -5,18 +5,18 @@
 #let csl-name-map = (
   "gb-7714-2005-numeric": ("numeric", 2005, auto),
   "gb-7714-2005-author-date": ("author-date", 2005, auto),
-  "gb-7714-2005-note": ("numeric", 2005, true),
+  "gb-7714-2005-note": ("numeric", 2005, "foot"),
   "gb-7714-2015-numeric": ("numeric", 2015, auto),
   "gb-7714-2015-author-date": ("author-date", 2015, auto),
-  "gb-7714-2015-note": ("numeric", 2015, true),
+  "gb-7714-2015-note": ("numeric", 2015, "foot"),
   "gb-7714-2025-numeric": ("numeric", 2025, auto),
   "gb-7714-2025-author-date": ("author-date", 2025, auto),
-  "gb-7714-2025-note": ("numeric", 2025, true),
+  "gb-7714-2025-note": ("numeric", 2025, "foot"),
 )
 
 #let normalize(style) = {
   if style == none or style == auto {
-    return (cite: none, bib: none, version: auto, footnote: auto, native: false)
+    return (cite: none, bib: none, version: auto, note: auto, native: false)
   }
   if type(style) == dictionary {
     for (key, _) in style {
@@ -31,16 +31,16 @@
       else if type(value) == str and value in axis-values { value }
       else { errors.raise("style.bad-axis-value", key: key, value: repr(value), values: axis-values.join(" / ")) }
     }
-    return (cite: pick("cite"), bib: pick("bib"), version: auto, footnote: auto, native: false)
+    return (cite: pick("cite"), bib: pick("bib"), version: auto, note: auto, native: false)
   }
   if type(style) == str and style in axis-values {
-    return (cite: style, bib: style, version: auto, footnote: auto, native: false)
+    return (cite: style, bib: style, version: auto, note: auto, native: false)
   }
   if type(style) == str and style in csl-name-map {
-    let (name, version, footnote) = csl-name-map.at(style)
-    return (cite: name, bib: name, version: version, footnote: footnote, native: false)
+    let (name, version, note) = csl-name-map.at(style)
+    return (cite: name, bib: name, version: version, note: note, native: false)
   }
-  (cite: none, bib: none, version: auto, footnote: auto, native: true)
+  (cite: none, bib: none, version: auto, note: auto, native: true)
 }
 
 #let resolve(list-style, global-style, fallback: "numeric") = {

@@ -1,6 +1,10 @@
 #let _ENUMS = (
-  "numbering-style": ("bracket", "paren", "dot", "plain", "fullwidth-bracket", "fullwidth-paren", "shell", "circled", none),
-  "cite-numbering-style": ("bracket", "paren", "fullwidth-bracket", "fullwidth-paren", "shell"),
+  "bib-numbering-style": ("bracket", "paren", "dot", "plain", "fullwidth-bracket", "fullwidth-paren", "shell", "circled", none),
+  "cite-numbering-style": ("bracket", "paren", "fullwidth-bracket", "fullwidth-paren", "shell", "circled"),
+
+  "note": (none, "foot", "end"),
+
+  "note-numbering-style": ("circled",),
   "mark-medium-bracket-style": ("half", "full"),
   "number-align": ("left", "right", "center"),
 
@@ -65,9 +69,9 @@
   "custom-pids.prefix-bad": "gb7714: custom-pids `{name}`.prefix 必须是字符串或多语言字典 (zh: \"..\", en: \"..\")。",
   "custom-pids.resolver-bad": "gb7714: custom-pids `{name}`.resolver 必须是字符串模板（含 `{}` 占位则替换，否则当前缀拼接）；只有 `eprint` 另收*按平台的字典*（`(medrxiv: \"https://..{}\")`，键是 archiveprefix，大小写/空格/连字符不敏感）。",
 
-  "footnote-repeat-style.bad-value": "gb7714: `footnote-repeat-style` 只收 auto / {values}，收到 {got}",
-  "footnote-ibid.bad-value": "gb7714: `footnote-ibid` 只收 auto / true / false，收到 {got}",
-  "footnote-repeat-reset.bad-value": "gb7714: `footnote-repeat-reset` 只收 none 或 selector（如 heading.where(level: 1)、标签 <part-break>、元素函数 heading），收到 {got}",
+  "note-repeat-style.bad-value": "gb7714: `note-repeat-style` 只收 auto / {values}，收到 {got}",
+  "note-ibid.bad-value": "gb7714: `note-ibid` 只收 auto / true / false，收到 {got}",
+  "note-repeat-reset.bad-value": "gb7714: `note-repeat-reset` 只收 none 或 selector（如 heading.where(level: 1)、标签 <part-break>、元素函数 heading），收到 {got}",
 
   "disambiguate.bad-form": "gb7714: `disambiguate` 须是 auto / true / false 或三键字典（date / given-name / names），收到 {got}",
   "disambiguate.unknown-key": "gb7714: `disambiguate` 收到未知机制 \"{key}\"；合法键：date（同责任者同年的 a/b/c 后缀）/ given-name（同姓不同人补名）/ names（展开 et al 名单）",
@@ -78,7 +82,7 @@
   "name-style.order-dict": "gb7714: `{param}.order` 的字典形须同时给出 `first`（第一责任者）与 `rest`（其余责任者）两键、值各为 family-ahead / given-ahead——全体统一请写标量。收到 {got}",
   "name-style.bad-value": "gb7714: `{param}.{key}` 收到值域外的值 {got}。各维值域：order = family-ahead / given-ahead（标量）或 (first:, rest:) 字典；family-case = auto / uppercase / lowercase / none；given-form = auto / none / initials / full；given-separator = auto / none / 任意字符串；given-case = none / uppercase / lowercase / capitalize-first / capitalize-each；given-initial-separator / family-given-separator / given-family-separator = auto / 任意字符串（case 与 given-separator 键的 none 是「不处理」，given-form 的 none 是「只姓」）。四个 -separator 维另收多语言字典 (zh: .., rest: ..)，按条目语言分设。",
 
-  "numbering-style.circled-dict": "gb7714: `numbering-style` 的字典形只收 `(circled: \"unicode\")` 或 `(circled: \"quan\")`（圈码的绘制引擎二级展开，其余样式无引擎可选请写标量）。收到 {got}",
+  "bib-numbering-style.circled-dict": "gb7714: `{param}` 的字典形只收 `(circled: \"unicode\")` 或 `(circled: \"quan\")`（圈码的绘制引擎二级展开，其余样式无引擎可选请写标量）。收到 {got}",
 
   "style.unknown-axis": "gb7714: `style` 字典只收 `cite`（正文标注形态）与 `bib`（著录格式）两个键，收到 \"{key}\"",
   "style.missing-axis": "gb7714: `style` 字典须同时给出 `cite` 与 `bib` 两轴——两轴相同请写标量（如 style: \"numeric\"）；只想指定一轴，另一轴写 `auto`（继承）。收到 {got}",
@@ -150,16 +154,16 @@
   "shell.native-bibliography-called": "gb7714: 检测到原生 typst `#bibliography(...)` 调用。请用本包导出的 `bibliography` 函数：\n  #import \"@preview/omni-gb7714:0.1.0\": *\n  #show: gb7714(version: 2025)\n  正文 @k1 @k2\n  #bibliography(read(\"refs.bib\"))     // 我们的 bibliography，含原生所有参数 + 50+ 扩展\n  // 多 bib：#bibliography(read(\"ch1.bib\"), label: \"ch1\") #bibliography(read(\"ch2.bib\"), label: \"ch2\")\n我们的版本支持 label / entrytype / filter / sort-keys 等扩展，且 source 直接收 read() 结果。",
   "shell.native-014-single-bib": "gb7714: typst 0.14 一份文档只能有一个 std.bibliography，原生 CSL 样式列表（style: \"ieee\" / \"apa\" 等）无法与其它列表共存；请升级 typst 0.15+。",
   "shell.native-with-label": "gb7714: 原生 CSL 样式列表（style: \"ieee\" / \"apa\" 等）不能与 label: 命名列表混用。",
-  "shell.footnote-with-native": "gb7714: cite-footnote: true 暂不能与原生 CSL 样式列表（ieee / apa / CSL 文件）混用；GB 轴的 target / group / 多表路由可以混用。",
+  "shell.footnote-with-native": "gb7714: note: \"foot\" 暂不能与原生 CSL 样式列表（ieee / apa / CSL 文件）混用；GB 轴的 target / group / 多表路由可以混用。",
   "shell.bad-source-type": "gb7714: bibliography source 必须是 bytes / str / array",
   "shell.source-looks-like-path": "gb7714: `bibliography(..)` 收到的像是文件*路径* `\"{path}\"`，但本包收的是 bib *内容*（与原生不同：原生 `bibliography(\"refs.bib\")` 把字符串当路径）。请改用 `bibliography(bytes(read(\"{path}\")), ..)`——此写法在原生 typst 与 omni 下都通用；或 `bibliography(read(\"{path}\"), ..)`（omni）。",
   "shell.style-version-conflict": "gb7714: style 全名已含版本（{style-version}），与显式 version: {version} 矛盾。去掉 version 或改用短名 style + version 组合。",
-  "shell.style-footnote-conflict": "gb7714: style 全名 *-note 即脚注制，与显式 footnote: false 矛盾。去掉 footnote 或改用短名 style + footnote 组合。",
+  "shell.style-footnote-conflict": "gb7714: style 全名 *-note 即脚注制，与显式 note: none 矛盾。去掉 note 或改用短名 style + note 组合。",
   "shell.target-needs-015": "gb7714: `target:` / `group:` 参数需要 typst 0.15+（原生多 bibliography 路由）。typst 0.14 请用 `label:` + `set-bib-label` 实现多列表。",
 
   "shell.cite-unexpected-argument": "unexpected argument: {name}",
   "shell.cite-before-init": "gb7714: 调用 `#cite(..)` 之前必须先 `#show: gb7714(..)` 并写至少一个 `#bibliography(read(\"...\"))`。",
-  "shell.cite-footnote-with-native": "gb7714: cite(footnote: true) 暂不能与原生 CSL 样式列表（ieee / apa / CSL 文件）混用；GB 轴的 target / group / 多表路由可以混用。",
+  "shell.cite-footnote-with-native": "gb7714: cite(note: \"foot\") 暂不能与原生 CSL 样式列表（ieee / apa / CSL 文件）混用；GB 轴的 target / group / 多表路由可以混用。",
 )
 
 #let message(id, ..args) = {

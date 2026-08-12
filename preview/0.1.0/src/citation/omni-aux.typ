@@ -17,7 +17,7 @@
 
   let named-lists = state("gb7714-list-ids", (:)).final().len() > 0
 
-  if target-list == none and not named-lists and not state("gb7714-has-fncite", false).final() {
+  if target-list == none and not named-lists and not state("gb7714-has-note", false).final() {
     return state("gb7714-cite-counter", (order: (), map: (:))).final().order
   }
 
@@ -31,7 +31,7 @@
       } else { none }
     } else {
       let value = it.value
-      if type(value) == dictionary and value.at("kind", default: none) == "gb7714-fncite" {
+      if type(value) == dictionary and value.at("kind", default: none) == "gb7714-note" {
         let anchor-key = str(value.at("key", default: ""))
         if anchor-key in bib-data and ((not named-lists and target-list == none) or active-list.at(it.location()) == target-list) {
           redirect.at(anchor-key, default: anchor-key)

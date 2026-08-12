@@ -4,7 +4,7 @@
   and (bibs.len() > 1 or bibs.any(b => b.target != auto) or bibs.any(b => b.native-style))
   and (
     (
-      not state("gb7714-config", (:)).final().at("cite-footnote", default: false)
+      not state("gb7714-config", (:)).final().at("note", default: none) != none
       and not bibs.any(b => b.at("footnote", default: auto) == true)
     )
     or bibs.any(b => b.target != auto)

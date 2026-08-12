@@ -17,15 +17,17 @@
 }
 
 #let render-run(items, _group-merge, opts) = {
-  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, _name-punct-direction, bib-data, publication-date, p, _num-link, supplement-mode, document-comma, document-semi, block-sep, seen, eff-compress-min, eff-cite-range-separator, cite-numbering-style) = opts
+  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, _name-punct-direction, bib-data, publication-date, p, _num-link, supplement-mode, document-comma, document-semi, block-sep, seen, eff-compress-min, eff-cite-range-separator, cite-numbering-style, cite-circled-render) = opts
 
+  let is-circled = cite-numbering-style == "circled"
   let (cite-lb, cite-rb) = (
     "paren": ("(", ")"),
     "fullwidth-bracket": ("［", "］"),
     "shell": ("〔", "〕"),
     "fullwidth-paren": ("（", "）"),
   ).at(cite-numbering-style, default: ("[", "]"))
-  let br(inner) = [#cite-lb#inner#cite-rb]
+
+  let br(inner) = if is-circled { inner } else { [#cite-lb#inner#cite-rb] }
 
   let items = _order-items(items)
   if items.len() == 1 and eff-form == "prose" {
@@ -68,12 +70,12 @@
       result += part
     }
     result
-  } else if not _group-merge {
+  } else if not _group-merge or is-circled {
 
     let use-super = eff-form == "super" or eff-form == "normal"
     let parts = items.map(item => {
       let k = _key-of(item)
-      let lbl = _num-link(k, item.number)
+      let lbl = if is-circled { _num-link(k, item.number, display: cite-circled-render(item.number)) } else { _num-link(k, item.number) }
       let inner = if item.supplement != none { [#lbl#item.supplement] } else { lbl }
       if use-super { super[#br(inner)] } else { br(inner) }
     })

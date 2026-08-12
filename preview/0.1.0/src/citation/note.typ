@@ -9,35 +9,37 @@
 #import "../elements/creators.typ" as creators
 #import "../elements/titles.typ" as titles
 
-#let footnote-repeat-style-values = ("full", "number", "shortened", "reuse")
+#let note-repeat-style-values = ("full", "number", "shortened", "reuse")
 
-#let normalize-footnote-repeat-style(value) = {
+#let _endnote-counter = counter("gb7714-endnote")
+
+#let normalize-note-repeat-style(value) = {
   if value == auto { return "number" }
-  if value not in footnote-repeat-style-values { errors.raise("footnote-repeat-style.bad-value", got: repr(value), values: footnote-repeat-style-values.join(" / ")) }
+  if value not in note-repeat-style-values { errors.raise("note-repeat-style.bad-value", got: repr(value), values: note-repeat-style-values.join(" / ")) }
   value
 }
 
-#let normalize-footnote-ibid(value, version) = {
+#let normalize-note-ibid(value, version) = {
   if value == auto { return version != 2025 }
   if value == true or value == false { return value }
-  errors.raise("footnote-ibid.bad-value", got: repr(value))
+  errors.raise("note-ibid.bad-value", got: repr(value))
 }
 
-#let normalize-footnote-repeat-reset(value) = {
+#let normalize-note-repeat-reset(value) = {
   if value == none { return none }
   if value == "per-page" { return "per-page" }
   if std.type(value) == selector { return value }
   if std.type(value) == label or std.type(value) == function { return selector(value) }
-  errors.raise("footnote-repeat-reset.bad-value", got: repr(value))
+  errors.raise("note-repeat-reset.bad-value", got: repr(value))
 }
 
 #let _sidecar-list() = query(metadata).filter(m => {
   let value = m.value
-  std.type(value) == dictionary and value.at("kind", default: none) == "gb7714-fnsidecar"
+  std.type(value) == dictionary and value.at("kind", default: none) == "gb7714-note-sidecar"
 })
 
-#let _render-note(items, options-thunk, in-merged-group) = {
-  let _is-fncite(m) = { let v = m.value; std.type(v) == dictionary and v.at("kind", default: none) == "gb7714-fncite" }
+#let _render-note(items, options-thunk, in-merged-group, note-mode) = {
+  let _is-fncite(m) = { let v = m.value; std.type(v) == dictionary and v.at("kind", default: none) == "gb7714-note" }
 
   let anchors-all = query(selector(metadata).before(here(), inclusive: false)).filter(_is-fncite)
   let group-size = items.len()
@@ -56,7 +58,7 @@
   }
   let first-sidecar = _sidecar-at(base)
   let opts = options-thunk(if first-sidecar == none { (:) } else { first-sidecar.value.at("overrides", default: (:)) })
-  let (indent, eff-style, bib-style, show-url, eff-show-annotation, show-end-period, eff-custom-drivers, version, eff-punct-style, eff-custom-punct, eff-pid-colon-style, _emit-entry-author-date, _emit-entry, eff-custom-terms, eff-custom-fields, eff-custom-pids, eff-correct-punct, eff-url-break-every, eff-show-pid, eff-pid-priority, eff-dedup-url-pid, _get-related, _set-redirect, bib-data, footnote-repeat-style, footnote-ibid, footnote-repeat-reset, cite-terms-lang, format-footnote-number, _active-list, _bib-link, show-anon, show-et-al, _global-config, show-mark, show-medium, space-before-mark, correct-punct) = opts
+  let (indent, eff-style, bib-style, show-url, eff-show-annotation, show-end-period, eff-custom-drivers, version, eff-punct-style, eff-custom-punct, eff-pid-colon-style, _emit-entry-author-date, _emit-entry, eff-custom-terms, eff-custom-fields, eff-custom-pids, eff-correct-punct, eff-url-break-every, eff-show-pid, eff-pid-priority, eff-dedup-url-pid, _get-related, _set-redirect, bib-data, note-repeat-style, note-ibid, note-repeat-reset, cite-terms-lang, format-footnote-number, _active-list, _bib-link, show-anon, show-et-al, _global-config, show-mark, show-medium, space-before-mark, correct-punct) = opts
 
   let current-list = _active-list.at(here())
   let document-lang = text.lang
@@ -129,8 +131,8 @@
         let same-locator-as-previous = adjacent and supplement != none and supplement == previous-supplement
 
         let content-kind = if not is-repeat { "full" }
-          else if adjacent and footnote-ibid { "ibid" }
-          else { footnote-repeat-style }
+          else if adjacent and note-ibid { "ibid" }
+          else { note-repeat-style }
         if content-kind == "reuse" and is-repeat and (in-merged-group or prior-first.value.at("merged", default: false)) { content-kind = "number" }
 
         let entry-end-suffix = if show-end-period != false { punct.end-period(entry, eff-punct-style, eff-custom-punct) } else { "" }
@@ -153,7 +155,8 @@
           (kind: "ibid", body: if bare { ibid-body } else { punct.append-end-period(ibid-body, entry-end-suffix) })
         } else if content-kind == "number" and is-repeat {
 
-          let note-number = counter(std.footnote).at(prior-first.location()).first() + 1
+          let _note-counter = if note-mode == "end" { _endnote-counter } else { counter(std.footnote) }
+          let note-number = _note-counter.at(prior-first.location()).first() + 1
           let reference-text = terms.footnote-number-wrap(_fnnum-lang, format-footnote-number(note-number), custom-terms: eff-custom-terms)
           let numbered-body = _with-locator(reference-text, terms.footnote-number-supplement-separator(_fnnum-lang, custom-terms: eff-custom-terms))
           (kind: "number", body: if bare { numbered-body } else { punct.append-end-period(numbered-body, entry-end-suffix) })
@@ -168,12 +171,12 @@
       let _prior-anchors(slot-index) = {
         let cut = base + slot-index
         let all = anchors-all.slice(0, cut)
-        let domain = if footnote-repeat-reset == none { all } else if footnote-repeat-reset == "per-page" {
+        let domain = if note-repeat-reset == none { all } else if note-repeat-reset == "per-page" {
 
           let pg = here().page()
           all.filter(a => a.location().page() == pg)
         } else {
-          let boundaries = query(footnote-repeat-reset.before(here(), inclusive: false))
+          let boundaries = query(note-repeat-reset.before(here(), inclusive: false))
           if boundaries.len() == 0 { all } else {
             let scoped = query(selector(metadata).after(boundaries.last().location()).before(here(), inclusive: false)).filter(_is-fncite)
             let drop = anchors-all.len() - cut
@@ -183,6 +186,14 @@
         (domain: domain, all: all)
       }
       let _redirect-of-anchor(anchor) = { let anchor-key = anchor.value.key; _set-redirect.at(anchor-key, default: anchor-key) }
+
+      let _emit-endnote(body) = {
+
+        _endnote-counter.step()
+        super(context format-footnote-number(_endnote-counter.get().first()))
+
+        metadata((kind: "gb7714-endnote", body: body, list: current-list))
+      }
       if not in-merged-group {
         let item = items.first()
         let redirect-key = _set-redirect.at(item.key, default: item.key)
@@ -190,12 +201,21 @@
 
         let globally-first = anchor-sets.all.find(m => _redirect-of-anchor(m) == redirect-key) == none
         let slot = _slot-content(item.key, anchor-sets.domain, current-list, document-lang, false, 0, false)
-        if slot.kind == "reuse" {
+        if note-mode == "end" {
 
-          std.footnote(std.label("gb7714-fn-" + redirect-key))
+          if slot.kind == "reuse" {
+            let prior-first = anchor-sets.domain.find(m => _redirect-of-anchor(m) == redirect-key)
+            let reuse-number = _endnote-counter.at(prior-first.location()).first() + 1
+            [#super(format-footnote-number(reuse-number))]
+          } else {
+            _emit-endnote(slot.body)
+          }
+        } else if slot.kind == "reuse" {
+
+          std.footnote(std.label("gb7714-note-" + redirect-key))
         } else if globally-first {
 
-          [#std.footnote(slot.body)#std.label("gb7714-fn-" + redirect-key)]
+          [#std.footnote(slot.body)#std.label("gb7714-note-" + redirect-key)]
         } else {
           std.footnote(slot.body)
         }
@@ -218,18 +238,19 @@
         let end-suffix = if show-end-period != false {
           punct.end-period(bib-data.at(slots.last().item.key, default: none), eff-punct-style, eff-custom-punct)
         } else { "" }
-        std.footnote(punct.append-end-period(joined, end-suffix))
+        if note-mode == "end" { _emit-endnote(punct.append-end-period(joined, end-suffix)) }
+        else { std.footnote(punct.append-end-period(joined, end-suffix)) }
       }
 }
 
-#let render(items, options-thunk, merge-notes: true) = {
+#let render(items, options-thunk, merge-notes: true, note-mode: "foot") = {
   let will-merge = merge-notes and items.len() > 1
   for item in items {
 
-    metadata((kind: "gb7714-fncite", key: item.key, merged: will-merge))
+    metadata((kind: "gb7714-note", key: item.key, merged: will-merge))
 
-    state("gb7714-has-fncite", false).update(true)
-    if not will-merge { context { _render-note((item,), options-thunk, false) } }
+    state("gb7714-has-note", false).update(true)
+    if not will-merge { context { _render-note((item,), options-thunk, false, note-mode) } }
   }
-  if will-merge { context { _render-note(items, options-thunk, true) } }
+  if will-merge { context { _render-note(items, options-thunk, true, note-mode) } }
 }

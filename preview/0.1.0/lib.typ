@@ -32,8 +32,8 @@
   cite-compress-min:   2,
   /// 引文区间 [1-5] 的起讫号连接符（默认 -，与 page-range-separator 平行独立）
   cite-range-separator: "-",
-  /// true 时所有引用走脚注（条目完整著录于脚注，正文无 [1] 标注）
-  cite-footnote:       false,
+  /// 注模式：none 行内标注（默认）/ "foot" 脚注制（条目完整著录于脚注，正文只留注号）/ "end" 尾注制（著录集中排在 bibliography 处的尾注列表，取代参考文献表）
+  note:                none,
   /// 正文引用「等 / et al」触发阈值：作者多于 N 才截断
   cite-et-al-min:      2,
   /// 正文引用截断后保留前 N 位作者
@@ -87,8 +87,8 @@
   /// 编号放哪："column"（默认，自成一列贴版心）/ "margin"（挂到版心外）/ "inline"（排行内）
   number-placement:    "column",
   /// 编号样式："bracket" [1] / "paren" (1) / "dot" 1. / "plain" 1 / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕(六角括号,旧 GB-1987) / "circled" ①（缺省 Unicode 绘制,展开 (circled: "quan") 用 quan 包）/ none 无编号
-  numbering-style:        auto,
-  /// 正文标注编号的括号形态(与 numbering-style 分属两轴,那个管文献表列、本参数管正文 [1])："bracket" [1](默认) / "paren" (1) / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕(六角括号,旧 GB-1987)
+  bib-numbering-style:        auto,
+  /// 正文标注编号的括号形态（与 bib-numbering-style 分属两轴，那个管文献表列、本参数管正文 [1]）："bracket" [1]（默认） / "paren" (1) / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕（六角括号，旧 GB-1987）
   cite-numbering-style:   "bracket",
   /// 编号对齐："left"(默认,同原生) / "right" / "center"
   number-align:        "left",
@@ -200,13 +200,13 @@
   /// 每条按条目语种设 text(lang:)：非 CJK 连字、CJK 走 locl 本地化字形；auto=非 CJK 恒开/CJK 仅 2025，true 全开，false 全关
   entry-localized-glyphs:   auto,
   /// 重复引用的脚注内容物（首次恒完整著录）：auto = "number"（同③，官方梯子）/ "full" 重复著录 / "shortened" 缩略 / "reuse" 复用首注号
-  footnote-repeat-style:     auto,
-  /// 紧邻重复是否简化为「同上」：auto = true（官方梯子）/ false 紧邻同隔开一样取 footnote-repeat-style
-  footnote-ibid:       auto,
+  note-repeat-style:     auto,
+  /// 紧邻重复是否简化为「同上」：auto = true（官方梯子）/ false 紧邻同隔开一样取 note-repeat-style
+  note-ibid:       auto,
   /// 重复判定的重置界：none 全文一个域（缺省）/ selector（如 heading.where(level: 1) 章界、标签手工插旗）——过界判定清零：同上不跨界、每域首引重新完整著录、同③只在本域找注号
-  footnote-repeat-reset: none,
+  note-repeat-reset: none,
   /// 本包接管脚注编号为带圈数字（缺省 Unicode ①）；true 改由 quan 包绘制（字体缺字时用）。其他样式直接 set footnote(numbering:) 覆盖，「同③」自动镜像
-  footnote-numbering-use-quan:      false,
+  note-numbering-style:             "circled",
   /// 配置级「类型 → 默认标识码」，如 (software: "SW", mytype: "XX")；自造类型设码正道，条目字段仍可压过
   custom-marks:      (:),
   /// 自定义条目模板字典，如 (book: "author `. ` title")
@@ -229,12 +229,12 @@
   import "src/parse/csl-json.typ" as _csl-json
 
   _errors.check-enum("cite-form", cite-form, extra: (auto,))
-  if std.type(numbering-style) == dictionary {
+  if std.type(bib-numbering-style) == dictionary {
 
-    if numbering-style.keys() != ("circled",) or numbering-style.circled not in ("unicode", "quan") {
-      _errors.raise("numbering-style.circled-dict", got: repr(numbering-style))
+    if bib-numbering-style.keys() != ("circled",) or bib-numbering-style.circled not in ("unicode", "quan") {
+      _errors.raise("bib-numbering-style.circled-dict", param: "bib-numbering-style", got: repr(bib-numbering-style))
     }
-  } else { _errors.check-enum("numbering-style", numbering-style, extra: (auto,)) }
+  } else { _errors.check-enum("bib-numbering-style", bib-numbering-style, extra: (auto,)) }
   _errors.check-enum("number-align", number-align)
   _errors.check-enum("mark-medium-bracket-style", mark-medium-bracket-style)
   _creators.validate-name-style(bib-name-style, param: "bib-name-style")
@@ -256,17 +256,18 @@
   }
   import "src/sentinel.typ": _M, _MB
 
-  let (eff-style-cite, eff-style-bib, eff-version, eff-cite-footnote) = {
+  let (eff-style-cite, eff-style-bib, eff-version, eff-note) = {
     let normalized = _style.normalize(style)
     if normalized.native { _errors.raise("shell.style-invalid") }
 
     let resolved-version = if normalized.version != auto { normalized.version } else { version }
-    let resolved-cite-footnote = if normalized.footnote == true { true } else { cite-footnote }
+
+    let resolved-note = if normalized.note != auto { normalized.note } else { note }
     let axes = _style.resolve(normalized, (cite: none, bib: none))
-    (axes.cite, axes.bib, resolved-version, resolved-cite-footnote)
+    (axes.cite, axes.bib, resolved-version, resolved-note)
   }
 
-  let _emit-body(body-content) = _api.apply-footnote-numbering(footnote-numbering-use-quan, body-content)
+  let _emit-body(body-content) = _api.apply-note-numbering(note-numbering-style, body-content)
 
   let style-axes = (cite: eff-style-cite, bib: eff-style-bib)
 
@@ -274,14 +275,14 @@
     style: style-axes, version: eff-version, full: full,
     cite-form: cite-form, cite-merge: cite-merge, cite-supplement-style: cite-supplement-style,
     cite-punct-style: cite-punct-style, cite-compress-min: cite-compress-min, cite-range-separator: cite-range-separator,
-    cite-footnote: eff-cite-footnote, cite-et-al-min: cite-et-al-min,
+    note: eff-note, cite-et-al-min: cite-et-al-min,
     cite-et-al-use-first: cite-et-al-use-first, cite-et-al-use-last: cite-et-al-use-last, cite-terms-lang: cite-terms-lang, cite-name-style: cite-name-style,
     cite-name-date-separator: cite-name-date-separator,
     cite-completion: cite-completion,
     bib-name-style: bib-name-style, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, bib-name-date-separator: bib-name-date-separator, bib-et-al-min: bib-et-al-min, bib-et-al-use-first: bib-et-al-use-first, bib-et-al-use-last: bib-et-al-use-last,
     show-anon: show-anon, show-no-date: show-no-date, date-fallback: date-fallback, show-et-al: show-et-al, dedup-author-editor: dedup-author-editor, creator-idem: creator-idem,
     title: title, entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, entry-spacing: entry-spacing, number-gutter: number-gutter,
-    numbering-style: numbering-style, cite-numbering-style: cite-numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width,
+    bib-numbering-style: bib-numbering-style, cite-numbering-style: cite-numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width,
     back-ref: back-ref,
     disambiguate: disambiguate, bib-sort-by: bib-sort-by, cite-sort-by: cite-sort-by, sort-keys: sort-keys, bib-sort-zh-by: bib-sort-zh-by, cite-sort-zh-by: cite-sort-zh-by, cite-collapse-date: cite-collapse-date, sort-use-prefix: sort-use-prefix, entry-lang-order: entry-lang-order, entry-lang-detect: entry-lang-detect,
     show-mark: show-mark, show-medium: show-medium, show-url: show-url, show-urldate: show-urldate,
@@ -295,8 +296,8 @@
     titles-text-case: titles-text-case, emphasis: emphasis,
     period-after-creator: period-after-creator, show-end-period: show-end-period,
     space-before-mark: space-before-mark, mark-medium-bracket-style: mark-medium-bracket-style, space-before-pages: space-before-pages,
-    page-range-separator: page-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, entry-localized-glyphs: entry-localized-glyphs, footnote-numbering-use-quan: footnote-numbering-use-quan,
-    footnote-repeat-style: footnote-repeat-style, footnote-ibid: footnote-ibid, footnote-repeat-reset: footnote-repeat-reset,
+    page-range-separator: page-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, entry-localized-glyphs: entry-localized-glyphs, note-numbering-style: note-numbering-style,
+    note-repeat-style: note-repeat-style, note-ibid: note-ibid, note-repeat-reset: note-repeat-reset,
     custom-marks: custom-marks, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, custom-languages: custom-languages, warn-missing-title: warn-missing-title,
   )
 
@@ -379,7 +380,7 @@
     let native-mode = _api._is-native-mode(bibs)
     if native-mode {
 
-      if state("gb7714-config", (:)).final().at("cite-footnote", default: false) and bibs.any(b => b.native-style) {
+      if state("gb7714-config", (:)).final().at("note", default: none) != none and bibs.any(b => b.native-style) {
         _errors.raise("shell.footnote-with-native")
       }
 
@@ -400,7 +401,7 @@
   show regex(_MB): _ => []
 
   let _global-super = if cite-form == auto { eff-style-cite != "author-date" } else { cite-form == "super" }
-  let _eat-leading-spaces = _global-super or cite-footnote
+  let _eat-leading-spaces = _global-super or (note != none)
   show regex(if _eat-leading-spaces { "[ \u{00A0}\t]+\u{2060}" } else { "\u{E7FF}" }): _ => sym.wj
 
   show regex(_M + "(?s:.+?)" + _M + "(([^\\S\\n]|\u{2060})*" + _M + "(?s:.+?)" + _M + ")*"): m => context {
@@ -482,8 +483,8 @@
   style:          none,
   /// 本列表国标版本：2015 / 2025；auto 跟随全局；与 style 国标全名锁定矛盾时报错（名实一致）
   version:        auto,
-  /// 本列表脚注制：true 时归属本列表的引用走脚注（auto 跟随全局 cite-footnote；链：cite 显式 > 本参数 > 全局）
-  footnote:       auto,
+  /// 本列表注模式："foot" 脚注 / "end" 本表位置渲染尾注列表（取代参考文献表）/ none 强制行内 / auto 跟随全局 note（链：cite 显式 > 本参数 > 全局）
+  note:           auto,
   /// typst 0.15 原生 cite 路由选择器，如 selector(std.cite).within(<ch1>)；需 typst 0.15+
   target:         auto,
   /// typst 0.15 原生编号分组；auto 全文档连续编号；需 typst 0.15+
@@ -544,7 +545,7 @@
   /// 编号与正文之间的列间距（「编号后那道间隔」）；auto 跟随全局
   number-gutter:    auto,
   /// 编号样式："bracket" / "paren" / "dot" / "plain" / "fullwidth-bracket" ［1］ / "fullwidth-paren" / "shell" 〔1〕 / "circled"（可展开 (circled: "quan") 选绘制引擎）/ none；auto 跟随全局
-  numbering-style:        auto,
+  bib-numbering-style:        auto,
   /// 语种分组顺序；auto 跟随全局
   entry-lang-order:          auto,
   /// 西文姓名格式：auto 跟随全局 / 五维字典（order / family-case / given-form / given-separator / given-case）
@@ -629,12 +630,12 @@
   import "src/elements/creators.typ" as _creators
   import "src/parse/csl-json.typ" as _csl-json
 
-  if std.type(numbering-style) == dictionary {
+  if std.type(bib-numbering-style) == dictionary {
 
-    if numbering-style.keys() != ("circled",) or numbering-style.circled not in ("unicode", "quan") {
-      _errors.raise("numbering-style.circled-dict", got: repr(numbering-style))
+    if bib-numbering-style.keys() != ("circled",) or bib-numbering-style.circled not in ("unicode", "quan") {
+      _errors.raise("bib-numbering-style.circled-dict", param: "bib-numbering-style", got: repr(bib-numbering-style))
     }
-  } else { _errors.check-enum("numbering-style", numbering-style, extra: (auto,)) }
+  } else { _errors.check-enum("bib-numbering-style", bib-numbering-style, extra: (auto,)) }
   _errors.check-enum("number-align", number-align, extra: (auto,))
   _errors.check-enum("mark-medium-bracket-style", mark-medium-bracket-style, extra: (auto,))
   _creators.validate-name-style(name-style)
@@ -677,8 +678,11 @@
   let gb-style-bib = normalized-style.bib
   let list-style-axes = (cite: gb-style-cite, bib: gb-style-bib)
   let gb-version = normalized-style.version
-  let gb-footnote = normalized-style.footnote
+
+  let gb-footnote = if normalized-style.note == "foot" { true } else { auto }
   let is-native-style = normalized-style.native
+
+  let footnote = if note == auto { auto } else { note != none }
 
   if gb-version != auto and version != auto and gb-version != version {
     _errors.raise("shell.style-version-conflict", style-version: str(gb-version), version: str(version))
@@ -875,12 +879,21 @@
     import "src/terms/built-in.typ": bib-title
     bib-title(text.lang, text.region)
   } else { title }
+
+  let _bib-note = if note != auto { note }
+    else if gb-footnote == true { "foot" }
+    else if config.at("note", default: none) == "end" { "end" }
+    else { auto }
   let common-args = (
-    title: eff-title,
+
+    title: if _bib-note == "end" { title } else { eff-title },
     full: full,
     style: list-style-axes,
+
+    target: target,
+    group: group,
     version: if gb-version != auto { gb-version } else { version },
-    footnote: eff-footnote,
+    note: _bib-note,
     entry-type: entry-type,
     filter: filter,
     keys: effective-keys,
@@ -903,7 +916,7 @@
     entry-localized-glyphs: entry-localized-glyphs,
     entry-spacing: entry-spacing,
     number-gutter: number-gutter,
-    numbering-style: numbering-style,
+    bib-numbering-style: bib-numbering-style,
     entry-lang-order: entry-lang-order,
     name-style: name-style,
     show-anon: show-anon,
@@ -994,25 +1007,25 @@
   supplement-style:     auto,
   /// 是否与相邻引用合并为一组；auto 跟随全局 cite-merge
   merge:           auto,
-  /// true 走脚注引用（完整著录于脚注）；auto 跟随全局 cite-footnote
-  footnote:        auto,
+  /// "foot" 走脚注引用（完整著录于脚注）/ "end" 尾注制 / none 强制行内 / auto 跟随全局 note
+  note:            auto,
   /// 脚注模式下双语关联条目第二行缩进；auto 与首行首字对齐（实测注号前缀宽）
   footnote-related-indent:  auto,
-  /// 自定义条目模板；仅 footnote: true 时生效
+  /// 自定义条目模板；仅 note: "foot" 时生效
   custom-drivers: auto,
-  /// 用户自定义本地化字面量 token；仅 footnote: true 时生效
+  /// 用户自定义本地化字面量 token；仅 note: "foot" 时生效
   custom-terms:    auto,
-  /// 用户自定义字段 token；仅 footnote: true 时生效
+  /// 用户自定义字段 token；仅 note: "foot" 时生效
   custom-fields:   auto,
-  /// 用户自定义永久标识符；仅 footnote: true 时生效
+  /// 用户自定义永久标识符；仅 note: "foot" 时生效
   custom-pids:     auto,
-  /// 永久标识符显示控制；仅 footnote: true 时生效
+  /// 永久标识符显示控制；仅 note: "foot" 时生效
   show-pid:        auto,
-  /// 永久标识符优先级；仅 footnote: true 时生效
+  /// 永久标识符优先级；仅 note: "foot" 时生效
   pid-priority:       auto,
-  /// URL 与永久标识符去重；仅 footnote: true 时生效
+  /// URL 与永久标识符去重；仅 note: "foot" 时生效
   dedup-url-pid:   auto,
-  /// 条目末尾追加注释字段；仅 footnote: true 时生效
+  /// 条目末尾追加注释字段；仅 note: "foot" 时生效
   show-annotation: auto,
   /// 「等 / et al」触发阈值（单次覆盖 cite-et-al-min；999 临时全列作者）
   et-al-min:       auto,
@@ -1032,11 +1045,11 @@
   sort-zh-by:      auto,
   /// 本组年份折叠（单次覆盖 cite-collapse-date）：auto / true / false
   collapse-date:   auto,
-  /// 脚注里 bib 条目的标点(同 punct-style)："half-with-space" / "half" / "full" / "by-doc-*" / "by-entry-*"；仅 footnote: true 时生效
+  /// 脚注里 bib 条目的标点(同 punct-style)："half-with-space" / "half" / "full" / "by-doc-*" / "by-entry-*"；仅 note: "foot" 时生效
   footnote-punct-style:     auto,
-  /// 脚注里符号精确覆盖；仅 footnote: true 时生效
+  /// 脚注里符号精确覆盖；仅 note: "foot" 时生效
   footnote-custom-punct: auto,
-  /// 脚注里 URL 断点密度；仅 footnote: true 时生效
+  /// 脚注里 URL 断点密度；仅 note: "foot" 时生效
   footnote-url-break-every: auto,
 ) = context {
   import "src/api.typ" as _api
@@ -1069,7 +1082,7 @@
 
   let _bibs = state("gb7714-bib-list", ()).final()
   let native-mode-flag = _api._is-native-mode(_bibs)
-  if native-mode-flag and footnote == true and _bibs.any(b => b.native-style) {
+  if native-mode-flag and note == "foot" and _bibs.any(b => b.native-style) {
     _errors.raise("shell.cite-footnote-with-native")
   }
 
@@ -1087,7 +1100,7 @@
     punct-style: punct-style,
     supplement-style: supplement-style,
     merge: merge,
-    footnote: footnote,
+    note: note,
     footnote-related-indent: footnote-related-indent,
     custom-drivers: custom-drivers,
     custom-terms: custom-terms,

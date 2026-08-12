@@ -132,7 +132,7 @@
 }
 
 #let render-entries(filtered, opts) = {
-  let (bib-data, _emit-entry, _emit-entry-author-date, _plabel, _get-related, _disambiguation, _active-list, eff-bib-style, eff-suffixes, eff-numeric-date-suffix, eff-numbering-style, eff-show-related, eff-show-url, eff-show-annotation, eff-show-end-period, eff-custom-drivers, eff-version, eff-punct-style, eff-custom-punct, eff-hyphenate, eff-entry-hanging-indent, eff-entry-first-line-indent, eff-number-gutter, eff-number-width, eff-back-ref, eff-number-placement, _column-mode, _margin-mode, list-label, number-offset, lbl-align, related-indent, eff-creator-idem, eff-entry-localized-glyphs) = opts
+  let (bib-data, _emit-entry, _emit-entry-author-date, _plabel, _get-related, _disambiguation, _active-list, eff-bib-style, eff-suffixes, eff-numeric-date-suffix, eff-bib-numbering-style, eff-show-related, eff-show-url, eff-show-annotation, eff-show-end-period, eff-custom-drivers, eff-version, eff-punct-style, eff-custom-punct, eff-hyphenate, eff-entry-hanging-indent, eff-entry-first-line-indent, eff-number-gutter, eff-number-width, eff-back-ref, eff-number-placement, _column-mode, _margin-mode, list-label, number-offset, lbl-align, related-indent, eff-creator-idem, eff-entry-localized-glyphs) = opts
 
   let _wrap-lang(lang, body) = {
     let on = if eff-entry-localized-glyphs == false { false }
@@ -190,7 +190,7 @@
       let member-block = members.map(_render-member)
       let element = emit-label(key, list-label: list-label)
       let number-label = _plabel(str(i + 1 + number-offset))
-      if eff-back-ref and eff-numbering-style != none { number-label = _backref-label(number-label, key) }
+      if eff-back-ref and eff-bib-numbering-style != none { number-label = _backref-label(number-label, key) }
       if _grid-mode {
 
         _grid-cells.push(number-label)
@@ -201,7 +201,7 @@
       } else {
         let inner-block = _entryset-block(
           element, number-label, member-block,
-          author-date-or-none: eff-numbering-style == none,
+          author-date-or-none: eff-bib-numbering-style == none,
           is-html: _IS-HTML,
 
           not-hanging: false,
@@ -247,7 +247,7 @@
       punct.append-end-period(related-body, related-suffix)
     } else { none }
 
-    if eff-numbering-style == none {
+    if eff-bib-numbering-style == none {
 
       let related-indent-value = if related-indent != none { related-indent } else { [] }
 
