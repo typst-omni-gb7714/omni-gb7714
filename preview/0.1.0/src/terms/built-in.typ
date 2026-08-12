@@ -1,4 +1,4 @@
-#import "../parse/lang-detect.typ" as language
+#import "../detect/lang.typ" as language
 
 #let localized(value, entry) = {
   if value == none { return none }
@@ -50,7 +50,7 @@
 
 #let no-date(entry, custom-terms: (:)) = no-date-for(language.get(entry), custom-terms: custom-terms)
 
-#let etal-for(lang, custom-terms: (:), version: 2025) = _term(custom-terms, "et-al", lang, (zh: "等", ja: "他", ko: "외", ru: "и др").at(lang, default: if version == 2005 { "et al" } else { "et al." }))
+#let etal-for(lang, custom-terms: (:), version: 2025) = _term(custom-terms, "et-al", lang, (zh: "等", ja: "ほか", ko: "외", ru: if version == 2005 { "и др" } else { "и др." }).at(lang, default: if version == 2005 { "et al" } else { "et al." }))
 
 #let etal(entry, custom-terms: (:), version: 2025) = etal-for(if entry != none { language.get(entry) } else { "en" }, custom-terms: custom-terms, version: version)
 

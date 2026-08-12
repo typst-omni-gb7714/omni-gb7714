@@ -8,12 +8,12 @@
 #import "elements/mark-medium/built-in.typ" as mark-medium
 #import "elements/mark-medium/custom.typ" as mark-custom
 #import "elements/emphasis.typ": validate as validate-emphasis
-#import "parse/lang-detect.typ" as language
+#import "detect/lang.typ" as language
 #import "terms/built-in.typ" as terms
 #import "punct/built-in.typ" as punct
 #import "punct/custom.typ" as punct-custom
 #import "category.typ"
-#import "parse/field.typ"
+#import "field.typ"
 #import "bibliography/sort.typ"
 #import "elements/pages.typ"
 #import "citation/author-date.typ" as author-date-cite
@@ -27,11 +27,11 @@
 #import "elements/pids/custom.typ": validate-pids, note-label-candidates
 #import "elements/pids/built-in.typ": is-preprint-platform
 #import "bibliography/render.typ" as bib
-#import "citation/omni-aux.typ" as omni-aux
+#import "citation/aux-omni.typ" as aux-omni
 
-#import "citation/native-aux.typ": *
+#import "citation/aux-native.typ": *
 #import "parse/latex.typ"
-#import "parse/entryset.typ"
+#import "entryset.typ"
 #import "elements/imprint/date.typ" as publication-date
 #import "elements/creators.typ" as creators
 #import "elements/titles.typ" as titles
@@ -807,16 +807,16 @@
     /// 例：```typ titles-text-case: (title: "sentence", journaltitle: "title", rest: none)```。\
     /// `{}` 保护括号内两档都不动（biblatex 惯例）；含 CJK 的字段值整体跳过（大小写无意义，且内嵌拉丁词如 DNA 不得被改）。转换在解析期由 citegeist（Rust）按字段应用。|
   emphasis:            (:),       /// <- `dictionary`
-    /// 按*渲染位置*(槽)给题名类 / 责任者 / 卷期日期施加*斜体 / 加粗 / 包裹符*,可按条目语言分设。
+    /// 按*渲染位置*（槽）给题名类 / 责任者 / 卷期日期施加*斜体 / 加粗 / 包裹符*，可按条目语言分设。
     /// 替代早期的 `italic-book-title` / `italic-journal` / `bold-journal-volume` 三个布尔。默认 `(:)` 不装饰。\
-    /// *槽*(渲染位置,非裸 .bib 字段):`titles`(专著级题名,含副题名)/ `journaltitles`(刊名)/ `booktitles`(母体题名)/
-    /// `series`(丛书)/ `creator`(主责任者)/ `volume`(卷)/ `issue`(期)/ `date`(出版年 / 日期)。角色分派自动——
-    /// 析出篇名 / article 篇名*不*装饰(它们的容器 journaltitles / booktitles 才装饰),与被替代的三参同位。\
-    /// *槽值*三形:*规格* ```typc (italic: true, bold: true, prefix: "《", suffix: "》")```(键全可选、可叠加)|
-    /// *语言分设* ```typc (zh: <atom>, rest: <atom>)```(atom = `none` | 规格,按条目语言取)| `none`。
-    /// 消歧靠键:含 `italic`/`bold`/`prefix`/`suffix` 即当规格,含语言键(`zh`/`en`/`rest`…)即当语言分设。\
-    /// 例:西文斜体 + 中文书名号 ```typc emphasis: (titles: (zh: (prefix: "《", suffix: "》"), rest: (italic: true)), journaltitles: (zh: (prefix: "《", suffix: "》"), rest: (italic: true)))```;
-    /// 卷号加粗 ```typc emphasis: (volume: (bold: true))```。`italic` 逐字生效(要 CJK 不斜,在语言分设里给 zh 关掉)。|
+    /// *槽*（渲染位置，非裸 .bib 字段）：`titles`（专著级题名，含副题名）/ `journaltitles`（刊名）/ `booktitles`（母体题名）/
+    /// `series`（丛书）/ `creator`（主责任者）/ `volume`（卷）/ `issue`（期）/ `date`（出版年 / 日期）。角色分派自动——
+    /// 析出篇名 / article 篇名*不*装饰（它们的容器 journaltitles / booktitles 才装饰），与被替代的三参同位。\
+    /// *槽值*三形：*规格* ```typc (italic: true, bold: true, prefix: "《", suffix: "》")```（键全可选、可叠加）|
+    /// *语言分设* ```typc (zh: <atom>, rest: <atom>)```（atom = `none` | 规格，按条目语言取）| `none`。
+    /// 消歧靠键：含 `italic`/`bold`/`prefix`/`suffix` 即当规格，含语言键（`zh`/`en`/`rest`…）即当语言分设。\
+    /// 例：西文斜体 + 中文书名号 ```typc emphasis: (titles: (zh: (prefix: "《", suffix: "》"), rest: (italic: true)), journaltitles: (zh: (prefix: "《", suffix: "》"), rest: (italic: true)))```；
+    /// 卷号加粗 ```typc emphasis: (volume: (bold: true))```。`italic` 逐字生效（要 CJK 不斜，在语言分设里给 zh 关掉）。|
   period-after-creator: true,      /// <- `boolean`
     /// *责任者元素*之后是否加句点。\
     /// - `true`（默认）：加 `.`；
@@ -873,7 +873,7 @@
     /// 单值；紧邻位的「同上」简化由 #arg-ref("gb7714", "note-ibid")[`note-ibid`] 独立控制，两参正交出全部有据体例：\
     /// - `auto`（默认）：`"number"`——`version: 2015` 配缺省 `note-ibid: auto`（=`true`）即社区 2015 note CSL 的梯子：紧邻「同上(: 页码)」、隔开「同③(: 页码)」；`version: 2025` 下 `note-ibid` 缺省转 `false`，全程「同③(: 页码)」，对齐 2025 note CSL 与 GB 2025 9.2.1.3；
     /// - `"full"`：重复著录整条（GB 9.2.1.3「重复著录」正统，社区方言主流；与 `"shortened"` 对仗，即 CMOS 的 full note / shortened citation 逐字术语）；
-    /// - `"number"`：同③（首注号,圈码自动镜像文档脚注编号样式，序号假定脚注全文连续编号；custom-terms 的 `footnote-number` 模式词键管它的前后缀与页码分隔——词汇表键在全局空间需完整域名，参数值在本参数域内无需重复前缀）；
+    /// - `"number"`：同③（首注号，圈码自动镜像文档脚注编号样式，序号假定脚注全文连续编号；custom-terms 的 `footnote-number` 模式词键管它的前后缀与页码分隔——词汇表键在全局空间需完整域名，参数值在本参数域内无需重复前缀）；
     /// - `"shortened"`：缩略「责任者. 题名[标识].」（完整注的*缩减产物*，CMOS 术语；页码接独立著录段）；
     /// - `"reuse"`：*不发新注*，正文上标复用首注号——唯一装不下页码的值。\
     /// 「同上」「同」两词可经 #arg-ref("gb7714", "custom-terms")[`custom-terms`] 的 `ibid`（纯词）与 `footnote-number`（前后缀对）覆写，按*文档语言*取词。|
@@ -881,7 +881,7 @@
     /// *紧邻*重复（上一条脚注引用就是同一文献，中间夹普通脚注不破坏）是否简化为「同上(: 页码)」：\
     /// - `auto`（默认，版本感知）：`version: 2015` / `2005` = `true`（紧邻「同上」，对齐 2015 note CSL）；`version: 2025` = `false`（2025 note CSL 弃用 ibid、GB 2025 9.2.1.3 只标首次序号，紧邻重复也走 #arg-ref("gb7714", "note-repeat-style")[`note-repeat-style`]）；
     /// - `false`：紧邻不特殊化，与隔开重复一样取 #arg-ref("gb7714", "note-repeat-style")[`note-repeat-style`] 的值（如 `"full"` 配 `false` = GB 纯重复著录；`"shortened"` 配 `false` = Chicago 17th 全缩略）。\
-    /// 「同上」的页码语义走 CSL position 算法：与上次同页码时不重复页码；上次有页码本次没有时降级为隔开。|
+    /// 「同上」的页码语义走 CSL position 算法，与上次同页码时不重复页码；上次有页码本次没有时降级为隔开。|
   note-repeat-reset: none,    /// <- `none` | `"per-page"` | `selector`
     /// 重复判定的重置界（biblatex `citereset` 的对应物）。判定只认*最近一道界之后*的引用：    /// - `none`（默认）：全文一个域，现状；
     /// - `"per-page"`：*每页*重置——判定只认与当前引用*同一页*的先前引用。主要给 Touying 幻灯片用：Touying 的一张 subslide 就是一页，`#pause` 会把整片逐 subslide 重渲，`"per-page"` 让每张 subslide 各自从头判定，从而重复引用的「同上」不会跨 subslide 误判（不设它则脚注制配 `#pause` 会全退化成「同①」）。普通文档里则等价「每页重置」（部分体例的合法做法）。
@@ -913,7 +913,7 @@
     /// 值为字符串（语言无关）或多语言字典 `(zh: "见", en: "See")`——按条目语言取值，缺该语言时按字典插入顺序回退。\
     /// - *注册新词*（键为自创名）：例 ```typ custom-terms: (see: (zh: "见", en: "See"))``` 后，`custom-drivers` 模板里写 `see` 即按条目语言渲染「见」/「See」；
     /// - *覆盖内置词*（键 ∈ 封闭集合 `et-al` / `editor` / `translator` / `anon` / `no-date` / `sine-loco` / `sine-nomine` / `sine-anno` / `ma-thesis` / `phd-thesis` / `edition` / `volume` / `ibid` / `footnote-number`）：例 ```typ custom-terms: (et-al: (en: "et al"), editor: (zh: "编"))``` 把西文截断词改回无点、中文编者标签改成「编」。\
-    ///   （析出符 `//` 不在此列——它是标点分隔符不是本地化词，改用 #arg-ref("gb7714", "component-part-separator")[`component-part-separator`]。）\
+    ///   （析出符 `//` 不在此列，因为它是标点分隔符而非本地化词，改用 #arg-ref("gb7714", "component-part-separator")[`component-part-separator`]。）\
     /// 限制：键若撞了*内置结构 token*（如 `author` / `title` / `doi`）会 panic（覆盖内置词只支持上列封闭集合）；不得含 `field` / `prefix` / `pid` / `resolver` 等结构键（放错篮子，会 panic 引导到 custom-fields / custom-pids）。\
     /// 注：Typst 无 warning API，内置词键*拼错*（如 `et-la`）只会被当成「注册了个没人引用的死 token」静默无效，不报错。|
   custom-fields:       (:),       /// <- `dictionary`
@@ -923,13 +923,13 @@
     /// 字段值同其它显示字段走 LaTeX->Typst 处理（`\textbf{}` / 引号连字 / 转义正常，未定义命令优雅降级）。\
     /// 限制：token 名不与内置 token 同名；`field` 取值不能与本包内部已用字段名冲突。|
   custom-pids:         (:),       /// <- `dictionary`
-    /// *永久标识符*入口,一箭双雕:键是*自创名*就*注册新* PID(URN / Handle 等),键 ∈ `doi` / `cstr` / `isbn` / `issn` / `eprint` 就*覆写内置* PID。均著录于条目末尾「获取和访问路径」区。\
-    /// 值为字典 `(field: "xxx", prefix:.., resolver:..)`:从 `field` 字段读值,标签取 `prefix`(或 `field` 名,自动补冒号)。\
-    /// - *注册新* PID(必须给 `field`):例 ```typ custom-pids: (myurn: (field: "urn"))```,```bib urn = {urn:nbn:...}``` 渲染为 `URN:urn:nbn:...`;
-    /// - *覆写内置* PID(`field` 可省,缺则读默认字段):例 ```typ custom-pids: (doi: (resolver: "https://doi.company.com/{}"), isbn: (prefix: "书号"))``` 把 DOI 换成机构镜像解析器、ISBN 标签改成「书号」;也可 ```typ (doi: (field: "mydoi"))``` 让 DOI 改读别的字段。\
-    /// 可点击跳转(#arg-ref("gb7714", "hyperlink")[`hyperlink`] 为 `true` 时):值为 URL(`http`/`https`/`ftp` 开头)时链到自身;否则 `resolver` 模板——含 `{}` 占位则替换字段值、否则当前缀拼接。例 ```typ (handle: (field: "handle", prefix: "HDL", resolver: "https://hdl.handle.net/"))``` 把 ```bib handle = {20.500/abc}``` 链到 ```typ https://hdl.handle.net/20.500/abc```。\
+    /// *永久标识符*入口，一箭双雕：键是*自创名*就*注册新* PID（URN / Handle 等），键 ∈ `doi` / `cstr` / `isbn` / `issn` / `eprint` 就*覆写内置* PID。均著录于条目末尾「获取和访问路径」区。\
+    /// 值为字典 `(field: "xxx", prefix:.., resolver:..)`：从 `field` 字段读值，标签取 `prefix`（或 `field` 名，自动补冒号）。\
+    /// - *注册新* PID（必须给 `field`）：例 ```typ custom-pids: (myurn: (field: "urn"))```，```bib urn = {urn:nbn:...}``` 渲染为 `URN:urn:nbn:...`；
+    /// - *覆写内置* PID（`field` 可省，缺则读默认字段）：例 ```typ custom-pids: (doi: (resolver: "https://doi.company.com/{}"), isbn: (prefix: "书号"))``` 把 DOI 换成机构镜像解析器、ISBN 标签改成「书号」；也可 ```typ (doi: (field: "mydoi"))``` 让 DOI 改读别的字段。\
+    /// 可点击跳转（#arg-ref("gb7714", "hyperlink")[`hyperlink`] 为 `true` 时）：值为 URL（`http`/`https`/`ftp` 开头）时链到自身；否则 `resolver` 模板——含 `{}` 占位则替换字段值、否则当前缀拼接。例 ```typ (handle: (field: "handle", prefix: "HDL", resolver: "https://hdl.handle.net/"))``` 把 ```bib handle = {20.500/abc}``` 链到 ```typ https://hdl.handle.net/20.500/abc```。\
     /// 配合 #arg-ref("gb7714", "show-pid")[`show-pid`] / #arg-ref("gb7714", "pid-priority")[`pid-priority`] / #arg-ref("gb7714", "dedup-url-pid")[`dedup-url-pid`] 使用。\
-    /// 限制:新 PID 名不与内置结构 token 同名;新 PID 的 `field` 不与内部已用字段名冲突;永久标识符只在条目末尾渲染,不作 `custom-drivers` 模板 token(模板里放整块请用内置 `access` token)。|
+    /// 限制：新 PID 名不与内置结构 token 同名；新 PID 的 `field` 不与内部已用字段名冲突；永久标识符只在条目末尾渲染，不作 `custom-drivers` 模板 token（模板里放整块请用内置 `access` token）。|
   custom-languages:    (:),       /// <- `dictionary`
     /// 注册*新语言码*，让内置识别外的语种（德文等）能出自己的本地化术语。GB 文献表主体总是中文，本参只影响*西文条目的术语字面量*（`编`/`译`/`佚名`/`无日期` 等），不改标点字距。\
     /// 形态 `(<语言码>: (<langid 别名>, ...))`：键=自创语言码（不得撞内置码 zh/ja/ko/ru/fr/en）；值=别名字符串或数组。条目 `langid` / `language` 域写这些别名（或码本身）即归到该码，区域后缀自动剥离（`de-DE` -> `de`）。\
@@ -1430,7 +1430,7 @@
 
   let _bib-link(anchor-string, list-label, bib-key, body) = {
 
-    let loc = omni-aux.bib-anchor-map().at(anchor-string, default: none)
+    let loc = aux-omni.bib-anchor-map().at(anchor-string, default: none)
     if loc == none {
 
       body
@@ -2050,7 +2050,7 @@
       _list-style-map.update(m => { m.insert("\u{0}b" + str(native-bib-index), eff-cite-style); m })
     }
 
-    let cited-keys = omni-aux.cited-keys(bib-data, list-label)
+    let cited-keys = aux-omni.cited-keys(bib-data, list-label)
     let source-keys = if keys != none {
 
       let raw = _extract-refs(keys).map(r => str(r.target)).filter(k => k in bib-data)
@@ -2334,7 +2334,7 @@
     })
   }
 
-  let _cite-context = omni-aux.cite-context
+  let _cite-context = aux-omni.cite-context
 
   let _handle-cite(it) = {
 
@@ -2493,7 +2493,7 @@
       let flat = ()
       for array in _native-seen { for (index, k) in array.enumerate() { if k != "" { while flat.len() <= index { flat.push("") }; flat.at(index) = k } } }
       flat
-    } else { omni-aux.cited-keys(bib-data, current-list) }
+    } else { aux-omni.cited-keys(bib-data, current-list) }
 
     let _any-supplement = raw-items.any(it => it.at("supplement-rank", default: none) != none)
     let all-bib-refs = if _any-supplement { _cite-context(bib-data, current-list).all-refs } else { () }

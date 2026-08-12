@@ -1,4 +1,4 @@
-#import "../../parse/field.typ"
+#import "../../field.typ"
 #import "../../parse/latex.typ"
 
 #let edtf-year(s) = {

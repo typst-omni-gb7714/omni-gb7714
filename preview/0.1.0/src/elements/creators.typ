@@ -1,12 +1,12 @@
 #import "../sentinel.typ": *
 #import "../errors.typ"
-#import "../parse/lang-detect.typ" as language
-#import "../parse/pinyin.typ" as pinyin
+#import "../detect/lang.typ" as language
+#import "../detect/pinyin.typ" as pinyin
 #import "../terms/built-in.typ" as terms
 #import "../punct/built-in.typ" as punct
 #import "mark-medium/built-in.typ" as mark-medium
 #import "../parse/latex.typ"
-#import "../parse/field.typ"
+#import "../field.typ"
 
 #let _TEX-DROP-PATTERNS = latex.TEX-DROP-ARG.map(sort-command => regex("\\\\" + sort-command + "\\s*\\{[^{}]*\\}"))
 

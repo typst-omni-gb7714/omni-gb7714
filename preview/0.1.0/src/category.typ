@@ -1,5 +1,5 @@
 #import "sentinel.typ": *
-#import "parse/field.typ"
+#import "field.typ"
 #import "elements/mark-medium/built-in.typ" as mark-medium
 
 #let is-platform-form(entry, version: 2015) = version == 2025 and mark-medium.mark(entry) in ("EB", "CP", "DS", "PP")

@@ -25,8 +25,8 @@
   /// 带 supplement 的引用显示格式：auto / "compact"（[1:p3, 2]）/ "split"（[1]p3, [2]）
   cite-supplement-style:    auto,
   /// 引用标注内部标点风格。语义见 src/marks/punct.typ 的 `cite` 注释：
-  /// "by-doc-and-style"(默认,跟文档语言·制感知) / "by-doc-no-space" / "by-doc-with-space"
-  /// / "by-entry-and-style" / "by-entry-no-space" / "by-entry-with-space"(跟被引条目语言) / "half"(="half-no-space") / "half-with-space" / "full" / 按样式分派的字典
+  /// "by-doc-and-style"（默认，跟文档语言·制感知） / "by-doc-no-space" / "by-doc-with-space"
+  /// / "by-entry-and-style" / "by-entry-no-space" / "by-entry-with-space"（跟被引条目语言） / "half"(="half-no-space") / "half-with-space" / "full" / 按样式分派的字典
   cite-punct-style:    "by-doc-and-style",
   /// 顺序编码制中 ≥ N 个连续编号压缩为范围（如 [1-5]）
   cite-compress-min:   2,
@@ -86,11 +86,11 @@
   number-gutter:    0.65em,
   /// 编号放哪："column"（默认，自成一列贴版心）/ "margin"（挂到版心外）/ "inline"（排行内）
   number-placement:    "column",
-  /// 编号样式："bracket" [1] / "paren" (1) / "dot" 1. / "plain" 1 / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕(六角括号,旧 GB-1987) / "circled" ①（缺省 Unicode 绘制,展开 (circled: "quan") 用 quan 包）/ none 无编号
+  /// 编号样式："bracket" [1] / "paren" (1) / "dot" 1. / "plain" 1 / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕（六角括号，旧 GB-1987） / "circled" ①（缺省 Unicode 绘制，展开 (circled: "quan") 用 quan 包）/ none 无编号
   bib-numbering-style:        auto,
   /// 正文标注编号的括号形态（与 bib-numbering-style 分属两轴，那个管文献表列、本参数管正文 [1]）："bracket" [1]（默认） / "paren" (1) / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕（六角括号，旧 GB-1987）
   cite-numbering-style:   "bracket",
-  /// 编号对齐："left"(默认,同原生) / "right" / "center"
+  /// 编号对齐："left"（默认，同原生） / "right" / "center"
   number-align:        "left",
   /// 编号列宽度：auto 自动测量最宽编号
   number-width:        auto,
@@ -132,9 +132,9 @@
   show-patent-country: false,
   /// 多卷书卷号与分卷名之间的间距 gutter：auto（普通词间空格，对齐官方 CSL）/ 长度（如 1em = 李泽平 \quad 宽间距）
   volume-title-gutter: auto,
-  /// 缺出版地时补 [S.l.] / 出版地不详 占位（sine loco）。默认 auto=条件补白(出版者在场才补)；true=一缺就补(GB 严格著录)；false=留空
+  /// 缺出版地时补 [S.l.] / 出版地不详 占位（sine loco）。默认 auto=条件补白（出版者在场才补）；true=一缺就补（GB 严格著录）；false=留空
   show-sine-loco:      auto,
-  /// 缺出版者时补 [s.n.] / 出版者不详 占位（sine nomine）。默认 auto=条件补白(出版地在场才补)；true=一缺就补(GB 严格著录)；false=留空
+  /// 缺出版者时补 [s.n.] / 出版者不详 占位（sine nomine）。默认 auto=条件补白（出版地在场才补）；true=一缺就补（GB 严格著录）；false=留空
   show-sine-nomine:    auto,
   /// 出版年缺失时是否补占位（[s.a.] / 日期不详）：GB 没规定这一项，是方言样式的需求，默认关；只对顺序编码制有意义
   show-sine-anno:      false,
@@ -159,11 +159,11 @@
   pid-priority: ("cstr", "doi", "eprint", "isbn", "issn"),
   /// URL 已含同一永久标识符时不重复著录：auto 随版本（2015 并列、2025 去重）/ true 去重 / false 都列
   dedup-url-pid:       auto,
-  /// 参考文献表标点(cite 值的子集,无 -and-style)：auto（随 version：2015 取 "half-with-space"、2025 取 "full"，即部分全角对齐 GB/T 7714—2025）/ "half-with-space" / "half"(="half-no-space") / "full" / "by-doc-no-space"/"-with-space"(分隔符跟文档语言) / "by-entry-no-space"/"-with-space"(跟条目)
+  /// 参考文献表标点（cite 值的子集，无 -and-style）：auto（随 version：2015 取 "half-with-space"、2025 取 "full"，即部分全角对齐 GB/T 7714—2025）/ "half-with-space" / "half"(="half-no-space") / "full" / "by-doc-no-space"/"-with-space"（分隔符跟文档语言） / "by-entry-no-space"/"-with-space"（跟条目）
   bib-punct-style:     auto,
-  /// PID(DOI/CSTR/eprint 等)标签与值间那一个冒号的全/半角,独立于结构冒号(出版项/年:页)。取值同 bib-punct-style：auto(跟随 bib-punct-style,即历史行为) / "half"(DOI:x) / "half-with-space"(DOI: x) / "full"(DOI：x) / "by-doc-*" / "by-entry-*"；非 auto 时绕过 custom-punct 的 colon
+  /// PID(DOI/CSTR/eprint 等)标签与值间那一个冒号的全/半角，独立于结构冒号(出版项/年:页)。取值同 bib-punct-style：auto（跟随 bib-punct-style，即历史行为） / "half"(DOI:x) / "half-with-space"(DOI: x) / "full"(DOI：x) / "by-doc-*" / "by-entry-*"；非 auto 时绕过 custom-punct 的 colon
   pid-colon-style:     auto,
-  /// 精确覆盖某*结构标点*（著录格式串符号,不碰用户字段文本;值为绝对字面量不感知）,如 (",": "，", ":": "：")
+  /// 精确覆盖某*结构标点*（著录格式串符号，不碰用户字段文本；值为绝对字面量不感知），如 (",": "，", ":": "：")
   custom-punct:     (:),
   /// 矫正长文本字段（题名等）里用户输入的标点全/半角
   correct-punct:       false,
@@ -173,11 +173,11 @@
   latex-strict-char:   true,
   /// URL 每 N 个连续字符插一个断点机会：none 不插 / 1 任意处可断
   url-break-every:     1,
-  /// URL 断点处是否显示连字符：false 零宽不显示(默认,copy-safe) / true 软连字符(落行末显示 `-`)
+  /// URL 断点处是否显示连字符：false 零宽不显示（默认，copy-safe） / true 软连字符（落行末显示 `-`）
   url-break-hyphen:    false,
-  /// 显连字符时,URL 分隔符(RFC 3986 delimiter,`/ . : ? &`)断点算不算在内：true 含(默认,= jurlstify 0.2.1) / false 仅 every 救济断点显(旧 0.2.0 partial)
+  /// 显连字符时，URL 分隔符(RFC 3986 delimiter,`/ . : ? &`)断点算不算在内：true 含（默认，= jurlstify 0.2.1） / false 仅 every 救济断点显（旧 0.2.0 partial）
   url-break-hyphen-at-delimiters: true,
-  /// 长标题字段大小写: none 原样 / "sentence" 句首大写 / "title" Title Case; 字典按字段+rest; {DNA} 花括号保护
+  /// 长标题字段大小写：none 原样 / "sentence" 句首大写 / "title" Title Case; 字典按字段+rest; {DNA} 花括号保护
   titles-text-case:    none,
   /// 按槽位施加斜体 / 加粗 / 包裹符（替代 italic-book-title / italic-journal / bold-journal-volume）
   emphasis:            (:),
@@ -187,7 +187,7 @@
   show-end-period:     auto,
   /// 文献类型标识 [M] 前加空格
   space-before-mark:   false,
-  /// 文献类型标识方括号半/全角："half" [M](默认,GB 标准)/ "full" ［M］(全角方括号,斜杠恒半角)
+  /// 文献类型标识方括号半/全角："half" [M]（默认，GB 标准）/ "full" ［M］（全角方括号，斜杠恒半角）
   mark-medium-bracket-style: "half",
   /// 页码前加空格（: 123 与 :123）
   space-before-pages:  true,
@@ -603,9 +603,9 @@
   custom-fields:       auto,
   /// 用户自定义永久标识符；auto 跟随全局
   custom-pids:         auto,
-  /// 标点(同 punct-style)："half-with-space" / "half" / "full" / "by-doc-*" / "by-entry-*"；auto 跟随全局
+  /// 标点（同 punct-style）："half-with-space" / "half" / "full" / "by-doc-*" / "by-entry-*"；auto 跟随全局
   punct-style:         auto,
-  /// PID 冒号风格(同 pid-colon-style)；auto 跟随全局
+  /// PID 冒号风格（同 pid-colon-style）；auto 跟随全局
   pid-colon-style:     auto,
   /// 符号精确覆盖；auto 跟随全局
   custom-punct:     auto,
@@ -1001,7 +1001,7 @@
   form:            auto,
   /// 西文姓名格式：auto 跟随全局 / 五维字典（order / family-case / given-form / given-separator / given-case）
   name-style:     auto,
-  /// 标注内部标点："by-doc-and-style"(默认) / "...-no-space" / "...-with-space" / "by-entry-*" / "half" / "half-with-space" / "full"；auto 跟随全局
+  /// 标注内部标点："by-doc-and-style"（默认） / "...-no-space" / "...-with-space" / "by-entry-*" / "half" / "half-with-space" / "full"；auto 跟随全局
   punct-style:     auto,
   /// supplement 显示格式："compact" / "split"；auto 跟随全局
   supplement-style:     auto,
@@ -1045,7 +1045,7 @@
   sort-zh-by:      auto,
   /// 本组年份折叠（单次覆盖 cite-collapse-date）：auto / true / false
   collapse-date:   auto,
-  /// 脚注里 bib 条目的标点(同 punct-style)："half-with-space" / "half" / "full" / "by-doc-*" / "by-entry-*"；仅 note: "foot" 时生效
+  /// 脚注里 bib 条目的标点（同 punct-style）："half-with-space" / "half" / "full" / "by-doc-*" / "by-entry-*"；仅 note: "foot" 时生效
   footnote-punct-style:     auto,
   /// 脚注里符号精确覆盖；仅 note: "foot" 时生效
   footnote-custom-punct: auto,

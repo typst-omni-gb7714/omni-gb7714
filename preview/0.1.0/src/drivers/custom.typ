@@ -1,8 +1,8 @@
 #import "../sentinel.typ": *
 #import "../errors.typ"
 #import "../elements/mark-medium/built-in.typ" as mark-medium
-#import "../parse/field.typ"
-#import "../parse/lang-detect.typ" as language
+#import "../field.typ"
+#import "../detect/lang.typ" as language
 #import "../punct/built-in.typ" as punct
 #import "../parse/latex.typ"
 #import "../fields/built-in.typ" as fields

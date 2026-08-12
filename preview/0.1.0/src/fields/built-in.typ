@@ -9,7 +9,7 @@
 #import "../elements/pages.typ"
 #import "../category.typ"
 #import "../elements/date.typ"
-#import "../parse/field.typ"
+#import "../field.typ"
 #import "../elements/access.typ": access, has-visible-path
 #import "../drivers/built-in.typ" as built-in-driver
 

@@ -1,4 +1,4 @@
-#import "../sentinel.typ": *
+#import "sentinel.typ": *
 
 #let get(entry, key) = {
   let value = entry.fields.at(key, default: none)

@@ -1,7 +1,7 @@
 #import "@preview/glotter:0.1.0" as _glotter
 #import "../sentinel.typ": *
 #import "../errors.typ"
-#import "field.typ"
+#import "../field.typ"
 
 #let is-cjk(s) = {
   for c in str(s).codepoints() {

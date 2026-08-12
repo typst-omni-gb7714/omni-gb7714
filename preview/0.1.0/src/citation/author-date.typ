@@ -1,11 +1,11 @@
 #import "../sentinel.typ": *
 #import "../errors.typ"
-#import "../parse/lang-detect.typ" as language
+#import "../detect/lang.typ" as language
 #import "../terms/built-in.typ" as terms
 #import "../elements/creators.typ" as creators
 #import "../punct/built-in.typ" as punct
 #import "../elements/imprint/date.typ" as publication-date
-#import "../parse/field.typ"
+#import "../field.typ"
 
 #let author-short(entry, cite-et-al-min: 2, cite-et-al-use-first: 1, cite-et-al-use-last: 0, name-style: (:), first-name-style: none, no-etal: false, terms-lang: "by-entry", document-lang: "en", sort-use-prefix: false, name-separator: ", ", name-suffix-separator: auto, custom-terms: (:), punct-style: "half-with-space", version: 2025) = {
 

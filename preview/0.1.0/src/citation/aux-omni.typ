@@ -1,4 +1,4 @@
-#import "../parse/entryset.typ"
+#import "../entryset.typ"
 
 #let bib-anchor-map() = {
   let anchor-map = (:)

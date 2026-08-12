@@ -1,8 +1,8 @@
 #import "mark-medium/built-in.typ" as mark-medium
 #import "emphasis.typ" as emphasis
 #import "../punct/built-in.typ" as punct
-#import "../parse/field.typ"
-#import "../parse/lang-detect.typ" as language
+#import "../field.typ"
+#import "../detect/lang.typ" as language
 #import "../category.typ"
 #import "../terms/built-in.typ" as terms
 

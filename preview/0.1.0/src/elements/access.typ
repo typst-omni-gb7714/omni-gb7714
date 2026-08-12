@@ -1,6 +1,6 @@
 #import "@preview/jurlstify:0.3.1": jurlstify as _jurlstify
 #import "../sentinel.typ": *
-#import "../parse/field.typ"
+#import "../field.typ"
 #import "../punct/built-in.typ" as punct
 #import "mark-medium/built-in.typ" as mark-medium
 #import "pids/built-in.typ" as pids

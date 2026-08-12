@@ -1,4 +1,4 @@
-#import "../../parse/field.typ"
+#import "../../field.typ"
 #import "../../errors.typ"
 #import "../../terms/built-in.typ" as terms
 #import "../../terms/custom.typ": reserved-term-names, reserved-bib-fields

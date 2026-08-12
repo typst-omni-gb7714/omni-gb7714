@@ -2,10 +2,10 @@
 #import "@preview/auto-bihua:0.2.0": bihua-count as _bihua-count, bihua-order as _bihua-order
 #import "../sentinel.typ": *
 #import "../errors.typ"
-#import "../parse/field.typ"
+#import "../field.typ"
 #import "../elements/creators.typ" as creators
 #import "../terms/built-in.typ" as terms
-#import "../parse/lang-detect.typ" as language
+#import "../detect/lang.typ" as language
 #import "../elements/imprint/date.typ" as publication-date
 
 #let lang-key(entry, entry-lang-order: ("zh", "ja", "ko", "en", "fr", "ru")) = {

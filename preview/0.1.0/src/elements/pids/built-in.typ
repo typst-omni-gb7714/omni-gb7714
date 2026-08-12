@@ -1,4 +1,4 @@
-#import "../../parse/field.typ"
+#import "../../field.typ"
 #import "../../punct/built-in.typ" as punct
 #import "../mark-medium/built-in.typ" as mark-medium
 #import "./custom.typ" as custom-pid

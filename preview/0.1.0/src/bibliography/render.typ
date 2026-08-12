@@ -1,10 +1,10 @@
 #import "../sentinel.typ": *
-#import "../parse/field.typ"
+#import "../field.typ"
 #import "../punct/built-in.typ" as punct
-#import "../parse/entryset.typ"
+#import "../entryset.typ"
 #import "../elements/mark-medium/built-in.typ" as mark-medium
 #import "../elements/creators.typ" as creators
-#import "../parse/lang-detect.typ" as language
+#import "../detect/lang.typ" as language
 #import "../drivers/custom.typ" as custom-driver
 
 #let emit-label(key, list-label: none) = {

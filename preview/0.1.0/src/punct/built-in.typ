@@ -1,6 +1,6 @@
 #import "../sentinel.typ": *
 #import "../elements/mark-medium/built-in.typ" as mark-medium
-#import "../parse/lang-detect.typ" as language
+#import "../detect/lang.typ" as language
 #import "../errors.typ"
 #import "../parse/latex.typ"
 #import "custom.typ"

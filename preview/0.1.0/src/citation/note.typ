@@ -1,11 +1,10 @@
 #import "../sentinel.typ": *
 #import "../errors.typ"
-#import "./native-aux.typ" as native-aux
 #import "../punct/built-in.typ" as punct
 #import "../drivers/custom.typ" as custom-driver
 #import "../bibliography/render.typ" as bib
 #import "../terms/built-in.typ" as terms
-#import "../parse/entryset.typ"
+#import "../entryset.typ"
 #import "../elements/creators.typ" as creators
 #import "../elements/titles.typ" as titles
 

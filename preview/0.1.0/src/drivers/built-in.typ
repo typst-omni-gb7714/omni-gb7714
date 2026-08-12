@@ -1,7 +1,7 @@
 #import "../sentinel.typ": *
 #import "../elements/mark-medium/built-in.typ" as mark-medium
-#import "../parse/field.typ"
-#import "../parse/lang-detect.typ" as language
+#import "../field.typ"
+#import "../detect/lang.typ" as language
 #import "../terms/built-in.typ" as terms
 #import "../punct/built-in.typ" as punct
 #import "../elements/creators.typ" as creators

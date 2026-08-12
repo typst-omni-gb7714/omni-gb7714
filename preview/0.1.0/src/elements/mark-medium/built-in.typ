@@ -1,5 +1,5 @@
 #import "../../sentinel.typ": *
-#import "../../parse/field.typ"
+#import "../../field.typ"
 #import "../../errors.typ"
 #import "../../parse/guard.typ" as guard
 

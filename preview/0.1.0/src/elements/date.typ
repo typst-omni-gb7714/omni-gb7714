@@ -1,4 +1,4 @@
-#import "../parse/field.typ"
+#import "../field.typ"
 #import "mark-medium/built-in.typ" as mark-medium
 #import "imprint/date.typ" as publication-date
 

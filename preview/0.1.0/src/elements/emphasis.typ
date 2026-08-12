@@ -1,4 +1,4 @@
-#import "../parse/lang-detect.typ" as language
+#import "../detect/lang.typ" as language
 #import "../errors.typ"
 
 #let _spec-keys = ("italic", "bold", "prefix", "suffix")
