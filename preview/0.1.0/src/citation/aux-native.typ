@@ -30,18 +30,15 @@
     let routed = none
     for i in range(bibs.len()) {
       let target-hits = t-hits.at(i)
-
       if target-hits != none and target-hits.any(hit-cite => hit-cite.location() == c.loc) { routed = i; break }
     }
     if routed == none {
-
       for i in range(c.before, bibs.len()) {
         let b = bibs.at(i)
         if b.target == auto and c.key in b.source-keys { routed = i; break }
       }
     }
     if routed == none {
-
       let i = c.before - 1
       while i >= 0 {
         let b = bibs.at(i)
@@ -65,7 +62,6 @@
       bib-keys.len()
     } else { per-bib.at(bib-index).len() }
   }
-
   let offsets = bibs.map(_ => 0)
   for i in range(bibs.len()) {
     let entry-group = bibs.at(i).group
@@ -78,7 +74,6 @@
     offsets.at(i) = offset
   }
   let numbered = routes.map(route => (loc: route.loc, number: offsets.at(route.bib-index) + route.rank + 1, bib-index: route.bib-index))
-
   let seen = bibs.map(_ => ())
   for i in range(bibs.len()) {
     let off = offsets.at(i)
@@ -90,7 +85,6 @@
   }
   (numbered: numbered, seen: seen)
 }
-
 #let _native-route-number(table, loc) = {
   let hit = table.numbered.find(r => r.loc == loc)
   if hit == none { none } else { (number: hit.number, bib-index: hit.bib-index) }

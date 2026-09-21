@@ -8,12 +8,9 @@
 #import "../field.typ"
 
 #let author-short(entry, cite-et-al-min: 2, cite-et-al-use-first: 1, cite-et-al-use-last: 0, name-style: (:), first-name-style: none, no-etal: false, terms-lang: "by-entry", document-lang: "en", sort-use-prefix: false, name-separator: ", ", name-suffix-separator: auto, custom-terms: (:), punct-style: "half-with-space", version: 2025) = {
-
   let name-list = creators.principal-names(entry).names
   if name-list.len() == 0 { return none }
-
   let (min: cite-et-al-min, use-first: cite-et-al-use-first, use-last: cite-et-al-use-last) = creators.resolve-et-al-triple(cite-et-al-min, cite-et-al-use-first, cite-et-al-use-last, "principal", entry)
-
   let (real-names, show-count, last-count, needs-etal, bare-etal) = creators.truncate(name-list, cite-et-al-min, cite-et-al-use-first, not no-etal, et-al-use-last: cite-et-al-use-last)
 
   let entry-use-prefix = field.use-prefix-entry(entry)
@@ -21,27 +18,26 @@
   let _one(name-index) = {
     let n = real-names.at(name-index)
     let style-for = if name-index == 0 and first-name-style != none { first-name-style } else { name-style }
+    if creators.is-corp-name(n, entry: entry) {
+      return creators.format-one(n, name-style: style-for, name-suffix-separator: name-suffix-separator, entry: entry, punct-style: punct-style, name-index: name-index)
+    }
     if style-for.at("given-form", default: none) == none {
       let family = n.at("family", default: "")
       if language.is-cjk(family) { creators.format-one(n, name-style: style-for, name-suffix-separator: name-suffix-separator, entry: entry, punct-style: punct-style, name-index: name-index) } else {
         let prefix = if field.use-prefix-eff(n, entry-use-prefix, sort-use-prefix) { str(n.at("prefix", default: "")) } else { "" }
         let assembled = if prefix != "" { prefix + " " + family } else { family }
-
         let family-case = style-for.at("family-case", default: none)
         if family-case == "uppercase" { upper(assembled) } else if family-case == "lowercase" { lower(assembled) } else { assembled }
       }
     } else { creators.format-one(n, name-style: style-for, name-suffix-separator: name-suffix-separator, entry: entry, punct-style: punct-style, name-index: name-index) }
   }
   let formatted = range(show-count).map(_one)
-
   let result = formatted.join(name-separator)
   if last-count > 0 {
-
     let tail-start = real-names.len() - last-count
     return result + name-separator + punct.get("ellipsis", entry, punct-style, (:)) + range(tail-start, real-names.len()).map(_one).join(name-separator)
   }
   if needs-etal {
-
     let lang = terms.cite-term-lang(terms-lang, "et-al", entry, document-lang)
     let et-al-word = terms.etal-for(lang, custom-terms: custom-terms, version: version)
 
@@ -83,7 +79,6 @@
 #let disambiguation(bib-data, cite-et-al-min: 2, cite-et-al-use-first: 1, name-style: (:), sort-keys: none, scope-keys: none, escalate-given-name: false, expand-names: false) = {
 
   let active-keys = if scope-keys != none { scope-keys.filter(k => k in bib-data) } else { bib-data.keys() }
-
   let related-targets = ()
   let related-pairs = (:)
   for key in active-keys {
@@ -117,16 +112,13 @@
     if year == none { year = "" }
 
     if label == none {
-
       if field.get(entry, "label") != none { return none }
       if entry.entry_type == "set" { return none }
       if year == "" { return none }
-
       return terms.anon(entry) + "|" + year
     }
     (if std.type(label) == str { label } else { repr(label) }) + "|" + year
   }
-
   let _collision-groups(current-escalations) = {
     let groups = (:)
     for key in active-keys {
@@ -139,16 +131,14 @@
     groups.values().filter(g => g.len() > 1)
   }
   if escalate-given-name {
-
     for group in _collision-groups(escalations) {
       let persons = group.map(k => _person-key(_first-person(bib-data.at(k))))
       if persons.dedup().len() <= 1 { continue }
       for key in group {
         let esc = escalations.at(key, default: _blank-escalation)
-        esc.given-form = "initials"
+        esc.given-form = (pinyin: "pinyin-initials", rest: "initials")
         escalations.insert(key, esc)
       }
-
       let still-colliding = (:)
       for key in group {
         let group-key = _escalated-label(escalations, key)
@@ -168,7 +158,6 @@
     }
   }
   if expand-names {
-
     let expanding = true
     let rounds = 0
     while expanding and rounds < 8 {
@@ -192,21 +181,17 @@
   }
 
   let cite-labels = (:)
-
   let keys-by-disambiguation = (:)
   for key in active-keys {
-
     if key in related-targets { continue }
     let entry = bib-data.at(key)
     let esc = escalations.at(key, default: _blank-escalation)
     let _first-style = if esc.given-form != none { _escalated-style(esc.given-form) } else { none }
-
     let author = author-short(entry, cite-et-al-min: cite-et-al-min, cite-et-al-use-first: if esc.use-first != none { esc.use-first } else { cite-et-al-use-first }, name-style: name-style, first-name-style: _first-style)
     if author == none { author = "" }
     let year = publication-date.year(entry)
     if year == none { year = "" }
     cite-labels.insert(key, author + ", " + year)
-
     let disambiguation-key = _escalated-label(escalations, key)
     if disambiguation-key == none { continue }
     if disambiguation-key not in keys-by-disambiguation { keys-by-disambiguation.insert(disambiguation-key, ()) }
@@ -225,7 +210,6 @@
       for (i, key) in sorted-keys.enumerate() {
         let suffix-str = _suffix(i)
         cite-suffixes.insert(key, suffix-str)
-
         if key in related-pairs {
           cite-suffixes.insert(related-pairs.at(key), suffix-str)
         }
@@ -237,7 +221,6 @@
 
 #let render-run(items, _group-merge, opts) = {
   let (eff-form, _key-of, _cite-author, _cite-year, _order-items, bib-data, publication-date, p, _bib-link, _author-date-cite-label, lbl-prefix, current-list, suffix-table, escalation-table, supplement-mode, document-semi, eff-name-style, eff-cite-et-al-min, eff-cite-et-al-use-first, eff-cite-terms-lang, document-lang, eff-collapse-date, _name-punct-direction) = opts
-
   let items = _order-items(items)
   if items.len() == 1 and eff-form in ("author", "year") {
     let item = items.first()
@@ -246,7 +229,6 @@
     let author = _cite-author(entry)
     let _suffix = suffix-table.at(k, default: "")
     let year = _cite-year(entry, _suffix)
-
     let display = if eff-form == "author" { author } else { year }
     let lbl = _bib-link(lbl-prefix + k, current-list, k, display)
     if item.supplement != none { [#lbl#super[#item.supplement]] } else { lbl }
@@ -262,7 +244,6 @@
     })
     let result = []
     for (i, part) in parts.enumerate() {
-
       if i > 0 and _group-merge { result += document-semi }
       result += part
     }
@@ -275,9 +256,7 @@
     let _suffix = suffix-table.at(k, default: "")
     let year = _cite-year(entry, _suffix)
     let lbl = _bib-link(lbl-prefix + k, current-list, k, year)
-
     let gap = if author == "" or _name-punct-direction(entry) == "full" { "" } else { " " }
-
     let no-year = (year == none or year == "") and item.supplement == none
     if no-year { author }
     else if item.supplement != none {
@@ -314,7 +293,6 @@
       }
       result
     }
-
     let render-group(g) = {
       let punct-entry(n) = p(n, entry: bib-data.at(g.members.first().key, default: none))
       let lbl = group-label(g)
@@ -327,7 +305,6 @@
     let body = if items.len() == 1 {
       render-group(groups.first())
     } else if not _group-merge {
-
       groups.map(render-group).join()
     } else {
 

@@ -14,10 +14,8 @@
 )
 
 #let has-visible-path(entry, show-url: true, show-pid: (:), custom-pids: (:), dedup-url-pid: true, version: 2015) = {
-
   if mark-medium.online-suppressed(show-url, entry, version: version) { return false }
   let show-url = mark-medium.gate(show-url, entry, version: version)
-
   if not show-url { return false }
   let _bov = name => if type(custom-pids) == dictionary and name in custom-pids and type(custom-pids.at(name)) == dictionary { custom-pids.at(name) } else { (:) }
   let _bfield = (name, dflt) => _bov(name).at("field", default: dflt)
@@ -36,7 +34,6 @@
     let value = field.get(entry, _bfield(name, name))
     if pids.effective(name, value, show-pid, url-str, _defaults.at(name), entry: entry, custom-pids: custom-pids, dedup-url-pid: dedup-url-pid, version: version) { return true }
   }
-
   if type(custom-pids) == dictionary {
     for (name, spec) in custom-pids {
       if name in ("doi", "cstr", "eprint", "isbn", "issn") { continue }
@@ -49,15 +46,12 @@
 }
 
 #let access(entry, show-url: true, hyperlink: true, show-pid: (:), pid-priority: (), dedup-url-pid: true, custom-pids: (:), punct-style: "half-with-space", custom-punct: (:), pid-colon-style: auto, url-break-every: 1, url-break-hyphen: true, url-break-hyphen-at-delimiters: true, version: 2015) = {
-
   if mark-medium.online-suppressed(show-url, entry, version: version) { return none }
-
   let show-url = mark-medium.gate(show-url, entry, version: version)
   let p = name => punct.get(name, entry, punct-style, custom-punct)
   let _brk = s => _break-url(str(s), url-break-every, url-break-hyphen, url-break-hyphen-at-delimiters)
   let _link-fn = (target, body) => if hyperlink and target != none { link(target, body) } else { body }
   let parts = ()
-
   let _bov = name => if type(custom-pids) == dictionary and name in custom-pids and type(custom-pids.at(name)) == dictionary { custom-pids.at(name) } else { (:) }
   let _bfield = (name, dflt) => _bov(name).at("field", default: dflt)
   let url = field.get(entry, "url")
@@ -85,7 +79,6 @@
     cstr: version == 2025,
 
     eprint: not _pid-off-2005,
-
     isbn: false,
     issn: false,
   )
@@ -107,7 +100,6 @@
     } else if name == "eprint" and _effective("eprint", eprint) {
       let prefix = pids.eprint-prefix(entry)
       let prefix-text = if prefix != none { prefix } else { "eprint" }
-
       let eprint-value = custom-pid.strip-label-prefix(eprint, prefix-text)
       _link-fn(_resolve("eprint", eprint-value, pids.resolve-eprint(entry, eprint-value, custom-pids: custom-pids)), [#(_label("eprint", prefix-text))#pcolon#eprint-value])
     } else if name == "isbn" and _effective("isbn", isbn) {

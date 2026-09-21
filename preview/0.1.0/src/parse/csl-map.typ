@@ -47,7 +47,6 @@
 #let map-type(csl-type) = TYPE-MAP.at(lower(str(csl-type)), default: "misc")
 
 #let CONTAINER-AS-BOOKTITLE = ("incollection", "inproceedings", "inbook", "inreference", "map")
-
 #let container-field(entry-type) = if entry-type in CONTAINER-AS-BOOKTITLE { "booktitle" } else { "journaltitle" }
 
 #let LANG-MAP = (
@@ -122,7 +121,6 @@
   if "day" in p { s += "-" + pad(p.day) }
   s
 }
-
 #let parse-date(csl-date) = {
   if type(csl-date) == str { return (parsed: none, raw: csl-date) }
   if type(csl-date) != dictionary { return (parsed: none, raw: none) }
@@ -130,7 +128,6 @@
   let approximate = (circa == true or circa == "true" or circa == 1)
   let dp = csl-date.at("date-parts", default: none)
   if type(dp) != array or dp.len() == 0 or type(dp.at(0)) != array or dp.at(0).len() == 0 {
-
     let lit = csl-date.at("literal", default: csl-date.at("raw", default: none))
     return (parsed: none, raw: if lit != none { str(lit) } else { none })
   }
@@ -211,7 +208,6 @@
 )
 
 #let _LABEL-ALIAS = (
-
   "pages": "page",
   "place": "publisher-place",
   "series": "collection-title", "series-title": "collection-title", "seriestitle": "collection-title",
@@ -224,12 +220,10 @@
   "book-title": "container-title", "booktitle": "container-title",
   "version-number": "version", "versionnumber": "version",
   "callnumber": "call-number",
-
   "date": "issued",
   "access-date": "accessed", "accessdate": "accessed",
   "filing-date": "submitted", "filingdate": "submitted",
   "originaldate": "original-date",
-
   "book-author": "container-author", "bookauthor": "container-author",
   "series-editor": "collection-editor", "serieseditor": "collection-editor",
 )
@@ -237,14 +231,11 @@
 #let _ARTICLE-LIKE-TYPES = ("article", "newspaper")
 
 #let _CSL-VARS = (
-
   "author", "chair", "collection-editor", "compiler", "composer", "container-author", "contributor",
   "curator", "director", "editor", "editor-translator", "editorial-director", "executive-producer",
   "guest", "host", "illustrator", "interviewer", "narrator", "organizer", "original-author",
   "performer", "producer", "recipient", "reviewed-author", "script-writer", "series-creator", "translator",
-
   "accessed", "available-date", "event-date", "issued", "original-date", "submitted",
-
   "abstract", "annote", "archive", "archive-collection", "archive-location", "archive-place",
   "authority", "call-number", "chapter-number", "citation-key", "citation-label", "citation-number",
   "collection-number", "collection-title", "collection-title-short", "container-title",

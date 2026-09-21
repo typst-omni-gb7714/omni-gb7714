@@ -19,14 +19,12 @@
 }
 
 #let redirect(bib-data) = {
-
   let nested = ()
   for (k, e) in bib-data {
     if e.entry_type == "set" {
       for member in members(e) { nested.push(member) }
     }
   }
-
   let _contained-sets(key, visited: ()) = {
     if key in visited { return () }
     let e = bib-data.at(key, default: none)
@@ -43,7 +41,6 @@
     out
   }
   let redirect-map = (:)
-
   for (k, e) in bib-data {
     if e.entry_type == "set" and k not in nested {
       for leaf in leaves(bib-data, k) {
@@ -54,7 +51,6 @@
       }
     }
   }
-
   for (k, e) in bib-data {
     if e.entry_type == "set" {
       for leaf in leaves(bib-data, k) {

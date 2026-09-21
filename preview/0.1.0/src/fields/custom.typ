@@ -32,7 +32,6 @@
 #let resolve-field(name, definition, entry, correct-punct: false, punct-style: "half-with-space", custom-punct: (:)) = {
   let field-name = if definition == auto { name } else if type(definition) == dictionary { definition.at("field", default: none) } else { none }
   if field-name == none { return none }
-
   let value = punct.field-text(entry, str(field-name), correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct, force-correct: true)
   if value == none or value == "" { return none }
   if definition == auto { return value }

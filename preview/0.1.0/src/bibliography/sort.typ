@@ -13,7 +13,6 @@
   let lang = language.get(entry)
   let index = entry-lang-order.position(l => l == lang)
   let rank = if index != none { index + 1 } else { entry-lang-order.len() + 1 }
-
   let text-value = str(rank)
   "0" * calc.max(0, 2 - text-value.len()) + text-value
 }
@@ -75,9 +74,7 @@
   if key-value != none { return _normalize(key-value) }
 
   let _collate = if sort-zh-by == "bihua" and language.get(entry) == "zh" { _bihua } else { _pinyin }
-
   let entry-use-prefix = field.use-prefix-entry(entry)
-
   let authors = entry.parsed_names.at("author", default: ())
   if authors.len() > 0 {
     let noop-name = _noopsort(field.get(entry, "author"))
@@ -92,7 +89,6 @@
   if show-anon and creators.principal-names(entry).names.len() == 0 {
     return _collate(str(terms.anon(entry, custom-terms: custom-terms)))
   }
-
   let title-value = field.get(entry, "title")
   if title-value == none { return "" }
   let noop-name = _noopsort(title-value)

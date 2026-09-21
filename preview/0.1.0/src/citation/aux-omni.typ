@@ -20,7 +20,6 @@
   if target-list == none and not named-lists and not state("gb7714-has-note", false).final() {
     return state("gb7714-cite-counter", (order: (), map: (:))).final().order
   }
-
   let redirect = entryset.redirect(bib-data)
 
   let keys = ()

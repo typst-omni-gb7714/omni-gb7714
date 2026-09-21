@@ -26,18 +26,14 @@
     "shell": ("〔", "〕"),
     "fullwidth-paren": ("（", "）"),
   ).at(cite-numbering-style, default: ("[", "]"))
-
   let br(inner) = if is-circled { inner } else { [#cite-lb#inner#cite-rb] }
-
   let items = _order-items(items)
   if items.len() == 1 and eff-form == "prose" {
-
     let item = items.first()
     let k = _key-of(item)
     let entry = bib-data.at(k, default: none)
     let author = _cite-author(entry)
     let lbl = _num-link(k, item.number)
-
     let gap = if _name-punct-direction(entry) == "full" { "" } else { " " }
     if item.supplement != none { [#author#gap#br(lbl)#item.supplement] }
     else { [#author#gap#br(lbl)] }
@@ -45,7 +41,6 @@
     let item = items.first()
     let k = _key-of(item)
     let entry = bib-data.at(k, default: none)
-
     let display = if eff-form == "author" {
       _cite-author(entry)
     } else {
@@ -71,7 +66,6 @@
     }
     result
   } else if not _group-merge or is-circled {
-
     let use-super = eff-form == "super" or eff-form == "normal"
     let parts = items.map(item => {
       let k = _key-of(item)
@@ -82,7 +76,6 @@
     parts.join()
   } else {
     let use-super = eff-form == "super" or eff-form == "normal"
-
     let segments = _compress-runs(items)
 
     if supplement-mode == "split" {
@@ -112,7 +105,6 @@
         }
         if use-super { super[#br(inner)] } else { br(inner) }
       } else {
-
         let parts = segments.map(segment => {
           let (start, end, supplement) = segment
           let k = seen.at(start - 1, default: "")
@@ -128,7 +120,6 @@
             }
             br(inner)
           }
-
           if supplement != none { [#bracketed#(if use-super { supplement } else { super[#supplement] })] } else { bracketed }
         })
         let result = []

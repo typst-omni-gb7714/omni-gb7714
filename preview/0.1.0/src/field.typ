@@ -5,7 +5,6 @@
   if type(value) == str and value.trim() == "" { return none }
 
   if type(value) == str and value.contains(_SD) { value = value.replace(_SD, "$") }
-
   if type(value) == str and (value.contains(_SLBR) or value.contains(_SRBR)) { value = value.replace(_SLBR, "{").replace(_SRBR, "}") }
   value
 }
@@ -27,7 +26,6 @@
   if options-match == none { return none }
   options-match.captures.at(0) == "true"
 }
-
 #let use-prefix-eff(name, entry-use-prefix, global-use-prefix) = {
   let name-use-prefix = name.at("use-prefix", default: none)
   if name-use-prefix != none { return name-use-prefix == true }

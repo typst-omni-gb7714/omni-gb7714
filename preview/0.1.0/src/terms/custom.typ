@@ -41,27 +41,38 @@
 
 #let _structural-keys = ("field", "bib-field", "prefix", "suffix", "pid", "resolver")
 
+#let _number-branches(v, unwrap) = {
+  let is-pair = type(v) == dictionary and ("singular" in v or "plural" in v)
+  if unwrap {
+    if not is-pair { return (("", v),) }
+    return v.pairs().filter(pair => pair.first() in ("singular", "plural"))
+  }
+  if type(v) != dictionary { return (("", v),) }
+  if is-pair { return v.pairs().filter(pair => pair.first() in ("singular", "plural")) }
+  v.pairs()
+}
+
 #let validate-terms(custom-terms) = {
   if custom-terms == none or custom-terms == (:) { return }
   for (name, definition) in custom-terms {
     let is-built-in-word = str(name) in built-in-term-keys
-
     if not is-built-in-word and str(name) in reserved-term-names {
       errors.raise("custom-terms.structural-name", name: str(name), allowed: built-in-term-keys.join("、"))
     }
-
-    if str(name) in ("edition", "volume", "footnote-number") {
+    if str(name) in ("edition", "volume", "pages", "footnote-number") {
       let allowed = if str(name) == "footnote-number" { ("prefix", "suffix", "supplement-separator") } else { ("prefix", "suffix") }
       if type(definition) != dictionary { errors.raise("custom-terms.bad-value", name: str(name)) }
-      for (k, v) in definition {
+      for (k, v) in _number-branches(definition, false) {
         if type(v) != dictionary { errors.raise("custom-terms.wrap-value-not-pair", name: str(name), key: str(k)) }
-        for (wrap-key, _) in v {
-          if wrap-key not in allowed { errors.raise("custom-terms.wrap-bad-key", name: str(name), key: str(wrap-key), allowed: allowed.map(a => "`" + a + "`").join(" / ")) }
+        for (_, branch) in _number-branches(v, true) {
+          if type(branch) != dictionary { errors.raise("custom-terms.wrap-value-not-pair", name: str(name), key: str(k)) }
+          for (wrap-key, _) in branch {
+            if wrap-key not in allowed { errors.raise("custom-terms.wrap-bad-key", name: str(name), key: str(wrap-key), allowed: allowed.map(a => "`" + a + "`").join(" / ")) }
+          }
         }
       }
       continue
     }
-
     if str(name) == "ibid" {
       let _check-ibid-parts(v, lang-key) = {
         for (part-key, part-value) in v {
@@ -89,9 +100,12 @@
         errors.raise("custom-terms.structural-key", name: str(name), key: structural)
       }
     }
-    for (k, v) in definition {
-      if v != none and type(v) != str {
-        errors.raise("custom-terms.lang-value-not-str", name: str(name), key: str(k))
+    for (k, v) in _number-branches(definition, false) {
+
+      for (_, branch) in _number-branches(v, true) {
+        if branch != none and type(branch) != str {
+          errors.raise("custom-terms.lang-value-not-str", name: str(name), key: str(k))
+        }
       }
     }
   }

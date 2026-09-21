@@ -18,20 +18,22 @@
   version:             2025,
   /// true 时参考文献表输出全部条目（未引用的追加在已引用之后）
   full:                false,
-  /// 引用形态：auto / "super" 上标 / "inline" 行内 / "normal" / "prose" 叙事 / "author" / "year" / "full" 原位完整条目 / none（括号前间隙随标点方向）/ "author" 仅作者 / "year" 裸出版年（对齐原生）/ none 不显示
+  /// 正文标注形式：auto / "super" 上标 / "inline" 行内 / "normal" 默认形式 / "prose" 叙述式 / "author" 仅作者 / "year" 仅出版年 / "full" 原位显示完整条目 / none 不显示
   cite-form:           auto,
   /// 相邻引用合并为一组：@a@b@c 行内渲染为 [1-3]；脚注制下合成一个脚注（条目分号接排）
   cite-merge:          true,
   /// 带 supplement 的引用显示格式：auto / "compact"（[1:p3, 2]）/ "split"（[1]p3, [2]）
   cite-supplement-style:    auto,
   /// 引用标注内部标点风格。语义见 src/marks/punct.typ 的 `cite` 注释：
-  /// "by-doc-and-style"（默认，跟文档语言·制感知） / "by-doc-no-space" / "by-doc-with-space"
+  /// "by-doc-and-style"（默认，按文档语言和标注体系自动选择）/ "by-doc-no-space" / "by-doc-with-space"
   /// / "by-entry-and-style" / "by-entry-no-space" / "by-entry-with-space"（跟被引条目语言） / "half"(="half-no-space") / "half-with-space" / "full" / 按样式分派的字典
   cite-punct-style:    "by-doc-and-style",
   /// 顺序编码制中 ≥ N 个连续编号压缩为范围（如 [1-5]）
   cite-compress-min:   2,
   /// 引文区间 [1-5] 的起讫号连接符（默认 -，与 page-range-separator 平行独立）
   cite-range-separator: "-",
+  /// 标注两侧相邻空格：auto 在相邻字符为 CJK 时删除（中文 `见 @key 所述` 不留空格，西文保留）/ true 始终保留 / false 始终删除
+  cite-adjacent-space: auto,
   /// 注模式：none 行内标注（默认）/ "foot" 脚注制（条目完整著录于脚注，正文只留注号）/ "end" 尾注制（著录集中排在 bibliography 处的尾注列表，取代参考文献表）
   note:                none,
   /// 正文引用「等 / et al」触发阈值：作者多于 N 才截断
@@ -41,28 +43,28 @@
   cite-et-al-use-last: 0,
   /// 正文引用「等 / et al」截断词语言："by-doc"（跟文档语言 text.lang）/ "by-entry"（跟被引条目）/ "zh"/"ja"/"ko"/"ru"/… 强制
   cite-terms-lang:  "by-entry",
-  /// 正文引用西文姓名格式：auto（只姓、原大小写）或五维字典（order / family-case / given-form / given-separator / given-case）
+  /// 正文引用西文姓名格式：auto（只姓、原大小写）或八维字典（order / family-case / given-form / given-initial-separator / given-separator / given-case / family-given-separator / given-family-separator）
   cite-name-style:    auto,
-  /// 正文引用「著者 ↔ 出版日期」分隔符：auto（中日全角逗号；西文 2005 空格、2015/2025 逗号）/ 标点字符（仍全半角感知）/ 任意字符串（字面量）
+  /// 正文标注中著者与出版日期的分隔符：auto（中日文用全角逗号；西文在 2005 版用空格、2015/2025 版用逗号）/ 单个标点字符（自动转换全角或半角）/ 任意字符串（原样输出）
   cite-name-date-separator: auto,
-  /// 发射隐形 bibliography 供 LSP 补全 @key（不产生可见输出）
+  /// 生成隐形 bibliography 供 LSP 补全 @key（不产生可见输出）
   cite-completion:     true,
-  /// 参考文献表西文姓名格式：auto 或五维字典（order / family-case / given-form / given-separator / given-case；感知维随 version 派生）
+  /// 参考文献表中的西文姓名格式：auto 或姓名格式字典（order / family-case / given-form / given-initial-separator / given-separator / given-case / family-given-separator / given-family-separator）；auto 按 version 取值
   bib-name-style:     auto,
   /// 西文姓名后缀（Jr/Sr）前分隔符：auto（随 version：2015 取 ", " 逗号、2025 取 " " 空格）/ 任意字符串
   name-suffix-separator: auto,
-  /// 译者截断词（等/et al.）与角色词（译/trans.）间分隔符：auto（中文按版本：2005/2025「等，译」、2015「等译」）/ ""（强制紧贴「等译」）/ ", "（强制「等, 译」）/ 标点字符（感知）/ 任意字符串
+  /// 译者截断词（等/et al.）与角色词（译/trans.）之间的分隔符：auto（中文 2005/2025 版为「等，译」，2015 版为「等译」）/ ""（不加分隔符）/ ", "（加逗号）/ 单个标点字符（自动转换全角或半角）/ 任意字符串
   et-al-translator-separator: auto,
   /// 析出文献题名与其出处（母体）间的分隔符——GB 里那个 `//`（biblatex-gb7714 的「析出文献标识符号」gbpunctin）：默认 "//"（全语言通用）/ 任意字符串 / 多语言字典（如 (zh: ". 见: ", en: ". In: ")，未点名的回落 //）
   component-part-separator: "//",
-  /// 参考文献表「著者 ↔ 出版日期」分隔符：auto（随 version：2005 句点、2015/2025 逗号，全半角感知）/ 标点字符 / 任意字符串（字面量）
+  /// 参考文献表中著者与出版日期的分隔符：auto（2005 版用句点，2015/2025 版用逗号，并自动转换全角或半角）/ 单个标点字符 / 任意字符串（原样输出）
   bib-name-date-separator: auto,
   /// 参考文献表「等 / et al」触发阈值：作者多于 N 才截断（国标默认 3）
   bib-et-al-min:       4,
   /// 参考文献表截断后保留前 N 位作者（国标默认 3）
   bib-et-al-use-first: 3,
   bib-et-al-use-last: 0,
-  /// auto（默认，制度感知）：著者-出版年制显示「佚名 / Anon」、顺序编码制留空；true/false 强制
+  /// auto（默认）：著者-出版年制显示「佚名 / Anon」，顺序编码制留空；true / false 强制显示或隐藏
   show-anon:           auto,
   /// 出版日期不明时的占位（与 show-anon 逐字同构）：auto=著者-出版年制显示「无日期」、顺序编码制留空
   show-no-date:        auto,
@@ -86,17 +88,18 @@
   number-gutter:    0.65em,
   /// 编号放哪："column"（默认，自成一列贴版心）/ "margin"（挂到版心外）/ "inline"（排行内）
   number-placement:    "column",
-  /// 编号样式："bracket" [1] / "paren" (1) / "dot" 1. / "plain" 1 / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕（六角括号，旧 GB-1987） / "circled" ①（缺省 Unicode 绘制，展开 (circled: "quan") 用 quan 包）/ none 无编号
+  /// 编号格式："bracket" [1] / "paren" (1) / "dot" 1. / "plain" 1 / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕（六角括号，旧 GB-1987）/ "circled" ①（默认使用 Unicode；(circled: "quan") 使用 quan 包绘制）/ none 不显示编号
   bib-numbering-style:        auto,
-  /// 正文标注编号的括号形态（与 bib-numbering-style 分属两轴，那个管文献表列、本参数管正文 [1]）："bracket" [1]（默认） / "paren" (1) / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1） / "shell" 〔1〕（六角括号，旧 GB-1987）
+  /// 正文标注编号的括号格式；bib-numbering-style 控制参考文献表编号，本参数控制正文中的 [1]："bracket" [1]（默认）/ "paren" (1) / "fullwidth-bracket" ［1］ / "fullwidth-paren" （1）/ "shell" 〔1〕（六角括号，旧 GB-1987）
   cite-numbering-style:   "bracket",
   /// 编号对齐："left"（默认，同原生） / "right" / "center"
   number-align:        "left",
   /// 编号列宽度：auto 自动测量最宽编号
   number-width:        auto,
+  number-punct-width:  "full",
   /// true 时参考文献表编号可点击跳回正文首次引用处
   back-ref:            false,
-  /// 引用消歧：标量三档管全部机制，或字典逐机制 (date: 年份a/b/c, given-name: 同姓补名, names: 展开et al名单)；given-name/names 的 auto 跟正文标注形态轴
+  /// 正文标注消歧：标量统一控制所有机制，或用字典分别设置 (date: 年份 a/b/c, given-name: 同姓时补名字, names: 展开 et al. 名单)；given-name / names 的 auto 按正文标注体系取值
   disambiguate:        auto,
   /// 参考文献表排序键（优先级由高到低）：auto 按标注体系派生（著者-出版年制 ("name","date","title")、顺序编码制 none）/ none 保持引用序 / 数组，元素为键名或方向字典 ("date": "descending")
   bib-sort-by:         auto,
@@ -110,7 +113,7 @@
   cite-sort-zh-by:    "pinyin",
   /// 著者-出版年制合并组内的年份折叠：同著者相邻条目并组、年份连列（张三，2020，2021）；带页码的条目不参与
   cite-collapse-date:  true,
-  /// 紧邻条目同一责任者时，第二条起责任者槽替换为此串（如 "———"；idem=同前一人，biblatex dashed/AMS bysame 同特性）；none 关
+  /// 相邻条目的责任者相同时，从第二条起用此字符串替代责任者（如 "———"；相当于 biblatex 的 dashed 或 AMS 的 bysame）；none 关闭
   creator-idem:        none,
   /// 西文姓名前缀粒子（van/von/de/della）是否参与排序与行内标注（对齐 biblatex useprefix）：false 跳过（Beethoven 排 B）/ true 计入（van Beethoven 排 V）
   sort-use-prefix:     false,
@@ -136,13 +139,13 @@
   show-sine-loco:      auto,
   /// 缺出版者时补 [s.n.] / 出版者不详 占位（sine nomine）。默认 auto=条件补白（出版地在场才补）；true=一缺就补（GB 严格著录）；false=留空
   show-sine-nomine:    auto,
-  /// 出版年缺失时是否补占位（[s.a.] / 日期不详）：GB 没规定这一项，是方言样式的需求，默认关；只对顺序编码制有意义
+  /// 出版年缺失时是否显示占位文字（[s.a.] / 日期不详）：GB 未作规定，供特定样式使用；默认关闭，仅对顺序编码制有效
   show-sine-anno:      false,
   /// 学位论文在 [D] 后附加「硕士学位论文 / 博士学位论文」注记
   show-degree:         false,
   /// 是否著录丛书项（series 字段，如「经济科学译库」）。默认关——GB 著录格式不含丛书项，对齐标准与各参照实现
   show-series:         false,
-  /// 西文姓名前缀（van der 等）著录形态：auto 随版本（2025 缩成首字母置名后 `Veen P H v d`、2015 全拼置姓前 `VAN DER VEEN P H`）
+  /// 西文姓名前缀（van der 等）的著录格式：auto 按版本取值（2025 版缩写并置于名字后 `Veen P H v d`；2015 版全拼并置于姓氏前 `VAN DER VEEN P H`）
   prefix-last:         auto,
   /// 条目末尾追加 annotation / annote 字段内容
   show-annotation:     false,
@@ -154,8 +157,8 @@
   hyperlink-title:     false,
   /// 永久标识符显示控制，如 (doi: false, max: 1, rest: "online-only", book: false)
   show-pid:            (:),
-  /// 永久标识符渲染优先级（残缺名次表：列出的压过未列出的），如 ("cstr", "doi")
-  /// 永久标识符的渲染次序；缺省就是完整的链（同时也是残缺名次表的补齐序）；show-pid 只管开关、不影响次序
+  /// 永久标识符渲染优先级（残缺名次表：列出的优先于未列出的），如 ("cstr", "doi")
+  /// 永久标识符的显示顺序；默认值列出全部内置标识符，也用于补全未列出的项目；show-pid 只控制是否显示，不改变顺序
   pid-priority: ("cstr", "doi", "eprint", "isbn", "issn"),
   /// URL 已含同一永久标识符时不重复著录：auto 随版本（2015 并列、2025 去重）/ true 去重 / false 都列
   dedup-url-pid:       auto,
@@ -163,7 +166,7 @@
   bib-punct-style:     auto,
   /// PID(DOI/CSTR/eprint 等)标签与值间那一个冒号的全/半角，独立于结构冒号(出版项/年:页)。取值同 bib-punct-style：auto（跟随 bib-punct-style，即历史行为） / "half"(DOI:x) / "half-with-space"(DOI: x) / "full"(DOI：x) / "by-doc-*" / "by-entry-*"；非 auto 时绕过 custom-punct 的 colon
   pid-colon-style:     auto,
-  /// 精确覆盖某*结构标点*（著录格式串符号，不碰用户字段文本；值为绝对字面量不感知），如 (",": "，", ":": "：")
+  /// 覆盖指定的*结构标点*（只影响著录格式字符串，不修改用户字段；替换值原样输出），如 (",": "，", ":": "：")
   custom-punct:     (:),
   /// 矫正长文本字段（题名等）里用户输入的标点全/半角
   correct-punct:       false,
@@ -179,7 +182,7 @@
   url-break-hyphen-at-delimiters: true,
   /// 长标题字段大小写：none 原样 / "sentence" 句首大写 / "title" Title Case; 字典按字段+rest; {DNA} 花括号保护
   titles-text-case:    none,
-  /// 按槽位施加斜体 / 加粗 / 包裹符（替代 italic-book-title / italic-journal / bold-journal-volume）
+  /// 按位置施加斜体 / 加粗 / 包裹符（替代 italic-book-title / italic-journal / bold-journal-volume）
   emphasis:            (:),
   /// 作者字段后加句点（false 改空格）
   period-after-creator: true,
@@ -191,35 +194,37 @@
   mark-medium-bracket-style: "half",
   /// 页码前加空格（: 123 与 :123）
   space-before-pages:  true,
+  /// 注释（annotation/annote）前加空格：auto 按注释首字符宽窄定（CJK / 全角标点不加），true/false 强制
+  space-before-annotation: auto,
   /// 页码范围连字符，如 "-" / "～"
   page-range-separator:       "-",
-  /// 起讫页码的位数形态：none = 原样（默认）/ "expanded" 补全 / "minimal" / "minimal-two" / "chicago-15" / "chicago-16"
+  /// 起讫页码的位数格式：none 原样输出（默认）/ "expanded" 补全 / "minimal" / "minimal-two" / "chicago-15" / "chicago-16"
   page-range-style:    none,
   /// 参考文献表内允许西文断字
   hyphenate:           true,
   /// 每条按条目语种设 text(lang:)：非 CJK 连字、CJK 走 locl 本地化字形；auto=非 CJK 恒开/CJK 仅 2025，true 全开，false 全关
   entry-localized-glyphs:   auto,
-  /// 重复引用的脚注内容物（首次恒完整著录）：auto = "number"（同③，官方梯子）/ "full" 重复著录 / "shortened" 缩略 / "reuse" 复用首注号
+  /// 重复引用的脚注内容物（首次恒完整著录）：auto = "number"（同③，官方规则）/ "full" 重复著录 / "shortened" 缩略 / "reuse" 复用首注号
   note-repeat-style:     auto,
-  /// 紧邻重复是否简化为「同上」：auto = true（官方梯子）/ false 紧邻同隔开一样取 note-repeat-style
+  /// 紧邻重复是否简化为「同上」：auto = true（官方规则）/ false 紧邻同隔开一样取 note-repeat-style
   note-ibid:       auto,
-  /// 重复判定的重置界：none 全文一个域（缺省）/ selector（如 heading.where(level: 1) 章界、标签手工插旗）——过界判定清零：同上不跨界、每域首引重新完整著录、同③只在本域找注号
+  /// 重复引用判断的重置范围：none 表示全文（默认）；selector 可按一级标题等位置分段。进入新范围后，首次引用重新显示完整著录，「同上」和「同③」不跨范围引用
   note-repeat-reset: none,
-  /// 本包接管脚注编号为带圈数字（缺省 Unicode ①）；true 改由 quan 包绘制（字体缺字时用）。其他样式直接 set footnote(numbering:) 覆盖，「同③」自动镜像
+  /// 脚注编号使用带圈数字（默认使用 Unicode ①）；true 改由 quan 包绘制，适合字体缺少相应字符的情况。其他格式可用 set footnote(numbering:) 覆盖，「同③」使用相同编号格式
   note-numbering-style:             "circled",
-  /// 配置级「类型 → 默认标识码」，如 (software: "SW", mytype: "XX")；自造类型设码正道，条目字段仍可压过
+  /// 配置级「类型 → 默认标识码」，如 (software: "SW", mytype: "XX")；自定义类型设码推荐方式，条目字段仍可优先于
   custom-marks:      (:),
   /// 自定义条目模板字典，如 (book: "author `. ` title")
   custom-drivers:    (:),
   /// 用户自定义本地化字面量 token；键 ∈ et-al/editor/translator/anon/sine-loco/sine-nomine/ma-thesis/phd-thesis 时覆盖内置词，否则注册新词
   custom-terms:        (:),
-  /// 用户自定义字段 token：把 bib 字段暴露成模板 token（auto 纯透传 / (field:.., prefix:.., suffix:..)）
+  /// 用户自定义字段 token：把 bib 字段暴露成模板 token（auto 纯原样传递 / (field:.., prefix:.., suffix:..)）
   custom-fields:       (:),
   /// 用户自定义永久标识符（field:.., prefix:.., resolver:..），著录于条目末尾
   custom-pids:         (:),
   /// 注册新语言码（(de: ("german", "deu")) 等），让内置识别外的西文语种能出自己的本地化术语；仅影响显式标注 langid 的西文条目
   custom-languages:    (:),
-  /// 缺题名时是否报错：false 软退化为空题名，true 遇缺 / 空 title 即报错指明该 key
+  /// 缺题名时是否报错：false 容错处理为空题名，true 遇缺 / 空 title 即报错指明该 key
   warn-missing-title:  false,
 ) = {
   import "src/api.typ" as _api
@@ -227,39 +232,38 @@
   import "src/style.typ" as _style
   import "src/elements/creators.typ" as _creators
   import "src/parse/csl-json.typ" as _csl-json
-
   _errors.check-enum("cite-form", cite-form, extra: (auto,))
   if std.type(bib-numbering-style) == dictionary {
-
     if bib-numbering-style.keys() != ("circled",) or bib-numbering-style.circled not in ("unicode", "quan") {
       _errors.raise("bib-numbering-style.circled-dict", param: "bib-numbering-style", got: repr(bib-numbering-style))
     }
   } else { _errors.check-enum("bib-numbering-style", bib-numbering-style, extra: (auto,)) }
   _errors.check-enum("number-align", number-align)
+  _errors.check-enum("number-punct-width", number-punct-width)
   _errors.check-enum("mark-medium-bracket-style", mark-medium-bracket-style)
   _creators.validate-name-style(bib-name-style, param: "bib-name-style")
   _creators.validate-name-style(cite-name-style, param: "cite-name-style")
   if std.type(bib-punct-style) != dictionary { _errors.check-enum("bib-punct-style", bib-punct-style, extra: (auto,)) }
   _errors.check-enum("bib-punct-style", pid-colon-style, extra: (auto,), alias: "pid-colon-style")
+  if cite-adjacent-space != auto and std.type(cite-adjacent-space) != bool { _errors.raise("shell.cite-adjacent-space-invalid", value: repr(cite-adjacent-space)) }
+  if space-before-annotation != auto and std.type(space-before-annotation) != bool { _errors.raise("shell.space-before-annotation-invalid", value: repr(space-before-annotation)) }
   if std.type(cite-punct-style) != dictionary { _errors.check-enum("punct-style", cite-punct-style, extra: (auto,), alias: "cite-punct-style") }
   _errors.check-enum("supplement-style", cite-supplement-style, extra: (auto,), alias: "cite-supplement-style")
   _errors.check-enum("entry-lang-detect", entry-lang-detect)
   _errors.check-enum("date-fallback", date-fallback)
   _errors.check-enum("sort-zh-by", bib-sort-zh-by, alias: "bib-sort-zh-by")
   _errors.check-enum("sort-zh-by", cite-sort-zh-by, alias: "cite-sort-zh-by")
-
   import "src/bibliography/sort.typ" as _sort
   if bib-sort-by != auto and bib-sort-by != none { let _ = _sort.normalize-sort-by(bib-sort-by, param: "bib-sort-by") }
   if cite-sort-by != auto and cite-sort-by != none { let _ = _sort.normalize-sort-by(cite-sort-by, keys: _sort.cite-sort-by-keys, param: "cite-sort-by") }
   if cite-collapse-date not in (true, false) {
     _errors.raise("collapse-date.bad-value", param: "cite-collapse-date", allowed: "true / false", got: repr(cite-collapse-date))
   }
-  import "src/sentinel.typ": _M, _MB
+  import "src/sentinel.typ": _M, _MB, _MSP, _CJK-ADJ
 
   let (eff-style-cite, eff-style-bib, eff-version, eff-note) = {
     let normalized = _style.normalize(style)
     if normalized.native { _errors.raise("shell.style-invalid") }
-
     let resolved-version = if normalized.version != auto { normalized.version } else { version }
 
     let resolved-note = if normalized.note != auto { normalized.note } else { note }
@@ -268,13 +272,13 @@
   }
 
   let _emit-body(body-content) = _api.apply-note-numbering(note-numbering-style, body-content)
-
   let style-axes = (cite: eff-style-cite, bib: eff-style-bib)
 
   let config = (
     style: style-axes, version: eff-version, full: full,
     cite-form: cite-form, cite-merge: cite-merge, cite-supplement-style: cite-supplement-style,
     cite-punct-style: cite-punct-style, cite-compress-min: cite-compress-min, cite-range-separator: cite-range-separator,
+    cite-adjacent-space: cite-adjacent-space,
     note: eff-note, cite-et-al-min: cite-et-al-min,
     cite-et-al-use-first: cite-et-al-use-first, cite-et-al-use-last: cite-et-al-use-last, cite-terms-lang: cite-terms-lang, cite-name-style: cite-name-style,
     cite-name-date-separator: cite-name-date-separator,
@@ -282,7 +286,7 @@
     bib-name-style: bib-name-style, name-suffix-separator: name-suffix-separator, et-al-translator-separator: et-al-translator-separator, component-part-separator: component-part-separator, bib-name-date-separator: bib-name-date-separator, bib-et-al-min: bib-et-al-min, bib-et-al-use-first: bib-et-al-use-first, bib-et-al-use-last: bib-et-al-use-last,
     show-anon: show-anon, show-no-date: show-no-date, date-fallback: date-fallback, show-et-al: show-et-al, dedup-author-editor: dedup-author-editor, creator-idem: creator-idem,
     title: title, entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, entry-spacing: entry-spacing, number-gutter: number-gutter,
-    bib-numbering-style: bib-numbering-style, cite-numbering-style: cite-numbering-style, number-placement: number-placement, number-align: number-align, number-width: number-width,
+    bib-numbering-style: bib-numbering-style, cite-numbering-style: cite-numbering-style, number-placement: number-placement, number-punct-width: number-punct-width, number-align: number-align, number-width: number-width,
     back-ref: back-ref,
     disambiguate: disambiguate, bib-sort-by: bib-sort-by, cite-sort-by: cite-sort-by, sort-keys: sort-keys, bib-sort-zh-by: bib-sort-zh-by, cite-sort-zh-by: cite-sort-zh-by, cite-collapse-date: cite-collapse-date, sort-use-prefix: sort-use-prefix, entry-lang-order: entry-lang-order, entry-lang-detect: entry-lang-detect,
     show-mark: show-mark, show-medium: show-medium, show-url: show-url, show-urldate: show-urldate,
@@ -295,7 +299,7 @@
     url-break-every: url-break-every, url-break-hyphen: url-break-hyphen, url-break-hyphen-at-delimiters: url-break-hyphen-at-delimiters,
     titles-text-case: titles-text-case, emphasis: emphasis,
     period-after-creator: period-after-creator, show-end-period: show-end-period,
-    space-before-mark: space-before-mark, mark-medium-bracket-style: mark-medium-bracket-style, space-before-pages: space-before-pages,
+    space-before-mark: space-before-mark, mark-medium-bracket-style: mark-medium-bracket-style, space-before-pages: space-before-pages, space-before-annotation: space-before-annotation,
     page-range-separator: page-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, entry-localized-glyphs: entry-localized-glyphs, note-numbering-style: note-numbering-style,
     note-repeat-style: note-repeat-style, note-ibid: note-ibid, note-repeat-reset: note-repeat-reset,
     custom-marks: custom-marks, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, custom-languages: custom-languages, warn-missing-title: warn-missing-title,
@@ -304,20 +308,16 @@
   if rest.pos().len() == 0 {
     let _validate() = none
     let _ = _validate(..rest)
-
     let shell-config = { let c = config; c.insert("style", style); c }
     return body => gb7714(body, ..shell-config)
   }
-
   let _extract(first) = first
   let first = _extract(..rest)
-
   if std.type(first) != content {
     _errors.raise("shell.bib-source-positional")
   }
   let body = first
   state("gb7714-config", (:)).update(config)
-
   state("gb7714-latex-strict-command", true).update(latex-strict-command)
   state("gb7714-latex-strict-char", true).update(latex-strict-char)
 
@@ -357,7 +357,6 @@
   show std.bibliography: it => context {
     let flag = state("gb7714-lsp-bib-active", false).at(it.location())
     if flag == "visible" { return it }
-
     if flag == "render" {
       let idx = query(selector(std.bibliography).before(it.location(), inclusive: false))
         .filter(b => state("gb7714-lsp-bib-active", false).at(b.location()) == "render").len()
@@ -385,7 +384,6 @@
       }
 
       if bibs.any(b => b.native-style) { return it }
-
       if it.form == none { return it }
 
       let instance = _build-instance()
@@ -402,9 +400,23 @@
 
   let _global-super = if cite-form == auto { eff-style-cite != "author-date" } else { cite-form == "super" }
   let _eat-leading-spaces = _global-super or (note != none)
-  show regex(if _eat-leading-spaces { "[ \u{00A0}\t]+\u{2060}" } else { "\u{E7FF}" }): _ => sym.wj
-
-  show regex(_M + "(?s:.+?)" + _M + "(([^\\S\\n]|\u{2060})*" + _M + "(?s:.+?)" + _M + ")*"): m => context {
+  let _cjk = _CJK-ADJ
+  let _sp = "[ \u{00A0}\t]+"
+  let _never = "\u{E7FF}"
+  let _lead-pat = if cite-adjacent-space == false or _eat-leading-spaces { _sp + "\u{2060}" }
+    else if cite-adjacent-space == auto { _cjk + _sp + "\u{2060}" }
+    else { _never }
+  let _trail-pat = if cite-adjacent-space == false { _MSP + _sp }
+    else if cite-adjacent-space == auto { _MSP + _sp + _cjk }
+    else { _never }
+  show regex(_MSP): _ => []
+  let _lead-keeps-char = cite-adjacent-space == auto and not _eat-leading-spaces
+  let _trail-keeps-char = cite-adjacent-space == auto
+  show regex(_lead-pat): it => if _lead-keeps-char { [#it.text.clusters().first()#sym.wj] } else { sym.wj }
+  show regex(_trail-pat): it => if _trail-keeps-char { [#it.text.clusters().last()] } else { [] }
+  let _between-pat = if cite-adjacent-space == auto { _MSP + _sp + _cjk + _sp + "\u{2060}" } else { _never }
+  show regex(_between-pat): it => [#it.text.clusters().filter(c => c != "\u{2060}" and c.trim() != "" and not _MSP.contains(c)).join()#sym.wj]
+  show regex(_M + "(?s:.+?)" + _M + "((?:[^\\S\\n]|\u{2060}|" + _MSP + ")*" + _M + "(?s:.+?)" + _M + ")*"): m => context {
     let instance = _build-instance()
     if instance == none { return m }
     let f = instance.handle-cite-group
@@ -421,7 +433,7 @@
       let c = std.cite(it.target, supplement: supplement)
 
       let cite-merge = state("gb7714-config", (:)).get().at("cite-merge", default: true)
-      [#state("gb7714-cite-nomerge", false).update(not cite-merge)#sym.wj#c#state("gb7714-cite-nomerge", false).update(false)]
+      [#state("gb7714-cite-nomerge", false).update(not cite-merge)#sym.wj#c#_MSP#state("gb7714-cite-nomerge", false).update(false)]
     }
     _emit-body(body)
   } else {
@@ -440,12 +452,10 @@
         if str(it.target) not in instance.bib-data { return it }
         let supplement = it.fields().at("supplement", default: none)
         if supplement == auto { supplement = none }
-
         let c = std.cite(it.target, supplement: supplement)
         let cite-merge = config.at("cite-merge", default: true)
-        [#leading-wj#state("gb7714-cite-nomerge", false).update(not cite-merge)#c#state("gb7714-cite-nomerge", false).update(false)]
+        [#leading-wj#state("gb7714-cite-nomerge", false).update(not cite-merge)#c#_MSP#state("gb7714-cite-nomerge", false).update(false)]
       } else {
-
         let instance = _build-instance()
         if instance == none { return it }
         if str(it.target) not in instance.bib-data { return it }
@@ -453,7 +463,7 @@
         if supplement == auto { supplement = none }
         let c = std.cite(it.target, supplement: supplement)
         let cite-merge = config.at("cite-merge", default: true)
-        [#leading-wj#state("gb7714-cite-nomerge", false).update(not cite-merge)#c#state("gb7714-cite-nomerge", false).update(false)]
+        [#leading-wj#state("gb7714-cite-nomerge", false).update(not cite-merge)#c#_MSP#state("gb7714-cite-nomerge", false).update(false)]
       }
     }
     _emit-body(body)
@@ -506,9 +516,9 @@
   sort-keys:      auto,
   /// 消歧后缀：auto 继承全局 / true 一律加 / false 一律不加
   disambiguate:   auto,
-  /// 排序键（逐表裸名即 bib 轴）：auto 继承全局 bib-sort-by / none 保持引用序 / 数组，元素为键名（"name" "date" "title"，默认升序）或方向字典 ("date": "descending")
+  /// 单个参考文献表的排序键：auto 继承全局 bib-sort-by / none 保持引用顺序 / 数组，元素为键名（"name" "date" "title"，默认升序）或带方向的字典 ("date": "descending")
   sort-by:        auto,
-  /// 中文姓名排序方案（逐表裸名即 bib 轴）：auto 继承全局 bib-sort-zh-by / "pinyin" / "bihua"
+  /// 单个参考文献表的中文姓名排序方式：auto 继承全局 bib-sort-zh-by / "pinyin" / "bihua"
   sort-zh-by:     auto,
   /// 紧邻同责任者替代串：auto 继承全局 creator-idem / none 关 / 字符串
   creator-idem:   auto,
@@ -548,7 +558,7 @@
   bib-numbering-style:        auto,
   /// 语种分组顺序；auto 跟随全局
   entry-lang-order:          auto,
-  /// 西文姓名格式：auto 跟随全局 / 五维字典（order / family-case / given-form / given-separator / given-case）
+  /// 西文姓名格式：auto 跟随全局 / 八维字典（order / family-case / given-form / given-initial-separator / given-separator / given-case / family-given-separator / given-family-separator）
   name-style:         auto,
   /// 无责任者显示「佚名 / Anon」；auto 跟随全局
   show-anon:           auto,
@@ -560,6 +570,7 @@
   number-align:        auto,
   /// 编号列宽；auto 跟随全局
   number-width:        auto,
+  number-punct-width:  auto,
   /// 作者后句点；auto 跟随全局
   period-after-creator: auto,
   /// 双语关联条目第二行缩进：none 无
@@ -591,6 +602,8 @@
   mark-medium-bracket-style: auto,
   /// 页码前空格；auto 跟随全局
   space-before-pages:  auto,
+  /// 注释前空格；auto 跟随全局
+  space-before-annotation: auto,
   /// 编号反向跳转；auto 跟随全局
   back-ref:            auto,
   /// 学位级别注记；auto 跟随全局
@@ -629,14 +642,13 @@
   import "src/style.typ" as _style
   import "src/elements/creators.typ" as _creators
   import "src/parse/csl-json.typ" as _csl-json
-
   if std.type(bib-numbering-style) == dictionary {
-
     if bib-numbering-style.keys() != ("circled",) or bib-numbering-style.circled not in ("unicode", "quan") {
       _errors.raise("bib-numbering-style.circled-dict", param: "bib-numbering-style", got: repr(bib-numbering-style))
     }
   } else { _errors.check-enum("bib-numbering-style", bib-numbering-style, extra: (auto,)) }
   _errors.check-enum("number-align", number-align, extra: (auto,))
+  _errors.check-enum("number-punct-width", number-punct-width, extra: (auto,))
   _errors.check-enum("mark-medium-bracket-style", mark-medium-bracket-style, extra: (auto,))
   _creators.validate-name-style(name-style)
   if std.type(punct-style) != dictionary { _errors.check-enum("bib-punct-style", punct-style, extra: (auto,), alias: "punct-style") }
@@ -656,7 +668,6 @@
 
   let _is-json = _csl-json.looks-like-json(bib-str)
   let _native-bib-str = if _is-json { _csl-json.to-bibtex(bib-str) } else { bib-str }
-
   {
     let s = bib-str.trim()
     if not s.contains("@") and not s.contains("\n") and s.len() < 256 and (
@@ -667,11 +678,9 @@
   }
 
   let full = if full == auto { state("gb7714-config", (:)).get().at("full", default: false) } else { full }
-
   let sort-keys = if sort-keys == auto { state("gb7714-config", (:)).get().at("sort-keys", default: none) } else { sort-keys }
 
   let current-bib-index = state("gb7714-bib-seq", 0).at(here())
-  state("gb7714-bib-seq", 0).update(n => n + 1)
 
   let normalized-style = _style.normalize(style)
   let gb-style-cite = normalized-style.cite
@@ -681,7 +690,6 @@
 
   let gb-footnote = if normalized-style.note == "foot" { true } else { auto }
   let is-native-style = normalized-style.native
-
   let footnote = if note == auto { auto } else { note != none }
 
   if gb-version != auto and version != auto and gb-version != version {
@@ -702,14 +710,12 @@
     if not dup { r.insert(auto-key, bib-str) }
     r
   })
-
   let _src-keys = if _is-json { _csl-json.keys(bib-str) } else { _api.bib-keys(bib-str) }
 
   let _numeric-csl = ("american-chemical-society", "american-institute-of-aeronautics-and-astronautics", "american-institute-of-physics", "american-medical-association", "american-physics-society", "american-physiological-society", "american-society-for-microbiology", "american-society-of-mechanical-engineers", "angewandte-chemie", "annual-reviews", "association-for-computing-machinery", "biomed-central", "bmj", "british-medical-journal", "cell", "council-of-science-editors", "cse-citation-sequence-brackets-8th-edition", "current-opinion", "elsevier-vancouver", "elsevier-with-titles", "future-medicine", "future-science", "gb-7714-2005-numeric", "gb-7714-2015-numeric", "gost-r-705-2008-numeric", "ieee", "institute-of-electrical-and-electronics-engineers", "institute-of-physics-numeric", "iso-690-numeric", "karger", "mary-ann-liebert-vancouver", "multidisciplinary-digital-publishing-institute", "nature", "nlm-citation-sequence", "nlm-citation-sequence-superscript", "plos", "public-library-of-science", "royal-society-of-chemistry", "sage-vancouver", "sist02", "spie", "springer-basic", "springer-fachzeitschriften-medizin-psychologie", "springer-lecture-notes-in-computer-science", "springer-mathphys", "springer-vancouver", "taylor-and-francis-national-library-of-medicine", "the-institution-of-engineering-and-technology", "the-lancet", "thieme", "trends", "vancouver", "vancouver-superscript")
   let counts-number = if is-native-style {
     if std.type(style) == str { style in _numeric-csl } else { true }
   } else if eff-footnote == true {
-
     false
   } else {
     let eff = if gb-style-cite != none { gb-style-cite } else { state("gb7714-config", (:)).get().at("style", default: (:)).at("cite", default: "numeric") }
@@ -720,7 +726,6 @@
     r.push((target: target, group: group, full: full, native-style: is-native-style, counts-number: counts-number, footnote: eff-footnote, source-keys: _src-keys, auto-key: auto-key, label: label))
     r
   })
-
   if label == none and gb-style-cite != none and not is-native-style {
     state("gb7714-main-list-style", none).update(gb-style-cite)
   }
@@ -784,9 +789,7 @@
   let routed-keys = none
   let routed-empty = false
   if is-native-style {
-
   } else if native-mode {
-
     let timeline = query(selector(std.cite).or(std.bibliography))
     let cite-infos = ()
     let bibs-seen = 0
@@ -794,11 +797,9 @@
       if e.func() == std.bibliography { bibs-seen += 1 }
       else { cite-infos.push((key: str(e.key), loc: e.location(), before: bibs-seen)) }
     }
-
     let t-hits = all-bibs-final.map(b => {
       if b.target == auto { none } else { query(b.target) }
     })
-
     let per-bib = all-bibs-final.map(_ => ())
     for c in cite-infos {
       let routed = none
@@ -826,7 +827,6 @@
         if c.key not in array { array.push(c.key); per-bib.at(routed) = array }
       }
     }
-
     let _bib-count(j) = {
       let bib-at-index-j = all-bibs-final.at(j)
       if bib-at-index-j.full {
@@ -835,7 +835,6 @@
         u.len()
       } else { per-bib.at(j).len() }
     }
-
     let mine = per-bib.at(current-bib-index)
 
     routed-empty = mine.len() == 0 and not full and keys == none
@@ -844,17 +843,14 @@
       for k in current-entry.source-keys { if k not in mine { mine.push(k) } }
     }
     routed-keys = mine
-
     let current-group = all-bibs-final.at(current-bib-index).group
     if current-group != none {
       for j in range(current-bib-index) {
         let bib-at-index-j = all-bibs-final.at(j)
-
         if bib-at-index-j.group == current-group and bib-at-index-j.at("counts-number", default: true) { number-offset += _bib-count(j) }
       }
     }
   } else if label == none {
-
     let cited = query(std.cite).map(c => str(c.key))
     for previous-index in range(current-bib-index) {
       let previous-bib = all-bibs-final.at(previous-index)
@@ -873,7 +869,6 @@
       buffer
     }
     else { none }
-
   let title = if title == auto { state("gb7714-config", (:)).get().at("title", default: auto) } else { title }
   let eff-title = if title == auto {
     import "src/terms/built-in.typ": bib-title
@@ -885,11 +880,9 @@
     else if config.at("note", default: none) == "end" { "end" }
     else { auto }
   let common-args = (
-
     title: if _bib-note == "end" { title } else { eff-title },
     full: full,
     style: list-style-axes,
-
     target: target,
     group: group,
     version: if gb-version != auto { gb-version } else { version },
@@ -909,7 +902,7 @@
     et-al-min: et-al-min,
     et-al-use-first: et-al-use-first,
     et-al-use-last: et-al-use-last,
-    entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, number-placement: number-placement,
+    entry-hanging-indent: entry-hanging-indent, entry-first-line-indent: entry-first-line-indent, number-placement: number-placement, number-punct-width: number-punct-width,
     hyperlink: hyperlink,
     hyperlink-title: hyperlink-title,
     hyphenate: hyphenate,
@@ -937,6 +930,7 @@
     space-before-mark: space-before-mark,
     mark-medium-bracket-style: mark-medium-bracket-style,
     space-before-pages: space-before-pages,
+    space-before-annotation: space-before-annotation,
     back-ref: back-ref,
     show-degree: show-degree,
     custom-drivers: custom-drivers,
@@ -956,7 +950,6 @@
   )
 
   if is-native-style {
-
   } else if sys.version >= std.version(0, 15, 0) {
 
     let payload = if native-mode and routed-empty {
@@ -975,10 +968,12 @@
     if label == none { f(bib-file: auto-key, number-offset: number-offset, ..common-args) }
     else { f(bib-file: auto-key, label: str(label), number-offset: number-offset, ..common-args) }
   }
+
+  state("gb7714-bib-seq", 0).update(n => n + 1)
 }
 
 /// 手动引用，是 `@key` 原生语法的增强版：可一次合并多条、附加 `supplement` 页码或补充信息、
-/// 临时切换列表（`bib-label`）、单次覆盖样式 / 形态 / 标点，也可生成脚注式完整条目。
+/// 可临时切换文献表（`bib-label`），或为单次引用覆盖样式、正文标注形式和标点；也可生成脚注式完整著录。
 ///
 /// 位置参数可混写若干 `<label>` 与若干 content（content 内可含任意数量 `@key`），按顺序合并。
 ///
@@ -993,13 +988,13 @@
   ..refs,
   /// 临时把这些引用归属到指定命名列表；auto 沿用当前 set-bib-label 作用域
   bib-label:       auto,
-  /// 附加页码 / 补充说明：单 content 作用于末位引用；数组逐一对应
+  /// 附加页码 / 补充说明：单 content 作用于首位引用；数组逐一对应
   supplement:      none,
   /// 本次引用样式："numeric" / "author-date"；auto 跟随列表或全局
   style:           auto,
-  /// 引用形态：auto / "super" / "inline" / "normal" / "prose" / "author" / "year" / "full"（原位完整条目）/ none（单次覆盖 cite-form）
+  /// 正文标注形式：auto / "super" / "inline" / "normal" / "prose" / "author" / "year" / "full"（原位显示完整条目）/ none（单次覆盖 cite-form）
   form:            auto,
-  /// 西文姓名格式：auto 跟随全局 / 五维字典（order / family-case / given-form / given-separator / given-case）
+  /// 西文姓名格式：auto 跟随全局 / 八维字典（order / family-case / given-form / given-initial-separator / given-separator / given-case / family-given-separator / given-family-separator）
   name-style:     auto,
   /// 标注内部标点："by-doc-and-style"（默认） / "...-no-space" / "...-with-space" / "by-entry-*" / "half" / "half-with-space" / "full"；auto 跟随全局
   punct-style:     auto,
@@ -1039,7 +1034,7 @@
   compress-min:    auto,
   /// 引文区间起讫号连接符（单次覆盖 cite-range-separator）
   range-separator: auto,
-  /// 本组组内排序（单次覆盖 cite-sort-by，裸名即 cite 轴）：auto / none 保写法序 / 键数组（"name"/"date"）
+  /// 本次合并引用内的排序（单次覆盖 cite-sort-by）：auto / none 保持书写顺序 / 键数组（"name" / "date"）
   sort-by:         auto,
   /// 组内排序的中文排序方案（单次覆盖 cite-sort-zh-by）：auto / "pinyin" / "bihua"
   sort-zh-by:      auto,
@@ -1057,14 +1052,12 @@
   import "src/style.typ" as _style
   import "src/elements/creators.typ" as _creators
   import "src/parse/csl-json.typ" as _csl-json
-
   _errors.check-enum("cite-form", form, extra: (auto,), alias: "form")
   _creators.validate-name-style(name-style)
   if std.type(punct-style) != dictionary { _errors.check-enum("punct-style", punct-style, extra: (auto,)) }
   _errors.check-enum("supplement-style", supplement-style, extra: (auto,))
   if std.type(footnote-punct-style) != dictionary { _errors.check-enum("punct-style", footnote-punct-style, extra: (auto,), alias: "footnote-punct-style") }
   _errors.check-enum("sort-zh-by", sort-zh-by, extra: (auto,))
-
   if sort-by != auto and sort-by != none {
     import "src/bibliography/sort.typ" as _sort
     let _ = _sort.normalize-sort-by(sort-by, keys: _sort.cite-sort-by-keys, param: "sort-by")

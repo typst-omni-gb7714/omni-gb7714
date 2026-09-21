@@ -30,9 +30,29 @@
   out
 }
 
-#let _is-double(word) = {
+#let split-syllables(word) = {
+  if word in _SYLLABLES { return none }
   let letters = word.clusters()
-  range(1, letters.len()).any(at => letters.slice(0, at).join("") in _SYLLABLES and letters.slice(at).join("") in _SYLLABLES)
+  for at in range(letters.len() - 1, 0, step: -1) {
+    let head = letters.slice(0, at).join("")
+    let tail = letters.slice(at).join("")
+    if head in _SYLLABLES and tail in _SYLLABLES { return (head, tail) }
+  }
+  none
+}
+
+#let _is-double(word) = split-syllables(word) != none
+
+#let _WESTERN-GIVEN-BLOCK-STR = (
+  "anna lisa nina tina diana dana lina mina sara nana maya mona lana gina rina dina " +
+  "leia mia lia sami cara lara tara zara kira mira nora dora cora vera lena bela nena " +
+  "erin aidan jason dalia julia sofia luna jana hana kana mila lola lulu nini " +
+  "ana ada ida ava eva ali ani ami ina ona una"
+)
+#let _WESTERN-GIVEN-BLOCK = {
+  let out = (:)
+  for w in _WESTERN-GIVEN-BLOCK-STR.split(" ") { if w != "" { out.insert(w, true) } }
+  out
 }
 
 #let _FAMILY-SEPARATOR = regex("-+")
@@ -61,7 +81,6 @@
   let lower-family = lower(family.trim())
   if lower-family == "" { return false }
   if lower-family in _SYLLABLES { return true }
-
   let compact = lower-family.replace("-", "").replace(" ", "").replace("'", "")
   if compact in _COMPOUND-SURNAMES { return true }
   _all-syllables(lower-family, _FAMILY-SEPARATOR)
@@ -70,6 +89,7 @@
 #let _given-pinyin(given) = {
   let lower-given = lower(given.trim()).replace("’", "'")
   if lower-given == "" or lower-given.contains(".") { return false }
+  if lower-given in _WESTERN-GIVEN-BLOCK { return false }
   _all-syllables(lower-given, _GIVEN-SEPARATOR)
 }
 

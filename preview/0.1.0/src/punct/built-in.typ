@@ -10,7 +10,6 @@
   semicolon: "; ", question: "?", exclam: "!",
   period: ". ", slash: "/", ellipsis: "… ",
 )
-
 #let _default-half-nospace = (
   comma: ",", colon: ":", lparen: "(", rparen: ")",
   semicolon: ";", question: "?", exclam: "!",
@@ -26,9 +25,7 @@
 #let _style-affected = ("comma", "colon", "lparen", "rparen", "semicolon", "question", "exclam", "period", "ellipsis")
 
 #let _cite-half       = (comma: ",", colon: ":", semicolon: ";", lparen: "(", rparen: ")")
-
 #let _cite-half-space = (comma: ", ", colon: ": ", semicolon: "; ", lparen: "(", rparen: ")")
-
 #let _cite-full       = (comma: "，", colon: "：", semicolon: "；", lparen: "（", rparen: "）")
 
 #let cite-direction(eff-cite-punct-style, document-lang, entry-lang, eff-style) = {
@@ -73,9 +70,7 @@
 }
 
 #let _slot-char = (comma: ",", colon: ":", semicolon: ";", period: ".", question: "?", exclam: "!", slash: "/", lparen: "(", rparen: ")")
-
 #let char-to-slot = { let m = (:); for (slot, c) in _slot-char { m.insert(c, slot) }; m }
-
 #let separator-char-set = custom.separator-char-set
 #let _slot-override-chars = custom.slot-chars
 #let _char-to-slot-any = custom.char-to-slot-any
@@ -151,7 +146,6 @@
 }
 
 #let resolve-cite-separator(value, eff-cite-punct-style, document-lang, entry-lang, eff-style, fallback) = {
-
   let value = if type(value) == dictionary { pick-separator-by-lang(value, entry-lang, fallback) } else { value }
   if type(value) != str { return value }
   let (verbatim, text) = unwrap-separator(value)
@@ -189,7 +183,6 @@
   if type(value) != content { return "" }
   if value.has("text") { return value.text }
   if value.func() == [].func() and value.has("children") and value.children.len() > 0 {
-
     let kids = value.children
     let i = kids.len() - 1
     while i >= 0 {
@@ -199,7 +192,6 @@
     }
     return ""
   }
-
   if value.has("child") { return trailing-text(value.child) }
   if value.has("body") { return trailing-text(value.body) }
   ""
@@ -228,7 +220,6 @@
 )
 
 #let _correct-map-full = (",": "，", ";": "；", "!": "！", "?": "？", "(": "（", ")": "）", ":": "：")
-
 #let _correct-map-half = ("，": ",", "；": ";", "！": "!", "？": "?", "（": "(", "）": ")", "：": ":")
 
 #let _colon-keep(c, previous, next) = {
@@ -240,10 +231,8 @@
   if s == none or type(s) != str { return s }
   let dir = resolve-dir(punct-style, is-cj-entry(entry))
   let use-full = dir == "full"
-
   let add-space = dir == "half-with-space"
   let target = if use-full { _correct-map-full } else { _correct-map-half }
-
   let override-keys = ()
   for (slot, chars) in _slot-override-chars {
     if slot in ("period", "slash") { continue }
@@ -268,7 +257,6 @@
         if i + 1 < n and characters.at(i + 1) == " " { i += 1 }
         else { result += " "; i += 1 }
       } else {
-
         i += 1
       }
       continue
@@ -290,7 +278,6 @@
     if lang-text in ("english", "american", "british") or lang-text.starts-with("en") { return "en" }
     if lang-text == "french" or lang-text.starts-with("fr") { return "fr" }
   }
-
   let has-cjk = false
   for c in block.clusters() {
     let codepoint = str.to-unicode(c)
@@ -304,18 +291,15 @@
 #let preprocess(bib-string, punct-style, custom-punct) = {
   let characters = bib-string.clusters()
   let n = characters.len()
-
   let out = ()
   let i = 0
   while i < n {
     let c = characters.at(i)
     if c != "@" { out.push(c); i += 1; continue }
-
     let start = i
     let brace-pos = i + 1
     while brace-pos < n and characters.at(brace-pos) != "{" { brace-pos += 1 }
     if brace-pos >= n { for k in range(i, n) { out.push(characters.at(k)) }; break }
-
     let depth = 0
     let end = brace-pos
     while end < n {
@@ -324,9 +308,7 @@
       else if current-character == "}" { depth -= 1; if depth == 0 { end += 1; break } }
       end += 1
     }
-
     let block-characters = characters.slice(start, end)
-
     let is-by-lang = punct-style == "by-entry-with-space" or punct-style == "by-entry-no-space" or punct-style == "by-doc-with-space" or punct-style == "by-doc-no-space"
     let lang = if is-by-lang { _block-lang(block-characters.join("")) } else { "" }
     let use-full = resolve-dir(punct-style, lang == "zh" or lang == "ja") == "full"
@@ -334,7 +316,6 @@
     let final-map = (:)
     let override-keys = ()
     for (src, tgt) in map-base { final-map.insert(src, tgt) }
-
     if has-override(custom-punct, "comma") {
       let override-text = _text-only(get-override(custom-punct, "comma"))
       final-map.insert(",", override-text); final-map.insert("，", override-text)
@@ -371,7 +352,6 @@
       final-map.insert(")", override-text); final-map.insert("）", override-text)
       override-keys.push(")"); override-keys.push("）")
     }
-
     let processed = ()
     let block-count = block-characters.len()
     let block-i = 0
@@ -379,13 +359,11 @@
     let last-name = ""
     let collecting = false
     let new-name-buffer = ""
-
     let in-quote = false
 
     let quote-base-depth = 0
     while block-i < block-count {
       let current-character = block-characters.at(block-i)
-
       if current-character == "\"" {
         if in-quote and depth == quote-base-depth + 1 {
           in-quote = false; depth -= 1; processed.push(current-character); block-i += 1; continue
@@ -409,13 +387,11 @@
         continue
       }
       if depth == 1 {
-
         let codepoint = if current-character.len() == 1 { str.to-unicode(current-character) } else { 0 }
         let is-letter = (codepoint >= 0x41 and codepoint <= 0x5A) or (codepoint >= 0x61 and codepoint <= 0x7A)
         let is-continuation = is-letter or (codepoint >= 0x30 and codepoint <= 0x39) or current-character == "_" or current-character == "-"
         if collecting and is-continuation { new-name-buffer += lower(current-character); processed.push(current-character); block-i += 1; continue }
         if not collecting and is-letter { collecting = true; new-name-buffer = lower(current-character); processed.push(current-character); block-i += 1; continue }
-
         if collecting { last-name = new-name-buffer; new-name-buffer = ""; collecting = false }
         processed.push(current-character); block-i += 1
         continue
@@ -434,18 +410,15 @@
             while j < block-count and block-characters.at(j) in (" ", "\t", "\n", "\r") { j += 1 }
             block-characters = block-characters.slice(0, block-i) + latex.PUNCT-MACROS.at(word).clusters() + block-characters.slice(j)
             block-count = block-characters.len()
-
             continue
           }
         }
-
         let char-previous = if block-i > 0 { block-characters.at(block-i - 1) } else { "" }
         let char-next = if block-i + 1 < block-count { block-characters.at(block-i + 1) } else { "" }
         if last-name in long-text-fields and current-character in final-map and not _colon-keep(current-character, char-previous, char-next) {
           processed.push(final-map.at(current-character))
           let next-is-space = block-i + 1 < block-count and block-characters.at(block-i + 1) == " "
           if current-character in override-keys {
-
             if next-is-space { block-i += 2 } else { block-i += 1 }
           } else if use-full {
             if next-is-space { block-i += 2 } else { block-i += 1 }
@@ -459,7 +432,6 @@
         block-i += 1
         continue
       }
-
       processed.push(current-character); block-i += 1
     }
     while block-i < block-count { processed.push(block-characters.at(block-i)); block-i += 1 }

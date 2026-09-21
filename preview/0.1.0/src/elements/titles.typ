@@ -47,7 +47,6 @@
     return none
   }
   title = addons(title, entry, correct-punct: correct-punct, punct-style: punct-style, custom-punct: custom-punct)
-
   if hyperlink-title {
     let url = field.get(entry, "url"); let doi = field.get(entry, "doi")
     let target = if url != none { str(url) }
@@ -55,36 +54,29 @@
     else { none }
     if target != none { title = link(target, title) }
   }
-
   let _emph(x) = emphasis.apply(x, title-spec)
   let _mark = mark-medium.mark(entry)
   if is-component-part {
-
     let scale = if version == 2025 and _mark == "CM" { punct.field-text(entry, "scale") } else { none }
     if scale != none { [#_emph(title)#p("period") #scale#mark-block] } else { _emph(title) + mark-block }
   }
-
   else if preprint { _emph(title) + mark-block }
 
   else if version == 2025 and _mark == "S" {
     let number = punct.field-text(entry, "number", correct-punct: correct-punct, punct-style: punct-style)
-
     let _num-sep = if language.is-cjk-entry(entry) { "\u{3000}" } else { " " }
     if number != none { [#number#_num-sep#_emph(title)#mark-block] } else { _emph(title) + mark-block }
   }
-
   else if _mark == "P" {
     let number = punct.field-text(entry, "number")
     if number == none { _emph(title) + mark-block }
     else {
       let country = if show-patent-country or version == 2005 { punct.field-text-alias(entry, "location", "address") } else { none }
-
       let number-part = if country != none { country + p("comma") + number } else { number }
       _emph(title + p("colon") + number-part) + mark-block
     }
   }
   else if version == 2025 and _mark == "CM" {
-
     let volume = volume(entry, version: version, custom-terms: custom-terms)
     let head = if volume != none { title + p("colon") + volume } else { title }
     let scale = punct.field-text(entry, "scale")

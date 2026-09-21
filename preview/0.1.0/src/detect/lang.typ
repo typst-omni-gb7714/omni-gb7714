@@ -57,7 +57,6 @@
     let custom-code = entry.fields.at("_omni-lang", default: none)
     if custom-code != none { return custom-code }
   }
-
   _scan-detect(_detection-text(entry))
 }
 
@@ -91,7 +90,6 @@
 
 #let apply-languages(bib-data, custom-languages) = {
   if custom-languages.len() == 0 { return bib-data }
-
   let alias-to-code = (:)
   for (code, aliases) in custom-languages {
     let alias-list = if type(aliases) == array { aliases } else { (aliases,) }
@@ -182,9 +180,7 @@
   let names = entry.parsed_names.at("author", default: ())
   if names.len() == 0 { return "" }
   let family = str(names.first().at("family", default: ""))
-
   if family.contains("·") or family.contains("・") { return "zh" }
-
   let han = ""
   for c in family.codepoints() {
     let codepoint = str.to-unicode(c)
@@ -193,11 +189,8 @@
   if han == "" { return "" }
   let han-clusters = han.clusters()
   let n = han-clusters.len()
-
   if n >= 2 and _LANG-ZH-SUR2.contains(han-clusters.slice(0, 2).join("")) { return "zh" }
-
   if n <= 3 and _LANG-ZH-SUR1.contains(han-clusters.at(0)) { return "zh" }
-
   "ja"
 }
 
@@ -231,11 +224,9 @@
 #let detect-accurate(entry) = {
   let detected-text = _detection-text(entry)
   let scan-result = _scan-detect(detected-text)
-
   if scan-result == "ja" or scan-result == "ko" or scan-result == "ru" { return scan-result }
   if detected-text.trim() == "" { return "en" }
   if scan-result == "zh" {
-
     let han-lang = _zh-vs-ja(detected-text)
     if han-lang != "" { return han-lang }
     let surname-lang = _zh-surname(entry)

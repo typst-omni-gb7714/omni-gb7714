@@ -17,7 +17,16 @@
   none
 }
 
-#let built-in-term-keys = ("et-al", "editor", "translator", "anon", "no-date", "sine-loco", "sine-nomine", "sine-anno", "ma-thesis", "phd-thesis", "edition", "volume", "ibid", "footnote-number")
+#let is-number-pair(v) = type(v) == dictionary and ("singular" in v or "plural" in v)
+
+#let pick-number(v, plural) = {
+  if not is-number-pair(v) { return v }
+  let primary = if plural { v.at("plural", default: none) } else { v.at("singular", default: none) }
+  if primary != none { return primary }
+  if plural { v.at("singular", default: none) } else { v.at("plural", default: none) }
+}
+
+#let built-in-term-keys = ("et-al", "editor", "translator", "anon", "no-date", "sine-loco", "sine-nomine", "sine-anno", "ma-thesis", "phd-thesis", "edition", "volume", "pages", "ibid", "footnote-number")
 
 #let cite-term-keys = ("et-al", "anon", "no-date", "ibid", "footnote-number")
 
@@ -28,12 +37,17 @@
   else { v }
 }
 
-#let _term(overrides, key, lang, fallback) = {
+#let _term(overrides, key, lang, fallback, plural: false) = {
   if type(overrides) != dictionary { return fallback }
   let o = overrides.at(key, default: none)
   if o == none { return fallback }
+  if is-number-pair(o) { o = pick-number(o, plural) }
+  if o == none { return fallback }
   if type(o) == dictionary {
-    if lang in o and o.at(lang) != none and str(o.at(lang)) != "" { return o.at(lang) }
+    if lang in o and o.at(lang) != none {
+      let v = pick-number(o.at(lang), plural)
+      if v != none and str(v) != "" { return v }
+    }
     return fallback
   }
   if type(o) == str and o != "" { return o }
@@ -51,23 +65,21 @@
 #let no-date(entry, custom-terms: (:)) = no-date-for(language.get(entry), custom-terms: custom-terms)
 
 #let etal-for(lang, custom-terms: (:), version: 2025) = _term(custom-terms, "et-al", lang, (zh: "等", ja: "ほか", ko: "외", ru: if version == 2005 { "и др" } else { "и др." }).at(lang, default: if version == 2005 { "et al" } else { "et al." }))
-
 #let etal(entry, custom-terms: (:), version: 2025) = etal-for(if entry != none { language.get(entry) } else { "en" }, custom-terms: custom-terms, version: version)
 
-#let role(entry, role, truncated, comma, bare-etal: false, custom-terms: (:), et-al-translator-separator: auto, version: 2025) = {
+#let role(entry, role, truncated, comma, bare-etal: false, custom-terms: (:), et-al-translator-separator: auto, version: 2025, plural: false) = {
   let lang = language.get(entry)
   let et-al-word = etal(entry, custom-terms: custom-terms, version: version)
 
   let lead(gutter) = if bare-etal { "" } else { gutter }
   let role-word = if role == "ed" {
-    _term(custom-terms, "editor", lang, (zh: "主编", ja: "編", ko: "편", fr: "éd.", ru: "ред.").at(lang, default: "ed."))
+    _term(custom-terms, "editor", lang, (zh: "主编", ja: "編", ko: "편", fr: "éd.", ru: "ред.").at(lang, default: "ed."), plural: plural)
   } else {
-    _term(custom-terms, "translator", lang, (zh: "译", ja: "訳", ko: "역", fr: "trad.", ru: "пер.").at(lang, default: "trans."))
+    _term(custom-terms, "translator", lang, (zh: "译", ja: "訳", ko: "역", fr: "trad.", ru: "пер.").at(lang, default: "trans."), plural: plural)
   }
   let translator-gutter(language-default) = if role == "trans" and et-al-translator-separator != auto { et-al-translator-separator } else { language-default }
   if lang == "zh" {
     if role == "ed" { (if truncated { lead(comma) + et-al-word } else { "" }) + role-word }
-
     else { (if truncated { lead(comma) + et-al-word + translator-gutter(if version == 2015 { "" } else { comma }) } else { comma }) + role-word }
   } else if lang == "ja" {
     (if truncated { lead(comma) + et-al-word + translator-gutter("") } else { "" }) + role-word
@@ -141,9 +153,11 @@
   )
 }
 
-#let _wrap-numbered(custom-terms, key, lang, num-text, default-wrap) = {
+#let _wrap-numbered(custom-terms, key, lang, num-text, default-wrap, plural: false) = {
   let ov = if type(custom-terms) == dictionary { custom-terms.at(key, default: none) } else { none }
-  let pair = if type(ov) == dictionary and lang in ov and type(ov.at(lang)) == dictionary { ov.at(lang) }
+  if is-number-pair(ov) { ov = pick-number(ov, plural) }
+  let picked = if type(ov) == dictionary and lang in ov { pick-number(ov.at(lang), plural) } else { none }
+  let pair = if type(picked) == dictionary and not is-number-pair(picked) { picked }
     else if lang in default-wrap { default-wrap.at(lang) }
     else { default-wrap.en }
   pair.at("prefix", default: "") + num-text + pair.at("suffix", default: "")
@@ -171,9 +185,22 @@
 #let volume(entry, volume-str, custom-terms: (:)) = {
   let lang = language.get(entry)
 
-  let is-number = volume-str.clusters().all(c => "0123456789".contains(c)) and volume-str.len() > 0
-  if not is-number { return volume-str }
-  _wrap-numbered(custom-terms, "volume", lang, volume-str, _VOLUME-WRAP)
+  let chars = volume-str.clusters()
+  let is-number = chars.len() > 0 and chars.all(c => "0123456789".contains(c))
+
+  let is-multi = (
+    not is-number and chars.len() > 0
+      and chars.all(c => "0123456789-–,，、 ".contains(c))
+      and chars.any(c => "0123456789".contains(c))
+  )
+  if not is-number and not is-multi { return volume-str }
+  _wrap-numbered(custom-terms, "volume", lang, volume-str, _VOLUME-WRAP, plural: is-multi)
+}
+
+#let _PAGES-WRAP = (en: (prefix: "", suffix: ""))
+
+#let pages-label(entry, page-text, plural, custom-terms: (:)) = {
+  _wrap-numbered(custom-terms, "pages", language.get(entry), page-text, _PAGES-WRAP, plural: plural)
 }
 
 #let sine-loco(entry, custom-terms: (:)) = {

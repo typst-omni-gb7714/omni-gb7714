@@ -1,5 +1,6 @@
 #import "../errors.typ"
 #import "../punct/built-in.typ" as punct
+#import "../terms/built-in.typ" as terms
 
 #let page-range-style-values = ("expanded", "minimal", "minimal-two", "chicago-15", "chicago-16")
 
@@ -54,11 +55,9 @@
 
   let x-len = x.clusters().len()
   let y-len = y-raw.clusters().len()
-
   let y = if x-len <= y-len { y-raw } else { x.clusters().slice(0, x-len - y-len).join("") + y-raw }
 
   let tail = if style == "expanded" {
-
     start-prefix + y
   } else if style == "minimal" {
     _minimal(1, x, y)
@@ -83,19 +82,35 @@
   })
 }
 
-#let pages(entry, page-range-separator: "-", page-range-style: none, override: none, punct-style: "half-with-space", custom-punct: (:)) = {
+#let is-plural(page-text) = {
+  if page-text == none or type(page-text) != str { return false }
+  let segments = page-text.split(regex("[,，]")).map(s => s.trim()).filter(s => s != "")
+  let countable = 0
+  for segment in segments {
+    let m = segment.match(_RANGE-RE)
+    if m != none and m.start == 0 and m.end == segment.len() {
+      if m.captures.first() != m.captures.last() { return true }
+      countable += 1
+    } else if segment.matches(regex("[0-9]")).len() > 0 { countable += 1 }
+  }
+  countable > 1
+}
+
+#let pages(entry, page-range-separator: "-", page-range-style: none, override: none, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:)) = {
 
   if override != none { return override }
   let page-text = punct.field-text(entry, "pages")
   let is-pages = page-text != none
   if page-text == none { page-text = punct.field-text(entry, "eid") }
   if page-text == none { return none }
-
   let page-range-separator = punct.resolve-separator(page-range-separator, entry, punct-style, custom-punct, "-")
   if type(page-text) != str { return page-text }
+  let label(text-out) = if is-pages {
+    terms.pages-label(entry, text-out, is-plural(page-text), custom-terms: custom-terms)
+  } else { text-out }
   if page-range-style != none and is-pages {
-    return _apply-page-range(page-text, page-range-style, page-range-separator)
+    return label(_apply-page-range(page-text, page-range-style, page-range-separator))
   }
 
-  page-text.replace(regex("--|\u{2013}|-"), page-range-separator)
+  label(page-text.replace(regex("--|\u{2013}|-"), page-range-separator))
 }

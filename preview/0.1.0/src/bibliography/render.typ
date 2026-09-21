@@ -29,11 +29,9 @@
 
     if entry == none or (entry.entry_type in _SPECIAL-ENTRY-TYPES and entry.entry_type != "set") { return false }
     if mark != none {
-
       let marks = (mark,).flatten()
       let entry-mark = mark-medium.mark(entry)
       let matched = marks.any(m => {
-
         entry-mark == m or entry-mark.starts-with(m + "/")
       })
       if not matched { return false }
@@ -83,9 +81,8 @@
   } else if grid-cells.len() > 0 {
     title-heading
     let _row-gutter = if entry-spacing != auto { entry-spacing } else { ambient-spacing }
-
     grid(
-      columns: (number-width, auto),
+      columns: (number-width, 1fr),
       column-gutter: number-gutter,
       row-gutter: _row-gutter,
       align: (lbl-align + top, left + top),
@@ -103,13 +100,11 @@
 }
 
 #let _entryset-block(anchor, lbl, member-blocks, author-date-or-none: false, is-html: false, not-hanging: false, hanging-indent: 1.5em, first-line-indent: 0pt, number-align: right, number-width: 0pt, gutter: 0.5em) = {
-
   let _members(cont-prefix) = { for (i, mb) in member-blocks.enumerate() { if i > 0 { linebreak(); cont-prefix }; mb } }
   if author-date-or-none {
 
     par(hanging-indent: hanging-indent, first-line-indent: (amount: first-line-indent, all: true))[#anchor#_members([])]
   } else if is-html {
-
     {
       anchor
       html.elem("span", attrs: (class: "prefix"), lbl)
@@ -147,7 +142,6 @@
   let _period-on(single-block) = if eff-show-end-period == auto { not single-block } else { eff-show-end-period }
 
   let _rows = ()
-
   let _backref-label(label, key) = {
     let cites = query(std.cite).filter(c => str(c.key) == key and _active-list.at(c.location()) == list-label)
     if cites.len() == 0 { return label }
@@ -155,10 +149,10 @@
       let lbl-anchor = if list-label == none { "gb7714" + _LSEP + key } else { "gb7714" + _LSEP + list-label + _LSEP + key }
       html.elem("a", attrs: (href: "#" + _anchor-id(lbl-anchor) + "-ref", role: "doc-backlink"), label)
     } else {
-      link(cites.first().location(), label)
+
+      link(cites.first().location(), box(label))
     }
   }
-
   let _html-li-content(anchor, lbl, body, related) = {
     anchor
     if lbl != none { html.elem("span", attrs: (class: "prefix"), lbl); " " }
@@ -192,7 +186,6 @@
       let number-label = _plabel(str(i + 1 + number-offset))
       if eff-back-ref and eff-bib-numbering-style != none { number-label = _backref-label(number-label, key) }
       if _grid-mode {
-
         _grid-cells.push(number-label)
         _grid-cells.push(_wrap-member(par(
           hanging-indent: eff-entry-hanging-indent,
@@ -203,7 +196,6 @@
           element, number-label, member-block,
           author-date-or-none: eff-bib-numbering-style == none,
           is-html: _IS-HTML,
-
           not-hanging: false,
           hanging-indent: eff-entry-hanging-indent, first-line-indent: eff-entry-first-line-indent,
           number-align: lbl-align,
@@ -236,7 +228,6 @@
 
       _emit-entry(target-entry, date-suffix: if eff-numeric-date-suffix { eff-suffixes.at(suffix-key, default: "") } else { "" }, creator-override: creator-override)
     }
-
     let (formatted, entry-single) = _emit(entry, key, creator-override: _creator-override)
     let suffix = if _period-on(entry-single) and not annotation-tail-v and not custom-driver.uses-override(entry, eff-custom-drivers, version: eff-version) { punct.end-period(entry, eff-punct-style, eff-custom-punct) } else { "" }
     let related-annotation-tail = if related != none { annotation-tail(related, show-annotation: eff-show-annotation) } else { false }
@@ -250,7 +241,6 @@
     if eff-bib-numbering-style == none {
 
       let related-indent-value = if related-indent != none { related-indent } else { [] }
-
       let _hanging-indent = eff-entry-hanging-indent
       let _first-line-indent = eff-entry-first-line-indent
       let _inner = if _IS-HTML {
@@ -265,15 +255,12 @@
     } else if _column-mode {
 
       let lbl = _plabel(str(i + 1 + number-offset))
-
       if eff-back-ref { lbl = _backref-label(lbl, key) }
       let related-indent-value = if related-indent != none { related-indent } else { [] }
       let related-content = if related-formatted != none { [#related-indent-value#related-formatted] } else { none }
       if _IS-HTML {
-
         _rows.push(_wrap(_html-li-content(entry-label-tag, lbl, punct.append-end-period(formatted, suffix), related-content)))
       } else {
-
         _grid-cells.push(lbl)
         _grid-cells.push(_wrap(par(
           hanging-indent: eff-entry-hanging-indent,
@@ -307,7 +294,6 @@
   "㉛","㉜","㉝","㉞","㉟","㊱","㊲","㊳","㊴","㊵",
   "㊶","㊷","㊸","㊹","㊺","㊻","㊼","㊽","㊾","㊿",
 )
-
 #let circled-number(n) = {
   if n >= 1 and n <= 50 { _circled-number-table.at(n - 1) }
   else { "(" + str(n) + ")" }

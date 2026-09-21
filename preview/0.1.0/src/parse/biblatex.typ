@@ -28,7 +28,6 @@
 
   bib-string = bib-string.replace(regex("\\\\textbraceleft(\\{\\}|\\s)?"), _SLBR)
   bib-string = bib-string.replace(regex("\\\\textbraceright(\\{\\}|\\s)?"), _SRBR)
-
   bib-string = bib-string.replace(regex("\\\\textunderscore(\\{\\}|\\s)?"), _SUND)
   bib-string = bib-string.replace(regex("\\\\textdollar(\\{\\}|\\s)?"), _SD)
 
@@ -37,7 +36,6 @@
   if latex-strict-char and bib-string.matches("\\{").len() != bib-string.matches("\\}").len() {
     assert(false, message: "omni-gb7714: bib 中存在未配对的转义花括号 `\\{` / `\\}`（真 biblatex 下会打乱 biber 的花括号计数、导致解析失败——`\\{`/`\\}` 不是可靠写法）。\n— 字面花括号*推荐*用 `\\textbraceleft` / `\\textbraceright`（或 `$\\lbrace$` / `$\\rbrace$`）：它们不参与花括号计数、未配对也安全；\n— 或确保 `\\{` 与 `\\}` 成对出现；\n— 要让本包*容忍*未配对（宽松），设 `gb7714(latex-strict-char: false)`。")
   }
-
   bib-string = bib-string.replace("\\{", _SLBR).replace("\\}", _SRBR)
 
   bib-string = latex.normalize-decls(bib-string)
@@ -62,7 +60,6 @@
     let m = (:)
     for f in _ttc-fields {
       let v = titles-text-case.at(f, default: auto)
-
       if f == "journaltitle" and v == auto { v = titles-text-case.at("journal", default: auto) }
       m.insert(f, if v == auto { rest } else { v })
     }
@@ -78,7 +75,6 @@
   for pr in _ttc-map.pairs() {
     if pr.at(1) != none {
       _ttc-parts.push(pr.at(0) + "=" + _ttc-mode(pr.at(1)))
-
       if pr.at(0) == "journaltitle" { _ttc-parts.push("journal=" + _ttc-mode(pr.at(1))) }
     }
   }

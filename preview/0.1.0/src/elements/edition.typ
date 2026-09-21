@@ -10,7 +10,6 @@
     if version-value != none { version-value } else { punct.field-text(entry, "edition") }
   } else { punct.field-text(entry, "edition") }
   if edition-value == none { return none }
-
   if type(edition-value) != str { return edition-value }
   let edition-str = edition-value.trim()
   let m = edition-str.match(regex("^(\\d+)$"))

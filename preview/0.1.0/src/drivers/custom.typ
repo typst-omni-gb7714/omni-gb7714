@@ -13,7 +13,6 @@
 #let _parse(tokens) = {
   let stack = ()
   let nodes = ()
-
   let pending-alias = none
   let i = 0
   let n = tokens.len()
@@ -21,7 +20,6 @@
     let token = tokens.at(i)
     let kind = token.at(0)
     if kind == "group-open" {
-
       stack.push((token.at(1), nodes))
       nodes = ()
       i += 1
@@ -42,12 +40,15 @@
         body.slice(a, b)
       }
       let group-node = if arrow-idx != none {
-        ("group", group-type, _trim-sp(nodes.slice(arrow-idx + 1)), guard.parse-guard-expr(nodes.slice(0, arrow-idx), token-names: fields.built-in-token-names))
+        let guard-toks = nodes.slice(0, arrow-idx)
+        let guard-ast = if guard-toks.any(tk => tk.at(0) != "sp") {
+          guard.parse-guard-expr(guard-toks, token-names: fields.built-in-token-names)
+        } else { ("otherwise",) }
+        ("group", group-type, _trim-sp(nodes.slice(arrow-idx + 1)), guard-ast)
       } else {
         ("group", group-type, nodes, none)
       }
       nodes = parent
-
       if pending-alias != none and pending-alias.at(0) == stack.len() {
         nodes.push(("alias", pending-alias.at(1), group-node))
         for lit in pending-alias.at(2) { nodes.push(lit) }
@@ -57,16 +58,13 @@
       }
       i += 1
     } else if kind == "arrow" {
-
       if stack.len() == 0 { errors.raise("template.guard-arrow-outside-group") }
       nodes.push(("arrow",))
       i += 1
     } else if kind == "alias" {
-
       while nodes.len() > 0 and (nodes.last().at(0) == "sp" or (nodes.last().at(0) == "text" and nodes.last().at(1).trim() == "")) {
         nodes = nodes.slice(0, -1)
       }
-
       let alias-literals = ()
       while nodes.len() > 0 and (nodes.last().at(0) == "text" or nodes.last().at(0) == "punct") {
         alias-literals.insert(0, nodes.last())
@@ -76,20 +74,17 @@
       let left = nodes.last()
       nodes = nodes.slice(0, -1)
       i += 1
-
       while i < n {
         let next-token = tokens.at(i)
         if next-token.at(0) == "sp" or (next-token.at(0) == "text" and next-token.at(1) == " ") { i += 1 } else { break }
       }
       if i >= n { errors.raise("template.alias-no-right") }
-
       pending-alias = (stack.len(), left, alias-literals)
     } else {
       let atom = if kind == "ident" { ("ident", token.at(1)) }
         else if kind == "text" { ("text", token.at(1)) }
         else if kind == "sp" { ("sp",) }
         else { ("punct", token.at(1)) }
-
       if pending-alias != none and kind != "sp" and pending-alias.at(0) == stack.len() {
         nodes.push(("alias", pending-alias.at(1), atom))
         for lit in pending-alias.at(2) { nodes.push(lit) }
@@ -101,7 +96,6 @@
     }
   }
   if stack.len() > 0 { errors.raise("template.unclosed-group") }
-
   if pending-alias != none { errors.raise("template.alias-no-right") }
   nodes
 }
@@ -119,7 +113,6 @@
     if strict { errors.raise("template.unknown-token", token: name) }
     return field.get(entry, name)
   }
-
   let v = if is-built-in { fields.resolve-built-in-token(name, entry, opts) } else { none }
   if v == none and is-field {
     v = resolve-field(name, custom-fields.at(name), entry, correct-punct: opts.correct-punct, punct-style: opts.punct-style, custom-punct: opts.custom-punct)
@@ -132,14 +125,13 @@
 
 #let _eval-guard(ast, entry, opts, custom-terms) = {
   let k = ast.at(0)
+  if k == "otherwise" { return true }
   if k == "and" { return ast.at(1).all(a => _eval-guard(a, entry, opts, custom-terms)) }
   if k == "or" { return ast.at(1).any(a => _eval-guard(a, entry, opts, custom-terms)) }
   if k == "not" { return not _eval-guard(ast.at(1), entry, opts, custom-terms) }
-
   if k == "present" {
     return not _is-empty(_resolve-ident(ast.at(1), entry, opts, custom-terms, strict: false))
   }
-
   let fname = ast.at(1)
   let op = ast.at(2)
   let values = ast.at(3)
@@ -153,11 +145,22 @@
       if code == none { "" } else { code }
     }
     else if fname == "entry-type" { entry.entry_type }
-
     else if fname == "entry-lang" { language.get(entry) }
     else { let v = field.get(entry, fname); if v == none { "" } else { str(v) } }
   let matches = str(actual) in values
   if op == "neq" { not matches } else { matches }
+}
+
+#let _is-otherwise(node) = {
+  node.at(0) == "group" and node.len() > 3 and node.at(3) != none and node.at(3).at(0) == "otherwise"
+}
+
+#let _otherwise-suppressed(nodes, entry, opts, custom-terms) = {
+  if not nodes.any(_is-otherwise) { return false }
+  nodes.any(n => (
+    n.at(0) == "group" and n.len() > 3 and n.at(3) != none and n.at(3).at(0) != "otherwise"
+      and _eval-guard(n.at(3), entry, opts, custom-terms)
+  ))
 }
 
 #let _CF-HUG-LEFT  = ".,:;?!)]}，。．、：；？！）】》」』（【《「『…·"
@@ -189,7 +192,6 @@
       let last-char = _last-character(v)
       if last-char != none { left-char = last-char }
     } else {
-
       let next-char = none
       for j in range(index + 1, items.len()) {
         if items.at(j).at(0) == "hard" {
@@ -241,20 +243,13 @@
 }
 
 #let _smart-join(nodes, parts, keep-trailing: false, active-group: false, always-emit: false) = {
-
   let phase = "preamble"
-
   let buffer = ()
-
   let prefix = ()
-
   let seen-data = false
   let result = []
-
   let emitted = false
-
   let last-character = none
-
   let held = ()
   let pending-empty = false
   for (i, cur-node) in nodes.enumerate() {
@@ -262,25 +257,21 @@
     if next-kind == "sp" { buffer.push(("soft",)); continue }
     let p = parts.at(i)
     if next-kind == "punct" or next-kind == "text" {
-
       let is-period = next-kind == "punct" and punct.char-to-slot.at(cur-node.at(1), default: none) == "period"
       buffer.push(("hard", p, is-period))
       continue
     }
-
     if not seen-data {
       seen-data = true
       if active-group { prefix = buffer; buffer = () }
     }
     if _is-empty(p) {
-
       held = if pending-empty { _collapse-around-empty(held, buffer, none) } else { buffer }
       pending-empty = true
       buffer = ()
       phase = "midstream"
       continue
     }
-
     if not emitted {
 
       let head = prefix + (if phase == "preamble" { buffer } else { () })
@@ -331,7 +322,6 @@
       }
       return punct.get(punct-name, entry, opts.punct-style, overrides)
     }
-
     if overrides != none and c in overrides { return punct.resolve-value(overrides.at(c)) }
     return c
   }
@@ -345,15 +335,16 @@
     return _render-node(node.at(2), entry, opts, custom-terms)
   }
   if kind == "group" {
-
     let group-type = node.at(1)
     let body = node.at(2)
-    let parts = body.map(c => _render-node(c, entry, opts, custom-terms))
-
+    let suppress = _otherwise-suppressed(body, entry, opts, custom-terms)
+    let parts = ()
+    for child in body {
+      parts.push(if suppress and _is-otherwise(child) { none } else { _render-node(child, entry, opts, custom-terms) })
+    }
     let guard = if node.len() > 3 { node.at(3) } else { none }
     if guard != none {
       if not _eval-guard(guard, entry, opts, custom-terms) { return none }
-
       return _smart-join(body, parts, keep-trailing: true, active-group: false, always-emit: true)
     }
     let data-parts = ()
@@ -375,7 +366,6 @@
   monograph: "改用 entry_type 点名（book / reference / techreport …）或大写码键（M / R / D …）",
   component-part: "改用 entry_type 点名（incollection / inbook …）",
   "serial-article": "改用 article: 或码键 J:",
-
   "serial-newspaper": "改用 newspaper: 点名 entry_type，或码键 N:",
   serial: "改用 periodical:",
   electronic: "改用 online:（@electronic/@www 解析期已归一为 online）或码键 EB:",
@@ -398,16 +388,20 @@
 
 #let render(entry, template, opts, custom-terms, show-end-period: false) = {
   let nodes = _parse(guard.tokenize(template))
-  let parts = nodes.map(n => _render-node(n, entry, opts, custom-terms))
-
+  let suppress = _otherwise-suppressed(nodes, entry, opts, custom-terms)
+  let parts = ()
+  for node in nodes {
+    parts.push(if suppress and _is-otherwise(node) { none } else { _render-node(node, entry, opts, custom-terms) })
+  }
   let body = _smart-join(nodes, parts, keep-trailing: true)
-
   let data-blocks = 0
   for (i, node) in nodes.enumerate() {
     if node.at(0) not in ("sp", "punct", "text") and node.at(1, default: none) not in ("mark", "medium", "mark-medium") and not _is-empty(parts.at(i)) { data-blocks += 1 }
   }
-  let single-block = data-blocks <= 1
+  let single-block = if template.contains("built-in") {
 
+    opts.at("built-in-single-block", default: data-blocks <= 1)
+  } else { data-blocks <= 1 }
   let period-on = if show-end-period == auto { not single-block } else { show-end-period }
   if period-on and body != none {
     let dot = punct.get("period", entry, opts.punct-style, opts.custom-punct)

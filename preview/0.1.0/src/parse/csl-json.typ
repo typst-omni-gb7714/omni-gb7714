@@ -31,7 +31,6 @@
     fields.insert("volume-title", csl-map.escape-text(volume-title))
     fields = csl-map.swap-volume-title(fields)
   }
-
   for (csl-key, bib-key) in csl-map.RAW-FIELDS {
     let v = item.at(csl-key, default: none)
     if v != none and str(v).trim() != "" { fields.insert(bib-key, str(v)) }
@@ -109,7 +108,6 @@
 
 #let _decode(content) = {
   let data = if type(content) == array or type(content) == dictionary { content } else { json(bytes(str(content))) }
-
   if type(data) == dictionary { (data,) } else { data }
 }
 
@@ -154,7 +152,6 @@
   let core = if given.trim() != "" { _bibtex-escape(family) + ", " + _bibtex-escape(given) } else { _bibtex-escape(family) }
   if suffix.trim() != "" { core + ", " + _bibtex-escape(suffix) } else { core }
 }
-
 #let _bib-line(k, v) = if v != none and str(v).trim() != "" { ("  " + k + " = {" + _bibtex-escape(v) + "}",) } else { () }
 
 #let to-bibtex(content) = {
@@ -167,7 +164,6 @@
     let real-type = csl-map.map-type(csl-type)
     let etype = if real-type in _NATIVE-SAFE-TYPES { real-type } else { "misc" }
     let lines = ()
-
     for (csl-role, bib-role) in csl-map.NAME-ROLES {
       let arr = item.at(csl-role, default: none)
       if type(arr) == array and arr.len() > 0 { lines.push("  " + bib-role + " = {" + arr.map(_name-bibtex).join(" and ") + "}") }

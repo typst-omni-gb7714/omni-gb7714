@@ -42,7 +42,6 @@
   let _mark-early = mark-medium.mark(entry)
 
   {
-
     let _report-has-location = (not is-missing(punct.field-text(entry, "location"))) or (not is-missing(punct.field-text(entry, "address")))
     if version == 2025 and _mark-early == "R" and not _report-has-location {
       let date-value = publication-date.date(entry)
@@ -52,7 +51,6 @@
       return none
     }
   }
-
   let location-value = location(entry)
   let publisher-value = publisher(entry)
   if type(location-value) == str and location-value.trim() == "" { location-value = none }
@@ -62,7 +60,6 @@
     else if skip-date { none }
     else if use-full-date { publication-date.date(entry) }
     else { publication-date.year(entry) }
-
   if year != none and date-suffix != "" { year = publication-date.with-suffix(year, date-suffix) }
 
   let _mark = _mark-early
@@ -71,10 +68,8 @@
   if not skip-placeholder-by-type {
     let _sine-loco = terms.sine-loco(entry, custom-terms: custom-terms)
     let _sine-nomine = terms.sine-nomine(entry, custom-terms: custom-terms)
-
     let _date-supplied = show-sine-anno and year == none and not skip-date
     let _sine-anno-word = if _date-supplied { terms.sine-anno(entry, custom-terms: custom-terms) } else { none }
-
     let _has-date = field.get(entry, "date") != none or field.get(entry, "year") != none
     let _fragment-no-fill = _imprint-fragment(entry) and (field.has-online(entry) or not _has-date)
     let need = (missing, show-value, other) => missing == none and (show-value == true or (show-value == auto and other != none and not _fragment-no-fill))
@@ -92,7 +87,6 @@
       publisher-value = "[" + _sine-nomine + p("comma") + _sine-anno-word + "]"
       year = none
     } else {
-
       if need-sine-loco { location-value = "[" + _sine-loco + "]" }
       if need-sine-nomine { publisher-value = "[" + _sine-nomine + "]" }
       if _date-supplied { year = "[" + _sine-anno-word + "]" }

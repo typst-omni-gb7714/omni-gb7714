@@ -18,9 +18,7 @@
   }
 
   if _mark == "CM" and (field.get(entry, "booktitle") != none or field.alias(entry, "journaltitle", "journal") != none) { return "component-part" }
-
   if _mark == "N" { return "serial-newspaper" }
-
   if entry-type == "article" {
     let eprint = field.get(entry, "eprint")
     let archive = field.alias(entry, "eprinttype", "archiveprefix")
@@ -32,7 +30,6 @@
     }
     let is-preprint = (entrysubtype != none and lower(str(entrysubtype)) == "preprint") or is-arxiv
     if is-preprint {
-
       if version == 2025 { return "electronic" }
       return "preprint"
     }
@@ -41,7 +38,6 @@
   if entry-type == "patent" or _mark == "P" { return "patent" }
   if entry-type == "online" { return "electronic" }
   if _mark in ("EB", "DB", "CP", "DS") and field.get(entry, "publisher") == none { return "electronic" }
-
   if _mark == "Z" and field.has-online(entry) and field.get(entry, "publisher") == none { return "electronic" }
 
   if is-platform-form(entry, version: version) { return "electronic" }

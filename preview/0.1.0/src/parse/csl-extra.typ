@@ -60,7 +60,6 @@
   let fields = entry.fields
   let names = entry.parsed_names
   let dates = entry.parsed_dates
-
   let real-fields = fields.keys()
   let real-name-roles = names.keys()
   let real-date-keys = dates.keys()
@@ -83,7 +82,6 @@
       if b.field == "entrytype" { override-type = lower(v); continue }
       if v == "" or b.field in real-fields { continue }
       if b.field in _TEX-NAME-FIELDS {
-
         let arr = names.at(b.field, default: ())
         arr.push(csl-map.parse-name-string(v))
         names.insert(b.field, arr)
@@ -107,7 +105,6 @@
       if prefix.trim() != "" { kept.push(prefix) }
       for (var, value) in recognized {
         if value == "" { continue }
-
         if var in pid-map {
           let target = pid-map.at(var)
           if target not in real-fields { fields.insert(target, value) }
@@ -116,7 +113,6 @@
         let route = csl-map.classify(var, entry-type: effective-type)
 
         if route.kind == "drop" { continue }
-
         let target = if route.kind == "lang" { "langid" } else if route.kind == "pmid" { "eprint" } else if route.kind == "container" { csl-map.container-field(effective-type) } else { route.key }
         let occupied = if route.kind == "name" { target in real-name-roles } else if route.kind == "date" { target in real-date-keys or target in real-fields } else { target in real-fields }
         if occupied { continue }
@@ -138,17 +134,14 @@
         } else if route.kind == "raw" {
           fields.insert(target, value)
         } else {
-
           fields.insert(target, esc(value))
         }
       }
     }
-
     let leftover = kept.join("\n", default: "").trim()
     if leftover == "" { let _ = fields.remove(src-key, default: none) } else { fields.insert(src-key, esc(leftover)) }
   }
   let _ = fields.remove("_omni-note-raw", default: none)
-
   fields = csl-map.swap-volume-title(fields)
 
   let e = entry

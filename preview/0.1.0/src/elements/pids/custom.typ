@@ -58,7 +58,6 @@
   if type(custom-pids) != dictionary { return out }
   for (name, definition) in custom-pids {
     if type(definition) != dictionary { continue }
-
     let field-name = str(definition.at("field", default: str(name)))
     out.push((str(name), field-name))
     let prefix = definition.at("prefix", default: none)
@@ -76,7 +75,6 @@
   if value == none or value == "" { return none }
   if not effective-fn(term-name, value) { return none }
   let label = upper(label-text(definition, entry, str(field-name)))
-
   let value = strip-label-prefix(value, label)
   link(resolve-custom(definition, value), [#label#pcolon#(brk(value))])
 }
@@ -102,7 +100,6 @@
     if prefix != none and type(prefix) != str and type(prefix) != dictionary {
       errors.raise("custom-pids.prefix-bad", name: str(name))
     }
-
     let resolver = definition.at("resolver", default: none)
     if resolver != none and type(resolver) != str {
       if str(name) != "eprint" or type(resolver) != dictionary {

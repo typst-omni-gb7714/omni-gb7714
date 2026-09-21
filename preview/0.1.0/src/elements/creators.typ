@@ -15,18 +15,35 @@
 }
 
 #let _CORP-DESIGNATORS = ("ltd", "inc", "llc", "plc", "corp", "gmbh", "ag", "pty", "co", "company", "llp", "lp", "srl", "sarl", "nv", "bv", "sa")
-#let _is-corp-name(name) = {
+
+#let _written-with-comma(name, entry) = {
+  if entry == none { return false }
+  let family = name.at("family", default: "")
+  if family == "" { return false }
+  let fields = entry.at("fields", default: (:))
+  for (role, _) in entry.at("parsed_names", default: (:)) {
+    let raw = fields.at(role, default: none)
+    if type(raw) != str { continue }
+    for segment in raw.split(regex("\\s+and\\s+")) {
+      if segment.replace("{", "").replace("}", "").trim().starts-with(family + ",") { return true }
+    }
+  }
+  false
+}
+
+#let is-corp-name(name, entry: none) = {
   let given = name.at("given", default: "")
   if given == "" { return false }
   let family = name.at("family", default: "")
   if family == "" { return false }
+  if _written-with-comma(name, entry) { return false }
   lower(family.split(" ").last().replace(".", "").trim()) in _CORP-DESIGNATORS
 }
 
 #let name-style-keys = ("order", "family-case", "given-form", "given-initial-separator", "given-separator", "given-case", "family-given-separator", "given-family-separator")
 #let _ORDER-VALUES = ("family-ahead", "given-ahead")
 #let _FAMILY-CASE-VALUES = (auto, "uppercase", "lowercase", none)
-#let _GIVEN-FORM-VALUES = (auto, none, "initials", "full")
+#let _GIVEN-FORM-VALUES = (auto, none, "initials", "full", "pinyin-initials")
 #let _GIVEN-CASE-VALUES = (none, "uppercase", "lowercase", "capitalize-first", "capitalize-each")
 
 #let validate-name-style(value, param: "name-style") = {
@@ -43,10 +60,9 @@
       if "first" not in v or "rest" not in v { errors.raise("name-style.order-dict", param: param, got: repr(v)) }
       continue
     }
-
     if key == "given-form" and std.type(v) == dictionary {
       for (form-key, form-value) in v {
-        if form-key not in ("pinyin", "rest") or form-value not in (none, "initials", "full") {
+        if form-key not in ("pinyin", "rest") or form-value not in (none, "initials", "full", "pinyin-initials") {
           errors.raise("name-style.bad-value", param: param, key: "given-form." + form-key, got: repr(form-value))
         }
       }
@@ -56,7 +72,6 @@
       else if key == "family-case" { v not in _FAMILY-CASE-VALUES }
       else if key == "given-form" { v not in _GIVEN-FORM-VALUES }
       else if key == "given-case" { v not in _GIVEN-CASE-VALUES }
-
       else if key == "given-separator" { not (v == auto or v == none or std.type(v) == str or std.type(v) == dictionary) }
       else { not (v == auto or std.type(v) == str or std.type(v) == dictionary) }
     if bad { errors.raise("name-style.bad-value", param: param, key: key, got: repr(v)) }
@@ -70,23 +85,20 @@
     family-case = if side == "cite" { none } else if version == 2025 { none } else { "uppercase" }
   }
   let given-form = dict.at("given-form", default: auto)
-
   if given-form == auto {
     given-form = if side == "cite" { none }
       else if version == 2025 { (pinyin: "full", rest: "initials") }
-      else { "initials" }
+      else { (pinyin: "pinyin-initials", rest: "initials") }
   }
   let given-separator = dict.at("given-separator", default: auto)
   if given-separator == auto { given-separator = if version == 2025 { none } else { " " } }
 
   let given-initial-separator = dict.at("given-initial-separator", default: auto)
   if given-initial-separator == auto { given-initial-separator = "" }
-
   let family-given-separator = dict.at("family-given-separator", default: auto)
   if family-given-separator == auto { family-given-separator = " " }
   let given-family-separator = dict.at("given-family-separator", default: auto)
   if given-family-separator == auto { given-family-separator = " " }
-
   let order = dict.at("order", default: "family-ahead")
   let order = if std.type(order) == dictionary { order } else { (first: order, rest: order) }
   (
@@ -107,7 +119,6 @@
     if type(fragment) != str { return fragment }
     fragment = fragment.replace(_SD, "$")
     fragment = fragment.replace("~", "\u{00A0}")
-
     if "\\" in fragment {
       for pattern in _TEX-DROP-PATTERNS {
         while fragment.match(pattern) != none { fragment = fragment.replace(pattern, "") }
@@ -126,13 +137,11 @@
   let prefix-last = if _up-explicit != none { not _up-explicit } else { prefix-last }
   if family == "" and given == "" { return "" }
   if _is-org(name) { return family }
-
-  if _is-corp-name(name) { return given + " " + family }
+  if is-corp-name(name, entry: entry) { return given + " " + family }
 
   if language.is-cjk(given) or (given == "" and language.is-cjk(family)) { family + given }
   else {
     let style = name-style
-
     let family-case = style.at("family-case", default: none)
     let _apply-family-case(text-value) = {
       if family-case == "uppercase" { upper(text-value) }
@@ -140,20 +149,16 @@
       else { text-value }
     }
     let formatted-family = _apply-family-case(family)
-
     let formatted-prefix = if prefix != "" { _apply-family-case(prefix).replace(" ", "\u{00A0}") + "\u{00A0}" } else { "" }
-
     let given-form = style.at("given-form", default: "initials")
     if type(given-form) == dictionary {
       given-form = if pinyin.is-name-pinyin(name) { given-form.at("pinyin", default: "full") }
         else { given-form.at("rest", default: "initials") }
     }
     let given-case = style.at("given-case", default: none)
-
     let _entry-lang = if entry != none { language.get(entry) } else { none }
     let _pick(value, fallback) = if type(value) == dictionary { punct.pick-separator-by-lang(value, _entry-lang, fallback) } else { value }
     let _dim(key, fallback) = _pick(style.at(key, default: fallback), fallback)
-
     let _sep(value) = {
       let resolved = punct.resolve-separator(value, entry, punct-style, custom-punct, value)
       if type(resolved) == str { resolved } else { value }
@@ -167,12 +172,12 @@
       let value = _dim("given-separator", none)
       if value == none { none } else { _sep(value) }
     }
-
     let family-given-separator = _sep(_dim("family-given-separator", " "))
     let given-family-separator = _sep(_dim("given-family-separator", " "))
     let formatted-given = if given == "" or given-form == none { "" } else {
       let segments = ()
       let connectors = ()
+      let _forced-space = ()
       let parts = given.split(regex("\\s+")).filter(p => p.len() > 0)
       for (part-index, part) in parts.enumerate() {
         let subsegments = part.split("-").filter(s => s.len() > 0)
@@ -182,11 +187,29 @@
         }
         if part-index < parts.len() - 1 { connectors.push(" ") }
       }
-      let shaped = if given-form == "initials" {
+      if given-form == "pinyin-initials" {
+        let expanded = ()
+        let expanded-connectors = ()
+        let forced = ()
+        for (segment-index, s) in segments.enumerate() {
+          let split = pinyin.split-syllables(lower(s))
+          if split != none {
+            let head-len = split.first().clusters().len()
+            let tail = s.clusters().slice(head-len)
+            expanded.push(s.clusters().slice(0, head-len).join(""))
+            expanded.push(upper(tail.first()) + tail.slice(1).join(""))
+            expanded-connectors.push(" "); forced.push(true)
+          } else { expanded.push(s) }
+          if segment-index < connectors.len() { expanded-connectors.push(connectors.at(segment-index)); forced.push(false) }
+        }
+        segments = expanded
+        connectors = expanded-connectors
+        _forced-space = forced
+      }
+      let shaped = if given-form == "initials" or given-form == "pinyin-initials" {
 
         segments.map(s => s.clusters().first() + given-initial-separator)
       } else {
-
         let _capitalize(s) = { let cl = s.clusters(); upper(cl.first()) + lower(cl.slice(1).join("")) }
         segments.enumerate().map(((segment-index, s)) => {
           if given-case == "uppercase" { upper(s) }
@@ -196,25 +219,31 @@
           else { s }
         })
       }
-
-      let _tie(separator) = if given-form == "initials" and separator == " " { "\u{00A0}" } else { separator }
+      let _tie(separator) = if given-form in ("initials", "pinyin-initials") and separator == " " { "\u{00A0}" } else { separator }
       if given-separator == none {
-
         let rejoined = ""
         for (segment-index, s) in shaped.enumerate() {
           rejoined += s
           if segment-index < connectors.len() { rejoined += _tie(connectors.at(segment-index)) }
         }
         rejoined
-      } else { shaped.join(_tie(given-separator)) }
+      } else {
+        let rejoined = ""
+        for (segment-index, s) in shaped.enumerate() {
+          rejoined += s
+          if segment-index < connectors.len() {
+            let forced = _forced-space.len() > segment-index and _forced-space.at(segment-index)
+            rejoined += _tie(if forced { " " } else { given-separator })
+          }
+        }
+        rejoined
+      }
     }
 
     let formatted-given = if type(formatted-given) == str { formatted-given.trim(regex("\\s+"), at: end) } else { formatted-given }
-
     let order = style.at("order", default: "family-ahead")
     let order = if std.type(order) == dictionary { order.at(if name-index == 0 { "first" } else { "rest" }, default: "family-ahead") } else { order }
     let result = if order == "given-ahead" {
-
       if formatted-given != "" { formatted-given + given-family-separator + formatted-prefix + formatted-family }
       else { formatted-prefix + formatted-family }
     } else if prefix-last and prefix != "" {
@@ -224,14 +253,11 @@
       if formatted-given != "" { assembled += family-given-separator + formatted-given }
       assembled + " " + end-prefix
     } else {
-
       let assembled = formatted-prefix + formatted-family
       if formatted-given != "" { assembled += family-given-separator + formatted-given }
       assembled
     }
-
     if suffix != "" {
-
       let suffix-separator = if name-suffix-separator != auto { _sep(_pick(name-suffix-separator, ", ")) } else { ", " }
       result += suffix-separator + suffix.trim(".", at: end)
     }
@@ -263,7 +289,6 @@
 #let resolve-et-al(value, role, entry, param: "et-al-min") = {
   if type(value) != dictionary { return value }
   let keys = value.keys()
-
   for key in keys {
     if key not in et-al-role-keys and key not in punct.separator-lang-keys {
       errors.raise("et-al.unknown-key", param: param, key: key,
@@ -280,7 +305,6 @@
   let picked = if role in value { value.at(role) } else if "rest" in value { value.at("rest") } else {
     errors.raise("et-al.no-role-fallback", param: param, role: role)
   }
-
   _pick-et-al-by-lang(picked, entry, param)
 }
 
@@ -302,7 +326,6 @@
   let should-truncate = has-others or real-names.len() >= et-al-min
   let show-count = if should-truncate { calc.min(real-names.len(), et-al-use-first) } else { real-names.len() }
   let needs-etal = (has-others or show-count < real-names.len()) and show-et-al
-
   let last-count = if et-al-use-last > 0 and needs-etal and not has-others {
     calc.min(et-al-use-last, real-names.len() - show-count)
   } else { 0 }
@@ -336,26 +359,20 @@
       }
     }
   }
-
   let (real-names, show-count, last-count, needs-etal, bare-etal) = truncate(names, et-al-min, et-al-use-first, show-et-al, et-al-use-last: et-al-use-last)
-
   let _one(name-index) = format-one(real-names.at(name-index), name-style: if name-index == 0 and first-name-style != none { first-name-style } else { name-style }, name-suffix-separator: name-suffix-separator, prefix-last: prefix-last, entry: entry, punct-style: punct-style, custom-punct: custom-punct, name-index: name-index)
-
   let comma = if entry != none { punct.get("comma", entry, punct-style, custom-punct) } else { ", " }
   let result = range(show-count).map(_one).join(comma)
   if last-count > 0 {
-
     let tail-start = real-names.len() - last-count
     result += comma + punct.get("ellipsis", entry, punct-style, custom-punct) + range(tail-start, real-names.len()).map(_one).join(comma)
   } else if needs-etal {
-
     result += (if bare-etal { "" } else { comma }) + terms.etal(entry, custom-terms: custom-terms, version: version)
   }
   result
 }
 
 #let default-roles(entry, component-part: false) = if component-part {
-
   ("author", "translator", "holder")
 } else if mark-medium.mark(entry) == "P" {
   ("holder", "author", "editor", "translator", "editora")
@@ -394,20 +411,17 @@
   let names = entry.parsed_names.at(role, default: ())
   if names.len() == 0 { return none }
   let comma = punct.get("comma", entry, punct-style, custom-punct)
-
   let (min: et-al-min, use-first: et-al-use-first, use-last: et-al-use-last) = resolve-et-al-triple(et-al-min, et-al-use-first, et-al-use-last, role, entry)
 
   let (real-names, show-count, last-count, needs-etal, bare-etal) = truncate(names, et-al-min, et-al-use-first, show-et-al, et-al-use-last: et-al-use-last)
   let _one(name-index) = format-one(real-names.at(name-index), name-style: name-style, name-suffix-separator: name-suffix-separator, prefix-last: prefix-last, entry: entry, punct-style: punct-style, custom-punct: custom-punct, name-index: name-index)
   let formatted = range(show-count).map(_one).join(comma)
-
   if last-count > 0 {
     let tail-start = real-names.len() - last-count
     formatted += comma + punct.get("ellipsis", entry, punct-style, custom-punct) + range(tail-start, real-names.len()).map(_one).join(comma)
   }
-
   let translator-separator = if et-al-translator-separator == auto { auto } else { punct.resolve-separator(et-al-translator-separator, entry, punct-style, custom-punct, auto) }
-  formatted + terms.role(entry, role-term, needs-etal, comma, bare-etal: bare-etal, custom-terms: custom-terms, et-al-translator-separator: translator-separator, version: version)
+  formatted + terms.role(entry, role-term, needs-etal, comma, bare-etal: bare-etal, custom-terms: custom-terms, et-al-translator-separator: translator-separator, version: version, plural: names.len() > 1)
 }
 #let other-editor(entry, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-et-al: true, name-style: (:), punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), name-suffix-separator: auto, prefix-last: false, version: 2025) = _other(entry, "editor", "ed", et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: custom-terms, name-suffix-separator: name-suffix-separator, prefix-last: prefix-last, version: version)
 #let other-translator(entry, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-et-al: true, name-style: (:), punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), name-suffix-separator: auto, prefix-last: false, et-al-translator-separator: auto, version: 2025) = _other(entry, "translator", "trans", et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: custom-terms, name-suffix-separator: name-suffix-separator, prefix-last: prefix-last, et-al-translator-separator: et-al-translator-separator, version: version)

@@ -40,7 +40,6 @@
 }
 
 #let resolve-doi(v) = "https://doi.org/" + str(v)
-
 #let resolve-cstr(v) = {
   let cstr-value = str(v).trim()
   if lower(cstr-value).starts-with("cstr:") { cstr-value = cstr-value.slice(5).trim() }
@@ -54,7 +53,6 @@
   let eprint-value = str(v).trim()
 
   let template = _EPRINT-RESOLVERS.at(key, default: none)
-
   if type(custom-pids) == dictionary and "eprint" in custom-pids and type(custom-pids.at("eprint")) == dictionary {
     let resolver = custom-pids.at("eprint").at("resolver", default: none)
     if type(resolver) == dictionary {
@@ -85,7 +83,6 @@
 
 #let effective(name, value, show-pid, url-str, default-show, entry: none, custom-pids: (:), dedup-url-pid: true, version: 2015) = {
   if value == none or value == "" { return false }
-
   let _online = v => v != "online-only" or (entry != none and mark-medium.is-online(entry, version: version))
   let explicit-show = show-pid.at(name, default: auto)
   if explicit-show == false { return false }
@@ -93,7 +90,6 @@
   if explicit-show == "online-only" {
     if not _online(explicit-show) { return false }
   } else {
-
     let entry-setting = auto
     if entry != none {
       if entry.entry_type in show-pid { entry-setting = show-pid.at(entry.entry_type) }
@@ -105,7 +101,6 @@
     if entry-setting == false { return false }
     if entry-setting == "online-only" and not _online(entry-setting) { return false }
     if entry-setting == auto {
-
       let rest = show-pid.at("rest", default: auto)
       if rest == false { return false }
       if rest == "online-only" and not _online(rest) { return false }

@@ -1,21 +1,18 @@
 #let _ENUMS = (
   "bib-numbering-style": ("bracket", "paren", "dot", "plain", "fullwidth-bracket", "fullwidth-paren", "shell", "circled", none),
   "cite-numbering-style": ("bracket", "paren", "fullwidth-bracket", "fullwidth-paren", "shell", "circled"),
-
   "note": (none, "foot", "end"),
-
   "note-numbering-style": ("circled",),
   "mark-medium-bracket-style": ("half", "full"),
   "number-align": ("left", "right", "center"),
 
   "number-placement": ("column", "margin", "inline"),
+  "number-punct-width": ("full", "native"),
   "cite-form": ("super", "inline", "normal", "prose", "author", "year", "full", none),
   "supplement-style": ("compact", "split"),
-
   "punct-style": ("half", "half-no-space", "half-with-space", "full",
     "by-doc-and-style", "by-doc-no-space", "by-doc-with-space",
     "by-entry-and-style", "by-entry-no-space", "by-entry-with-space"),
-
   "bib-punct-style": ("half", "half-no-space", "half-with-space", "full",
     "by-doc-no-space", "by-doc-with-space",
     "by-entry-no-space", "by-entry-with-space"),
@@ -24,7 +21,6 @@
   "titles-text-case": (none, "sentence", "title"),
 
   "page-range-style": (none, "expanded", "minimal", "minimal-two", "chicago-15", "chicago-16", "chicago"),
-
   "date-fallback": (none, "urldate"),
 )
 
@@ -39,7 +35,6 @@
 }
 
 #let _MESSAGES = (
-
   "mark-medium.show-mark-online-only": "show-mark 不支持 \"online-only\"：文献类型标识不是获取途径，联机判据对它无语义",
   "mark-medium.setting-key-not-mark": "{param} 大写键 \"{key}\" 不是 GB/T 7714 附录 A 的文献类型标识码（全集：{marks}）",
 
@@ -80,7 +75,7 @@
   "name-style.not-dictionary": "gb7714: `{param}` 须是维度字典（如 `(family-case: \"uppercase\")`）或 `auto`，收到 {got}",
   "name-style.unknown-key": "gb7714: `{param}` 收到未知维度 \"{key}\"；合法键：{keys}",
   "name-style.order-dict": "gb7714: `{param}.order` 的字典形须同时给出 `first`（第一责任者）与 `rest`（其余责任者）两键、值各为 family-ahead / given-ahead——全体统一请写标量。收到 {got}",
-  "name-style.bad-value": "gb7714: `{param}.{key}` 收到值域外的值 {got}。各维值域：order = family-ahead / given-ahead（标量）或 (first:, rest:) 字典；family-case = auto / uppercase / lowercase / none；given-form = auto / none / initials / full；given-separator = auto / none / 任意字符串；given-case = none / uppercase / lowercase / capitalize-first / capitalize-each；given-initial-separator / family-given-separator / given-family-separator = auto / 任意字符串（case 与 given-separator 键的 none 是「不处理」，given-form 的 none 是「只姓」）。四个 -separator 维另收多语言字典 (zh: .., rest: ..)，按条目语言分设。",
+  "name-style.bad-value": "gb7714: `{param}.{key}` 收到值域外的值 {got}。各维值域：order = family-ahead / given-ahead（标量）或 (first:, rest:) 字典；family-case = auto / uppercase / lowercase / none；given-form = auto / none / initials / full / pinyin-initials；given-separator = auto / none / 任意字符串；given-case = none / uppercase / lowercase / capitalize-first / capitalize-each；given-initial-separator / family-given-separator / given-family-separator = auto / 任意字符串（case 与 given-separator 键的 none 是「不处理」，given-form 的 none 是「只姓」）。四个 -separator 维另收多语言字典 (zh: .., rest: ..)，按条目语言分设。",
 
   "bib-numbering-style.circled-dict": "gb7714: `{param}` 的字典形只收 `(circled: \"unicode\")` 或 `(circled: \"quan\")`（圈码的绘制引擎二级展开，其余样式无引擎可选请写标量）。收到 {got}",
 
@@ -93,7 +88,6 @@
   "sort-by.dict-size": "gb7714: `{param}` 的字典元素只能含一个键，如 `(date: \"descending\")`。收到 {got}",
   "sort-by.unknown-key": "gb7714: `{param}` 收到未知排序键 \"{key}\"；合法键：{keys}。\n文种是隐式的最高优先级键（GB/T 7714 9.3.2「先按文种集中」），不写进排序键数组；文种先后由 `entry-lang-order` 决定。",
   "sort-by.bad-order": "gb7714: `{param}` 里 \"{key}\" 的方向须是 {orders}，收到 {order}",
-
   "collapse-date.bad-value": "gb7714: `{param}` 只收 {allowed}，收到 {got}",
 
   "template.unclosed-literal": "gb7714: 模板 verbatim 花括号未闭合（缺少配对的 `}`）：{src}",
@@ -102,8 +96,7 @@
   "template.alias-no-right": "gb7714: 模板 `|` 缺右操作数",
   "template.unclosed-group": "gb7714: 模板条件组 `?<` / `&<` 未闭合（缺 `>`）",
   "template.unknown-token": "gb7714: 模板里的 token `{token}` 既不是内置标识，也不在 `custom-fields` / `custom-terms` 字典里。\n请检查拼写，或在 `gb7714(custom-fields: (..))`（带字段的 token）/ `gb7714(custom-terms: (..))`（本地化字面量）里声明。\n内置 token 速查见手册「自定义条目格式」一节。",
-
-  "template.guard-type-is-bib-field": "gb7714: 卫语句 `type={value}` 里的 `type` 现在指*bib 的 `type` 字段*（报告种类、学位类型），不再是文献类型标识码。。要按标识码判，写 `mark={value}`；要按载体码判，写 `medium=OL`。（真想匹配 `type` 字段值为「{value}」的条目，这条卫语句写不出来——那个值恰好是标识码，无法与误用区分。）",
+  "template.guard-type-is-bib-field": "gb7714: 卫语句 `type={value}` 里的 `type` 现在指*bib 的 `type` 字段*（报告种类、学位类型），不再是文献类型标识码。要按标识码判，写 `mark={value}`；要按载体码判，写 `medium=OL`。（真想匹配 `type` 字段值为「{value}」的条目，这条卫语句写不出来——那个值恰好是标识码，无法与误用区分。）",
   "template.guard-expected-field": "gb7714: 卫语句表达式里应是「字段=值」或光秃秃一个字段名（空非空），这里缺字段名（写法如 `<mark=M => …>` / `<doi => …>`）",
   "template.guard-ambiguous-or": "gb7714: 卫语句里 `{field}=…` 的 `?` 后面跟了一个裸 token 名 `{token}`——两种读法都说得通，写明白一点：\n1) 想问「这条目有没有 `{token}`」（空非空），把它包进尖括号：`{field}=… ? <{token}> => …`；\n2) 想把 `{token}` 当成 `{field}` 的候选*取值*，把它包进花括号（verbatim）：`{field}=…?{{token}} => …`。\n（`?` 在卫语句里身兼两职：算符「或」与同字段的「值或」。裸值不是 token 名时不会有这个歧义。）",
   "template.guard-expected-value": "gb7714: 卫语句字段 `{field}` 的 `=` 后缺值（值带空格或冒号请用花括号 verbatim，如 `t={10:30}`）",
@@ -160,9 +153,10 @@
   "shell.style-version-conflict": "gb7714: style 全名已含版本（{style-version}），与显式 version: {version} 矛盾。去掉 version 或改用短名 style + version 组合。",
   "shell.style-footnote-conflict": "gb7714: style 全名 *-note 即脚注制，与显式 note: none 矛盾。去掉 note 或改用短名 style + note 组合。",
   "shell.target-needs-015": "gb7714: `target:` / `group:` 参数需要 typst 0.15+（原生多 bibliography 路由）。typst 0.14 请用 `label:` + `set-bib-label` 实现多列表。",
-
   "shell.cite-unexpected-argument": "unexpected argument: {name}",
   "shell.cite-before-init": "gb7714: 调用 `#cite(..)` 之前必须先 `#show: gb7714(..)` 并写至少一个 `#bibliography(read(\"...\"))`。",
+  "shell.cite-adjacent-space-invalid": "gb7714: cite-adjacent-space 只收 auto / true / false，收到 {value}",
+  "shell.space-before-annotation-invalid": "gb7714: space-before-annotation 只收 auto / true / false，收到 {value}",
   "shell.cite-footnote-with-native": "gb7714: cite(note: \"foot\") 暂不能与原生 CSL 样式列表（ieee / apa / CSL 文件）混用；GB 轴的 target / group / 多表路由可以混用。",
 )
 

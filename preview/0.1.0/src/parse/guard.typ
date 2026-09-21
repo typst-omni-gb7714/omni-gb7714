@@ -13,7 +13,6 @@
         let peek-char = s.at(i)
         if peek-char == " " or peek-char == "\t" or peek-char == "\n" or peek-char == "\r" { whitespace-count += 1; i += 1 } else { break }
       }
-
       if tokens.len() > 0 and i < n {
         if whitespace-count == 1 { tokens.push(("sp",)) }
         else { tokens.push(("text", " " * (whitespace-count - 1))) }
@@ -27,7 +26,6 @@
       continue
     }
     if c == "{" {
-
       let j = i + 1
       let buffer = ""
       while j < n {
@@ -70,7 +68,6 @@
       i = j
       continue
     }
-
     let clusters = s.slice(i).clusters()
     if clusters.len() > 0 {
       let first-cluster = clusters.first()
@@ -119,7 +116,6 @@
   let op = none
   if i < nodes.len() and nodes.at(i) == ("punct", "=") { op = "eq"; i += 1 }
   else if i + 1 < nodes.len() and nodes.at(i) == ("punct", "!") and nodes.at(i + 1) == ("punct", "=") { op = "neq"; i += 2 }
-
   else { return (("present", fname), i) }
   i = _g-skip(nodes, i)
   let (v0, ni) = _g-read-value(nodes, i)
@@ -129,7 +125,6 @@
   while true {
     let p = _g-skip(nodes, i)
     if p < nodes.len() and nodes.at(p) == ("punct", "?") and not _g-is-field-start(nodes, p + 1) {
-
       let q = _g-skip(nodes, p + 1)
       if q < nodes.len() and nodes.at(q).at(0) == "ident" and nodes.at(q).at(1) in token-names {
         errors.raise("template.guard-ambiguous-or", field: fname, token: nodes.at(q).at(1))

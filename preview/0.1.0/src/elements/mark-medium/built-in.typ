@@ -12,7 +12,6 @@
     let v = field.get(entry, ast.at(1))
     return v != none and str(v).trim() != ""
   }
-
   let fname = ast.at(1); let op = ast.at(2); let values = ast.at(3)
   let actual = if fname == "entry-type" { entry.entry_type }
     else { let v = field.get(entry, fname); if v == none { "" } else { str(v) } }
@@ -79,7 +78,6 @@
   booklet: "M",
 
   standard: "S", newspaper: "N", webpage: "EB",
-
   map: "CM",
   unpublished: "Z", misc: "Z",
   suppbook: "Z", suppperiodical: "Z", suppcollection: "Z",
@@ -118,7 +116,6 @@
   if mark-field != none { return mark-field }
   let custom = entry.fields.at("_omni-mark-custom", default: none)
   if custom != none {
-
     if type(custom) == str and "=>" in custom {
       let resolved = _resolve-mark-guard(custom, entry)
       if resolved != none and resolved != "" { return resolved }
@@ -139,7 +136,6 @@
 #let known-marks = ("M", "C", "G", "N", "J", "D", "R", "S", "P", "DB", "CP", "EB", "A", "CM", "DS", "Z", "PP")
 
 #let base-mark(entry) = {
-
   if entry.entry_type == "preprint" or str(entry.fields.at("entrysubtype", default: "")) == "preprint" { return "PP" }
   let stored = entry.fields.at("_omni-mark-base", default: none)
   let code = if stored != none { str(stored) } else { str(mark(entry)) }
@@ -202,10 +198,8 @@
 #let medium(entry, show-url: true, version: 2015, online: auto) = {
   let medium-field = entry.fields.at("medium", default: none)
   if medium-field != none { return medium-field }
-
   let explicit = _explicit-medium(entry)
   if explicit != none { return explicit }
-
   if entry.entry_type in ONLINE-TYPES { return "OL" }
 
   let online = if online != auto { online }
@@ -216,12 +210,9 @@
 }
 
 #let render(entry, show-mark: true, show-medium: true, show-url: true, space-before-mark: false, version: 2015, online: auto, bracket-style: "half") = {
-
   if not gate(show-mark, entry, version: version, allow-online-only: false) { return "" }
   let show-url = gate(show-url, entry, version: version)
-
   let mark-code = mark(entry)
-
   if mark-code == "" { return "" }
   let medium-code = if show-medium { medium(entry, show-url: show-url, version: version, online: online) } else { none }
   let prefix = if space-before-mark { " " } else { "" }

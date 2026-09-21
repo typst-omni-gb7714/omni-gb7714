@@ -19,11 +19,9 @@
 
 #let _restore-backslash-linebreak(t) = {
   let s = t.replace(_SBS, "\\").replace(_SAMP, "&").replace(_SUND, "_").replace(_SHSH, "#").replace(_SPCT, "%").replace(_SCIRC, "^")
-
   if "{" in s or "}" in s { s = s.replace("{", "").replace("}", "") }
   s = s.replace(_SLBR, "{").replace(_SRBR, "}")
   if _SLB in s {
-
     let segments = s.split(_SLB)
     segments.enumerate().map(((i, segment)) => if i == 0 { segment } else { segment.trim(at: start) }).join(linebreak())
   } else { s }
@@ -57,13 +55,11 @@
     let m = out.slice(from).match(re)
     if m == none { break }
     let open = from + m.start
-
     if out.slice(0, open).trim(at: end).ends-with("=") { from = open + 1; continue }
     let span = _brace-span(out, open)
     let command = _DECL-TO-CMD.at(m.captures.at(0))
     let content = out.slice(from + m.end, span.at(0))
     out = out.slice(0, open) + "\\" + command + "{" + content + "}" + out.slice(span.at(1))
-
     from = open
   }
   out
@@ -77,7 +73,6 @@
   for (tag, cmd) in (("i", "textit"), ("b", "textbf"), ("sup", "textsuperscript"), ("sub", "textsubscript"), ("sc", "textsc")) {
     out = out.replace(regex("(?i)<" + tag + ">"), "\\" + cmd + "{").replace(regex("(?i)</" + tag + ">"), "}")
   }
-
   out = out.replace(regex("(?i)<span\\s+class=[\"']nocase[\"']\\s*>"), "{").replace(regex("(?i)</span>"), "}")
   out
 }
@@ -94,9 +89,7 @@
   bfseries: strong, bf: strong, itshape: emph, it: emph, em: emph, slshape: emph, sl: emph,
   scshape: smallcaps, sc: smallcaps,
   mdseries: none, upshape: none, normalfont: none, rmfamily: none, rm: none, selectfont: none,
-
   sffamily: none, sf: none,
-
   tiny: none, scriptsize: none, footnotesize: none, small: none, normalsize: none,
   large: none, Large: none, LARGE: none, huge: none, Huge: none,
 )
@@ -120,7 +113,6 @@
   textquoteleft: "\u{2018}", textquoteright: "\u{2019}",
   textendash: "\u{2013}", textemdash: "\u{2014}",
   quad: "\u{2003}", qquad: "\u{2003}\u{2003}", space: " ", thinspace: "\u{2009}",
-
   textdegree: "\u{00B0}", textmu: "\u{00B5}", texttimes: "\u{00D7}", textdiv: "\u{00F7}",
   textpm: "\u{00B1}", textminus: "\u{2212}", textonehalf: "\u{00BD}", textonequarter: "\u{00BC}",
   textthreequarters: "\u{00BE}", textnumero: "\u{2116}", textcelsius: "\u{2103}", textohm: "\u{2126}",
@@ -129,9 +121,7 @@
   textexclamdown: "\u{00A1}", textquestiondown: "\u{00BF}",
 
   textbraceleft: _SLBR, textbraceright: _SRBR,
-
   textunderscore: _SUND, textdollar: _SD,
-
   textpilcrow: "\u{00B6}", textperthousand: "\u{2030}", textpertenthousand: "\u{2031}",
   textbardbl: "\u{2016}", textlnot: "\u{00AC}", textlangle: "\u{2329}", textrangle: "\u{232A}",
   textleftarrow: "\u{2190}", textrightarrow: "\u{2192}", textuparrow: "\u{2191}", textdownarrow: "\u{2193}",
@@ -142,18 +132,14 @@
 
   ..PUNCT-MACROS,
 )
-
 #let _TEX-BREAK = ("newline", "linebreak", "par", "newblock")
-
 #let _TEX-PASSTHRU = (
   "mbox", "hbox", "vbox", "fbox", "makebox", "text", "protect", "frenchspacing",
   "bibstring", "selectlanguage", "foreignlanguage", "othername", "textln", "autocap", "bibhyphen",
 )
 
 #let TEX-DROP-ARG = ("noopsort", "sortname", "bibsort")
-
 #let _TEX-DROP-TOK = ("relax", "noindent", "verb", "ignorespaces", "unskip", "bibsentence", "noexpand", "bigskip", "medskip", "smallskip")
-
 #let _TEX-CTRL-SYM = (
   " ": " ", ",": "\u{2009}", ";": "\u{2005}", ":": "\u{2005}", "!": "",
   "-": "\u{00AD}", "/": "", ">": "", "<": "",
@@ -182,7 +168,6 @@
   let parts = ()
   let rest = s
   let buffer = ""
-
   let bad-command = none
   while rest.len() > 0 {
     let backslash-at = rest.position("\\")
@@ -192,27 +177,23 @@
     let command-word = after.match(regex("^[" + _LTR + "]+"))
     if command-word != none {
       let name = command-word.text
-
       let p = name.len()
       let absorbed = after.slice(p).find(regex("^\\s+"))
       if absorbed != none { p += absorbed.len() }
       let argpos = backslash-at + 1 + p
       let aftercmd = backslash-at + 1 + p
       if name == "ttfamily" or name == "tt" {
-
         if buffer != "" { parts.push(buffer); buffer = "" }
         let s = _restore-backslash-linebreak(rest.slice(argpos))
         parts.push(if type(s) == str { raw(s) } else { s })
         rest = ""; break
       } else if name in _TEX-DECL {
-
         if buffer != "" { parts.push(buffer); buffer = "" }
         let wrapper = _TEX-DECL.at(name)
         let inner = _command-scan(rest.slice(argpos))
         parts.push(if wrapper == none { inner } else { wrapper(inner) })
         rest = ""; break
       } else if name == "texttt" {
-
         if buffer != "" { parts.push(buffer); buffer = "" }
         let (arg, nxt) = _read-arg(rest, argpos)
         let s = _restore-backslash-linebreak(arg)
@@ -268,7 +249,6 @@
         }
       }
     } else {
-
       if after.len() == 0 { rest = "" } else {
         let ch = after.clusters().first()
         if ch in _TEX-CTRL-SYM { buffer += _TEX-CTRL-SYM.at(ch) }
@@ -293,7 +273,6 @@
   if not text.contains(_TRIVIAL-RE) { return text }
 
   if not text.contains("\\") and not text.contains("~") and not text.contains("$") and not text.contains("'") and not text.contains("`") {
-
     let bare = _bare-special(text)
     let restored = _restore-backslash-linebreak(text.replace(_SD, "$").replace(_ST, "~"))
     return if bare != none { _strict-wrap(restored, _special-message(bare), "gb7714-latex-strict-char") } else { restored }
@@ -306,7 +285,6 @@
   if text.contains("$") {
     let work = text.replace("\\$", _SD)
     if work.contains("$") {
-
       let _space-only-math = ("\\quad": "\u{2003}", "\\qquad": "\u{2003}\u{2003}", "\\,": "\u{2009}", "\\;": "\u{2005}", "\\:": "\u{2004}", "\\ ": " ", "\\!": "")
       let math-parts = ()
       let rest = work
