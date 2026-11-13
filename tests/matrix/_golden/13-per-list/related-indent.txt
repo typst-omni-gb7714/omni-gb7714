@@ -8,23 +8,23 @@
 
 正文：[1]
 [1] 张三. 中文原版[M]. 北京：中文社，2020.
-   Zhang S. English Version[M]. NY：EN Press，2020.
+    Zhang San. English Version[M]. NY：EN Press，2020.
 
 ▸ 0pt（第二行顶格）
 
 正文：[1]
 [1] 张三. 中文原版[M]. 北京：中文社，2020.
-   0ptZhang S. English Version[M]. NY：EN Press，2020.
+    0ptZhang San. English Version[M]. NY：EN Press，2020.
 
 ▸ 4em
 
 正文：[1]
 [1] 张三. 中文原版[M]. 北京：中文社，2020.
-   4emZhang S. English Version[M]. NY：EN Press，2020.
+    4emZhang San. English Version[M]. NY：EN Press，2020.
 
 ▸ auto · 著者-出版年制
 
 正文：（张三，2020）
 张三，2020. 中文原版[M]. 北京：中文社.
-Zhang S，2020. English Version[M]. NY：EN Press.
+Zhang San，2020. English Version[M]. NY：EN Press.
 

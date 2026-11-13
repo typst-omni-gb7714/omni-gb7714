@@ -1,5 +1,5 @@
 //! param: show-anon
-//! values: auto, true, false
+//! values: auto, true, false, dictionary
 #import "/tests/_fixture/probe.typ": *
 #show: spec.with(
   param: "show-anon",
@@ -11,6 +11,10 @@
     ——它是查找键，两侧分裂读者就在按责任者字顺排的表里定位不到。
     排序键 = 责任者位实际显示的内容：开着按占位词排（biblatex 实测：安(a) → 王(w) → 佚名(y) → 赵(zh)），
     关着顺延到题名。
+    *字典* `(numeric: .., "author-date": ..)` 逐制度覆盖：`(numeric: true)` 让顺序编码制的文献表也补佚名，
+    未列出的制度回落该制度的 auto 默认。
+    （*cite 侧全形态*——`default` / `prose` / `author` 都出佚名，且按 cite 制度解析、不被 numeric 文档压掉——
+    因 per-cite `form:` / `style:` 覆写在多用例文档里触发状态不收敛，不宜进本套件，改由直测覆盖。）
   ],
 )
 #case("auto · 著者-出版年制（→ true）", gb7714.with(style: "author-date"),
@@ -20,6 +24,8 @@
 #case("true · 顺序编码制", gb7714.with(show-anon: true),
   cites: (<bm-noauthor>, <bm-zh>), bib: MAIN, full: false)
 #case("false · 著者-出版年制", gb7714.with(style: "author-date", show-anon: false),
+  cites: (<bm-noauthor>, <bm-zh>), bib: MAIN, full: false)
+#case("字典 (numeric: true) · 顺序编码制（覆盖默认 → 文献表补佚名）", gb7714.with(show-anon: (numeric: true)),
   cites: (<bm-noauthor>, <bm-zh>), bib: MAIN, full: false)
 #case("排序键：开着按占位词排（佚名 y 落在 王 w 与 赵 zh 之间）",
   gb7714.with(style: "author-date", show-anon: true), bib: LANG, full: true, body: [])

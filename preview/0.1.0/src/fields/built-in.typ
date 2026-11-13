@@ -10,7 +10,7 @@
 #import "../category.typ"
 #import "../elements/date.typ"
 #import "../field.typ"
-#import "../elements/access.typ": access, has-visible-path
+#import "../elements/access.typ": access
 #import "../drivers/built-in.typ" as built-in-driver
 
 #let built-in-token-names = (
@@ -25,15 +25,6 @@
   "imprint-block", "mark", "mark-medium", "medium", "note", "access",
   "doi", "cstr", "isbn", "issn", "eprint", "eprinttype", "archiveprefix", "url",
   "type", "keywords", "scale", "dimensions", "eventtitle", "degree-annotation",
-)
-
-#let online(entry, opts) = has-visible-path(
-  entry,
-  show-url: opts.show-url,
-  show-pid: opts.at("show-pid", default: (:)),
-  custom-pids: opts.at("custom-pids", default: (:)),
-  dedup-url-pid: opts.at("dedup-url-pid", default: true),
-  version: opts.version,
 )
 
 #let resolve-built-in-token(name, entry, opts) = {
@@ -82,10 +73,10 @@
   if name == "subtitle" { return punct.field-text(entry, "subtitle", correct-punct: opts.correct-punct, punct-style: opts.punct-style) }
   if name == "titleaddon" { return punct.field-text(entry, "titleaddon", correct-punct: opts.correct-punct, punct-style: opts.punct-style) }
   if name == "title-block" {
-    return titles.format(entry, online: online(entry, opts), show-mark: opts.show-mark, show-medium: opts.show-medium, show-url: opts.show-url, space-before-mark: opts.space-before-mark, hyperlink-title: opts.hyperlink-title, correct-punct: opts.correct-punct, punct-style: opts.punct-style, custom-punct: opts.custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: opts.version, volume-title-gutter: opts.at("volume-title-gutter", default: auto))
+    return titles.format(entry, show-mark: opts.show-mark, show-medium: opts.show-medium, space-before-mark: opts.space-before-mark, hyperlink-title: opts.hyperlink-title, correct-punct: opts.correct-punct, punct-style: opts.punct-style, custom-punct: opts.custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: opts.version, volume-title-gutter: opts.at("volume-title-gutter", default: auto))
   }
   if name == "component-part-title-block" {
-    return titles.format(entry, is-component-part: true, online: online(entry, opts), show-mark: opts.show-mark, show-medium: opts.show-medium, show-url: opts.show-url, space-before-mark: opts.space-before-mark, hyperlink-title: opts.hyperlink-title, correct-punct: opts.correct-punct, punct-style: opts.punct-style, custom-punct: opts.custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: opts.version, volume-title-gutter: opts.at("volume-title-gutter", default: auto))
+    return titles.format(entry, is-component-part: true, show-mark: opts.show-mark, show-medium: opts.show-medium, space-before-mark: opts.space-before-mark, hyperlink-title: opts.hyperlink-title, correct-punct: opts.correct-punct, punct-style: opts.punct-style, custom-punct: opts.custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: opts.version, volume-title-gutter: opts.at("volume-title-gutter", default: auto))
   }
   if name == "mark" {
     if not mark-medium.gate(opts.show-mark, entry, version: opts.version, allow-online-only: false) { return none }
@@ -95,10 +86,10 @@
   }
   if name == "medium" {
     if not opts.show-medium { return none }
-    return mark-medium.medium(entry, show-url: mark-medium.gate(opts.show-url, entry, version: opts.version), version: opts.version, online: online(entry, opts))
+    return mark-medium.medium(entry, version: opts.version)
   }
   if name == "mark-medium" {
-    let mark-text = mark-medium.render(entry, show-mark: opts.show-mark, show-medium: opts.show-medium, show-url: opts.show-url, space-before-mark: opts.space-before-mark, version: opts.version, online: online(entry, opts), bracket-style: opts.at("mark-medium-bracket-style", default: "half"))
+    let mark-text = mark-medium.render(entry, show-mark: opts.show-mark, show-medium: opts.show-medium, space-before-mark: opts.space-before-mark, version: opts.version, bracket-style: opts.at("mark-medium-bracket-style", default: "half"))
     if mark-text == "" { return none }
     return mark-text
   }
@@ -146,6 +137,7 @@
     return publication-date.year(entry)
   }
   if name == "date" {
+    if category.is-platform-form(entry, version: opts.version) { return date.modified(entry, fallback-year: true) }
     if opts.skip-date { return none }
     return publication-date.date(entry)
   }

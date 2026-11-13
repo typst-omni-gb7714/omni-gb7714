@@ -1,5 +1,20 @@
 #import "sentinel.typ": *
 
+#let _stable-dict-order(value) = {
+  if type(value) == dictionary {
+    let result = (:)
+    for key in value.keys().sorted() { result.insert(key, _stable-dict-order(value.at(key))) }
+    result
+  } else if type(value) == array { value.map(_stable-dict-order) }
+  else { value }
+}
+
+#let stable-name-entry(entry) = {
+  let result = entry
+  if "parsed_names" in result { result.parsed_names = _stable-dict-order(result.parsed_names) }
+  result
+}
+
 #let get(entry, key) = {
   let value = entry.fields.at(key, default: none)
   if type(value) == str and value.trim() == "" { return none }

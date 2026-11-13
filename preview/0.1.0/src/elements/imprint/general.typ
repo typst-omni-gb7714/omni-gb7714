@@ -1,11 +1,11 @@
 #import "../../field.typ"
 #import "../../terms/built-in.typ" as terms
-#import "../../punct/built-in.typ" as punct
 #import "../mark-medium/built-in.typ" as mark-medium
 #import "../../category.typ"
 #import "location.typ": location
 #import "publisher.typ": publisher, platform
 #import "date.typ" as publication-date
+#import "../../punct/built-in.typ": get as _punct-get, field-text as _field-text
 
 #let _missing-set = (
   "[S.l.]", "[s.l.]", "[S. l.]", "[S.L.]",
@@ -38,11 +38,11 @@
 }
 
 #let format(entry, show-sine-loco: auto, show-sine-nomine: auto, show-sine-anno: false, skip-date: false, date-suffix: "", use-full-date: false, date-override: auto, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), version: 2015) = {
-  let p = name => punct.get(name, entry, punct-style, custom-punct)
+  let p = name => _punct-get(name, entry, punct-style, custom-punct)
   let _mark-early = mark-medium.mark(entry)
 
   {
-    let _report-has-location = (not is-missing(punct.field-text(entry, "location"))) or (not is-missing(punct.field-text(entry, "address")))
+    let _report-has-location = (not is-missing(_field-text(entry, "location"))) or (not is-missing(_field-text(entry, "address")))
     if version == 2025 and _mark-early == "R" and not _report-has-location {
       let date-value = publication-date.date(entry)
       if date-value != none { return date-value }

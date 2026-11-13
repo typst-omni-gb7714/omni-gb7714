@@ -1,5 +1,7 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 #import "/lib.typ": *
-#show: gb7714(version: 2015, cite-footnote: true, footnote-repeat-style: "full")
+#show: gb7714(version: 2015, note: "foot", note-repeat-style: "full")
 注引 @k1 再注 @k2 。
 #bibliography("@book{k1, author={Alpha, A}, title={T1}, publisher={P}, year={2020}}
 @book{k2, author={Beta, B}, title={T2}, publisher={Q}, year={2021}}

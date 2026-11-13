@@ -1,61 +1,59 @@
  联动：脚注制的梯子
  重复引用的四个参数交叉出各家有据体例。
- 期望 首次恒完整著录。之后两参正交： footnote-ibid（紧邻位）× footnote-repeat-style（隔开位）。
- • true × "number" = 官方 note CSL 的梯子（缺省）：同上 → 同③；
+ 期望 首次恒完整著录。之后两参正交： note-ibid（紧邻位）× note-repeat-style（隔开位）。
+ • true × "number" = 2015 note CSL 的梯子：同上 → 同③（note-ibid: auto 在 version: 2015 得此；version: 2025 缺省转
+   false，全程「同③」        ）；
  • false × "full" = GB §9.2.1.3 纯重复著录；
  • false × "shortened" = Chicago 17th 全缩略；
  • true × "full" = 紧邻同上、隔开重著。
 
- footnote-repeat-reset 加一道界：界后首引重新完整著录，「同③」只在本域找注号。 cite-merge 决定相邻引用是否合成一
- 个脚注。      ⚠️   "reuse" 不发新注（正文复用首注号），装不下页码，且不受重置界影响。
+ note-repeat-reset 加一道界：界后首引重新完整著录，「同③」只在本域找注号。 cite-merge 决定相邻引用是否合成一个脚
+ 注。 ⚠️ "reuse" 不发新注（正文复用首注号），装不下页码，且不受重置界影响。
 
 
-▸ ibid: true × repeat: number（官方 note CSL，缺省）
+▸ version 2015 缺省（ibid auto=true × number）：同上 → 同③
 
 首① 邻② 换③ 隔④ 页码⑤。
-[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
-[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
 
-▸ ibid: false × repeat: full（GB 纯重复著录）
+▸ version 2025 缺省（ibid auto=false × number）：全程同③
 
 首⑥ 邻⑦ 换⑧ 隔⑨ 页码⑩。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 
-▸ ibid: false × repeat: shortened（Chicago 17th）
+▸ ibid: false × repeat: full（GB 纯重复著录）
 
 首⑪ 邻⑫ 换⑬ 隔⑭ 页码⑮。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 
-▸ ibid: true × repeat: full（紧邻同上、隔开重著）
+▸ ibid: false × repeat: shortened（Chicago 17th）
 
 首⑯ 邻⑰ 换⑱ 隔⑲ 页码⑳。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 
-▸ ibid: true × repeat: shortened
+▸ ibid: true × repeat: full（紧邻同上、隔开重著）
 
 首㉑ 邻㉒ 换㉓ 隔㉔ 页码㉕。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 
+▸ ibid: true × repeat: shortened
+
+首㉖ 邻㉗ 换㉘ 隔㉙ 页码㉚。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
 ▸ repeat: reuse（不发新注、装不下页码）
 
-首① 邻㉖ 换③ 隔① 页码㉗。
+首① 邻① 换③ 隔① 页码①。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 
 ▸ + 章界（界后重新完整著录）
-
-甲章
-首㉘ 邻㉙。
-
-乙章
-又引㉚。
-[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
-
-▸ + 章界 × repeat: reuse（复用不受界影响）
 
 甲章
 首㉛ 邻㉜。
@@ -64,92 +62,105 @@
 又引㉝。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 
+▸ + 章界 × repeat: reuse（复用不受界影响）
+
+甲章
+首㉞ 邻①。
+
+乙章
+又引㉟。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+
 ▸ cite-merge: true（相邻引用合成一个脚注）
 
-合注㉞ 再引㉟。
+合注㊱ 再引㊲。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 
 ▸ cite-merge: false（各发各的脚注）
 
-分注㊱㊲ 再引㊳。
+分注㊳㊴ 再引㊵。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 
  ①
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+   张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
  ②
    同上.
  ③
-   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+   SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
  ④
    同①.
  ⑤
-   同上：88.
+   同上: 88.
  ⑥
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+   同①.
  ⑦
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+   同①.
  ⑧
-   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+   See note ③.
  ⑨
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+   同①.
  ⑩
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：88.
+   同①：88.
  ⑪
-   张三，李四，王五，等. 中文专著示例：副标题[M].
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
  ⑫
-   张三，李四，王五，等. 中文专著示例：副标题[M].
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
  ⑬
-   Smith J，Doe J，Roe R，et al. English Book Example[M].
- ⑭
-   张三，李四，王五，等. 中文专著示例：副标题[M].
- ⑮
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 88.
- ⑯
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
- ⑰
-   同上.
- ⑱
    Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
- ⑲
+ ⑭
    张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
- ⑳
-   同上：88.
- ㉑
+ ⑮
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：88.
+ ⑯
    张三，李四，王五，等. 中文专著示例：副标题[M].
+ ⑰
+   张三，李四，王五，等. 中文专著示例：副标题[M].
+ ⑱
+   Smith J，Doe J，Roe R，et al. English Book Example[M].
+ ⑲
+   张三，李四，王五，等. 中文专著示例：副标题[M].
+ ⑳
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 88.
+ ㉑
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
  ㉒
    同上.
  ㉓
-   Smith J，Doe J，Roe R，et al. English Book Example[M].
+   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
  ㉔
-   张三，李四，王五，等. 中文专著示例：副标题[M].
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
  ㉕
    同上：88.
  ㉖
-   同上.
+   张三，李四，王五，等. 中文专著示例：副标题[M].
  ㉗
-   同上：88.
- ㉘
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
- ㉙
    同上.
+ ㉘
+   Smith J，Doe J，Roe R，et al. English Book Example[M].
+ ㉙
+   张三，李四，王五，等. 中文专著示例：副标题[M].
  ㉚
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+   同上：88.
  ㉛
    张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
  ㉜
-   同上.
+   同㉛.
  ㉝
    张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
  ㉞
-   同上；See note ③.
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
  ㉟
-   同①.
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
  ㊱
-   同上.
+   同①；See note ③.
  ㊲
-   See note ③.
+   同①.
  ㊳
+   同①.
+ ㊴
+   See note ③.
+ ㊵
    同①.
 

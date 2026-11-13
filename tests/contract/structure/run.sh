@@ -10,6 +10,7 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 ROOT="$(cd ../../.. && pwd)"
+source "$ROOT/tests/fonts/env.sh" || exit 1
 TYPST="${TYPST:-typst}"
 TMPD="$(mktemp -d)"; trap 'rm -rf "$TMPD"' EXIT
 pass=0; fail=0
@@ -41,6 +42,38 @@ else
   echo "   ❌ grid-cell-postprocess 编译失败"; fail=$((fail+1))
 fi
 
+# ④ 两端对齐：条目行顶到内容区右缘。
+#    文本 golden 看不见对齐——`pdftotext -layout` 落的是字符网格，行尾差半个字它照样一模一样。
+#    这里量真几何：页宽 300pt、边距 20pt，内容区右缘 = 280pt；条目里有一长串挤不下的数字，
+#    断行只能落在它前面，留下的空当必须由两端对齐吃掉。内容列若是 `auto`（取最长行的自然宽度），
+#    列宽会被这个早断点压窄，最宽的行只到 ~236pt。
+jf_max=$($TYPST compile --root "$ROOT" justify-flush.typ "$TMPD/jf.pdf" >/dev/null 2>"$TMPD/jf.err" \
+  && pdftotext -bbox "$TMPD/jf.pdf" - 2>/dev/null \
+  | grep -o 'xMax="[0-9.]*"' | sed 's/[^0-9.]//g' | sort -g | tail -1)
+if [ -z "$jf_max" ]; then
+  echo "   ❌ 两端对齐：justify-flush.typ 编译或取数失败"; sed 's/^/      /' "$TMPD/jf.err" | head -2; fail=$((fail+1))
+elif awk -v v="$jf_max" 'BEGIN{exit !(v>=278)}'; then
+  echo "   ✅ 两端对齐：条目行顶到内容区右缘（最右 ${jf_max}，右缘 280）"; pass=$((pass+1))
+else
+  echo "   ❌ 两端对齐：最宽的行只到 ${jf_max}，没顶到内容区右缘 280（内容列宽被最长行的自然宽度压窄了）"; fail=$((fail+1))
+fi
+
+# ⑤ 编号列对齐：每条编号的左缘落在同一条竖线上。
+#    `number-width: auto` 只量末号时，Times 的「11」字距对让 `［11］` 比 `［10］` 窄，列宽塞不下 `［10］`，
+#    行首全角括号被压半格、那一条独自左探 6pt。文本 golden 看不见半格。这里取所有以「［」起头的词的
+#    xMin，断言全相等（容差 0.1pt）。
+ncf_xs=$($TYPST compile --root "$ROOT" number-column-flush.typ "$TMPD/ncf.pdf" >/dev/null 2>"$TMPD/ncf.err" \
+  && pdftotext -bbox "$TMPD/ncf.pdf" - 2>/dev/null \
+  | grep -o 'xMin="[0-9.]*"[^>]*>［' | grep -o 'xMin="[0-9.]*"' | sed 's/[^0-9.]//g' | sort -g | uniq)
+ncf_n=$(printf '%s\n' "$ncf_xs" | grep -c .)
+if [ -z "$ncf_xs" ]; then
+  echo "   ❌ 编号列对齐：number-column-flush.typ 编译或取数失败"; sed 's/^/      /' "$TMPD/ncf.err" | head -2; fail=$((fail+1))
+elif [ "$ncf_n" -eq 1 ] || awk -v lo="$(printf '%s\n' "$ncf_xs" | head -1)" -v hi="$(printf '%s\n' "$ncf_xs" | tail -1)" 'BEGIN{exit !(hi-lo<0.1)}'; then
+  echo "   ✅ 编号列对齐：11 条编号左缘同一竖线（x=$(printf '%s' "$ncf_xs" | head -1)）"; pass=$((pass+1))
+else
+  echo "   ❌ 编号列对齐：编号左缘不齐，出现了 $ncf_n 个不同的 x：$(printf '%s' "$ncf_xs" | tr '\n' ' ')（列宽只量了末号？）"; fail=$((fail+1))
+fi
+
 # ③ HTML 语义标签。
 html-has() {
   local label="$1" file="$2"; shift 2
@@ -58,6 +91,21 @@ html-has "HTML 语义 · 著者-出版年制" html-semantic-ay.typ \
   '<section role="doc-bibliography" class="hanging-indent"' '<ul style="list-style-type: none"'
 html-has "HTML 语义 · 条目反跳（back-ref）" html-backref.typ \
   'role="doc-biblioref"' 'role="doc-backlink"'
+
+# ④ label-only 多列表过滤：只用 cite(bib-label:) + bibliography(label:)、不调 set-bib-label 时，
+#    每张命名表仍只打属于自己的条目。作者名各出现*一次*（各在自己表）；bug 时出现*两次*（两表都打）。
+if $TYPST compile --root "$ROOT" label-only-multibib.typ "$TMPD/lo.pdf" >/dev/null 2>"$TMPD/lo.err"; then
+  t=$(pdftotext "$TMPD/lo.pdf" - 2>/dev/null)
+  naa=$(grep -o 'Qxaa' <<<"$t" | wc -l | tr -d ' ')
+  nzz=$(grep -o 'Qxzz' <<<"$t" | wc -l | tr -d ' ')
+  if [ "$naa" = 1 ] && [ "$nzz" = 1 ]; then
+    echo "   ✅ label-only 多列表：各表只打自己的条目（Qxaa=${naa} Qxzz=${nzz}，都是 1）"; pass=$((pass+1))
+  else
+    echo "   ❌ label-only 多列表过滤失效（Qxaa=${naa} Qxzz=${nzz}，都该是 1；=2 即两表都打全部）"; fail=$((fail+1))
+  fi
+else
+  echo "   ❌ label-only-multibib 编译失败"; fail=$((fail+1))
+fi
 
 echo "   ─────"
 [ "$fail" -eq 0 ] && { echo "   ✅ $pass 项结构不变量全部成立"; exit 0; }

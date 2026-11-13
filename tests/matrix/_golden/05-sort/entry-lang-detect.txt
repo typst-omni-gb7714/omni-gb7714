@@ -11,31 +11,34 @@
 
 ▸ "auto"（缺省）
 
-正文：（张三，2020；张三，李四等，2020；张三，Smith，2020；田中太郎他，2019；Smith et al.，2021；Dupont et al.，2016）
+正文：（张三，2020；张三，李四等，2020；张三，Smith，2020；田中太郎ほか，2019；Smith et al.，2021；Dupont et al.，
+2016）
 张三，2020. 没有 langid 字段的中文书[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
 
 ▸ "fast"
 
-正文：（张三，2020；张三，李四等，2020；张三，Smith，2020；田中太郎他，2019；Smith et al.，2021；Dupont et al.，2016）
+正文：（张三，2020；张三，李四等，2020；张三，Smith，2020；田中太郎ほか，2019；Smith et al.，2021；Dupont et al.，
+2016）
 张三，2020. 没有 langid 字段的中文书[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
 
 ▸ "accurate"
 
-正文：（张三，2020；张三，李四等，2020；张三，Smith，2020；田中太郎他，2019；Smith et al.，2021；Dupont et al.，2016）
+正文：（张三，2020；张三，李四等，2020；张三，Smith，2020；田中太郎ほか，2019；Smith et al.，2021；Dupont et al.，
+2016）
 张三，2020. 没有 langid 字段的中文书[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
 

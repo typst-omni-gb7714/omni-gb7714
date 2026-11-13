@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 // 原生基准：原生 CSL 流派(springer-vancouver)正文引用，标记前后空白由原生 CSL 决定。
 #set page(width: 300pt, height: auto, margin: 10pt)
 文本before #cite(<a>) 文本after.

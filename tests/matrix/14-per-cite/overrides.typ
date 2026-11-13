@@ -4,9 +4,9 @@
 #show: spec.with(param: "cite(..) 逐次覆盖", controls: "`#cite()` 的同名参数覆盖全局 / 列表，`auto` 继承。",
   expect: [本文件*逐个*走一遍 `cite()` 的可覆盖参数：每块把*全局*设成一个值、把*本次引用*设成另一个值，
     正文标注里印出来的必须是*本次*那个值。缺省 `auto` 表示「继承列表 / 全局」。
-    覆盖链：**`cite` 显式 > `bibliography` 逐表 > `gb7714` 全局**。
+    覆盖链：*`cite` 显式 > `bibliography` 逐表 > `gb7714` 全局*。
     ⚠️ `custom-drivers` / `custom-terms` / `custom-fields` / `custom-pids` / `show-pid` / `pid-priority` /
-    `dedup-url-pid` / `show-annotation` 与四个 `footnote-*` 参数*只在 `footnote: true` 时生效*
+    `dedup-url-pid` / `show-annotation` 与四个 `footnote-*` 参数*只在 `note: "foot"` 时生效*
     （见 `footnote-only.typ`）——正文标注里没有著录可言。])
 #let mixed = bytes(read("/tests/_fixture/main.bib") + read("/tests/_fixture/edge.bib"))
 #case("bib-label（临时归属到命名列表 x）", gb7714.with(), bib: mixed, full: false, body: [
@@ -33,4 +33,4 @@
 #cite-only("sort-by", gb7714.with(style: "author-date", cite-sort-by: none), bib: mixed, body: [全局档 #cite(<bm-zh>, <bm-en>, <aj-zh>, <aj-en>)；本次覆盖 #cite(<bm-zh>, <bm-en>, <aj-zh>, <aj-en>, sort-by: ("date",))。])
 #cite-only("sort-zh-by", gb7714.with(style: "author-date", cite-sort-by: ("name",)), bib: LANG, body: [全局档 #cite(<sort-zh-1>, <sort-zh-2>, <sort-zh-3>, <sort-zh-4>)；本次覆盖 #cite(<sort-zh-1>, <sort-zh-2>, <sort-zh-3>, <sort-zh-4>, sort-zh-by: "bihua")。])
 #cite-only("collapse-date", gb7714.with(style: "author-date", cite-collapse-date: false), bib: mixed, body: [全局档 #cite(<nm-same-a>, <nm-same-b>)；本次覆盖 #cite(<nm-same-a>, <nm-same-b>, collapse-date: true)。])
-#case("footnote（本次走脚注）", gb7714.with(cite-footnote: false), bib: mixed, full: false, body: [行内引用 #cite(<aj-zh>)，脚注引用 #cite(<bm-zh>, footnote: true)。])
+#case("note（本次走脚注）", gb7714.with(note: none), bib: mixed, full: false, body: [行内引用 #cite(<aj-zh>)，脚注引用 #cite(<bm-zh>, note: "foot")。])

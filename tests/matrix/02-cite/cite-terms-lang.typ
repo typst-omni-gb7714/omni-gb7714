@@ -18,5 +18,5 @@
 #cite-only("强制 fr", gb7714.with(style: "author-date", cite-terms-lang: "fr", cite-et-al-min: 2, cite-et-al-use-first: 1), bib: LANG, cites: cs)
 #cite-only("强制 de", gb7714.with(style: "author-date", cite-terms-lang: "de", cite-et-al-min: 2, cite-et-al-use-first: 1), bib: LANG, cites: cs)
 #cite-only("字典 · (et-al: by-doc)——只让截断词跟文档语言", gb7714.with(style: "author-date", cite-terms-lang: (et-al: "by-doc"), cite-et-al-min: 2, cite-et-al-use-first: 1), bib: LANG, cites: cs)
-#case("字典 · (ibid: by-doc)——只让脚注引语词跟文档语言", gb7714.with(cite-footnote: true, cite-terms-lang: (ibid: "by-doc")), bib: LANG, full: false,
+#case("字典 · (ibid: by-doc)——只让脚注引语词跟文档语言", gb7714.with(note: "foot", cite-terms-lang: (ibid: "by-doc")), bib: LANG, full: false,
   body: [首 #cite(<lg-en>) 邻 #cite(<lg-en>) 换 #cite(<lg-zh>) 隔 #cite(<lg-en>)。])

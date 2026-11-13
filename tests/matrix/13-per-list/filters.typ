@@ -5,7 +5,7 @@
   expect: [- `entry-type`：按 `.bib` 条目类型过滤，收单值或数组（`"book"` / `("book", "article")`）；
     - `mark`：按*文献类型标识*过滤（`"M"` / `("C", "G")`）——按码而非按类型，与 `custom-marks` 登记的自造码通用；
     - `filter`：自定义函数 `entry => bool`，拿到的是条目对象；
-    - `keys`：只渲染点名的条目，传内容块 `[@k1@k2]`，*按书写顺序*；
+    - `keys`：只渲染点名的条目，*按书写顺序*；两形等价——内容块 `[@k1@k2]`，或字符串数组 `("k1", "k2")`（程序化列表更方便，数组内部归一为引用后同样校验）；
     - `keyword`：按 `keywords` 字段*子串*匹配。
     过滤器与 `full` 正交：`full: true` 先取全表、再过滤。多个过滤器同时给时逐个收窄（取交集）。])
 #let mixed = bytes(read("/tests/_fixture/main.bib") + read("/tests/_fixture/edge.bib"))
@@ -17,5 +17,6 @@
 #one("mark: (\"D\", \"S\")", (mark: ("D", "S")))
 #one("filter: 自定义函数（只留有 doi 字段的；拿到的是条目对象，键在外层、不在 `e` 上）", (filter: e => "doi" in e.fields))
 #one("keys: [@st-zh@bm-en]（点名 + 书写序）", (keys: [@st-zh@bm-en]))
+#one("keys: (\"st-zh\", \"bm-en\")（字符串数组，与内容块等价）", (keys: ("st-zh", "bm-en")))
 #one("keyword: \"示例关键词\"", (keyword: "示例关键词"))
 #one("组合：entry-type book + filter 有 url", (entry-type: "book", filter: e => "url" in e.fields))

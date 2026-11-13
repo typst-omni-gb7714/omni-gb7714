@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 // 0.15：omni 每个 #bibliography 只发*一个* std.bibliography（日期解析/路由 + 渲染合并），使 query / 包裹类
 //   原生操作只命中一次、无空框漏出。断言 query(std.bibliography).len()==2（两个列表各一个，不是各两个）。见 run.sh。
 #import "/lib.typ": *

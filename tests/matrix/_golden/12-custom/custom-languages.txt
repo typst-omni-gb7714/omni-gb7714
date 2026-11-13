@@ -1,0 +1,46 @@
+ custom-languages
+ 注册*新语言码*，让内置识别外的语种（德文等）能出自己的本地化术语。
+ 期望 GB 文献表主体恒为中文，本参只影响西文条目的术语字面量（编/译/佚名 等），不改标点字距。 形态 (<语言码>:
+ (<langid 别名>, ...))：键=自创码（不得撞内置 zh/ja/ko/ru/fr/en）；值=别名字符串或数组。 条目 langid / language 域写这
+ 些别名（或码本身）即归到该码，区域后缀自动剥离（de-DE → de）。
+ • 内置已为 de 预置「佚名 = o. A.」「无日期 = o. J.」——注册 de 即点亮这些兜底；其余术语用 custom-terms 逐词补
+  （(editor: (de: "Hrsg."))）。
+ • 新码一律按西文处理（非 CJK，不触发全角标点 / 中文字距）；自动检测猜不出西文具体语种， 故仅对显式标注 langid 的
+   条目生效。缺 langid 的条目不受影响。
+
+
+▸ (:)（缺省：langid=german 不识别，落西文按 en 出术语 ed./Anon）
+
+[1] Müller H. Deutsches Buch[M]. Schmidt A，ed. Berlin：Verlag，2020.
+[2] Anon. Anonymes Werk[M]. München：Verlag，2019.
+[3] Weber K. Werk mit Code[M]. Bonn：Verlag，2018.
+[4] Smith J. English Book[M]. Doe J，ed. London：Press，2021.
+
+▸ 注册 de：(de: ("german", "deu"))（点亮内置兜底佚名 o. A.）
+
+[1] Müller H. Deutsches Buch[M]. Schmidt A，ed. Berlin：Verlag，2020.
+[2] o. A. Anonymes Werk[M]. München：Verlag，2019.
+[3] Weber K. Werk mit Code[M]. Bonn：Verlag，2018.
+[4] Smith J. English Book[M]. Doe J，ed. London：Press，2021.
+
+▸ de + custom-terms 逐词补德文编者 Hrsg.
+
+[1] Müller H. Deutsches Buch[M]. Schmidt A，Hrsg. Berlin：Verlag，2020.
+[2] o. A. Anonymes Werk[M]. München：Verlag，2019.
+[3] Weber K. Werk mit Code[M]. Bonn：Verlag，2018.
+[4] Smith J. English Book[M]. Doe J，ed. London：Press，2021.
+
+▸ 区域后缀剥离：langid=de-DE 命中 de（cl-de2 出 o. A.）
+
+[1] Müller H. Deutsches Buch[M]. Schmidt A，ed. Berlin：Verlag，2020.
+[2] o. A. Anonymes Werk[M]. München：Verlag，2019.
+[3] Weber K. Werk mit Code[M]. Bonn：Verlag，2018.
+[4] Smith J. English Book[M]. Doe J，ed. London：Press，2021.
+
+▸ 码本身作 langid：langid=de 命中（无需列进别名）
+
+[1] Müller H. Deutsches Buch[M]. Schmidt A，ed. Berlin：Verlag，2020.
+[2] o. A. Anonymes Werk[M]. München：Verlag，2019.
+[3] Weber K. Werk mit Code[M]. Bonn：Verlag，2018.
+[4] Smith J. English Book[M]. Doe J，ed. London：Press，2021.
+

@@ -1,0 +1,31 @@
+  mark-medium-bracket-style
+  文献类型标识的方括号半 / 全角。
+  期望 half（缺省）：[M]、[EB/OL]——GB 各版标准。full：［M］、［EB/OL］——全角方括号， 与 CJK 正文视觉统一时用。
+  块内斜杠 /（[EB/OL] 那个）恒半角，不随此参数切换。 只作用于 mark-medium 这个封装 token；custom-drivers 里的裸
+  mark / medium token 不受它管。 改成全角是偏离 GB 标准的排版选择。
+
+
+▸ half（缺省）
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[3] 沈七. 网页示例[EB/OL]. （2023-05-01）[2024-01-15]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​p​a​g​e.
+
+▸ full
+
+正文：[1-3]
+[1] 张三，李四，王五，等. 中文专著示例：副标题［M］. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example［M］. 2nd ed. New York：Example Press，2021：30-45.
+[3] 沈七. 网页示例［EB/OL］. （2023-05-01）[2024-01-15]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​p​a​g​e.
+
+▸ full + 裸 mark token 的自定义驱动（不受它管）
+
+正文：[1]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 示例出版社，2020.
+
+▸ full + mark-medium token 的自定义驱动（受它管）
+
+正文：[1]
+[1] 张三，李四，王五，等. 中文专著示例：副标题［M］. 示例出版社，2020.
+

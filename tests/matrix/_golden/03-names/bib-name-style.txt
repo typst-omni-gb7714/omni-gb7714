@@ -7,7 +7,7 @@
 ▸ auto（缺省）
 
 正文：[1-4]
-[1] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
+[1] van der Berg J，de la Cruz M. Name Prefix[M]. NY：P，2020.
 [2] King J Martin Luther，Ford I Henry. Name Suffix[M]. NY：P，2020.
 [3] Picard J-L，Watson M-J. Hyphenated Given[M]. NY：P，2020.
 [4] 李四. 条目级 nameformat[M]. 北京：社，2020.
@@ -15,7 +15,7 @@
 ▸ given-form: full
 
 正文：[1-4]
-[1] Berg Jan v d，Cruz Maria d l. Name Prefix[M]. NY：P，2020.
+[1] van der Berg Jan，de la Cruz Maria. Name Prefix[M]. NY：P，2020.
 [2] King Jr. Martin Luther，Ford II Henry. Name Suffix[M]. NY：P，2020.
 [3] Picard Jean-Luc，Watson Mary-Jane. Hyphenated Given[M]. NY：P，2020.
 [4] 李四. 条目级 nameformat[M]. 北京：社，2020.
@@ -23,7 +23,7 @@
 ▸ given-form: none（只姓）
 
 正文：[1-4]
-[1] Berg v d，Cruz d l. Name Prefix[M]. NY：P，2020.
+[1] van der Berg，de la Cruz. Name Prefix[M]. NY：P，2020.
 [2] King Martin Luther，Ford Henry. Name Suffix[M]. NY：P，2020.
 [3] Picard，Watson. Hyphenated Given[M]. NY：P，2020.
 [4] 李四. 条目级 nameformat[M]. 北京：社，2020.
@@ -39,7 +39,7 @@
 ▸ order 字典 (first:, rest:)
 
 正文：[1-4]
-[1] Berg Jan v d，Maria de la Cruz. Name Prefix[M]. NY：P，2020.
+[1] van der Berg Jan，Maria de la Cruz. Name Prefix[M]. NY：P，2020.
 [2] King Jr. Martin Luther，II Ford Henry. Name Suffix[M]. NY：P，2020.
 [3] Picard Jean-Luc，Mary-Jane Watson. Hyphenated Given[M]. NY：P，2020.
 [4] 李四. 条目级 nameformat[M]. 北京：社，2020.
@@ -47,7 +47,7 @@
 ▸ family-case: uppercase / lowercase / none
 
 正文：[1-4]
-[1] berg J v d，cruz M d l. Name Prefix[M]. NY：P，2020.
+[1] van der berg J，de la cruz M. Name Prefix[M]. NY：P，2020.
 [2] king J Martin Luther，ford I Henry. Name Suffix[M]. NY：P，2020.
 [3] picard J-L，watson M-J. Hyphenated Given[M]. NY：P，2020.
 [4] 李四. 条目级 nameformat[M]. 北京：社，2020.
@@ -55,7 +55,7 @@
 ▸ given-initial-separator: 「.」
 
 正文：[1-4]
-[1] Berg J. v d，Cruz M. d l. Name Prefix[M]. NY：P，2020.
+[1] van der Berg J.，de la Cruz M. Name Prefix[M]. NY：P，2020.
 [2] King J. Martin Luther，Ford I. Henry. Name Suffix[M]. NY：P，2020.
 [3] Picard J.-L.，Watson M.-J. Hyphenated Given[M]. NY：P，2020.
 [4] 李四. 条目级 nameformat[M]. 北京：社，2020.
@@ -63,7 +63,7 @@
 ▸ given-separator + given-case
 
 正文：[1-4]
-[1] Berg Jan v d，Cruz Maria d l. Name Prefix[M]. NY：P，2020.
+[1] van der Berg Jan，de la Cruz Maria. Name Prefix[M]. NY：P，2020.
 [2] King Jr. Martin Luther，Ford Ii Henry. Name Suffix[M]. NY：P，2020.
 [3] Picard Jean-luc，Watson Mary-jane. Hyphenated Given[M]. NY：P，2020.
 [4] 李四. 条目级 nameformat[M]. 北京：社，2020.
@@ -71,8 +71,48 @@
 ▸ family-given-separator + given-family-separator
 
 正文：[1-4]
-[1] Berg、Jan v d，Cruz、Maria d l. Name Prefix[M]. NY：P，2020.
+[1] van der Berg、Jan，de la Cruz、Maria. Name Prefix[M]. NY：P，2020.
 [2] King、Jr. Martin Luther，Ford、II Henry. Name Suffix[M]. NY：P，2020.
 [3] Picard、Jean-Luc，Watson、Mary-Jane. Hyphenated Given[M]. NY：P，2020.
 [4] 李四. 条目级 nameformat[M]. 北京：社，2020.
+
+▸ 拼音感知 2025 缺省：拼音名全拼(Li Jiangning)、西文缩(Smith J P)、逐名分(Wang Ming／Smith J)
+
+正文：[1-3]
+[1] Li Jiangning. T[M]. L：P，2020.
+[2] Smith J P. T[M]. L：P，2020.
+[3] Wang Ming，Smith J. T[M]. L：P，2020.
+[4] Ouyang Xiu，Sima Qian. T[M]. L：P，2020.
+
+▸ 2015：拼音名逐音节缩(Li J N)、西文缩首字母(Wang M)——对齐李泽平 initializepinyin 默认
+
+正文：[1-2]
+[1] LI J N. T[M]. L: P, 2020.
+[2] WANG M, SMITH J. T[M]. L: P, 2020.
+[3] SMITH J P. T[M]. L: P, 2020.
+[4] OUYANG X, SIMA Q. T[M]. L: P, 2020.
+
+▸ 显式 given-form: initials(2025)——关掉检测，拼音名也缩(Li J)
+
+正文：[1]
+[1] Li J. T[M]. L：P，2020.
+[2] Smith J P. T[M]. L：P，2020.
+[3] Wang M，Smith J. T[M]. L：P，2020.
+[4] Ouyang X，Sima Q. T[M]. L：P，2020.
+
+▸ 显式字典 (pinyin: initials, rest: full)——反着来:拼音缩、西文全拼
+
+正文：[1-2]
+[1] Li J. T[M]. L：P，2020.
+[2] Smith John Paul. T[M]. L：P，2020.
+[3] Wang M，Smith John. T[M]. L：P，2020.
+[4] Ouyang X，Sima Q. T[M]. L：P，2020.
+
+▸ 复姓(2025)：欧阳修 Ouyang Xiu / 司马迁 Sima Qian 全拼(复姓静态表,非单音节)
+
+正文：[1]
+[1] Ouyang Xiu，Sima Qian. T[M]. L：P，2020.
+[2] Li Jiangning. T[M]. L：P，2020.
+[3] Smith J P. T[M]. L：P，2020.
+[4] Wang Ming，Smith J. T[M]. L：P，2020.
 

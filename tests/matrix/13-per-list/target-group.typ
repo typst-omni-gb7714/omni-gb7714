@@ -25,3 +25,6 @@
 ]
 #case("target：按章路由（各表独立编号）", gb7714.with(), full: false, own-bib: false, body: chapters)
 #case("target + 同一 group：跨表连续编号（乙章从 [3] 起）", gb7714.with(), full: false, own-bib: false, body: grouped)
+// note: "end" + target 的章末尾注*不能*在此测：probe 的 `case` 强制 `set-bib-label(tag)` 令尾注归属
+//   命名列表 tag，而 target 的 `bibliography` 无 label（尾注作用域按 none 收），两者相斥。真实用法用
+//   target 时没有 set-bib-label，见 parity 的 ours-27-note-end-target。

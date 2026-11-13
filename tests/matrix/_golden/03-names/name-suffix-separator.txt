@@ -1,7 +1,7 @@
- name-suffix-separator
- 姓名与世系后缀（Jr. / II）之间的分隔符。
- 期望 auto 按语言派生。显式字符串走三态（裸标点感知 / {X} verbatim / 字面量）；也收多语言字典， 未点到的语言退回
- auto 档的派生值。
+  name-suffix-separator
+  姓名与世系后缀（Jr. / II）之间的分隔符。
+  期望 auto 按语言派生。显式字符串走三态（裸标点感知 / {X} verbatim / 字面量）；也收多语言字典， 未点到的语言退回
+  auto 档的派生值。
 
 
 ▸ auto（缺省）

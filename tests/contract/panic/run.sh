@@ -37,9 +37,9 @@ expect enum-typo-panic.typ                  'numbering-style 收到非法值' '�
 expect numbering-circled-dict-panic.typ     '字典形只收' 'circled'
 expect numbering-quan-value-panic.typ       '非法值' 'circled'
 expect page-range-bad-value.typ             'page-range-style 收到非法值' 'chicago-15'
-expect footnote-repeat-style-bad-value-panic.typ  'footnote-repeat-style' '只收 auto' 'shortened'
-expect footnote-repeat-style-bad-string-panic.typ 'footnote-repeat-style' '只收 auto' 'short'
-expect footnote-repeat-reset-panic.typ      'footnote-repeat-reset' 'selector'
+expect footnote-repeat-style-bad-value-panic.typ  'note-repeat-style' '只收 auto' 'shortened'
+expect footnote-repeat-style-bad-string-panic.typ 'note-repeat-style' '只收 auto' 'short'
+expect footnote-repeat-reset-panic.typ      'note-repeat-reset' 'selector'
 expect ttc-bad-key-panic.typ                'titles-text-case 收到非法键' 'journaltitle|journal'
 
 # ── 结构校验（字典 / 数组的形状不对）
@@ -65,7 +65,7 @@ expect custom-drivers-category-word-panic.typ '类别词|entry_type'
 # ── 模板 DSL 的语法与语义
 expect dsl-guard-type-was-mark-panic.typ    '现在指' 'mark=M'
 expect cf-arrow-misuse-panic.typ            '不止一个'
-expect cf-arrow-outside-group-panic.typ     '只能作' '守卫组'
+expect cf-arrow-outside-group-panic.typ     '只能作' '卫语句组'
 expect custom-drivers-unknown-token-panic.typ '既不是内置标识' 'custom-fields'
 expect guard-empty-value-panic.typ          '后缺值'
 expect guard-ambiguous-or-panic.typ         '裸 token 名' '空非空' '取值'
@@ -74,6 +74,8 @@ expect guard-ambiguous-or-panic.typ         '裸 token 名' '空非空' '取值'
 expect warn-missing-title-panic.typ         '缺 title 字段'
 expect latex-strict-command-panic.typ       'foobar|未定义'
 expect latex-strict-char-panic.typ          '&|转义'
+expect emphasis-bad-slot-panic.typ          'emphasis 收到未知槽位' 'booktitles'
+expect custom-languages-builtin-code-panic.typ  'custom-languages' '内置码相撞'
 
 echo "   ─────"
 if [ "$fail" -eq 0 ]; then

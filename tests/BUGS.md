@@ -2,8 +2,11 @@
 
 重构测试套件时，穷举参数取值暴露出来的真实缺陷。
 
-**已修**：#1 / #3 / #4 / #5 / #6 / #7 / #8 / #9 / #12 / #13 / #14。
-**待裁决**：#2 / #10 / #11——它们不是纯 bug，而是「行为对不对」或「加不加能力」先要定下来。
+**已修**：#1 / #2 / #3 / #4 / #5 / #6 / #7 / #8 / #9 / #12 / #13 / #14 / #17 / #18 / #20 / #21 / #22 / #23。
+**待办**：#16（西文刊名实词首字母大写——唯一的真合规缺陷）。
+**待裁决**：#10 / #11——不是纯 bug，是「加不加能力」先要定下来。
+**延后**：#15（2026-07-22 定；不是否决，触发条件 = 「重复位模板化 / 自定义脚注形状」落地）。
+**搁置**：#19（无稳定复现用例）。
 
 ---
 
@@ -263,7 +266,18 @@ volume={9}，无 date    → 编. 刊名[J]. ，9—. 地：社.     ← 打头�
 
 ---
 
-## ⏳ #10　模板表达不了年卷期的**区间解析**——真区间的 `@periodical` 复现不了
+## ✅ #10　模板表达不了年卷期的**区间解析**〔已做 · `serial-block` token · 出版年段剩余〕
+
+**✅ 已做（2026-07-30）**：加了 `serial-block` token（照 `imprint-block` / `series-block` 模式——`fields/built-in.typ`
+白名单 + 分支调 `built-in-driver.serial-year-volume`）。内置 serial 驱动里「拆年卷期、交叉重排」那段抽成独立
+函数 `serial-year-volume(entry, opts)`（返回 `(block, start-year, end-year)`），驱动与 token 共用，逐字节不变
+（twins 逐字复现内置 + matrix 全绿）。模板可写 `author. title<mark-medium>. <serial-block>. …`，输出
+`1957，1（1）—1990，15（4）`（原来单 token 拼不出、只出 `1957/1990，1-15（1-4）`）；只对连续出版物有值，图书等出空。
+手册 periodical 的 bib-fields 改用 `<serial-block>`，token 速查表 + extra 更新，字段说明补 EDTF 写法（约标记 / 区间 /
+开区间 / BCE）。**剩余（次要）**：出版项末尾的出版年区间段（`1957—1990`）模板仍取起始年示意（`<date{—}>`），真区间
+`@periodical` 的完整 twins 待第二个「出版年区间」token——它罕见（整本连续出版物少单独著录、通常著录析出文献），暂不做。
+
+原始记录（提案背景）如下——
 
 `@periodical` 的 `date=1957/1990`、`volume=1-15`、`number=1-4` 是**写在一个字段里的起讫**。
 内置 `serial` 驱动把它们*拆成两段*再用 `—` 连起来：
@@ -392,7 +406,7 @@ AY 下引擎把「责任者，年份」提到最前，再给模板传 `skip-crea
 页码一律用冒号接在出版年后（§8.2.2「出版年: 引文页码」），出版年缺位也是冒号。
 语料 `im-online-nopubyear` 进 `edge.bib` 盯住这条路径。
 
-## ⏳ #15　`et-al-subsequent-min` / `et-al-subsequent-use-first`（待办，非缺陷）
+## ⏸ #15　`et-al-subsequent-min` / `et-al-subsequent-use-first`〔延后 · 依赖「重复位模板化」〕
 
 CSL 的「后续引用换一套更紧的截断阈值」：条目**之前已被引用过**时，`et-al-min` / `et-al-use-first`
 换成 subsequent 版本（citeproc-node-names.lua:191-199，判据 `position_level >= Position.Subsequent`）。
@@ -414,11 +428,78 @@ CSL 的「后续引用换一套更紧的截断阈值」：条目**之前已被�
   性能命脉（cite 的 O(N²) 专门治过，见 `cite-counter-rewrite` 记忆）。而且语料里唯一的 in-text
   用例是无效设置，**没有真实需求**。
 
-三条路（待裁决）：
-- **A** 只做脚注制。覆盖唯一真实用例，复用现成判定。代价：AY 制下该参数无效——须 panic 明示
-  「只对脚注制生效」，不能静默失效。
-- **B** 两制式都做。完整对齐 CSL，但要给 AY 制加 per-cite 状态，性能须先实测。
-- **C** 不做。GB 无此规定，一个样式的需求。
+三条路：**A** 只做脚注制 / **B** 两制式都做 / **C** 不做。
+
+**2026-07-22 定：延后，不是否决。触发条件 = 「重复位模板化（自定义脚注形状）」落地。**
+
+理由是下面这条**结构性**结论：现在做，本功能在包里**没有可截断的对象**——国标规定的重复引用形态
+不含责任者，而那些真需要它的样式的形态我们又渲染不出来。等模板化落地、用户能自定义出「责任者 +
+首注号」这类重复位形状之后，阈值才有意义。届时按本节末尾的方案实施。
+
+### 依据一：现在做的话，国标体系内没有这个功能的作用对象
+
+四步实测（语料 `redleafnew/Chinese-STD-GB-T-7714-related-csl`，345 个方言）：
+
+| 步骤 | 结果 |
+|---|---|
+| ① 按「有无 `type-id` / `medium-id` 宏」判国标系 | **219 个**。判据自检通过：官方 GB 样式在集内，中外法学 / 西南政法大学在集外 |
+| ② 219 个国标系里用 `et-al-subsequent-*` 的 | **0 个** |
+| ③ 219 个里连 `position="subsequent"` 分支都有的 | **仅 4 个**（官方 GB—2015 注释双语的四个变体） |
+| ④ 这 4 个的再引分支渲染的责任者名单数 | **全部 0** |
+
+第 ④ 步是关键，它们的再引分支体是：
+
+```xml
+<else-if position="subsequent">
+  <group delimiter=": ">
+    <text variable="first-reference-note-number" prefix="同"/>   <!-- 同N -->
+    <text variable="locator"/>                                    <!-- 页码 -->
+  </group>
+</else-if>
+```
+
+**「同N: 页码」，一个责任者都不出。没有名单就没有可截断的对象。** GB §9.2.1.3 规定的重复引用形态
+（标注首次引用序号 + 引文页码）本就不含责任者，本功能在国标体系内无处安放。我们的 `number` 档
+已完整实现它——且实现了官方 CSL 自认做不到的圈码 ①（其源码注释原话：「国标要求提供的示例中
+注释编号是用圈码，在 CSL 中无法实现」）。
+
+### 依据二：现在用这个功能的样式全部非国标（两条独立方法一致）
+
+全语料 345 个里只有 **1 个**用了 `et-al-subsequent-*`（中外法学）。连同其余 11 个「重复位另作
+处理」的样式：
+
+- **方法一 · 结构相似度（带基线自证）**：官方 GB 两个变体互比 = **57%** 宏名重合；中外法学 /
+  西南政法大学 / 法学引注手册 = **0%**（46 / 69 / 69 个宏零共有）；世界历史等 5 个 = 14–20%，
+  且唯一共有的宏是最通用的 `author`。宏体系架构也不同：母版是 `entry-layout` / `note-layout` /
+  `type-id` / `medium-id`，法学系是「功能 × 语种」三联（`author-short-zh` / `citation-layout-de`…）。
+- **方法二 · 文献类型标识**：这 12 个一个都不发 `[M]` / `[J]`，而 §8 每条格式串都要求它。
+
+⚠️ `<link rel="template">` 出处元数据在本语料**不可用**——连官方 GB 样式自己都没声明。
+
+### 补扫的第二种编码方式
+
+「首引 / 再引两套阈值」除了 `<citation>` 上的 `et-al-subsequent-*`，还可写成 `position="subsequent"`
+分支调用自带 `et-al-min` 的 `<names>` / `<name>`。`<name et-al-min=>` 在语料里出现 **332 次、涉及
+44 个文件**，但那只是「在哪里设阈值」的常规写法；**国标系里没有任何一个把它用成首引 / 再引两套值**。
+
+### 为什么是「先模板化、后本项」这个顺序
+
+- **单做本项覆盖不了那些法学样式**：中外法学的再引形态是「责任者，见前注〔N〕，页码」，我们四档
+  都没有（`number` 无责任者、`shortened` 出题名不出首注号）。**先卡住的是形态、不是阈值**——所以
+  「重复位模板化」是本项的**前置项**（见记忆 `footnote-repeat-position-template`）。模板化落地后，
+  用户能写出带责任者的重复位形状，本项的阈值才有可截断的对象。
+- **B 分支仍单独否决**（与延后无关，将来实施时也不走 B）：著者-出版年制没有「之前引过没有」的判定，
+  要加就得给每个 cite 引入跨全文的已引 key 集合，碰性能命脉；而语料里 in-text 唯一用例
+  （澳門科技大學）首引与再引两套值相同，写了等于没写。**将来实施时仍按 A（只做脚注制）。**
+
+### 触发条件满足后，A1 按此实施
+
+「重复位模板化」落地后（届时用户可自定义出带责任者的重复位形状，阈值才有作用对象），按此实施：参数名
+`footnote-repeat-et-al-min` / `footnote-repeat-et-al-use-first`（**不含 `shortened`**——那是另一个
+参数的取值、且是实现进度不是语义边界）；只作用于 `shortened` 档（`_short-body` 里
+`creators.principal` 单一调用点）；取值走 `creators.resolve-et-al` 三档（标量 / 语种字典 /
+角色×语种字典）；校验须用 (新 min, 新 use-first, **继承的** use-last) 走 `resolve-et-al-triple`
+——会产生「首引配置合法、重复位配置也合法、组合才违反前置条件」的新报错，须在 doc 写明。
 
 ## ⏳ #16　西文刊名未做「实词首字母大写」（真缺陷，待办）
 
@@ -503,3 +584,134 @@ citeproc-lua + 官方 2025 CSL 实测，网页 / 数据集 / 预印本缺出版�
 （网页走 `creation-accessed-date` 宏，无 accessed→issued 兜底；兜底只在图书类的 `date` 宏里）。
 已修（后一个提交）：`date-fallback` 跳过 2025 版平台式电子资源（EB / DS / PP），只对有传统出版年槽的
 类型（图书、联机图书等）推定。三类电子资源缺年现在都只出 `[引用日期]`，与 citeproc 一字不差。
+
+## ⏳ #19　`#cite(style:"author-date")` 在多区块顺序编码制文档里触发消歧 → 不收敛（既有，非本次引入）
+
+**现象**　一个含多个 `#show: gb7714.with(..)` 区块的文档（如 matrix 测试文件），全局顺序编码制，
+其中一处用 `#cite(<key>, style: "author-date")` 覆写、且被引条目同责任者同年（触发 a/b 后缀消歧），
+编译报 `document did not converge within five attempts`（警告，退出码 0）。单区块文档不复现。
+
+**根因**（初判）　per-cite 的 `style` 覆写走 `_cite-style-state`（markup 层 state），文献表渲染读
+state-受影响的值算消歧后缀存回 `_list-suffix-map`，cite 标签又读它——多区块下这条 state 往返在
+布局迭代间反复，5 轮内收敛不下来。
+
+**与性能优化的关系**　**无关，早于本次优化**：完全原始代码（无 `_need-global-disambig` /
+`_uses-ad-label` 任何门控）+ 同一用例照样不收敛。性能优化（消歧门控）的收敛安全性已由全套验证
+（含单区块 `style-ad-override.typ` 回归、check-clean 门）。本条是撞出来的独立既有 bug。
+
+**规避**　回归用例 `tests/matrix/14-per-cite/style-ad-override.typ` 隔离成*单区块*，绕开此隐患。
+
+**待办**　真正修它要拆 per-cite `style` 覆写的 state 往返（可能改成 markup 层一次定、不经文献表
+回读），或让消歧后缀不依赖 per-cite state。牵涉命脉，另立。
+
+**2026-07-16 探索结论：不做「位置态→载荷通道」重构。** 起初以为把 14 个 per-cite 覆写轴从
+`_cite-*-state` 位置态换成 supplement/旁车载荷能顺带提速命脉。子代理全量测绘 + `--timings` 火焰图
+（500 cite 基准）推翻了：`state.at` 只占 **0.12%**（6.1ms / 5.2s，1.2µs×5049 次），`realize`（版面）
+占 87.6%、`func call` 占 7.9%。**换通道省不出可感知速度，还可能因载荷解析微微变慢**——过不了「必须提速」
+的线。且那 14 轴里值钱的几个（`merge`/`sort`/`collapse`/`compress`/`style`/`bib-label`）需全文知识、
+**无法 markup 烘焙**，重构只是换通道不减读。#19 的收敛警告用 10+ 种多区块结构（含渲染 bib 的 `case`）
+**当前复现不出**（三道缓冲——单调闩锁、文档序、主表写进后缀表——把环压住了），没有稳定失败用例＝无法
+验证修复。故搁置。详见 issue 与 [[host-separator-term-plan]] 记忆里的 terms→punct 病态旁注。
+
+## ✅ #20　多区块下 author-date 后缀丢失 / 串表（浅：per-cite 覆写；深：两 AD 主表）〔已修 · 按 bib 实例建键〕
+
+**现象**（MWE，退出码 0、无警告）
+```typ
+#import "/lib.typ": *
+#let b = bytes("@article{ov1, author={钱一}, title={甲}, journaltitle={刊}, year={2021}, volume={1}, pages={1}, langid={chinese}}\n@article{ov2, author={钱一}, title={乙}, journaltitle={刊}, year={2021}, volume={2}, pages={2}, langid={chinese}}")
+#show: gb7714.with()
+块一 #cite(<ov1>, style: "author-date") #cite(<ov2>, style: "author-date")
+#bibliography(b, full: false, title: none)
+
+#show: gb7714.with()
+块二引任意条目 #cite(<ov1>)
+#bibliography(b, full: false, title: none)
+```
+块一输出 `(钱一, 2021, 2021)`——**a/b 后缀丢了**，应为 `(钱一, 2021a, 2021b)`。只有块一（无块二）时正确。
+块二引的是不是同一 key 无关（引无关条目 `ov3` 也照丢）。
+
+**根因**（已证）　`_list-suffix-map`（api.typ:1431）是按 list-label 建键的全局 state；主表都用空串 `""`。
+块二那张 numeric 文献表渲染时消歧门控 false → 往 `_list-suffix-map[""]` 写**空后缀**（api.typ:2415），
+且它在文档序里最后。cite 标签读 `_list-suffix-map.final()`（api.typ:2913）拿到的是**最后一次写＝空**，
+于是块一的 cite 丢了后缀。两张不同主表共用 `""` 键 → 后写覆盖先写。
+
+**修法（B，按 bib 实例建键，已落地——浅深两层一并根治）。** 起初做过窄修 A（空写不覆盖非空），只堵浅层；
+后来发现**多张文献表本就触发 0.15 原生模式**（`_is-native-mode` 在 `bibs.len() > 1` 即真，native-aux.typ:18），
+而原生路由**早已把每个 cite 分派到某张 bib**（`_native-route-table` 给出 `bib-index`，api.typ:2726 把它烘焙进
+marker 的 `_ML` 槽）——**实例身份一直存在**，我先前「主表 cite 无实例身份」的判断是错的（漏看了 native 路径）。
+
+落点三处：
+1. `bibliography()` 壳（lib.typ）native 模式把 `my-bib-index` 传进 print-bib（新参 `native-bib-index`）；
+2. **写侧**（print-bib，api.typ:`_list-suffix-map.update`）native 时按 `"\u{0}b" + bib-index` 建键，各主表互不覆盖；
+3. **读侧**（group 渲染器，api.typ:`_list-disambiguation`）native 时按*本组的 bib-index*（`my-list-id`，与写侧
+   同源的文档序 bib 位置）取*所属表那一份*后缀，**不合并**。⚠️曾用「合并所有表」（merge），错：**同一个 key
+   跨表引用时后缀不同**——如 a1 在表一同年对里是 `2020a`，在表二单独出该是 `2020`。合并会让 a1 在表二也拿
+   `2020a`，与表二著录 `2020` 打架，还因与表一同形被下游去重丢掉（cite 整个不显示）。按表取后各随各表、对齐原生。
+
+非 native（单表 / 命名列表 `set-bib-label`）走原 list-label 键，零改动。A 的「空写不覆盖非空」判据保留作兜底
+（native 下键已互斥、无碰撞，A 逻辑天然不触发）。
+
+**依据**：原生 std.bibliography（`gb-7714-2015-author-date`）实测就是**逐表消歧**——单表两同年 → a/b；同年对
+分居两表 → 两边都无后缀；a1 跨两表 → 表一 `2020a`、表二 `2020`。parity 案例 `native/27-ay-multibib-disambig`
+（native 与 ours 成对）锁住此对齐。
+
+**验证**：浅 MWE `(钱一,2021,2021)→(钱一,2021a,2021b)`；深 MWE 两块各得 `钱一2021a/b`/`孙三2018a/b`；跨表同 key
+a1 表一 `2020a`、表二 `2020`（与各自著录一致，15/15 稳定、零掉条零未收敛）；**142 条既有 golden 逐字节不变**；
+全套件 ALL GREEN（disambiguate 对拍 citeproc-lua、native parity 27、发布四闸、check-clean）；回归
+`style-ad-override-multiblock.typ`（四块）+ `parity/native/{native,ours}-27`。#19 收敛警告仍独立、当前复现不出，搁置。
+
+## ✅ #21　native 多表下 cite 不继承所属表的样式（混排 numeric + author-date 表）〔已修 · 对 Typst 源码审计发现〕
+
+**现象**　同一文档混排「一张 author-date 表 + 一张 numeric 表」（`bibliography(style: "author-date")` /
+`"numeric"`，或 CSL 全名 `gb-7714-2015-*`）时，author-date 表的 cite 应出 `(Alpha, 2020)`，实际错出 `[1]`。
+
+**依据**（Typst 0.15 源码 `model/bibliography.rs`）　`prepare_cite_group` 里每条 cite 的样式 =
+`citations.first().style` 缺省时 `?? bib.style`——**cite 无自己的 `style` 时继承所属 bibliography 的 `style`**。
+（同源确认：Typst 消歧**逐表**、无跨表协调；`#cite(style:)` 原生也支持并可覆盖 bib 样式。这条印证 #20 逐表方向。）
+
+**根因**　native 模式 cite 的 `my-list` 恒 `none`，`eff-style` 读主列表共享的 `gb7714-main-list-style`
+（last-write-wins）；两张不同样式的主表下 `main-list-style.final()` = 最后一张（numeric），所有 cite 都用它。
+
+**修法**（与 #20 后缀同一手法：per-bib 状态按 bib 实例索引存 / 取）　写侧 print-bib 在 `native-bib-index != none`
+时把本表 `eff-cite-style` 存进 `_list-style-map["\u{0}b"+index]`；读侧 cite 在 native 且 `my-list-id != none`
+时按其 marker 携带的 bib-index 取所属表样式，回落 `global-style-cite`。142 golden 逐字节不变；全套件 ALL GREEN；
+新增 parity `parity/native/{native,ours}-28-mixed-style-cite`。
+
+**边角审计结论（对 Typst 0.15 源码 + 成对实测）**：多表的**路由**（后续→前置 auto，`select_auto_bib`）、
+**逐表消歧**、**编号**（group offset，仅 `displays_citation_number` 的表推进）、**条目收集**（cited + full）、
+**per-cite `#cite(style:)` 覆盖**——ours 全部逐条对齐原生。本 #21 是审计中唯一发现的分歧，已修。
+
+## ✅ #22　跨 bib 的相邻 cite 组不拆 subgroup（整组用首项样式）〔已修 · 对 Typst 源码审计发现〕
+
+**现象**　一个相邻 cite 组跨两张不同表：`@a @b`（a→表一 author-date、b→表二 numeric）。应出
+`(Alpha, 2020)[1]`（各随所属表），实际 ours 出 `(Alpha, 2020; Beta, 2021)`——b 错用了首项 a 的 author-date。
+
+**依据**（Typst 0.15 `model/cite.rs` 的 `CiteGroup` doc + `bibliography.rs` `prepare_cite_group`）　相邻 cite
+先无差别成组，再在 `Works::generate` 里**按归属 bib 拆成 subgroup**（`prepare_cite_group`：归属 bib 一变就
+flush 当前 subgroup，组间空格保留），每个 subgroup 各自交 hayagriva 渲染。subgroup 连续——非连续的同 bib
+cite（`@a@b@a`，b 在中间）各自成段。
+
+**根因**　ours 组渲染器 `_render-inline-cite-run` 用*首项* bib-index（`my-list-id`）定整组的样式 / 后缀。
+
+**修法**　函数开头按每项 `it.list`（bib-index）把 items 切成*连续段*，多段则每段递归本函数（每段 bib 均匀→
+`my-list-id` / `_list-style-map` / `_list-suffix-map` 各随其表）、相邻拼接。单 bib 组短路走原逻辑。142 golden
+逐字节不变；实测 `@a@b@c`（跨三表）、`@a@b@a`（非连续）都逐条对齐原生。新增 parity native/29-crossbib-group。
+
+## ✅ #23　`#cite(form: "full")` 原位完整条目〔已修 · 审计发现〕
+
+Typst `cite.rs` 的 `CitationForm::Full`「Mimics a bibliography entry, with full information」——`#cite(<k>, form:"full")`
+在 cite *原位*（非脚注）渲染完整著录条目（顺序编码制 `[1] 著录`、著者-出版年制带「作者，年」前缀），条目在
+正文原位再现一份、文献表照样保留。原生实测确认是**原位行内**，不是脚注（与 `footnote:true` 两条独立路径）。
+
+**修法**　`errors.typ` 的 `cite-form` 白名单加 `"full"`；组渲染器 `_render-items` 加 `form == "full"` 分支，每条
+复用 `_emit-entry`（numeric，带 `[N]`）/ `_emit-entry-author-date`（author-date）——与文献表同一渲染，多条以
+文档分隔符连接。两制式逐字节对齐原生；142 golden 不变；`errors-sync`/`api-coverage` 过；parity native/30-form-full。
+
+---
+
+### 多 bib 行为边角审计小结（2026-07 · 对 Typst 0.15 源码 `bibliography.rs`/`cite.rs` 逐函数比对 + 成对实测）
+
+**逐条对齐原生**：路由（后续→前置 auto，`select_auto_bib`）· 逐表消歧（每表独立 driver，#20）· 编号偏移
+（group none/auto/named，仅 `displays_citation_number` 表推进，S2/S11/D）· 条目收集（cited+full，S1）·
+form prose/author/year/**full**（#23）· per-cite `#cite(style:)`（cite.style ?? bib.style，#21）· 跨 bib 组 subgroup 拆分（#22）。
+**ours 更 GB-faithful 处**：supplement 引文页码 ours 出、社区 CSL 不出（§9.2.1.3）。**该轮审计的全部分歧（#21/#22/#23）均已修，多 bib 行为逐条对齐原生。**

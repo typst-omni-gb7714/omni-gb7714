@@ -3,7 +3,7 @@
 #import "/tests/_fixture/probe.typ": *
 #show: spec.with(param: "bib-et-al-use-last", controls: "截断后，在省略号之后再保留*原名单末尾* N 位责任者。",
   expect: [缺省 `0`（关）——GB 没有这条规定，是方言功能。开启后责任者串出「前 use-first 位 +
-    省略号 + 末 N 位」（`A，B，C，… Z`），并且**不再出「等 / et al」**：省略号与截断词互斥
+    省略号 + 末 N 位」（`A，B，C，… Z`），并且*不再出「等 / et al」*：省略号与截断词互斥
     （citeproc-lua 实测同判）。
 
     语料每条 8 位责任者。四档配置都用 `bib-et-al-min: 8`：
@@ -11,7 +11,7 @@
     - `1`：*心理学报 / 心理科学进展*的配置（```xml et-al-min="8" et-al-use-first="6" et-al-use-last="true"```
       —— CSL 的布尔 `true` 就是本项的 `1`）。出前 6 位 + 省略号 + 末 1 位，省掉第 7 位。
       与 citeproc-lua 的对拍见 `tests/parity/et-al-use-last/`。
-    - `2`：留末 2 位。**CSL 表达不了这一档**（它的 `et-al-use-last` 是布尔，只能留末 1 位）；
+    - `2`：留末 2 位。*CSL 表达不了这一档*（它的 `et-al-use-last` 是布尔，只能留末 1 位）；
       本项收整数正是为了与 `et-al-use-first` 值域一致。
     - *语言档*：三档取值与 `bib-et-al-min` 同规，`(zh: 1, rest: 0)` 让中文条目用省略号、西文条目
       仍出 `et al`。

@@ -17,7 +17,7 @@
 }
 
 #let render-run(items, _group-merge, opts) = {
-  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, _name-punct-direction, bib-data, publication-date, p, _num-link, supplement-mode, document-comma, document-semi, block-sep, seen, eff-compress-min, eff-cite-range-separator, cite-numbering-style, cite-circled-render) = opts
+  let (eff-form, _key-of, _cite-author, _cite-year, _order-items, _name-punct-direction, bib-data, p, _num-link, supplement-mode, document-comma, document-semi, block-sep, seen, eff-compress-min, eff-cite-range-separator, cite-numbering-style, cite-circled-render, cite-super) = opts
 
   let is-circled = cite-numbering-style == "circled"
   let (cite-lb, cite-rb) = (
@@ -71,7 +71,7 @@
       let k = _key-of(item)
       let lbl = if is-circled { _num-link(k, item.number, display: cite-circled-render(item.number)) } else { _num-link(k, item.number) }
       let inner = if item.supplement != none { [#lbl#item.supplement] } else { lbl }
-      if use-super { super[#br(inner)] } else { br(inner) }
+      if use-super { cite-super[#br(inner)] } else { br(inner) }
     })
     parts.join()
   } else {
@@ -103,7 +103,7 @@
           if i > 0 { inner += p("comma") }
           inner += part
         }
-        if use-super { super[#br(inner)] } else { br(inner) }
+        if use-super { cite-super[#br(inner)] } else { br(inner) }
       } else {
         let parts = segments.map(segment => {
           let (start, end, supplement) = segment
@@ -128,7 +128,7 @@
           if i > 0 { result += block-sep }
           result += part
         }
-        if use-super { super[#result] } else { result }
+        if use-super { cite-super[#result] } else { result }
       }
     } else {
       let parts = segments.map(segment => {
@@ -154,7 +154,7 @@
         if i > 0 { inner += p("comma") }
         inner += part
       }
-      if use-super { super[#br(inner)] }
+      if use-super { cite-super[#br(inner)] }
       else { br(inner) }
     }
   }

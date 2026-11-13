@@ -1,11 +1,10 @@
  字段别名
  两个同义字段名，谁胜。
  期望 journal 是 journaltitle 的传统别名，address 是 location 的传统别名。 只写别名 → 照常著录；两个都写 → 真名
- 静默胜（不报错、不合并）。             ⚠️ 底层 crate 的 crossref 继承表只认真名   location、不认别名 address—— 所以
+ 静默胜（不报错、不合并）。 ⚠️ 底层 crate 的 crossref 继承表只认真名 location、不认别名 address—— 所以
  @proceedings{.., address={北京}} 被 @inproceedings{.., crossref=..} 继承时会丢出版地。 载入期把 address 归一成
-
- location 正是为了堵这个洞（见 crossref-xdata.typ）。 模板里 address 与 location 两个 token 都读归一后的值 （      ⚠️
- location token 目前一写就 panic，见 BUGS 5）。
+ location 正是为了堵这个洞（见 crossref-xdata.typ）        。 模板里 address 与 location 两个 token 都读归一后的值 （⚠️
+ location token 目前一写就 panic，见 BUGS 5）    。
 
 
 ▸ 四条别名条目（2025 · 顺序编码制）

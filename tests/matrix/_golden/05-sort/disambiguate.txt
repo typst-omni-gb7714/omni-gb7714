@@ -25,14 +25,14 @@
 
 正文：（Brown，Chen et al.，2021；Brown，Wang et al.，2021；Jones，2022a，2022b；Smith A，2020；Smith J，2020；Stone
 Sam et al.，2024；Stone Sue et al.，2024；Vague，[2019a]，[2019b]）
-Brown B，Chen C，Li L，2021. Delta[M]. NY：P.
-Brown B，Wang W，Li L，2021. Gamma[M]. NY：P.
+Brown B，Chen Chao，Li Lei，2021. Delta[M]. NY：P.
+Brown B，Wang Wei，Li Lei，2021. Gamma[M]. NY：P.
 Jones J，2022a. Epsilon[M]. NY：P.
 Jones J，2022b. Zeta[M]. NY：P.
 Smith A，2020. Beta[M]. NY：P.
 Smith J，2020. Alpha[M]. NY：P.
-Stone Sam，Wang W，Li L，2024. Iota[M]. NY：P.
-Stone Sue，Chen C，Li L，2024. Kappa[M]. NY：P.
+Stone Sam，Wang Wei，Li Lei，2024. Iota[M]. NY：P.
+Stone Sue，Chen Chao，Li Lei，2024. Kappa[M]. NY：P.
 Vague V，[2019a]. Eta[M]. NY：P.
 Vague V，[2019b]. Theta[M]. NY：P.
 
@@ -45,14 +45,14 @@ Vague V，[2019b]. Theta[M]. NY：P.
 ▸ false（全关：标注撞车不管）
 
 正文：（Brown et al.，2021，2021；Jones，2022，2022；Smith，2020，2020；Stone et al.，2024，2024；Vague，[2019]，[2019]）
-Brown B，Chen C，Li L，2021. Delta[M]. NY：P.
-Brown B，Wang W，Li L，2021. Gamma[M]. NY：P.
+Brown B，Chen Chao，Li Lei，2021. Delta[M]. NY：P.
+Brown B，Wang Wei，Li Lei，2021. Gamma[M]. NY：P.
 Jones J，2022. Epsilon[M]. NY：P.
 Jones J，2022. Zeta[M]. NY：P.
 Smith A，2020. Beta[M]. NY：P.
 Smith J，2020. Alpha[M]. NY：P.
-Stone S，Wang W，Li L，2024. Iota[M]. NY：P.
-Stone S，Chen C，Li L，2024. Kappa[M]. NY：P.
+Stone S，Wang Wei，Li Lei，2024. Iota[M]. NY：P.
+Stone S，Chen Chao，Li Lei，2024. Kappa[M]. NY：P.
 Vague V，[2019]. Eta[M]. NY：P.
 Vague V，[2019]. Theta[M]. NY：P.
 
@@ -61,41 +61,41 @@ Vague V，[2019]. Theta[M]. NY：P.
 正文：[1-10]
 [1]   Smith J. Alpha[M]. NY：P，2020.
 [2]   Smith A. Beta[M]. NY：P，2020.
-[3]   Brown B，Wang W，Li L. Gamma[M]. NY：P，2021.
-[4]   Brown B，Chen C，Li L. Delta[M]. NY：P，2021.
+[3]   Brown B，Wang Wei，Li Lei. Gamma[M]. NY：P，2021.
+[4]   Brown B，Chen Chao，Li Lei. Delta[M]. NY：P，2021.
 [5]   Jones J. Epsilon[M]. NY：P，2022a.
 [6]   Jones J. Zeta[M]. NY：P，2022b.
 [7]   Vague V. Eta[M]. NY：P，[2019a].
 [8]   Vague V. Theta[M]. NY：P，[2019b].
-[9]   Stone S，Wang W，Li L. Iota[M]. NY：P，2024.
-[10] Stone S，Chen C，Li L. Kappa[M]. NY：P，2024.
+[9]   Stone S，Wang Wei，Li Lei. Iota[M]. NY：P，2024.
+[10] Stone S，Chen Chao，Li Lei. Kappa[M]. NY：P，2024.
 
 ▸ auto · 顺序编码制（[1] 无标签可消歧，著录处也不加）
 
 正文：[1-10]
 [1]   Smith J. Alpha[M]. NY：P，2020.
 [2]   Smith A. Beta[M]. NY：P，2020.
-[3]   Brown B，Wang W，Li L. Gamma[M]. NY：P，2021.
-[4]   Brown B，Chen C，Li L. Delta[M]. NY：P，2021.
+[3]   Brown B，Wang Wei，Li Lei. Gamma[M]. NY：P，2021.
+[4]   Brown B，Chen Chao，Li Lei. Delta[M]. NY：P，2021.
 [5]   Jones J. Epsilon[M]. NY：P，2022.
 [6]   Jones J. Zeta[M]. NY：P，2022.
 [7]   Vague V. Eta[M]. NY：P，[2019].
 [8]   Vague V. Theta[M]. NY：P，[2019].
-[9]   Stone S，Wang W，Li L. Iota[M]. NY：P，2024.
-[10] Stone S，Chen C，Li L. Kappa[M]. NY：P，2024.
+[9]   Stone S，Wang Wei，Li Lei. Iota[M]. NY：P，2024.
+[10] Stone S，Chen Chao，Li Lei. Kappa[M]. NY：P，2024.
 
 ▸ (date: true, given-name: false, names: false)
 
 正文：（Brown et al.，2021a，2021b；Jones，2022a，2022b；Smith，2020a，2020b；Stone et al.，2024a，2024b；Vague，
 [2019a]，[2019b]）
-Brown B，Chen C，Li L，2021a. Delta[M]. NY：P.
-Brown B，Wang W，Li L，2021b. Gamma[M]. NY：P.
+Brown B，Chen Chao，Li Lei，2021a. Delta[M]. NY：P.
+Brown B，Wang Wei，Li Lei，2021b. Gamma[M]. NY：P.
 Jones J，2022a. Epsilon[M]. NY：P.
 Jones J，2022b. Zeta[M]. NY：P.
 Smith A，2020a. Beta[M]. NY：P.
 Smith J，2020b. Alpha[M]. NY：P.
-Stone S，Wang W，Li L，2024a. Iota[M]. NY：P.
-Stone S，Chen C，Li L，2024b. Kappa[M]. NY：P.
+Stone S，Wang Wei，Li Lei，2024a. Iota[M]. NY：P.
+Stone S，Chen Chao，Li Lei，2024b. Kappa[M]. NY：P.
 Vague V，[2019a]. Eta[M]. NY：P.
 Vague V，[2019b]. Theta[M]. NY：P.
 
@@ -103,14 +103,14 @@ Vague V，[2019b]. Theta[M]. NY：P.
 
 正文：（Brown et al.，2021a，2021b；Jones，2022a，2022b；Smith A，2020；Smith J，2020；Stone Sam et al.，2024；Stone Sue
 et al.，2024；Vague，[2019a]，[2019b]）
-Brown B，Chen C，Li L，2021a. Delta[M]. NY：P.
-Brown B，Wang W，Li L，2021b. Gamma[M]. NY：P.
+Brown B，Chen Chao，Li Lei，2021a. Delta[M]. NY：P.
+Brown B，Wang Wei，Li Lei，2021b. Gamma[M]. NY：P.
 Jones J，2022a. Epsilon[M]. NY：P.
 Jones J，2022b. Zeta[M]. NY：P.
 Smith A，2020. Beta[M]. NY：P.
 Smith J，2020. Alpha[M]. NY：P.
-Stone Sam，Wang W，Li L，2024. Iota[M]. NY：P.
-Stone Sue，Chen C，Li L，2024. Kappa[M]. NY：P.
+Stone Sam，Wang Wei，Li Lei，2024. Iota[M]. NY：P.
+Stone Sue，Chen Chao，Li Lei，2024. Kappa[M]. NY：P.
 Vague V，[2019a]. Eta[M]. NY：P.
 Vague V，[2019b]. Theta[M]. NY：P.
 
@@ -118,14 +118,14 @@ Vague V，[2019b]. Theta[M]. NY：P.
 
 正文：（Brown，Chen et al.，2021；Brown，Wang et al.，2021；Jones，2022a，2022b；Smith，2020a，2020b；Stone，Chen et
 al.，2024；Stone，Wang et al.，2024；Vague，[2019a]，[2019b]）
-Brown B，Chen C，Li L，2021. Delta[M]. NY：P.
-Brown B，Wang W，Li L，2021. Gamma[M]. NY：P.
+Brown B，Chen Chao，Li Lei，2021. Delta[M]. NY：P.
+Brown B，Wang Wei，Li Lei，2021. Gamma[M]. NY：P.
 Jones J，2022a. Epsilon[M]. NY：P.
 Jones J，2022b. Zeta[M]. NY：P.
 Smith A，2020a. Beta[M]. NY：P.
 Smith J，2020b. Alpha[M]. NY：P.
-Stone S，Wang W，Li L，2024. Iota[M]. NY：P.
-Stone S，Chen C，Li L，2024. Kappa[M]. NY：P.
+Stone S，Wang Wei，Li Lei，2024. Iota[M]. NY：P.
+Stone S，Chen Chao，Li Lei，2024. Kappa[M]. NY：P.
 Vague V，[2019a]. Eta[M]. NY：P.
 Vague V，[2019b]. Theta[M]. NY：P.
 
@@ -134,12 +134,28 @@ Vague V，[2019b]. Theta[M]. NY：P.
 正文：[1-10]
 [1]   Smith J，2020. Alpha[M]. NY：P.
 [2]   Smith A，2020. Beta[M]. NY：P.
-[3]   Brown B，Wang W，Li L，2021. Gamma[M]. NY：P.
-[4]   Brown B，Chen C，Li L，2021. Delta[M]. NY：P.
+[3]   Brown B，Wang Wei，Li Lei，2021. Gamma[M]. NY：P.
+[4]   Brown B，Chen Chao，Li Lei，2021. Delta[M]. NY：P.
 [5]   Jones J，2022a. Epsilon[M]. NY：P.
 [6]   Jones J，2022b. Zeta[M]. NY：P.
 [7]   Vague V，[2019a]. Eta[M]. NY：P.
 [8]   Vague V，[2019b]. Theta[M]. NY：P.
-[9]   Stone Sam，Wang W，Li L，2024. Iota[M]. NY：P.
-[10] Stone Sue，Chen C，Li L，2024. Kappa[M]. NY：P.
+[9]   Stone Sam，Wang Wei，Li Lei，2024. Iota[M]. NY：P.
+[10] Stone Sue，Chen Chao，Li Lei，2024. Kappa[M]. NY：P.
+
+▸ 拼音名同姓同年 · 补名中间级逐音节缩（Chu Y S / Chu Y M；西文 Smith J 撞车再升全名）· 2025 文献表仍全拼
+
+正文：（Chu Y M，2020；Chu Y S，2020；Smith Jane，2020；Smith John，2020）
+Chu Yanming，2020. Beta[M]. NY：P.
+Chu Yanshuo，2020. Alpha[M]. NY：P.
+Smith Jane，2020. Delta[M]. NY：P.
+Smith John，2020. Gamma[M]. NY：P.
+
+▸ 同上 · 2015（文献表缺省本就逐音节缩，与标注同形）
+
+正文：（Chu Y S，2020；Chu Y M，2020；Smith John，2020；Smith Jane，2020）
+CHU Y M, 2020. Beta[M]. NY: P.
+CHU Y S, 2020. Alpha[M]. NY: P.
+SMITH Jane, 2020. Delta[M]. NY: P.
+SMITH John, 2020. Gamma[M]. NY: P.
 

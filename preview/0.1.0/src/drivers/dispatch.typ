@@ -3,8 +3,11 @@
 #import "../elements/mark-medium/built-in.typ" as mark-medium
 #import "../punct/built-in.typ" as punct
 #import "../field.typ"
-#import "built-in.typ" as built-in-driver
+
+#import "built-in.typ": component-part as _render-component-part, preprint as _render-preprint, serial-article as _render-serial-article, serial-newspaper as _render-serial-newspaper
+#import "built-in.typ": patent as _render-patent, electronic as _render-electronic, serial as _render-serial, monograph as _render-monograph
 #import "custom.typ" as custom-driver
+#import "../field.typ": stable-name-entry as _stable-name-entry
 
 #let count-data-groups(entry) = {
   let has(..names) = names.pos().any(n => field.get(entry, n) != none)
@@ -33,8 +36,8 @@
 }
 
 #let entry(entry, registered-marks: (), show-sine-loco: true, show-sine-nomine: true, show-sine-anno: false, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-url: true, show-mark: true, show-medium: true, show-patent-country: false, short-journal: false, show-urldate: true, show-end-period: true, hyperlink: true, emphasis: (:), space-before-mark: false, mark-medium-bracket-style: "half", space-before-pages: true, page-range-separator: "-", page-range-style: none, period-after-creator: true, show-anon: false, show-et-al: true, name-style: (:), hyperlink-title: false, dedup-author-editor: false, skip-date: false, date-suffix: "", pages-override: none, skip-creator: false, creator-override: none, show-degree: false, show-series: false, prefix-last: false, custom-drivers: (:), custom-terms: (:), custom-fields: (:), custom-pids: (:), correct-punct: false, punct-style: "half-with-space", custom-punct: (:), pid-colon-style: auto, url-break-every: 1, url-break-hyphen: true, url-break-hyphen-at-delimiters: true, version: 2015, name-suffix-separator: auto, et-al-translator-separator: auto, component-part-separator: "//", show-pid: (:), pid-priority: (), dedup-url-pid: true, show-annotation: false, space-before-annotation: auto, volume-title-gutter: auto) = {
+  entry = _stable-name-entry(entry)
   let entry-category = category.get(entry, version: version)
-  let show-urldate = show-urldate and not mark-medium.online-suppressed(show-url, entry, version: version)
   let mark-is-auto = (mark-medium.applied-value(show-mark, entry) == auto)
 
   let _format-args = (
@@ -57,14 +60,14 @@
     custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids,
     volume-title-gutter: volume-title-gutter,
   )
-  let run-built-in(args) = if entry-category == "component-part" { built-in-driver.component-part(entry, args) }
-    else if entry-category == "preprint" { built-in-driver.preprint(entry, args) }
-    else if entry-category == "serial-article" { built-in-driver.serial-article(entry, args) }
-    else if entry-category == "serial-newspaper" { built-in-driver.serial-newspaper(entry, args) }
-    else if entry-category == "patent" { built-in-driver.patent(entry, args) }
-    else if entry-category == "electronic" { built-in-driver.electronic(entry, args) }
-    else if entry-category == "serial" { built-in-driver.serial(entry, args) }
-    else { built-in-driver.monograph(entry, args) }
+  let run-built-in(args) = if entry-category == "component-part" { _render-component-part(entry, args) }
+    else if entry-category == "preprint" { _render-preprint(entry, args) }
+    else if entry-category == "serial-article" { _render-serial-article(entry, args) }
+    else if entry-category == "serial-newspaper" { _render-serial-newspaper(entry, args) }
+    else if entry-category == "patent" { _render-patent(entry, args) }
+    else if entry-category == "electronic" { _render-electronic(entry, args) }
+    else if entry-category == "serial" { _render-serial(entry, args) }
+    else { _render-monograph(entry, args) }
   let _format-args = (
     .._format-args,
     render-built-in: run-built-in,

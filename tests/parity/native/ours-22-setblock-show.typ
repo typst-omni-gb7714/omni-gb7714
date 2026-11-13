@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 // 0.15 能力：omni 的可见列表经 std.bibliography 哨兵改道，使原生写法 `show std.bibliography: set block`
 //   命中整表（与原生体验一致）。断言：SVG 中标记 fill 色恰 1 次（整表一个框、不随条目数）。见 run.sh。
 #import "/lib.typ": *

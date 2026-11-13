@@ -6,6 +6,8 @@
 //
 // 页面故意做窄（8cm）、题名故意做长——不折行就看不出悬挂。
 #import "/lib.typ": *
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 
 #set page(width: 8cm, height: auto, margin: 6mm)
 #set text(lang: "zh", size: 9pt)

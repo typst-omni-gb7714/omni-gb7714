@@ -10,7 +10,7 @@
 
 [1]    张三，李四，王五，等. 中文书[M]. 北京：社，2020.
 [2]    Smith J，Doe J，Roe R，et al. English Book[M]. NY：P，2021.
-[3]    田中太郎，鈴木花子，佐藤次郎，他. 日本語の本[M]. 東京：出版社，2019.
+[3]    田中太郎，鈴木花子，佐藤次郎，ほか. 日本語の本[M]. 東京：出版社，2019.
 [4]    김철수，이영희，박민수，외. 한국어 책[M]. 서울：출판사，2018.
 [5]    Иванов И，Петров П，Сидоров С，и др. Русская книга[M]. Москва：Издательство，2017.
 [6]    Dupont J，Martin M，Bernard P，et al. Livre français[M]. Paris：Éditions，2016.
@@ -25,7 +25,7 @@
 [15] 万二. 万书[M]. 北京：社，2020.
 [16] 习三. 习书[M]. 北京：社，2020.
 [17] 乔四. 乔书[M]. 北京：社，2020.
-[18] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
+[18] van der Berg J，de la Cruz M. Name Prefix[M]. NY：P，2020.
 [19] King J Martin Luther，Ford I Henry. Name Suffix[M]. NY：P，2020.
 [20] Picard J-L，Watson M-J. Hyphenated Given[M]. NY：P，2020.
 [21] 张三，李四，等. 显式 and others[M]. 北京：社，2020.
@@ -45,7 +45,7 @@
 [35] 丙. 北京：社，2020.
 [36] 丁. 题名里有半角逗号, 分号; 问号? 叹号![M]. 北京：社，2020.
 [37] 戊. 出版地与出版者都缺[M]. 2020.
-[38] 己. 只缺出版地[M]. 某社，2020.
+[38] 己. 只缺出版地[M]. [出版地不详]：某社，2020.
 [39] 庚. 用户手写占位符[M]. [S.l.]：[s.n.]，2020.
 [40] 丙子. 电子资源缺出版年有页码[EB/OL]. [2024-01-01]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​n​p.
 [41] 辛. 有卷无期[J]. 学报，2022，10：1-9.
@@ -57,13 +57,13 @@
 [47] 卯. EDTF 不确定日期[M]. 北京：社，[2020].
 [48] 辰. 年份区间[M]. 北京：社，1998/2005.
 [49] 张三. 条目集成员甲[M]. 北京：社，2018.
-       李四. 条目集成员乙[M]. 北京：社，2017.
+     李四. 条目集成员乙[M]. 北京：社，2017.
 [50] 王五. 条目集成员丙[M]. 北京：社，2019.
 [51] 张三. 中文原版[M]. 北京：中文社，2020.
-       Zhang S. English Version[M]. NY：EN Press，2020.
+     Zhang San. English Version[M]. NY：EN Press，2020.
 [52] 巳. 带关键词的书[M]. 北京：社，2020.
 [53] 午. 带注释字段的书[M]. 北京：社，2020.
-[54] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[54] 未. DOI 与 CSTR 与 URL 齐备[J]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 [55] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 [56] 酉. 带 ISBN 的书[M]. 北京：社，2020.
 [57] 戌. usera 显式码[M/OL]. 2020. h​t​t​p​s​:​/​/​e​.​c​o​m.
@@ -85,7 +85,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 庚，2020. 用户手写占位符[M]. [S.l.]：[s.n.].
 癸，2024. 网络首发无卷期[J]. 学报：1-9.
 亥，2020. entrytypeid 显式码[J].
-己，2020. 只缺出版地[M]. 某社.
+己，2020. 只缺出版地[M]. [出版地不详]：某社.
 甲，2020. 丛书中的一本[M]. 北京：社.
 甲子，2020. mark 字段显式码[S].
 李编，王编，2020. 只有编者的书[M]. 北京：社.
@@ -96,14 +96,14 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 壬，2022. 有期无卷[J]. 学报（2）：1-9.
 巳，2020. 带关键词的书[M]. 北京：社.
 万二，2020. 万书[M]. 北京：社.
-未，2023. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+未，2023. DOI 与 CSTR 与 URL 齐备[J]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 午，2020. 带注释字段的书[M]. 北京：社.
 戊，2020. 出版地与出版者都缺[M].
 习三，2020. 习书[M]. 北京：社.
 辛，2022. 有卷无期[J]. 学报，10：1-9.
 戌，2020. usera 显式码[M/OL]. h​t​t​p​s​:​/​/​e​.​c​o​m.
 乙，2020. 主题名：副题名：其他题名信息[M]. 北京：社.
-乙丑，2020. entrysubtype 等值[DS].
+乙丑，2020. entrysubtype 等值[DS]. （2020）.
 佚名，2020. 无责任者中文[M]. 北京：社.
 寅，2020. 起讫页码折叠[M]. 北京：社：1234-1236.
 酉，2020. 带 ISBN 的书[M]. 北京：社.
@@ -111,7 +111,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 张三，2020b. 同责任者同年甲[M]. 北京：社.
 张三，2020c. 同责任者同年乙[M]. 北京：社.
 张三，2020d. 中文原版[M]. 北京：中文社.
-Zhang S，2020d. English Version[M]. NY：EN Press.
+Zhang San，2020d. English Version[M]. NY：EN Press.
 张三，李四，等，2020. 显式 and others[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
@@ -120,23 +120,23 @@ Zhang S，2020d. English Version[M]. NY：EN Press.
 周七，无日期-b. 同责任者无年乙[M]. 北京：社.
 周七，无日期-c. 无年中文[M]. 北京：社.
 子，2022. 无页码有文章编号[J]. 学报，5：e12345.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 Anon，2021. Anonymous English[M]. NY：P.
 张三，2018. 条目集成员甲[M]. 北京：社.
   李四，2017. 条目集成员乙[M]. 北京：社.
 王五，2019. 条目集成员丙[M]. 北京：社.
-Berg J v d，Cruz M d l，2020. Name Prefix[M]. NY：P.
+van der Berg J，de la Cruz M，2020. Name Prefix[M]. NY：P.
 Brown B，n.d. No Year English[M]. NY：P.
 King J Martin Luther，Ford I Henry，2020. Name Suffix[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Picard J-L，Watson M-J，2020. Hyphenated Given[M]. NY：P.
-申，2023. arXiv 预印本[PP/OL]. arXiv. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+申，2023. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 Smith J，2021. Same Family B[M]. NY：P.
 Smith J，2020. Same Family A[M]. NY：P.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
 
 ▸ + entry-lang-order: (en, zh, ..)（文种次序翻过来）
 
@@ -144,12 +144,12 @@ Anon，2021. Anonymous English[M]. NY：P.
 张三，2018. 条目集成员甲[M]. 北京：社.
   李四，2017. 条目集成员乙[M]. 北京：社.
 王五，2019. 条目集成员丙[M]. 北京：社.
-Berg J v d，Cruz M d l，2020. Name Prefix[M]. NY：P.
+van der Berg J，de la Cruz M，2020. Name Prefix[M]. NY：P.
 Brown B，n.d. No Year English[M]. NY：P.
 King J Martin Luther，Ford I Henry，2020. Name Suffix[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Picard J-L，Watson M-J，2020. Hyphenated Given[M]. NY：P.
-申，2023. arXiv 预印本[PP/OL]. arXiv. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+申，2023. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 Smith J，2021. Same Family B[M]. NY：P.
 Smith J，2020. Same Family A[M]. NY：P.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
@@ -164,7 +164,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 庚，2020. 用户手写占位符[M]. [S.l.]：[s.n.].
 癸，2024. 网络首发无卷期[J]. 学报：1-9.
 亥，2020. entrytypeid 显式码[J].
-己，2020. 只缺出版地[M]. 某社.
+己，2020. 只缺出版地[M]. [出版地不详]：某社.
 甲，2020. 丛书中的一本[M]. 北京：社.
 甲子，2020. mark 字段显式码[S].
 李编，王编，2020. 只有编者的书[M]. 北京：社.
@@ -175,14 +175,14 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 壬，2022. 有期无卷[J]. 学报（2）：1-9.
 巳，2020. 带关键词的书[M]. 北京：社.
 万二，2020. 万书[M]. 北京：社.
-未，2023. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+未，2023. DOI 与 CSTR 与 URL 齐备[J]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 午，2020. 带注释字段的书[M]. 北京：社.
 戊，2020. 出版地与出版者都缺[M].
 习三，2020. 习书[M]. 北京：社.
 辛，2022. 有卷无期[J]. 学报，10：1-9.
 戌，2020. usera 显式码[M/OL]. h​t​t​p​s​:​/​/​e​.​c​o​m.
 乙，2020. 主题名：副题名：其他题名信息[M]. 北京：社.
-乙丑，2020. entrysubtype 等值[DS].
+乙丑，2020. entrysubtype 等值[DS]. （2020）.
 佚名，2020. 无责任者中文[M]. 北京：社.
 寅，2020. 起讫页码折叠[M]. 北京：社：1234-1236.
 酉，2020. 带 ISBN 的书[M]. 北京：社.
@@ -190,7 +190,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 张三，2020b. 同责任者同年甲[M]. 北京：社.
 张三，2020c. 同责任者同年乙[M]. 北京：社.
 张三，2020d. 中文原版[M]. 北京：中文社.
-Zhang S，2020d. English Version[M]. NY：EN Press.
+Zhang San，2020d. English Version[M]. NY：EN Press.
 张三，李四，等，2020. 显式 and others[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
@@ -199,20 +199,20 @@ Zhang S，2020d. English Version[M]. NY：EN Press.
 周七，无日期-b. 同责任者无年乙[M]. 北京：社.
 周七，无日期-c. 无年中文[M]. 北京：社.
 子，2022. 无页码有文章编号[J]. 学报，5：e12345.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
 
 ▸ + bib-sort-zh-by: bihua（中文组内改笔画序）
 
 Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻译社.
 乙，2020. 主题名：副题名：其他题名信息[M]. 北京：社.
-乙丑，2020. entrysubtype 等值[DS].
+乙丑，2020. entrysubtype 等值[DS]. （2020）.
 丁，2020. 题名里有半角逗号, 分号; 问号? 叹号![M]. 北京：社.
 丁一，2020. 丁书[M]. 北京：社.
 万二，2020. 万书[M]. 北京：社.
-己，2020. 只缺出版地[M]. 某社.
+己，2020. 只缺出版地[M]. [出版地不详]：某社.
 巳，2020. 带关键词的书[M]. 北京：社.
 子，2022. 无页码有文章编号[J]. 学报，5：e12345.
 习三，2020. 习书[M]. 北京：社.
@@ -220,7 +220,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 午，2020. 带注释字段的书[M]. 北京：社.
 壬，2022. 有期无卷[J]. 学报（2）：1-9.
 丑，2022. 非数字期号[J]. 学报，5（增刊 2）：1-9.
-未，2023. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+未，2023. DOI 与 CSTR 与 URL 齐备[J]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 丙，2020. 北京：社.
 丙子，无日期. 电子资源缺出版年有页码[EB/OL]. [2024-01-01]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​n​p.
 丙寅，2020. 无任何标识线索[Z].
@@ -239,7 +239,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 佚名，2020. 无责任者中文[M]. 北京：社.
 辛，2022. 有卷无期[J]. 学报，10：1-9.
 张三，2020a. 中文原版[M]. 北京：中文社.
-Zhang S，2020a. English Version[M]. NY：EN Press.
+Zhang San，2020a. English Version[M]. NY：EN Press.
 张三，2020b. 同责任者同年乙[M]. 北京：社.
 张三，2020c. 同责任者同年甲[M]. 北京：社.
 张三，2020d. 没有 langid 字段的中文书[M]. 北京：社.
@@ -252,23 +252,23 @@ Zhang S，2020a. English Version[M]. NY：EN Press.
 庚，2020. 用户手写占位符[M]. [S.l.]：[s.n.].
 癸，2024. 网络首发无卷期[J]. 学报：1-9.
 寅，2020. 起讫页码折叠[M]. 北京：社：1234-1236.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 Anon，2021. Anonymous English[M]. NY：P.
 张三，2018. 条目集成员甲[M]. 北京：社.
   李四，2017. 条目集成员乙[M]. 北京：社.
 王五，2019. 条目集成员丙[M]. 北京：社.
-Berg J v d，Cruz M d l，2020. Name Prefix[M]. NY：P.
+van der Berg J，de la Cruz M，2020. Name Prefix[M]. NY：P.
 Brown B，n.d. No Year English[M]. NY：P.
 King J Martin Luther，Ford I Henry，2020. Name Suffix[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Picard J-L，Watson M-J，2020. Hyphenated Given[M]. NY：P.
-申，2023. arXiv 预印本[PP/OL]. arXiv. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+申，2023. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 Smith J，2021. Same Family B[M]. NY：P.
 Smith J，2020. Same Family A[M]. NY：P.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
 
 ▸ + bib-sort-by: ((date: descending), name)
 
@@ -277,7 +277,7 @@ Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éd
 周七，无日期-b. 同责任者无年甲[M]. 北京：社.
 周七，无日期-c. 同责任者无年乙[M]. 北京：社.
 癸，2024. 网络首发无卷期[J]. 学报：1-9.
-未，2023. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+未，2023. DOI 与 CSTR 与 URL 齐备[J]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 丑，2022. 非数字期号[J]. 学报，5（增刊 2）：1-9.
 壬，2022. 有期无卷[J]. 学报（2）：1-9.
 辛，2022. 有卷无期[J]. 学报，10：1-9.
@@ -288,7 +288,7 @@ Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éd
 丁一，2020. 丁书[M]. 北京：社.
 庚，2020. 用户手写占位符[M]. [S.l.]：[s.n.].
 亥，2020. entrytypeid 显式码[J].
-己，2020. 只缺出版地[M]. 某社.
+己，2020. 只缺出版地[M]. [出版地不详]：某社.
 甲，2020. 丛书中的一本[M]. 北京：社.
 甲子，2020. mark 字段显式码[S].
 李编，王编，2020. 只有编者的书[M]. 北京：社.
@@ -302,7 +302,7 @@ Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éd
 习三，2020. 习书[M]. 北京：社.
 戌，2020. usera 显式码[M/OL]. h​t​t​p​s​:​/​/​e​.​c​o​m.
 乙，2020. 主题名：副题名：其他题名信息[M]. 北京：社.
-乙丑，2020. entrysubtype 等值[DS].
+乙丑，2020. entrysubtype 等值[DS]. （2020）.
 佚名，2020. 无责任者中文[M]. 北京：社.
 寅，2020. 起讫页码折叠[M]. 北京：社：1234-1236.
 酉，2020. 带 ISBN 的书[M]. 北京：社.
@@ -310,7 +310,7 @@ Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éd
 张三，2020b. 同责任者同年甲[M]. 北京：社.
 张三，2020c. 同责任者同年乙[M]. 北京：社.
 张三，2020d. 中文原版[M]. 北京：中文社.
-Zhang S，2020d. English Version[M]. NY：EN Press.
+Zhang San，2020d. English Version[M]. NY：EN Press.
 张三，李四，等，2020. 显式 and others[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
@@ -318,23 +318,23 @@ Zhang S，2020d. English Version[M]. NY：EN Press.
 Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻译社.
 辰，1998/2005. 年份区间[M]. 北京：社.
 李约瑟，1990. 中国科学技术史：第 2 卷 科学思想史[M]. 北京：科学出版社.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 张三，2018. 条目集成员甲[M]. 北京：社.
   李四，2017. 条目集成员乙[M]. 北京：社.
 王五，2019. 条目集成员丙[M]. 北京：社.
 Brown B，n.d. No Year English[M]. NY：P.
-申，2023. arXiv 预印本[PP/OL]. arXiv. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+申，2023. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 Anon，2021. Anonymous English[M]. NY：P.
 Smith J，2021. Same Family B[M]. NY：P.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
-Berg J v d，Cruz M d l，2020. Name Prefix[M]. NY：P.
+van der Berg J，de la Cruz M，2020. Name Prefix[M]. NY：P.
 King J Martin Luther，Ford I Henry，2020. Name Suffix[M]. NY：P.
 Picard J-L，Watson M-J，2020. Hyphenated Given[M]. NY：P.
 Smith J，2020. Same Family A[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
 
 ▸ + sort-use-prefix: true（西文前缀计入）
 
@@ -349,7 +349,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 庚，2020. 用户手写占位符[M]. [S.l.]：[s.n.].
 癸，2024. 网络首发无卷期[J]. 学报：1-9.
 亥，2020. entrytypeid 显式码[J].
-己，2020. 只缺出版地[M]. 某社.
+己，2020. 只缺出版地[M]. [出版地不详]：某社.
 甲，2020. 丛书中的一本[M]. 北京：社.
 甲子，2020. mark 字段显式码[S].
 李编，王编，2020. 只有编者的书[M]. 北京：社.
@@ -360,14 +360,14 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 壬，2022. 有期无卷[J]. 学报（2）：1-9.
 巳，2020. 带关键词的书[M]. 北京：社.
 万二，2020. 万书[M]. 北京：社.
-未，2023. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+未，2023. DOI 与 CSTR 与 URL 齐备[J]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 午，2020. 带注释字段的书[M]. 北京：社.
 戊，2020. 出版地与出版者都缺[M].
 习三，2020. 习书[M]. 北京：社.
 辛，2022. 有卷无期[J]. 学报，10：1-9.
 戌，2020. usera 显式码[M/OL]. h​t​t​p​s​:​/​/​e​.​c​o​m.
 乙，2020. 主题名：副题名：其他题名信息[M]. 北京：社.
-乙丑，2020. entrysubtype 等值[DS].
+乙丑，2020. entrysubtype 等值[DS]. （2020）.
 佚名，2020. 无责任者中文[M]. 北京：社.
 寅，2020. 起讫页码折叠[M]. 北京：社：1234-1236.
 酉，2020. 带 ISBN 的书[M]. 北京：社.
@@ -375,7 +375,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 张三，2020b. 同责任者同年甲[M]. 北京：社.
 张三，2020c. 同责任者同年乙[M]. 北京：社.
 张三，2020d. 中文原版[M]. 北京：中文社.
-Zhang S，2020d. English Version[M]. NY：EN Press.
+Zhang San，2020d. English Version[M]. NY：EN Press.
 张三，李四，等，2020. 显式 and others[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
@@ -384,7 +384,7 @@ Zhang S，2020d. English Version[M]. NY：EN Press.
 周七，无日期-b. 同责任者无年乙[M]. 北京：社.
 周七，无日期-c. 无年中文[M]. 北京：社.
 子，2022. 无页码有文章编号[J]. 学报，5：e12345.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 Anon，2021. Anonymous English[M]. NY：P.
 张三，2018. 条目集成员甲[M]. 北京：社.
@@ -394,13 +394,13 @@ Brown B，n.d. No Year English[M]. NY：P.
 King J Martin Luther，Ford I Henry，2020. Name Suffix[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Picard J-L，Watson M-J，2020. Hyphenated Given[M]. NY：P.
-申，2023. arXiv 预印本[PP/OL]. arXiv. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+申，2023. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 Smith J，2021. Same Family B[M]. NY：P.
 Smith J，2020. Same Family A[M]. NY：P.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
-Berg J v d，Cruz M d l，2020. Name Prefix[M]. NY：P.
+van der Berg J，de la Cruz M，2020. Name Prefix[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
 
 ▸ + creator-idem: 「———」（排完之后才替换）
 
@@ -415,7 +415,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 庚，2020. 用户手写占位符[M]. [S.l.]：[s.n.].
 癸，2024. 网络首发无卷期[J]. 学报：1-9.
 亥，2020. entrytypeid 显式码[J].
-己，2020. 只缺出版地[M]. 某社.
+己，2020. 只缺出版地[M]. [出版地不详]：某社.
 甲，2020. 丛书中的一本[M]. 北京：社.
 甲子，2020. mark 字段显式码[S].
 李编，王编，2020. 只有编者的书[M]. 北京：社.
@@ -426,14 +426,14 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 壬，2022. 有期无卷[J]. 学报（2）：1-9.
 巳，2020. 带关键词的书[M]. 北京：社.
 万二，2020. 万书[M]. 北京：社.
-未，2023. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+未，2023. DOI 与 CSTR 与 URL 齐备[J]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 午，2020. 带注释字段的书[M]. 北京：社.
 戊，2020. 出版地与出版者都缺[M].
 习三，2020. 习书[M]. 北京：社.
 辛，2022. 有卷无期[J]. 学报，10：1-9.
 戌，2020. usera 显式码[M/OL]. h​t​t​p​s​:​/​/​e​.​c​o​m.
 乙，2020. 主题名：副题名：其他题名信息[M]. 北京：社.
-乙丑，2020. entrysubtype 等值[DS].
+乙丑，2020. entrysubtype 等值[DS]. （2020）.
 佚名，2020. 无责任者中文[M]. 北京：社.
 寅，2020. 起讫页码折叠[M]. 北京：社：1234-1236.
 酉，2020. 带 ISBN 的书[M]. 北京：社.
@@ -441,7 +441,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 ———，2020b. 同责任者同年甲[M]. 北京：社.
 ———，2020c. 同责任者同年乙[M]. 北京：社.
 ———，2020d. 中文原版[M]. 北京：中文社.
-Zhang S，2020d. English Version[M]. NY：EN Press.
+Zhang San，2020d. English Version[M]. NY：EN Press.
 张三，李四，等，2020. 显式 and others[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
@@ -450,23 +450,23 @@ Zhang S，2020d. English Version[M]. NY：EN Press.
 ———，无日期-b. 同责任者无年乙[M]. 北京：社.
 ———，无日期-c. 无年中文[M]. 北京：社.
 子，2022. 无页码有文章编号[J]. 学报，5：e12345.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 Anon，2021. Anonymous English[M]. NY：P.
 张三，2018. 条目集成员甲[M]. 北京：社.
   李四，2017. 条目集成员乙[M]. 北京：社.
 王五，2019. 条目集成员丙[M]. 北京：社.
-Berg J v d，Cruz M d l，2020. Name Prefix[M]. NY：P.
+van der Berg J，de la Cruz M，2020. Name Prefix[M]. NY：P.
 Brown B，n.d. No Year English[M]. NY：P.
 King J Martin Luther，Ford I Henry，2020. Name Suffix[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Picard J-L，Watson M-J，2020. Hyphenated Given[M]. NY：P.
-申，2023. arXiv 预印本[PP/OL]. arXiv. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+申，2023. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 Smith J，2021. Same Family B[M]. NY：P.
 Smith J，2020. Same Family A[M]. NY：P.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
 
 ▸ + sort-keys 置顶（压在文种分组之上）
 
@@ -483,7 +483,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 庚，2020. 用户手写占位符[M]. [S.l.]：[s.n.].
 癸，2024. 网络首发无卷期[J]. 学报：1-9.
 亥，2020. entrytypeid 显式码[J].
-己，2020. 只缺出版地[M]. 某社.
+己，2020. 只缺出版地[M]. [出版地不详]：某社.
 甲，2020. 丛书中的一本[M]. 北京：社.
 甲子，2020. mark 字段显式码[S].
 李编，王编，2020. 只有编者的书[M]. 北京：社.
@@ -494,21 +494,21 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 壬，2022. 有期无卷[J]. 学报（2）：1-9.
 巳，2020. 带关键词的书[M]. 北京：社.
 万二，2020. 万书[M]. 北京：社.
-未，2023. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+未，2023. DOI 与 CSTR 与 URL 齐备[J]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 午，2020. 带注释字段的书[M]. 北京：社.
 戊，2020. 出版地与出版者都缺[M].
 习三，2020. 习书[M]. 北京：社.
 辛，2022. 有卷无期[J]. 学报，10：1-9.
 戌，2020. usera 显式码[M/OL]. h​t​t​p​s​:​/​/​e​.​c​o​m.
 乙，2020. 主题名：副题名：其他题名信息[M]. 北京：社.
-乙丑，2020. entrysubtype 等值[DS].
+乙丑，2020. entrysubtype 等值[DS]. （2020）.
 佚名，2020. 无责任者中文[M]. 北京：社.
 寅，2020. 起讫页码折叠[M]. 北京：社：1234-1236.
 酉，2020. 带 ISBN 的书[M]. 北京：社.
 张三，2020b. 没有 langid 字段的中文书[M]. 北京：社.
 张三，2020c. 同责任者同年甲[M]. 北京：社.
 张三，2020d. 中文原版[M]. 北京：中文社.
-Zhang S，2020d. English Version[M]. NY：EN Press.
+Zhang San，2020d. English Version[M]. NY：EN Press.
 张三，李四，等，2020. 显式 and others[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
@@ -517,22 +517,22 @@ Zhang S，2020d. English Version[M]. NY：EN Press.
 周七，无日期-b. 同责任者无年乙[M]. 北京：社.
 周七，无日期-c. 无年中文[M]. 北京：社.
 子，2022. 无页码有文章编号[J]. 学报，5：e12345.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 Anon，2021. Anonymous English[M]. NY：P.
 张三，2018. 条目集成员甲[M]. 北京：社.
   李四，2017. 条目集成员乙[M]. 北京：社.
 王五，2019. 条目集成员丙[M]. 北京：社.
-Berg J v d，Cruz M d l，2020. Name Prefix[M]. NY：P.
+van der Berg J，de la Cruz M，2020. Name Prefix[M]. NY：P.
 Brown B，n.d. No Year English[M]. NY：P.
 King J Martin Luther，Ford I Henry，2020. Name Suffix[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Picard J-L，Watson M-J，2020. Hyphenated Given[M]. NY：P.
-申，2023. arXiv 预印本[PP/OL]. arXiv. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+申，2023. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 Smith J，2021. Same Family B[M]. NY：P.
 Smith J，2020. Same Family A[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
 
 ▸ 顺序编码制 + 显式 bib-sort-by: (name,)（显式给就生效）
 
@@ -547,7 +547,7 @@ Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éd
 [9]    庚. 用户手写占位符[M]. [S.l.]：[s.n.]，2020.
 [10] 癸. 网络首发无卷期[J]. 学报，2024-05-09：1-9.
 [11] 亥. entrytypeid 显式码[J]. 2020.
-[12] 己. 只缺出版地[M]. 某社，2020.
+[12] 己. 只缺出版地[M]. [出版地不详]：某社，2020.
 [13] 甲. 丛书中的一本[M]. 北京：社，2020.
 [14] mark 字段显式码[S].
 [15] 李编，王编. 只有编者的书[M]. 北京：社，2020.
@@ -558,7 +558,7 @@ Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éd
 [20] 壬. 有期无卷[J]. 学报，2022（2）：1-9.
 [21] 巳. 带关键词的书[M]. 北京：社，2020.
 [22] 万二. 万书[M]. 北京：社，2020.
-[23] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[23] 未. DOI 与 CSTR 与 URL 齐备[J]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 [24] 无责任者中文[M]. 北京：社，2020.
 [25] 午. 带注释字段的书[M]. 北京：社，2020.
 [26] 戊. 出版地与出版者都缺[M]. 2020.
@@ -573,7 +573,7 @@ Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éd
 [35] 张三. 同责任者同年甲[M]. 北京：社，2020.
 [36] 张三. 同责任者同年乙[M]. 北京：社，2020.
 [37] 张三. 中文原版[M]. 北京：中文社，2020.
-       Zhang S. English Version[M]. NY：EN Press，2020.
+     Zhang San. English Version[M]. NY：EN Press，2020.
 [38] 张三，李四，等. 显式 and others[M]. 北京：社，2020.
 [39] 张三，李四，王五，等. 中文书[M]. 北京：社，2020.
 [40] 张三，Smith J. Mixed 中英 Title[M]. 北京：社，2020.
@@ -582,13 +582,13 @@ Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éd
 [43] 周七. 同责任者无年甲[M]. 北京：社.
 [44] 周七. 同责任者无年乙[M]. 北京：社.
 [45] 子. 无页码有文章编号[J]. 学报，2022，5：e12345.
-[46] 田中太郎，鈴木花子，佐藤次郎，他. 日本語の本[M]. 東京：出版社，2019.
+[46] 田中太郎，鈴木花子，佐藤次郎，ほか. 日本語の本[M]. 東京：出版社，2019.
 [47] 김철수，이영희，박민수，외. 한국어 책[M]. 서울：출판사，2018.
 [48] 张三. 条目集成员甲[M]. 北京：社，2018.
-       李四. 条目集成员乙[M]. 北京：社，2017.
+     李四. 条目集成员乙[M]. 北京：社，2017.
 [49] 王五. 条目集成员丙[M]. 北京：社，2019.
 [50] Anonymous English[M]. NY：P，2021.
-[51] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
+[51] van der Berg J，de la Cruz M. Name Prefix[M]. NY：P，2020.
 [52] Brown B. No Year English[M]. NY：P.
 [53] King J Martin Luther，Ford I Henry. Name Suffix[M]. NY：P，2020.
 [54] Müller H，Schmidt A，Weber K，et al. Deutsches Buch[M]. Berlin：Verlag，2015.
@@ -611,17 +611,17 @@ Brown B，n.d. No Year English[M]. NY：P.
 King J Martin Luther，Ford I Henry，2020. Name Suffix[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Picard J-L，Watson M-J，2020. Hyphenated Given[M]. NY：P.
-申，2023. arXiv 预印本[PP/OL]. arXiv. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
+申，2023. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 Smith J，2021. Same Family B[M]. NY：P.
 Smith J，2020. Same Family A[M]. NY：P.
-Berg J v d，Cruz M d l，2020. Name Prefix[M]. NY：P.
+van der Berg J，de la Cruz M，2020. Name Prefix[M]. NY：P.
 Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻译社.
 乙，2020. 主题名：副题名：其他题名信息[M]. 北京：社.
-乙丑，2020. entrysubtype 等值[DS].
+乙丑，2020. entrysubtype 等值[DS]. （2020）.
 丁，2020. 题名里有半角逗号, 分号; 问号? 叹号![M]. 北京：社.
 丁一，2020. 丁书[M]. 北京：社.
 万二，2020. 万书[M]. 北京：社.
-己，2020. 只缺出版地[M]. 某社.
+己，2020. 只缺出版地[M]. [出版地不详]：某社.
 巳，2020. 带关键词的书[M]. 北京：社.
 子，2022. 无页码有文章编号[J]. 学报，5：e12345.
 习三，2020. 习书[M]. 北京：社.
@@ -629,7 +629,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 午，2020. 带注释字段的书[M]. 北京：社.
 壬，2022. 有期无卷[J]. 学报（2）：1-9.
 丑，2022. 非数字期号[J]. 学报，5（增刊 2）：1-9.
-未，2023. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+未，2023. DOI 与 CSTR 与 URL 齐备[J]. 学报，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 丙，2020. 北京：社.
 丙子，无日期. 电子资源缺出版年有页码[EB/OL]. [2024-01-01]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​n​p.
 丙寅，2020. 无任何标识线索[Z].
@@ -651,7 +651,7 @@ Foreign A，2019. 外国名著中译本[M]. 译甲，译乙，译. 上海：翻�
 ———，2020b. 同责任者同年甲[M]. 北京：社.
 ———，2020c. 同责任者同年乙[M]. 北京：社.
 ———，2020d. 中文原版[M]. 北京：中文社.
-Zhang S，2020d. English Version[M]. NY：EN Press.
+Zhang San，2020d. English Version[M]. NY：EN Press.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
 张三，李四，等，2020. 显式 and others[M]. 北京：社.
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
@@ -661,8 +661,8 @@ Zhang S，2020d. English Version[M]. NY：EN Press.
 庚，2020. 用户手写占位符[M]. [S.l.]：[s.n.].
 癸，2024. 网络首发无卷期[J]. 学报：1-9.
 寅，2020. 起讫页码折叠[M]. 北京：社：1234-1236.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
 

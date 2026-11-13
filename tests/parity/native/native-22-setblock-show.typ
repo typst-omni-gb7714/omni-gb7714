@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 // 原生基准：std.bibliography + show…: set block(fill 标记) → 整表一个框（fill 标记色恰 1 次）。title:none 去 heading 块。
 #show std.bibliography: set block(fill: rgb("#123456"))
 正文 #cite(<a>) #cite(<b>) #cite(<c>)

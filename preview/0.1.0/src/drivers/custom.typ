@@ -141,7 +141,7 @@
   }
   let actual = if fname == "mark" { mark-medium.mark(entry) }
     else if fname == "medium" {
-      let code = mark-medium.medium(entry, show-url: mark-medium.gate(opts.show-url, entry, version: opts.version), version: opts.version, online: fields.online(entry, opts))
+      let code = mark-medium.medium(entry, version: opts.version)
       if code == none { "" } else { code }
     }
     else if fname == "entry-type" { entry.entry_type }

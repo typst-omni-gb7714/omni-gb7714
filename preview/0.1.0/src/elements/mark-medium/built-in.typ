@@ -153,7 +153,7 @@
     let v = entry.fields.at(f, default: none)
     if v != none and str(v).contains("/") { return upper(str(v)).contains("/OL") }
   }
-  if entry.entry_type == "online" { return true }
+  if entry.entry_type in ONLINE-TYPES { return true }
   let subtype = str(entry.fields.at("entrysubtype", default: ""))
   if entry.entry_type in _born-digital or subtype == "preprint" or field.get(entry, "eprint") != none {
     return field.has-online(entry)
@@ -191,30 +191,20 @@
   }
 }
 
-#let online-suppressed(setting, entry, version: 2015) = {
-  applied-value(setting, entry) == "online-only" and not is-online(entry, version: version)
-}
-
-#let medium(entry, show-url: true, version: 2015, online: auto) = {
+#let medium(entry, version: 2015) = {
   let medium-field = entry.fields.at("medium", default: none)
   if medium-field != none { return medium-field }
   let explicit = _explicit-medium(entry)
   if explicit != none { return explicit }
-  if entry.entry_type in ONLINE-TYPES { return "OL" }
-
-  let online = if online != auto { online }
-    else if version == 2005 { field.get(entry, "url") != none and show-url }
-    else { field.has-online(entry) and show-url }
-  if online { return "OL" }
+  if is-online(entry, version: version) { return "OL" }
   return none
 }
 
-#let render(entry, show-mark: true, show-medium: true, show-url: true, space-before-mark: false, version: 2015, online: auto, bracket-style: "half") = {
+#let render(entry, show-mark: true, show-medium: true, space-before-mark: false, version: 2015, bracket-style: "half") = {
   if not gate(show-mark, entry, version: version, allow-online-only: false) { return "" }
-  let show-url = gate(show-url, entry, version: version)
   let mark-code = mark(entry)
   if mark-code == "" { return "" }
-  let medium-code = if show-medium { medium(entry, show-url: show-url, version: version, online: online) } else { none }
+  let medium-code = if show-medium { medium(entry, version: version) } else { none }
   let prefix = if space-before-mark { " " } else { "" }
   let (lb, rb) = if bracket-style == "full" { ("［", "］") } else { ("[", "]") }
   if medium-code != none { prefix + lb + mark-code + "/" + medium-code + rb } else { prefix + lb + mark-code + rb }

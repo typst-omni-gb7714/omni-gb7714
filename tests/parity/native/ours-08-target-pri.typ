@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 #import "/lib.typ": *
 #show: gb7714(version: 2015, )
 #[在 scope 里 @ka] <s1>

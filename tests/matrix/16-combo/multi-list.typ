@@ -16,13 +16,13 @@
 #let scoped = [
   #[#set-bib-label("s1")
     第一节的引用 #cite(<bm-zh>) #cite(<aj-zh>)]
-  #bibliography(MAIN, title: [第一节], full: false, label: "s1", numbering-style: "paren")
+  #bibliography(MAIN, title: [第一节], full: false, label: "s1", bib-numbering-style: "paren")
   #[#set-bib-label("s2")
     第二节的引用 #cite(<bm-en>)]
-  #bibliography(MAIN, title: [第二节], full: false, label: "s2", numbering-style: "circled")
+  #bibliography(MAIN, title: [第二节], full: false, label: "s2", bib-numbering-style: "circled")
 ]
 #case("两张命名列表：各自的 version / style / 编号空间", gb7714.with(), full: false, own-bib: false, body: two-lists)
-#case("set-bib-label 分节 + 逐表 numbering-style", gb7714.with(), full: false, own-bib: false, body: scoped)
+#case("set-bib-label 分节 + 逐表 bib-numbering-style", gb7714.with(), full: false, own-bib: false, body: scoped)
 #case("三级覆盖链：全局 numeric → 本表 author-date → 本次 cite(style: numeric)", gb7714.with(), full: false, own-bib: false, body: [
   本表 author-date，本次引用强制 numeric：#cite(<bm-zh>, bib-label: "c3", style: "numeric")；
   同表另一次引用跟本表：#cite(<aj-zh>, bib-label: "c3")。

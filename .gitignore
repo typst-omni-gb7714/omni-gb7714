@@ -3,3 +3,5 @@ tests/bin/
 # 系统 / 构建垃圾
 **/.DS_Store
 **/__pycache__/
+# 固定测试字体由setup.py下载，不提交二进制
+tests/fonts/*.otf

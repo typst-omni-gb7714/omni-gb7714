@@ -8,10 +8,8 @@ description = "GB/T 7714 参考文献格式化包（基于 citegeist），支持
 repository = "https://github.com/"
 keywords = ["bibliography", "citation", "GB/T 7714", "Chinese", "reference"]
 categories = ["text"]
-# 发布物只保留：lib.typ + src/ + typst.toml + README.md + LICENSE。
-# 其余（构建产物 / 测试 / 手册工程 / 草稿 / 基准 / 本地 quan 旧副本）一律排除。
+# 运行代码、随包依赖及许可证必须保留；开发测试、手册工程和构建产物不进下载包。
 exclude = [
-  "quan",
   "tests",
   "easy-zh-manual",
   "bench",

@@ -7,6 +7,7 @@
 #import "../entryset.typ"
 #import "../elements/creators.typ" as creators
 #import "../elements/titles.typ" as titles
+#import "aux-omni.typ": active-list-at
 
 #let note-repeat-style-values = ("full", "number", "shortened", "reuse")
 
@@ -54,8 +55,8 @@
   }
   let first-sidecar = _sidecar-at(base)
   let opts = options-thunk(if first-sidecar == none { (:) } else { first-sidecar.value.at("overrides", default: (:)) })
-  let (indent, eff-style, bib-style, show-url, eff-show-annotation, show-end-period, eff-custom-drivers, version, eff-punct-style, eff-custom-punct, eff-pid-colon-style, _emit-entry-author-date, _emit-entry, eff-custom-terms, eff-custom-fields, eff-custom-pids, eff-correct-punct, eff-url-break-every, eff-show-pid, eff-pid-priority, eff-dedup-url-pid, _get-related, _set-redirect, bib-data, note-repeat-style, note-ibid, note-repeat-reset, cite-terms-lang, format-footnote-number, _active-list, _bib-link, show-anon, show-et-al, _global-config, show-mark, show-medium, space-before-mark, correct-punct) = opts
-  let current-list = _active-list.at(here())
+  let (indent, eff-style, bib-style, show-url, eff-show-annotation, show-end-period, eff-custom-drivers, version, eff-punct-style, eff-custom-punct, eff-pid-colon-style, _emit-entry-author-date, _emit-entry, eff-custom-terms, eff-custom-fields, eff-custom-pids, eff-correct-punct, eff-url-break-every, eff-show-pid, eff-pid-priority, eff-dedup-url-pid, _get-related, _set-redirect, bib-data, note-repeat-style, note-ibid, note-repeat-reset, cite-terms-lang, format-footnote-number, note-super, _bib-link, show-anon, show-et-al, _global-config, show-mark, show-medium, space-before-mark, correct-punct) = opts
+  let current-list = active-list-at(here())
   let document-lang = text.lang
 
       let _period-on(single-block) = if show-end-period == auto { not single-block } else { show-end-period }
@@ -92,7 +93,7 @@
 
       let _short-body(entry, supplement, with-end-period: true) = {
         let author = creators.principal(entry, et-al-min: _global-config.et-al-min, et-al-use-first: _global-config.et-al-use-first, show-anon: show-anon, show-et-al: show-et-al, name-style: _global-config.name-style, punct-style: eff-punct-style, custom-punct: eff-custom-punct, custom-terms: _global-config.custom-terms, name-suffix-separator: _global-config.name-suffix-separator, prefix-last: _global-config.prefix-last, version: version)
-        let short-title = titles.format(entry, show-mark: (if show-mark == auto { true } else { show-mark }), show-medium: show-medium, show-url: false, space-before-mark: space-before-mark, mark-medium-bracket-style: _global-config.at("mark-medium-bracket-style", default: "half"), hyperlink-title: false, correct-punct: correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, version: _global-config.version, volume-title-gutter: _global-config.volume-title-gutter)
+        let short-title = titles.format(entry, show-mark: (if show-mark == auto { true } else { show-mark }), show-medium: show-medium, space-before-mark: space-before-mark, mark-medium-bracket-style: _global-config.at("mark-medium-bracket-style", default: "half"), hyperlink-title: false, correct-punct: correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, version: _global-config.version, volume-title-gutter: _global-config.volume-title-gutter)
 
         let parts = if supplement != none { (author, short-title, supplement) } else { (author, short-title) }
         let segment-period = punct.end-period(entry, eff-punct-style, eff-custom-punct)
@@ -173,7 +174,7 @@
       let _emit-endnote(body) = {
 
         _endnote-counter.step()
-        super(context format-footnote-number(_endnote-counter.get().first()))
+        note-super(context format-footnote-number(_endnote-counter.get().first()))
         metadata((kind: "gb7714-endnote", body: body, list: current-list))
       }
       if not in-merged-group {
@@ -186,7 +187,7 @@
           if slot.kind == "reuse" {
             let prior-first = anchor-sets.domain.find(m => _redirect-of-anchor(m) == redirect-key)
             let reuse-number = _endnote-counter.at(prior-first.location()).first() + 1
-            [#super(format-footnote-number(reuse-number))]
+            [#note-super(format-footnote-number(reuse-number))]
           } else {
             _emit-endnote(slot.body)
           }

@@ -2,21 +2,21 @@
  `A | B`：A 非空出 A，否则出 B。
  期望 可串接成 A | B | C（左结合，逐个回退到首个非空）。 两侧操作数都可以是单个 token / 字面量，也可以是整个组
  ——条件组 ?<…> / &<…> 与 守卫组 <… => …> 都行，所以回退候选放哪边都成。 | 与 => 互不相干：别名走 body 侧的取值回退，
- 守卫走谓词判断。 语料：bm-zh 有 edition 无 note；ti-notitle 无 title 有 author；aj-en 有 volume / number。
+ 守卫走谓词判断。 语料：bm-zh 有 edition 无 note；ti-notitle 无 titles 有 creator；aj-en 有 volume / number。
 
 
 ▸ token | token：note | edition
 
 正文：[1-3]
 [1] 张三，李四，王五，等. 中文专著示例：副标题. 3 版.
-[2] 丙.
+[2] 丙
 [3] Brown B，Green G. English Journal Article.
 
 ▸ 三段串接：note | keywords | edition
 
 正文：[1-3]
 [1] 张三，李四，王五，等. 中文专著示例：副标题. 3 版.
-[2] 丙.
+[2] 丙
 [3] Brown B，Green G. English Journal Article.
 
 ▸ 全空 → 整段消失：note | keywords
@@ -26,21 +26,21 @@
 [2] 丙. 2020.
 [3] Brown B，Green G. English Journal Article. 2023.
 
-▸ 题名兜底：title | subtitle | {（无题名）}
+▸ 题名兜底：titles | subtitle | {（无题名）}
 
 正文：[1-3]
 [1] 张三，李四，王五，等. 中文专著示例：副标题. 2020.
 [2] 丙. （无题名）. 2020.
 [3] Brown B，Green G. English Journal Article. 2023.
 
-▸ 组回退到 token：?<{副：} subtitle> | title
+▸ 组回退到 token：?<{副：} subtitle> | titles
 
 正文：[1-3]
 [1] 张三，李四，王五，等. 副：副标题. 2020.
 [2] 丙. 2020.
 [3] Brown B，Green G. English Journal Article. 2023.
 
-▸ token 回退到组：title | ?<{副：} subtitle>
+▸ token 回退到组：titles | ?<{副：} subtitle>
 
 正文：[1-3]
 [1] 张三，李四，王五，等. 中文专著示例：副标题. 2020.

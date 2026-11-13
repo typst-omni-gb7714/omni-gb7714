@@ -9,6 +9,6 @@
 #case("false（缺省）", gb7714.with(), cites: cs, full: false)
 #case("true", gb7714.with(space-before-mark: true), cites: cs, full: false)
 #case("true + 裸 mark token 的自定义驱动（不受它管）", gb7714.with(space-before-mark: true,
-  custom-drivers: (book: "<author>. <title>[<mark>]. <publisher>, <year>")), cites: (<bm-zh>,), full: false)
+  custom-drivers: (book: "<creator>. <titles>[<mark>]. <publisher>, <year>")), cites: (<bm-zh>,), full: false)
 #case("true + mark-medium token 的自定义驱动（受它管）", gb7714.with(space-before-mark: true,
-  custom-drivers: (book: "<author>. <title><mark-medium>. <publisher>, <year>")), cites: (<bm-zh>,), full: false)
+  custom-drivers: (book: "<creator>. <titles><mark-medium>. <publisher>, <year>")), cites: (<bm-zh>,), full: false)

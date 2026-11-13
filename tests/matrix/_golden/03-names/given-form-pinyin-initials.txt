@@ -1,0 +1,44 @@
+ given-form: "pinyin-initials"
+ 拼音名的名按音节逐节缩首字母（`Yanshuo` -> `Y S`）。
+ 期望 2015 / 2005 文献表缺省走 (pinyin: "pinyin-initials", rest: "initials")：拼音名 CHU Y S、PAN E T、WANG X Y
+（对齐李泽平 bst 的 initializepinyin 默认），西文名仍单首字母；2025 缺省拼音名全拼不变。 标量档不做拼音检测——能切就
+ 切（Anna 也切成 A N）；字典档才检测，且配中国姓的西文常用名 （Anna Wang、Lisa Chen）有阻断表拦下、退回单首字
+ 母。已有分隔符的 Yan-Shuo / Yan Shuo 走既有分段。 切点从长到短找：Changan 得 C A（长安）；歧义用 Chang'an 强制。
+
+
+▸ 2015 缺省：拼音名逐音节缩，西文名单首字母
+
+[1] CHU Y S, PAN E T, WANG X Y. Alpha[M]. X: P, 2020.
+[2] CHU Y S, OUYANG X, LI C A. Beta[M]. X: P, 2021.
+[3] WANG A, CHEN L, SMITH A. Gamma[M]. X: P, 2022.
+
+▸ 2005 缺省：同 2015
+
+[1] CHU Y S, PAN E T, WANG X Y. Alpha[M]. X: P, 2020.
+[2] CHU Y S, OUYANG X, LI C A. Beta[M]. X: P, 2021.
+[3] WANG A, CHEN L, SMITH A. Gamma[M]. X: P, 2022.
+
+▸ 2025 缺省：拼音名全拼不变
+
+[1] Chu Yanshuo，Pan Erting，Wang Xinya. Alpha[M]. X：P，2020.
+[2] Chu Yan-Shuo，Ouyang Xiu，Li Changan. Beta[M]. X：P，2021.
+[3] Wang A，Chen L，Smith A. Gamma[M]. X：P，2022.
+
+▸ 标量 pinyin-initials（不检测，Anna 也切）
+
+[1] CHU Y S, PAN E T, WANG X Y. Alpha[M]. X: P, 2020.
+[2] CHU Y S, OUYANG X, LI C A. Beta[M]. X: P, 2021.
+[3] WANG A N, CHEN L S, SMITH A N. Gamma[M]. X: P, 2022.
+
+▸ 显式标量 initials：整名单首字母（退路一）
+
+[1] CHU Y, PAN E, WANG X. Alpha[M]. X: P, 2020.
+[2] CHU Y S, OUYANG X, LI C. Beta[M]. X: P, 2021.
+[3] WANG A, CHEN L, SMITH A. Gamma[M]. X: P, 2022.
+
+▸ 2025 + 字典 (pinyin: pinyin-initials, rest: initials)
+
+[1] Chu Y S，Pan E T，Wang X Y. Alpha[M]. X：P，2020.
+[2] Chu Y-S，Ouyang X，Li C A. Beta[M]. X：P，2021.
+[3] Wang A，Chen L，Smith A. Gamma[M]. X：P，2022.
+

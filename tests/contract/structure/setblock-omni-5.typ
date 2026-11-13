@@ -1,5 +1,7 @@
 // 同 setblock-omni 但 5 条目——证明框数不随条目数增长（仍 = 1，非逐条目 N 框）。
 #import "/lib.typ": *
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 #show: gb7714.with(full: true)
 #set block(fill: rgb("#123456"))
 正文 @a @b @c @d @e

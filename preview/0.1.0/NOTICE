@@ -13,6 +13,13 @@ You may obtain a copy of the License at
 Third-party components bundled with this package
 ------------------------------------------------------------------------------
 
+quan (quan/)
+    A verbatim copy of quan 0.3.0 by Andrew Junhao Wu (circled numbers for
+    Typst), bundled temporarily while that release awaits Typst Universe
+    review; it will be replaced by `@preview/quan:0.3.0` once published.
+    Licensed under the MIT License; see quan/LICENSE.
+    Upstream: https://typst.app/universe/package/quan
+
 citegeist4gb7714 (citegeist/)
     A modified version of citegeist by Alexander Koller, bundled here as the
     .bib parsing backend. Licensed under the MIT License; see citegeist/LICENSE

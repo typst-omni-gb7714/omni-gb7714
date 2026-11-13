@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 // 回归：多列表连续编号，首表([1]-[12]双位数)与续表([13]-[15])的编号列/内容列必须*对齐*。
 //   曾 bug：续表按自身条数(3)测编号宽成 "[3]" 窄列 → [13-15] 溢出、与首表对不齐。修法 eff-number-width 计入 number-offset。
 //   run.sh 用像素量所有编号行左缘应*同一 x*（左对齐 + 各表对齐）。需 0.15（native-mode 连续编号）。

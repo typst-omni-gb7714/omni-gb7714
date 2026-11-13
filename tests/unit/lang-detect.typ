@@ -1,7 +1,7 @@
 // 精准语言检测 accurate 模式的边缘场景准确度探针。
 // 编译：typst compile --root <仓库根> probe.typ probe.pdf
 // 直接调 `detect-accurate(entry)`，用人造 entry 验证字符表 + 百家姓姓氏白名单 + glotter 四级判定的覆盖。
-#import "/src/parse/lang-detect.typ": detect-accurate
+#import "/src/detect/lang.typ": detect-accurate
 
 #let mk(fam, ttl) = (
   parsed_names: (author: if fam != none { ((family: fam, given: ""),) } else { () }),

@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 // omni：同样用原生 CSL 流派(springer-vancouver)。inline 引用应*完全 passthrough*、与原生逐像素一致
 //   （omni 不插 leading-wj、不吃标记前空白）。run.sh 比第一行(正文含引用)像素应全等。
 #import "/lib.typ": *

@@ -11,6 +11,7 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 ROOT="$(cd ../../.. && pwd)"
+source "$ROOT/tests/fonts/env.sh" || exit 1
 TYPST="${TYPST:-typst}"
 # 临时 .typ 得落在 project root 里面——typst 不接受 root 之外的源文件。
 TMPD="$(mktemp -d "$ROOT/tests/.tmp-typo-XXXXXX")"; trap 'rm -rf "$TMPD"' EXIT
@@ -27,6 +28,8 @@ differs() {
     local cfg; [ "$side" = off ] && cfg="$off" || cfg="$on"
     cat > "$TMPD/$side.typ" <<TYP
 #import "/lib.typ": *
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 #set page(width: $width, height: auto, margin: 5mm)
 #set text(lang: "zh", size: 9pt)
 #show: gb7714.with($cfg)
@@ -45,15 +48,17 @@ TYP
   fi
 }
 
-differs "italic-book-title"    '#cite(<bm-en>)' ''                          'italic-book-title: true'
-differs "italic-journal"       '#cite(<aj-en>)' ''                          'italic-journal: true'
-differs "bold-journal-volume"  '#cite(<aj-en>)' ''                          'bold-journal-volume: true'
+differs "emphasis titles italic"   '#cite(<bm-en>)' ''                      'emphasis: (titles: (italic: true))'
+differs "emphasis journaltitles"   '#cite(<aj-en>)' ''                      'emphasis: (journaltitles: (italic: true))'
+differs "emphasis volume bold"     '#cite(<aj-en>)' ''                      'emphasis: (volume: (bold: true))'
+differs "emphasis titles 书名号"    '#cite(<bm-zh>)' ''                      'emphasis: (titles: (prefix: "《", suffix: "》"))'
 differs "hyperlink"            '#cite(<bm-online>)' ''                      'hyperlink: false'
 differs "hyperlink-title"      '#cite(<bm-online>)' ''                      'hyperlink-title: true'
 differs "cite-form super/inline" '#cite(<bm-zh>)' 'cite-form: "inline"'     'cite-form: "super"'
 differs "cite-supplement-style"  '#cite(<bm-zh>, supplement: [12])' 'cite-supplement-style: "compact"' 'cite-supplement-style: "split"'
 differs "hyphenate"            '#cite(<aj-en>)#cite(<bm-en>)' ''           'hyphenate: false'          6cm
 differs "entry-spacing"        '#cite(<bm-zh>)#cite(<bm-en>)' ''            'entry-spacing: 2em'
+differs "number-punct-width"    '#cite(<bm-zh>)' 'bib-numbering-style: "fullwidth-bracket"' 'bib-numbering-style: "fullwidth-bracket", number-punct-width: "native"'
 # 悬挂缩进只在「编号不成列」时才由它说了算：成列档（缺省 `"column"`）下余行贴正文列，
 # 版式由列宽决定，这个参数不参与（见 BUGS.md #8——doc 那句「传长度则强制」是错的）。
 differs "entry-hanging-indent" '#cite(<ic-zh>)' 'number-placement: "inline"' 'number-placement: "inline", entry-hanging-indent: 6em' 6cm

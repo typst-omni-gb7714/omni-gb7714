@@ -1,0 +1,30 @@
+ 富文本标记
+ citeproc 的富文本标记是固定有限的 HTML 子集——`<i>` 斜体、`<b>` 粗体、`<sup>` 上标、`<sub>` 下标、`<sc>` 小型大写、
+ `<span class="nocase">` 大小写保护。Zotero 导出的 `.bib` 字段值可能带这些标记,omni 进 citegeist 前归一为对应的 LaTeX 命
+ 令 / 花括号组,由 `to-typst` 渲染。标签名大小写不敏感（Zotero 有时导出 `<Span>`）。
+ 期望 进 citegeist 前 normalize-html 把标记转换:<i>→\textit、<b>→\textbf、<sup>→\textsuperscript、
+ <sub>→\textsubscript、<sc>→\textsc(五者复用 to-typst 已有映射→emph/strong/super/sub/smallcaps);<span
+ class="nocase">…</span>→{…}(复用 citegeist brace-group=大小写保护+原样输出,等义于 CSL nocase)。
+
+ • 默认(不 title-case):五个样式标记各自渲染;nocase 段原样输出(DNA)。标记本身不漏进版面。
+ • 开 title-case(titles-text-case: (title: "title")):nocase 段大小写受保护——<span class="nocase">DNA</span> 保持
+   DNA,而同句非 nocase 的 rna 被 title-case 转成 Rna。
+
+
+▸ 五个样式标记 + nocase(默认不 title-case)
+
+正文：[1-2]
+[1] X. The genome of Eucalyptus grandis, bold, E=mc2, H2O, unesco[J]. Nature，2020.
+[2] Y. study of DNA and rna in cells[J]. Science，2020.
+
+▸ nocase 大小写保护(开 title-case)
+
+正文：[1]
+[1] Y. Study of DNA and Rna in Cells[J]. Science，2020.
+[2] X. The Genome of Eucalyptus Grandis, Bold, E=mc2, H2O, Unesco[J]. Nature，2020.
+
+▸ Zotero builtin：`{\textless}span…{\textgreater}` 转义 HTML 不漏进版面
+
+正文：[1]
+[1] Z. The genome of Eucalyptus grandis[J]. Nature，2014.
+

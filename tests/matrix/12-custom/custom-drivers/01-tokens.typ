@@ -7,9 +7,13 @@
     本文件把速查表的 token 逐个渲染出来（每行一个 token，前面用 verbatim 标出它的名字），
     好让人一眼核对每个 token 到底吐什么。
     *块 token*（`title-block` / `imprint-block` / `mark-medium` / `access` / `series-block`）是打包好的整段，
-    受各自的 `show-*` 配置管；*原值 token*（`journaltitle` / `number` / `type` / `note`）就是字段原文。])
+    受各自的 `show-*` 配置管；*原值 token*（`journaltitle` / `number` / `type` / `note`）就是字段原文。
+    *裸字段↔合成体*：`title` / `booktitle` / `journal` / `author` 是*纯字段*（作者名走角色格式化），
+    复数 / `creator` 是*合成体*——`titles`=题名+副题名+其他题名（冒号链）、`booktitles`=母体同构、
+    `journaltitles`=刊名链+副刊名、`creator`=主责任者顶替链+佚名占位。.bib 里子字段独立，裸 token 只指裸字段，要整条用合成体。])
 #let one(name, tpl) = case(name, gb7714.with(custom-drivers: (book: tpl, article: tpl, incollection: tpl, thesis: tpl, patent: tpl, online: tpl)),
   cites: (<bm-zh>, <aj-zh>, <ic-zh>, <dt-zh>, <pt-zh>, <eb-zh>), full: false)
+#one("合成体 titles · booktitles · journaltitles · creator（对比下方裸字段 / 角色）", "{titles=} titles {／booktitles=} booktitles {／journaltitles=} journaltitles {／creator=} creator")
 #one("author · editor · translator · editor-other · bookauthor · holder", "{author=} author {／editor=} editor {／editor-other=} editor-other {／translator=} translator {／bookauthor=} bookauthor {／holder=} holder")
 #one("title · subtitle · titleaddon · title-block · component-part-title-block", "{title=} title {／subtitle=} subtitle {／titleaddon=} titleaddon {／title-block=} title-block {／cp-title-block=} component-part-title-block")
 #one("mark · medium · mark-medium · type · degree-annotation · country", "{mark=} mark {／medium=} medium {／mark-medium=} mark-medium {／type=} type {／degree=} degree-annotation {／country=} country")

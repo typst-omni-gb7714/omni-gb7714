@@ -8,7 +8,7 @@
 
 正文：[1]
 [1] 张三. 中文原版[M]. 北京：中文社，2020.
-   Zhang S. English Version[M]. NY：EN Press，2020.
+    Zhang San. English Version[M]. NY：EN Press，2020.
 
 ▸ false
 
@@ -19,5 +19,5 @@
 
 正文：（张三，2020）
 张三，2020. 中文原版[M]. 北京：中文社.
-Zhang S，2020. English Version[M]. NY：EN Press.
+Zhang San，2020. English Version[M]. NY：EN Press.
 

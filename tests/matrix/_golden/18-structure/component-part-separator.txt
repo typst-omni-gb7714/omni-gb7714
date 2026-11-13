@@ -1,0 +1,38 @@
+ component-part-separator
+析出文献题名与其*出处*（母体：图书 / 论文集 / 会议名称）之间的分隔符——GB/T 7714 里那个 `//`。
+期望 默认 "//" 是 GB 全语言通用的析出符（析出题名//母体）。biblatex-gb7714（胡振震） 整节称它「析出文献标识符号」
+（gbpunctin 选项），标准 3.8 术语「析出文献 / component part」， 陈浩元称「出处项前标识符号」；语义是「析出文献登载于
+母体之中」（旧著录写「见:」/「In:」同此意）。
+ 收字符串（所有语言）或多语言字典（按条目语言分设、未点名的回落 "//"）。值是完整分隔串， 前导符含在里面（如 .
+ 见: 自带前导句点）。冒号等标点逐字使用、不感知，按 bib-punct-style 自己写（默认半角 见: 、full 档全角 见：）。纯著
+ 录符号，引文里永不出现，故无 cite- 对应。
+
+
+▸ 默认 //（GB 全语言通用）
+
+正文：[1-2]
+[1] 孙一. 析出文献题名[M]//李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+[2] Smith J，Brown B，Chen C，et al. Component Part[M]. Trans T，Uma U，Vega V，et al.，trans.//Host H，Ivy I，Jones J，et
+    al. Host Book. New York：Univ Press，2023：10-20.
+
+▸ ". 见: "（旧式，所有语言一律用）
+
+正文：[1-2]
+[1] 孙一. 析出文献题名[M]. 见: 李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+[2] Smith J，Brown B，Chen C，et al. Component Part[M]. Trans T，Uma U，Vega V，et al.，trans.. 见: Host H，Ivy I，Jones J，
+    et al. Host Book. New York：Univ Press，2023：10-20.
+
+▸ 多语言字典 (zh: 「. 见: 」, en: 「. In: 」)
+
+正文：[1-2]
+[1] 孙一. 析出文献题名[M]. 见: 李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+[2] Smith J，Brown B，Chen C，et al. Component Part[M]. Trans T，Uma U，Vega V，et al.，trans.. In: Host H，Ivy I，Jones J，
+    et al. Host Book. New York：Univ Press，2023：10-20.
+
+▸ 未点名的语言回落 //（只设 zh，en 条目仍 //）
+
+正文：[1-2]
+[1] 孙一. 析出文献题名[M]. 见: 李编，王编. 母体专著题名. 北京：母体出版社，2018：50-60.
+[2] Smith J，Brown B，Chen C，et al. Component Part[M]. Trans T，Uma U，Vega V，et al.，trans.//Host H，Ivy I，Jones J，et
+    al. Host Book. New York：Univ Press，2023：10-20.
+

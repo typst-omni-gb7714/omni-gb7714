@@ -16,5 +16,5 @@
 #one("顺序编码制 + supplement-style: \"split\"", gb7714.with(cite-supplement-style: "split"))
 #one("著者-出版年制", gb7714.with(style: "author-date"))
 #one("逐次覆盖 supplement-style", gb7714.with(cite-supplement-style: "compact"))
-#case("脚注制：supplement 接在注文之后", gb7714.with(cite-footnote: true), full: false,
+#case("脚注制：supplement 接在注文之后", gb7714.with(note: "foot"), full: false,
   body: [首 #cite(<bm-zh>, supplement: [12]) 邻 #cite(<bm-zh>, supplement: [34])。])

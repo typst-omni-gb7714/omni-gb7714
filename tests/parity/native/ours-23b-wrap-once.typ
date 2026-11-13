@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 // 0.15：`show std.bibliography: it => 包裹` 只命中一次（不再多出个空框）——SVG 标记 fill 恰 1 次。
 #import "/lib.typ": *
 #show: gb7714.with(full: true)

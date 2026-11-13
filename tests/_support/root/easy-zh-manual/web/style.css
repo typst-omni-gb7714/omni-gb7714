@@ -1,0 +1,1379 @@
+/* omni-gb7714 manual website styling
+ * 配套 typst compile --format html --input target=html 的输出结构。
+ * Typst 0.14+ HTML export 已内置基本样式；这里只覆盖语义化扩展（callout、example、header、TOC）+ 响应式。 */
+
+/* 代码字体：霞鹜文楷等宽 *简体*（LXGW WenKai Mono GB Screen，GB = 国标 = 简体）——中英文同一等宽字体、简体字形。
+ * fontsource 只有繁体切片（-tc）；简体等宽用 lxgw-wenkai-mono-gb-screen-webfont（由 cn-font-split 按 unicode-range 切片，
+ * 浏览器只下载页面真正用到的字符子集）。霞鹜文楷等宽繁体仅作末位后备，绝不落到浏览器默认的*日文字形*（无 CJK 字体时的老问题）。 */
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-mono-gb-screen-webfont/fonts/style.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/lxgw-wenkai-mono-tc/index.css');
+
+:root {
+  --accent: #6A1B9A;
+  --accent-light: #F4ECFA;
+  --code-bg: #FBF6EC;
+  --code-stripe: #F4EEDF;
+  --rule: #C9BEDB;
+  --link: #0B4F9E;
+  --muted: #6B6878;
+  --bg: #ffffff;
+  --fg: #222222;
+  --max-content: 56rem;
+}
+
+/* 系统主题 + 用户手动覆盖 (data-theme)
+ * 深色：紫色提亮到淡薰衣草（#C9A0E8）保证 4.5:1 对比度；
+ *      bg/code-bg 走低饱和暖灰；链接走低饱和浅蓝。 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --accent:       #C9A0E8;
+    --accent-light: #2D1F3A;
+    --bg:           #181818;
+    --fg:           #E8E8E8;
+    --code-bg:      #2E2818;
+    --code-stripe:  #3D3621;
+    --rule:         #3D3245;
+    --link:         #8FB8F0;
+    --muted:        #9C9398;
+  }
+}
+:root[data-theme="dark"] {
+  --accent:       #C9A0E8;
+  --accent-light: #2D1F3A;
+  --bg:           #181818;
+  --fg:           #E8E8E8;
+  --code-bg:      #242021;
+  --code-stripe:  #2E2828;
+  --rule:         #3D3245;
+  --link:         #8FB8F0;
+  --muted:        #9C9398;
+}
+
+html {
+  font-family: -apple-system, "Noto Serif CJK SC", "Source Han Serif SC",
+               "Songti SC", "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1.7;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* 两端对齐（仅段落 / 列表项 / 引用 / 摘要正文，避开标题、代码、表格）。
+ * text-justify: inter-character 让 CJK 字符之间均匀展开，不至于产生大空隙；
+ * hyphens: auto 让英文长词在末端换行时正常断字；break-word 防止超长 URL 撑破容器 */
+p,
+li,
+blockquote,
+.abstract {
+  text-align: justify;
+  text-justify: inter-character;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* ── 传统中文阅读排版 ───────────────────────────────────────────────
+ * 正文段落：首行缩进 2 字，段间不留空白——靠缩进区分段落，而非段间空行。
+ * 标题 / 列表 / 代码 / 图表各自带间距，不是 <p>、不受影响。
+ * 标题页元信息、API 选项、callout、表格等结构化组件内的段落单独豁免：
+ *   不缩进、间距回退浏览器默认（即保持改动前的原样）。 */
+p {
+  margin: 0;
+  text-indent: 2em;
+}
+.manual-header p { text-indent: 0; } /* margin 由 .description/.authors/.meta 等更高优先级规则保留 */
+.callout p,
+section.option p,
+.example p,
+blockquote p,
+td p,
+th p {
+  text-indent: 0;
+  margin: revert;
+}
+
+body {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 4.25rem 1.25rem 4rem; /* top: 3.25rem(top bar) + 1rem 间距 */
+  /* box-sizing: border-box 让 max-width 含 padding，以免 padding 把 body 视觉宽度推出右侧 page-toc-rail */
+  box-sizing: border-box;
+}
+
+/* 断点策略：缩放放大（视口变窄）时优先收起左侧章节目录，更窄时再收右侧"本页内容"。
+ * 因此左侧 sidebar 阈值 (≥1280) 高于右侧 rail (≥1024)。 */
+@media (min-width: 1280px) {
+  body {
+    margin-left: 320px; /* 280 sidebar + 40 gap */
+    max-width: calc(100vw - 580px); /* 320 (left) + 220 (rail) + 40 (右 gap) */
+    padding: 4.75rem 2.5rem 4rem 2.5rem; /* 3.25 顶栏 + 1.5 间距 */
+    /* body padding 恒定（不随章节变）——API 章节的悬挂缩进只加在 section.option 上（见 @1024 块），
+     * 故切章时 body 宽度不变、正文无 reflow 漂移；章节滑入靠 chapter-enter 关键帧（纯 transform、不影响 layout）。 */
+  }
+}
+
+/* ==== 左侧侧栏 .manual-toc 通用布局 ====
+ * 把面板布局放到无媒体查询的顶层，无论在何种视口都已"就绪"——这样 transform: translateX 滑入/滑出
+ * 才能 transition；不能用 display:none / display:flex 切换（display 不可 transition）。
+ * 默认隐藏（transform: translateX(-100%)），@≥1280 与 body.show-left-nav 各自负责把它推回 0。 */
+.manual-toc {
+  position: fixed;
+  left: 0;
+  top: 3.25rem;
+  width: 280px;
+  height: calc(100vh - 3.25rem);
+  height: calc(100dvh - 3.25rem);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  border-right: 1px solid var(--rule);
+  background: var(--bg);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  z-index: 60;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 默认收起状态 + 轨道阴影；窄屏看到的就是 overlay 模式 */
+  transform: translateX(-100%);
+  pointer-events: none;
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.18);
+  transition: transform 0.32s cubic-bezier(0.2, 0.85, 0.3, 1);
+}
+/* "章节" 标题条横跨全宽 */
+.manual-toc > h2,
+.manual-toc > h2:first-child {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.95rem 1.5rem 0.7rem 1.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: none;
+  border-bottom: 1px solid var(--rule);
+}
+/* 章节列表（第一个 nav）：始终完整显示，不滚动 */
+.manual-toc > nav[role="doc-toc"] {
+  flex: 0 0 auto;
+  overflow: visible;
+  padding: 0.9rem 1rem 0.5rem 1.5rem;
+}
+/* 示例区块：占剩余空间，且只有它可以滚动 */
+.manual-toc > .toc-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0 1rem 1.5rem 1.5rem;
+  min-height: 0;
+}
+.manual-toc > .toc-scroll > nav[role="doc-toc"] {
+  flex: none;
+  padding: 0;
+  overflow: visible;
+}
+.manual-toc ol { padding-left: 1.1rem; }
+.manual-toc .toc-scroll > nav[role="doc-toc"] > ol,
+.manual-toc > nav[role="doc-toc"] > ol { padding-left: 0; }
+.manual-toc li { margin: 0.18rem 0; }
+.manual-toc nav[role="doc-toc"] ol ol { display: none; }
+.manual-toc .toc-toggle { display: none !important; }
+.manual-toc nav[role="doc-toc"] > ol > li { margin: 0.45rem 0; }
+.manual-toc nav[role="doc-toc"] > ol > li > div > a,
+.manual-toc nav[role="doc-toc"] > ol > li > a {
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+.manual-toc a {
+  transition: color 0.15s ease, padding-left 0.15s ease;
+}
+.manual-toc a:hover {
+  padding-left: 0.25em;
+}
+/* 滚动条美化（挂在内层 .toc-scroll 上）*/
+.manual-toc .toc-scroll::-webkit-scrollbar,
+.manual-toc > nav[role="doc-toc"]::-webkit-scrollbar { width: 6px; }
+.manual-toc .toc-scroll::-webkit-scrollbar-thumb,
+.manual-toc > nav[role="doc-toc"]::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 3px;
+}
+
+/* @≥1280：sidebar 永久可见，无阴影、占位为正文左侧 320 让位的样式 */
+@media (min-width: 1280px) {
+  .manual-toc {
+    transform: translateX(0);
+    pointer-events: auto;
+    box-shadow: none;
+    z-index: 30;
+  }
+}
+/* show-left-nav：任意宽度强制把 sidebar 推回，与默认状态形成 transform transition */
+body.show-left-nav .manual-toc {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* ==== body padding/max-width breakpoints ====
+ * @≥1024：右侧 rail 出现（左侧 sidebar 还可能没出现，要到 ≥1280）*/
+@media (min-width: 1024px) {
+  body {
+    margin-left: 40px;
+    max-width: calc(100vw - 300px);
+    padding: 4.75rem 2.5rem 4rem 2.5rem;
+  }
+  /* API 章节的悬挂缩进只加在带悬挂参数名的 section.option 上（不再 pad 整个 body）——这样
+   * 标题（3 / 3.1 / 3.1.1）、章首散文、代码块、「参数排序」开关等都留在常规左位置，只有 option 块右移，
+   * 把绝对定位的参数名让进左侧空档。@1024 覆盖 ≥1024 与 ≥1280。
+   * 8.7rem = 11.2rem(原 body 悬挂 padding) − 2.5rem(常规 padding)，使 option 块位置/宽度与改动前像素一致。 */
+  body.has-hanging section.option {
+    margin-left: 8.7rem;
+  }
+}
+
+/* ==== 右侧 .page-toc-rail 通用布局 ==== 同 .manual-toc：layout 放顶层，transform 控制可见性 */
+.page-toc-rail {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 0;
+  top: 3.25rem;
+  width: 220px;
+  height: calc(100vh - 3.25rem);
+  height: calc(100dvh - 3.25rem);
+  overflow: hidden;
+  border-left: 1px solid var(--rule);
+  background: var(--bg);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  z-index: 60;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 默认收起：滑出右屏 + 阴影；@≥1024 与 body.show-right-nav 各自把 transform 推回 */
+  transform: translateX(100%);
+  pointer-events: none;
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.18);
+  opacity: 1;
+  transition: transform 0.32s cubic-bezier(0.2, 0.85, 0.3, 1),
+              opacity 0.25s ease,
+              visibility 0s;
+}
+/* 当章节没有次级标题（.empty）：在已可见状态下淡出 + 轻右移；维持原有效果 */
+.page-toc-rail.empty {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: transform 0.32s cubic-bezier(0.2, 0.85, 0.3, 1),
+              opacity 0.25s ease,
+              visibility 0s 0.32s;
+}
+.page-toc-rail > h2 {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.95rem 1.25rem 0.7rem 1.25rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: none;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+}
+.page-toc-rail > .scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0.9rem 0 1.5rem 0;
+}
+.page-toc-rail > .scroll::-webkit-scrollbar { width: 6px; }
+.page-toc-rail > .scroll::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 3px;
+}
+.page-toc-rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.page-toc-rail li { margin: 0; }
+.page-toc-rail a {
+  display: block;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.25rem 1.25rem 0.25rem 1rem;
+  border-left: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease, padding-left 0.15s ease;
+}
+
+/* @≥1024：rail 默认可见 (空状态例外)，无阴影 */
+@media (min-width: 1024px) {
+  .page-toc-rail {
+    transform: translateX(0);
+    pointer-events: auto;
+    box-shadow: none;
+    z-index: 1;
+  }
+}
+/* show-right-nav：任意宽度下手动拉回 */
+body.show-right-nav .page-toc-rail {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* page-toc-rail 内部样式（layout 已在上面定义；这里是层级缩进、折叠交互、高光） */
+.page-toc-rail li.lv-h3 > .page-toc-head > a,
+.page-toc-rail li.lv-h3 > a { padding-left: 1rem; }
+.page-toc-rail li.lv-h4 > a { padding-left: 1.8rem; font-size: 0.95em; }
+.page-toc-rail li.lv-h5 > a { padding-left: 2.4rem; font-size: 0.92em; }
+.page-toc-rail .page-toc-head {
+  display: flex;
+  align-items: stretch;
+}
+.page-toc-rail .page-toc-head > a {
+  flex: 1 1 auto;
+}
+.page-toc-rail .page-toc-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  flex: 0 0 auto;
+  cursor: pointer;
+  color: var(--muted);
+  user-select: none;
+  font-size: 0.65em;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease, color 0.15s ease;
+}
+.page-toc-rail .page-toc-toggle:hover { color: var(--accent); }
+.page-toc-rail li.collapsed > .page-toc-head > .page-toc-toggle {
+  transform: rotate(-90deg);
+}
+.page-toc-rail li.has-children > ol {
+  max-height: 200vh;
+  overflow: hidden;
+  opacity: 1;
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+}
+.page-toc-rail li.has-children.collapsed > ol {
+  max-height: 0;
+  opacity: 0;
+}
+.page-toc-rail a:hover {
+  color: var(--accent);
+}
+.page-toc-rail a.toc-current {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+/* @≥1280 — body 与 sidebar/rail 共存时的覆盖（必须放在上方 @1024 rail 块之后，
+ * 否则 @1024 的 body { margin-left: 40px } 会反向覆盖 @1280 的 320px → sidebar 与正文重叠 */
+@media (min-width: 1280px) {
+  body {
+    margin-left: 320px;
+    max-width: calc(100vw - 580px); /* 320 (left) + 220 (rail) + 40 (右 gap) */
+  }
+}
+
+/* 折叠 TOC：含子节的项变为可点击 toggle
+ * Typst HTML 把含子项的 <li> 渲染为 <li><div><a/></div><ol/></li>，
+ * 所以 toggle 被插入到 <div> 内（不是 <li> 直接子节点）。两种情形都覆盖。 */
+.manual-toc li.has-children > .toc-toggle,
+.manual-toc li.has-children > div > .toc-toggle {
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+  margin-right: 0.1em;
+  cursor: pointer;
+  color: var(--muted);
+  user-select: none;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease;
+  font-size: 0.7em;
+  text-align: center;
+}
+.manual-toc li.has-children.collapsed > .toc-toggle,
+.manual-toc li.has-children.collapsed > div > .toc-toggle {
+  transform: rotate(-90deg);
+}
+/* 折叠 / 展开动画：max-height 渐变，避免 display:none 的硬切换 */
+.manual-toc li.has-children > ol {
+  max-height: 200vh;
+  overflow: hidden;
+  opacity: 1;
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+}
+.manual-toc li.has-children.collapsed > ol {
+  max-height: 0;
+  opacity: 0;
+}
+.manual-toc a.toc-current {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ==== Options (API params: name + signature + body) ====
+ * 结构：<section class="option"><div class="option-head"><span class="option-name"/><span class="option-sig"/></div><div class="option-body"/></section>
+ * 默认（移动端 / 窄屏）：name 内嵌为 badge，与 sig 同行 flex 排列
+ * 桌面 ≥1024px：name 绝对定位，悬挂到 .option 左侧，sig 占据原位 */
+section.option {
+  margin: 1.2rem 0 0.8rem;
+  position: relative;
+}
+section.option .option-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5em;
+  margin: 0;
+}
+section.option .option-name {
+  font-family: "JetBrains Mono", "Source Code Pro", "Latin Modern Mono", "LXGW WenKai Mono GB Screen", monospace;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 1.0em;
+  padding: 0.1em 0.45em;
+  background: var(--accent-light);
+  border-radius: 3px;
+}
+section.option .option-sig {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92em;
+  font-family: "Latin Modern Mono", "LXGW WenKai Mono GB Screen", monospace;
+}
+section.option .option-sig strong { color: var(--accent); font-style: italic; font-weight: 700; }
+section.option .option-sig em { color: var(--fg); font-style: italic; }
+
+/* 重置 option-name 内嵌 <code>（避免与外层 badge 背景叠加）*/
+section.option .option-name code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+section.option .option-default {
+  font-size: 0.85em;
+  color: var(--muted);
+  font-style: italic;
+}
+section.option .option-body {
+  margin-top: 0.35rem;
+}
+
+/* 桌面：name 悬挂到左侧（绝对定位，从 flex 流中脱出，sig 自动顶到行首）；
+ * 只在 body.has-hanging（即激活章节包含 API options）时启用，其他章节回落到 inline badge */
+@media (min-width: 1024px) {
+  body.has-hanging section.option .option-name {
+    position: absolute;
+    left: -10.08rem;
+    top: 0;
+    width: 9.1rem;
+    text-align: right;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.95em;
+    line-height: 1.7;
+  }
+}
+
+/* ==== 章节分页：仅显示 active；切换时走 PPT 式滑入 / 滑出 ==== */
+section.chapter { display: none; }
+section.chapter.active {
+  display: block;
+  animation: chapter-enter 0.42s cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+section.chapter.leaving {
+  display: block;
+  animation: chapter-exit 0.32s cubic-bezier(0.55, 0, 0.85, 0.3) both;
+  pointer-events: none;
+}
+@keyframes chapter-enter {
+  from { opacity: 0; transform: translateX(56px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes chapter-exit {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-56px); }
+}
+/* 反向（前一章）切换时反向滑入 */
+section.chapter.active.from-left {
+  animation: chapter-enter-rev 0.42s cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+section.chapter.leaving.to-right {
+  animation: chapter-exit-rev 0.32s cubic-bezier(0.55, 0, 0.85, 0.3) both;
+}
+@keyframes chapter-enter-rev {
+  from { opacity: 0; transform: translateX(-56px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes chapter-exit-rev {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(56px); }
+}
+
+/* ==== 章节底部 prev / next 导航 ==== */
+nav.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 4rem 0 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+nav.chapter-nav a {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--fg);
+  background: var(--bg);
+  transition: background 0.15s, border-color 0.15s;
+}
+/* 占位 spacer（首章无 prev / 末章无 next 时使用）：保持栏位但不绘按钮 */
+nav.chapter-nav > span.spacer {
+  flex: 1 1 0;
+  visibility: hidden;
+}
+nav.chapter-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+nav.chapter-nav a.next {
+  text-align: right;
+}
+nav.chapter-nav .dir {
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+nav.chapter-nav .title {
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.95rem;
+}
+
+/* ==== 顶部站点栏 ====
+ * 横跨整个视口宽度，固定在顶部；左边品牌（图标 + 名 + 副标），右边操作区（仓库 + 主题切换） */
+.site-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  z-index: 50;
+  font-size: 0.9rem;
+  /* 强制独立 compositing layer：Safari 触控板 pinch-zoom 时减少重绘闪烁 */
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.site-bar .brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  text-decoration: none;
+  color: inherit;
+}
+.site-bar .brand-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: block;
+  align-self: center;
+}
+.site-bar .brand-name {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  font-family: "LXGW WenKai Mono GB Screen", "LXGW WenKai Mono TC", "JetBrains Mono", "Source Code Pro", "Latin Modern Mono", "Consolas", monospace;
+}
+.site-bar .brand-tag {
+  color: var(--muted);
+  font-size: 0.82rem;
+  border-left: 1px solid var(--rule);
+  padding-left: 0.7em;
+}
+.site-bar .actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* nav-toggle：当对应导航被视口宽度自动隐藏时点这个把它拉回 */
+.site-bar .nav-toggle {
+  display: none;
+  position: static;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--fg);
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-right: 0.5rem;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.site-bar .nav-toggle:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.site-bar .nav-toggle svg { display: block; }
+/* 左 toggle：sidebar 隐藏时（<1280px）显示 —— 缩放放大时 sidebar 先收 */
+@media (max-width: 1279px) {
+  .site-bar .nav-toggle-left { display: inline-flex; }
+}
+/* 右 toggle：rail 隐藏时（<1024px）显示 —— 更窄才收 rail */
+@media (max-width: 1023px) {
+  .site-bar .nav-toggle-right { display: inline-flex; }
+}
+
+/* show-left-nav / show-right-nav backdrop：黑透明遮罩，与 sidebar/rail 同步淡入淡出 */
+body.show-left-nav::after,
+body.show-right-nav::after {
+  content: '';
+  position: fixed;
+  inset: 3.25rem 0 0 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 55;
+  animation: backdrop-fade 0.32s cubic-bezier(0.2, 0.85, 0.3, 1);
+}
+@keyframes backdrop-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.site-bar .repo-link {
+  color: var(--muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.site-bar .repo-link:hover {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+.site-bar .repo-link svg {
+  display: block;
+}
+.site-bar .theme-toggle {
+  position: static;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--fg); /* ☾ / ☀ 字符跟随前景色，深色模式下也清晰可见 */
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  padding: 0;
+}
+.site-bar .theme-toggle:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+/* 移动端：副标题隐藏（GitHub 图标保留，因为它已经很紧凑）*/
+@media (max-width: 640px) {
+  .site-bar .brand-tag { display: none; }
+  .site-bar { padding: 0 0.75rem; }
+}
+
+/* 旧的浮动 theme-toggle 兜底（如果 site-bar 注入失败时仍可用）；
+ * site-bar 已接管，所以这里只针对 body > .theme-toggle 直接子节点 */
+body > .theme-toggle {
+  position: fixed;
+  top: 0.6rem;
+  right: 0.7rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  z-index: 49;
+}
+
+/* ==== Header (manual title page substitute) ==== */
+.manual-header {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 1.25rem;
+  margin-bottom: 2rem;
+}
+.manual-header h1 {
+  color: var(--accent);
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+.manual-header .subtitle {
+  color: var(--muted);
+  font-size: 1.15rem;
+  margin: 0.25rem 0;
+}
+.manual-header .description {
+  font-size: 1rem;
+  margin: 0.4rem 0 0.8rem;
+}
+.manual-header .authors {
+  font-size: 0.95rem;
+  margin: 0.4rem 0;
+}
+.manual-header .meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0.15rem 0;
+}
+
+.abstract {
+  font-style: italic;
+  color: var(--muted);
+  border-left: 3px solid var(--accent);
+  padding: 0.5rem 1rem;
+  margin: 1.5rem 0;
+}
+
+/* ==== TOC ====
+ * 窄屏（<1280px）下 .manual-toc 默认 transform: translateX(-100%) 收到屏外，
+ * 不再用 display:none——需要 transition 平滑滑入滑出，详见上方 .manual-toc 通用布局段。 */
+.manual-toc a {
+  color: var(--fg);
+  text-decoration: none;
+}
+.manual-toc a:hover { color: var(--accent); text-decoration: underline; }
+.manual-toc .prefix {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  margin-right: 0.4em;
+}
+
+/* ==== Headings ==== */
+h1, h2, h3, h4, h5 {
+  font-family: "PingFang SC", "Noto Sans CJK SC", -apple-system, sans-serif;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.3;
+  /* 锚点跳转时让位顶栏（3.25rem）+ 一点呼吸 */
+  scroll-margin-top: 4.25rem;
+}
+/* 链接锚点（loc-N）也常作为跳转目标 */
+[id^="loc-"], [id]:target { scroll-margin-top: 4.25rem; }
+h1 { font-size: 2rem; margin-top: 2.4rem; }
+h2 { font-size: 1.5rem; margin-top: 2.2rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.3em; }
+h3 { font-size: 1.2rem; margin-top: 1.8rem; }
+h4 { font-size: 1.05rem; margin-top: 1.4rem; }
+h5 { font-size: 1rem; margin-top: 1.2rem; }
+
+/* ==== Links ==== */
+/* 默认不画下划线，只用 link 色区分；hover 时才显出下划线，节制点 */
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+/* ==== Callouts ==== */
+.callout {
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--accent-light) 0,
+    var(--accent-light) 1.7rem,
+    color-mix(in srgb, var(--accent-light) 72%, var(--bg)) 1.7rem,
+    color-mix(in srgb, var(--accent-light) 72%, var(--bg)) 3.4rem
+  );
+  border-left: 3px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+  padding: 0.7rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.92rem;
+}
+.callout-title {
+  display: block;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+  text-indent: 0;
+  margin-bottom: 0.3rem;
+}
+.callout-question { background: rgba(11, 107, 176, 0.08); border-left-color: var(--callout-question, #0B6BB0); }
+.callout-question .callout-title { color: var(--callout-question, #0B6BB0); }
+.callout-tip      { background: rgba(46, 125, 50, 0.08); border-left-color: var(--callout-tip, #2E7D32); }
+.callout-tip .callout-title { color: var(--callout-tip, #2E7D32); }
+.callout-warning  { background: rgba(198, 40, 40, 0.08); border-left-color: var(--callout-warning, #C62828); }
+.callout-warning .callout-title { color: var(--callout-warning, #C62828); }
+
+/* 深色：callout 主色提亮，背景加深 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --callout-question: #6FB3F0;
+    --callout-tip:      #7BCC83;
+    --callout-warning:  #F08488;
+  }
+  :root:not([data-theme="light"]) .callout-question { background: rgba(111, 179, 240, 0.12); }
+  :root:not([data-theme="light"]) .callout-tip      { background: rgba(123, 204, 131, 0.12); }
+  :root:not([data-theme="light"]) .callout-warning  { background: rgba(240, 132, 136, 0.12); }
+}
+:root[data-theme="dark"] {
+  --callout-question: #6FB3F0;
+  --callout-tip:      #7BCC83;
+  --callout-warning:  #F08488;
+}
+:root[data-theme="dark"] .callout-question { background: rgba(111, 179, 240, 0.12); }
+:root[data-theme="dark"] .callout-tip      { background: rgba(123, 204, 131, 0.12); }
+:root[data-theme="dark"] .callout-warning  { background: rgba(240, 132, 136, 0.12); }
+
+/* ==== Generic figures（非 example：通常是 image + figcaption）====
+ * 浏览器默认 <figure> 不居中（仅左右各 40px margin），改成图与题注居中。
+ * 注意：不在 <figure> 上直接 text-align: center，否则 figure.example 里 <pre> 的代码也会被横向居中 */
+figure {
+  margin: 1.2rem auto;
+}
+figure > img,
+figure > svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+figure > figcaption {
+  text-align: center;
+  margin-top: 0.4rem;
+  font-size: 0.9em;
+  color: var(--muted);
+}
+
+/* ==== Examples (figure.example) ==== */
+figure.example {
+  background: var(--code-bg);
+  border-top: 1.5px solid var(--accent);
+  border-bottom: 1.5px solid var(--accent);
+  margin: 1.2rem 0;
+  padding: 0.7rem 0;
+}
+figure.example figcaption {
+  text-align: center;
+  font-family: "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+figure.example pre {
+  background: transparent;
+  margin: 0 1rem;
+}
+
+/* 深色模式下，Typst 内嵌的 style="color: #..."（字符串/关键字/类型等深色高亮色）肉眼看不清。
+ * 用 invert + hue-rotate 把每个深色变成同色相的亮色版，背景不变。
+ * 这是个简单成本低的全局修正——若需精细配色再单独覆盖 8 种 token 色。 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) pre [style*="color:"],
+  :root:not([data-theme="light"]) code [style*="color:"] {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}
+:root[data-theme="dark"] pre [style*="color:"],
+:root[data-theme="dark"] code [style*="color:"] {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* ==== Code blocks ==== */
+pre {
+  position: relative;
+  background: var(--code-bg);
+  border-left: 3px solid var(--accent);
+  padding: 0.6rem 1rem;
+  overflow-x: auto;
+  font-family: "LXGW WenKai Mono GB Screen", "LXGW WenKai Mono TC", "JetBrains Mono", "Source Code Pro", "Latin Modern Mono", "Consolas", monospace;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  border-radius: 0 4px 4px 0;
+}
+/* 语言徽标：Typst HTML 给 <code> 加了 data-lang，将其挂在 <pre> 右上角 */
+pre > code[data-lang] { display: block; }
+pre > code[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 0.65rem;
+  padding: 0.18em 0.55em;
+  border-radius: 0 4px 0 4px;
+  font-family: "JetBrains Mono", "Source Code Pro", "LXGW WenKai Mono GB Screen", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  line-height: 1.4;
+  pointer-events: none;
+}
+code {
+  font-family: "LXGW WenKai Mono GB Screen", "LXGW WenKai Mono TC", "JetBrains Mono", "Source Code Pro", "Latin Modern Mono", "Consolas", monospace;
+  font-size: 0.94em;
+  background: var(--code-stripe);
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+}
+pre code { background: transparent; padding: 0; }
+
+/* ==== 性能基准：launcher 按钮 + 模态面板 + 可视化 chart ==== */
+.perf-run-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.7em 1.1em;
+  margin: 0.6rem 0 0;
+  border: 1.5px solid var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+/* API 章节顶部"参数排序"开关：源码序 ↔ 按字母 */
+#api-sort-toggle {
+  margin: 0.6rem 0 1.2rem;
+}
+.api-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--fg);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.api-sort-btn:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.api-sort-btn[data-mode="alpha"] {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.api-sort-icon {
+  font-size: 1em;
+  line-height: 1;
+}
+.api-sort-label {
+  font-weight: 500;
+}
+.perf-run-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(106, 27, 154, 0.25);
+}
+.perf-run-icon { font-size: 1.1em; line-height: 1; }
+.perf-run-hint { font-weight: 400; opacity: 0.7; font-size: 0.82em; }
+
+/* 数值 cell 标记：JS 实测后会原地替换 */
+.perf-stat { transition: color 0.3s, background 0.3s; }
+.perf-stat.updated {
+  color: var(--accent);
+  font-weight: 600;
+  background: var(--accent-light);
+  padding: 0 0.2em;
+  border-radius: 3px;
+}
+
+/* 模态层 */
+.perf-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: perf-fade 0.2s ease-out;
+}
+@keyframes perf-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.perf-card {
+  width: min(560px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--bg);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  padding: 1.2rem 1.4rem 1rem;
+  animation: perf-pop 0.25s cubic-bezier(0.2, 0.85, 0.3, 1.05);
+}
+@keyframes perf-pop {
+  from { transform: translateY(20px) scale(0.96); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+.perf-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 0.6rem;
+}
+.perf-head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--accent);
+  border: none;
+  padding: 0;
+}
+.perf-close {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1;
+}
+.perf-close:hover { color: var(--accent); }
+.perf-status {
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-family: "LXGW WenKai Mono GB Screen", "LXGW WenKai Mono TC", "JetBrains Mono", "Source Code Pro", "Latin Modern Mono", "Consolas", monospace;
+  margin: 0.4rem 0;
+}
+.perf-progress {
+  height: 6px;
+  background: var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.perf-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--callout-question, #4b69c6));
+  transition: width 0.2s ease-out;
+}
+.perf-chart { margin: 1rem 0 0.5rem; }
+.perf-foot {
+  margin-top: 0.7rem;
+  font-size: 0.74rem;
+  color: var(--muted);
+  font-family: "LXGW WenKai Mono GB Screen", "LXGW WenKai Mono TC", "JetBrains Mono", "Source Code Pro", "Latin Modern Mono", "Consolas", monospace;
+  word-break: break-all;
+}
+
+/* 可视化：每个引擎一行 — label + 时间轴 (背景中位带 + 均值线 + 散点) + 数值 */
+.bench-axis-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.6rem;
+  margin: 0.4rem 0 0.3rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.bench-axis-spacer { flex: 0 0 6.5em; }
+.bench-axis { position: relative; height: 1em; }
+.bench-axis .bench-tick {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.bench-axis-unit { flex: 0 0 auto; }
+.bench-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.55rem 0;
+}
+.bench-label {
+  flex: 0 0 6.5em;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fg);
+  text-align: right;
+}
+.bench-track {
+  position: relative;
+  height: 1.4em;
+  background: linear-gradient(to bottom, transparent 0, transparent calc(50% - 0.5px), var(--rule) 50%, transparent calc(50% + 0.5px));
+}
+.bench-band {
+  position: absolute;
+  top: 25%;
+  height: 50%;
+  opacity: 0.18;
+  border-radius: 3px;
+}
+.bench-mean {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+}
+.bench-dot {
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: bench-dot-in 0.4s ease-out backwards;
+}
+.bench-dot:nth-child(2) { animation-delay: 0.05s }
+.bench-dot:nth-child(3) { animation-delay: 0.1s }
+.bench-dot:nth-child(4) { animation-delay: 0.15s }
+.bench-dot:nth-child(5) { animation-delay: 0.2s }
+.bench-dot:nth-child(6) { animation-delay: 0.25s }
+.bench-dot:nth-child(7) { animation-delay: 0.3s }
+.bench-dot:nth-child(8) { animation-delay: 0.35s }
+.bench-dot:nth-child(9) { animation-delay: 0.4s }
+.bench-dot:nth-child(10){ animation-delay: 0.45s }
+@keyframes bench-dot-in {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 0.7; }
+}
+.bench-num {
+  flex: 0 0 7em;
+  font-size: 0.85rem;
+  font-family: "LXGW WenKai Mono GB Screen", "LXGW WenKai Mono TC", "JetBrains Mono", "Source Code Pro", "Latin Modern Mono", "Consolas", monospace;
+  color: var(--fg);
+}
+.bench-num .bench-pm { color: var(--muted); font-size: 0.78rem; }
+.bench-summary {
+  text-align: center;
+  margin: 0.7rem 0 0;
+  font-size: 0.95rem;
+  color: var(--accent);
+}
+.bench-summary strong { font-size: 1.4em; }
+
+/* ==== TeX 风格徽标（TeX / LaTeX / Bib / BibTeX / BibLaTeX）====
+ * 用 <span> 嵌套 + CSS 偏移在网页字体上模拟 LaTeX 的视觉徽标，不走 SVG。
+ * 通过 main.typ 里 html.elem 输出 .logo-* 类，对应偏移在此定义。
+ *
+ * 字体跟随正文（不再强制 Latin Modern / CMU 等 LaTeX 字体），徽标视觉与上下文一致。
+ * smallcaps 用 font-variant-caps: small-caps 触发，对小写字母才生效（所以源里写 "e/a/ib"）*/
+.logo-tex, .logo-la, .logo-latex, .logo-bib, .logo-bibtex, .logo-biblatex {
+  font-family: inherit;
+  white-space: nowrap;
+  letter-spacing: 0;
+}
+/* TeX：T<E>X，中间小写 e → smallcaps + 1.2em + 下移 0.125em，左右各负 spacing */
+.logo-tex .logo-mid {
+  font-variant-caps: small-caps;
+  font-size: 1.2em;
+  margin-left: -0.1667em;
+  margin-right: -0.125em;
+  position: relative;
+  top: 0.125em;
+}
+/* La：L<A>，A 上移 0.175em，左右负 spacing。
+ * 通过 .logo-a 顶层选择器统一作用：单独 #La 用 / 嵌入 #LaTeX / 嵌入 #BibLaTeX 都生效 */
+.logo-a {
+  font-variant-caps: small-caps;
+  margin-left: -0.36em;
+  margin-right: -0.2em;
+  position: relative;
+  top: -0.175em;
+}
+/* Bib：B<IB>，IB smallcaps */
+.logo-bib .logo-ib {
+  font-variant-caps: small-caps;
+  margin-left: -0.05em;
+}
+/* BibTeX / BibLaTeX：复合徽标里 TeX/LaTeX 跟在 Bib 右侧的连接处微负距 */
+.logo-bibtex .logo-tex { margin-left: -0.15em; }
+.logo-biblatex .logo-latex { margin-left: -0.05em; }
+
+/* ==== Math (Typst html.frame → inline SVG) ====
+ * 行内公式：lib.typ 里包了 <span class="math-inline">，这里让 SVG 真正 inline。
+ * Typst html.frame 已经在 SVG 上设了正确的 baseline-shift（top-edge），
+ * 直接 vertical-align: baseline（即默认）让 SVG 底沿与文字 baseline 对齐 */
+.math-inline,
+.math-inline > svg.typst-frame {
+  display: inline-block;
+  vertical-align: baseline;
+}
+/* 块级公式：默认 typst 输出已是块；居中显示 */
+svg.typst-frame {
+  max-width: 100%;
+}
+p > svg.typst-frame {
+  display: block;
+  margin: 0.6rem auto;
+}
+/* 深色模式：SVG 公式 / 嵌入 SVG 图（如 MWE 文档预览）默认黑色 ink，看不清。
+ * 用 invert + hue-rotate 把黑变浅前景色，背景透明不变 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) svg.typst-frame,
+  :root:not([data-theme="light"]) img[src^="data:image/svg+xml"] {
+    filter: invert(0.92) hue-rotate(180deg);
+  }
+}
+:root[data-theme="dark"] svg.typst-frame,
+:root[data-theme="dark"] img[src^="data:image/svg+xml"] {
+  filter: invert(0.92) hue-rotate(180deg);
+}
+
+/* ==== Tables (3-line style) ====
+ * 表保持 display: table（默认），让 position: sticky 在首行单元格上能跟踪 *页面* 滚动。
+ * 不外包 .table-wrap：因为 overflow-x:auto 会让该容器变成 scroll container，
+ * 把 sticky 捕获到容器顶部（= 表头顶部）而非视口顶部，等于不冻结。 */
+table {
+  border-collapse: collapse;
+  border-top: 1.5px solid var(--fg);
+  border-bottom: 1.5px solid var(--fg);
+  margin: 1rem auto;
+  font-size: 0.92rem;
+  max-width: 100%;
+}
+/* Typst HTML 输出的 <table> 没有 <thead>，首行 <tr> 即表头；
+ * 用单元格底线（border-collapse 折叠后视觉与 <tr> 边框一致），兼容性更好。
+ * 同时给表头单元格 position: sticky 实现"冻结首行"——
+ * 滚动到长表中部时，表头自动悬停在视口/侧边栏顶部，离开表则消失。*/
+table > tr:first-child > td,
+table > tr:first-child > th,
+table > tbody > tr:first-child > td,
+table > tbody > tr:first-child > th {
+  border-bottom: 0.75px solid var(--fg);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 2;
+  /* sticky 元素遮挡下方时的细线（让边框能"跟着"贴到顶部）*/
+  box-shadow: 0 0.75px 0 var(--fg);
+}
+th, td { padding: 0.4rem 0.8rem; text-align: left; vertical-align: top; }
+th { font-weight: 700; font-size: 1rem; }
+td p, th p { text-align: left; }
+
+/* 示例文献表（main.typ 用 html.elem div.bib-list 包裹的 <table>）：两列透明——编号列 + 内容列。
+ * 覆盖上面全局 <table> 的三线表边框、首行 sticky / box-shadow 与内边距；类选择器 (0,1,x) 稳压元素链 (0,0,x)。 */
+/* width:100% + table-layout:fixed 把内容列定到固定宽度，长 URL 才会在列内断行而非整体换行 / 撑破；
+ * fixed 下首列取 td:first-child 的 2rem、内容列取剩余宽度。 */
+.bib-list table { border: none; margin: 0.4rem 0; width: 100%; table-layout: fixed; }
+.bib-list td {
+  border: none;
+  position: static;
+  box-shadow: none;
+  background: transparent;
+  padding: 0.12rem 0 0.12rem 0; /* 右 padding 归 0：内容右缘填到表(=正文)右缘，与正文右边对齐 */
+  vertical-align: top;
+  overflow-wrap: break-word;  /* 长 URL 中间断行（对齐 PDF 自动断行）；break-word 兼容旧 Safari，首列 nowrap 不受影响 */
+  text-align: justify;        /* 条目两端对齐（与正文一致）*/
+  text-justify: inter-character;
+}
+/* URL 链接在*任意*字符处断行（非只在 ? / & 等自然点）——这样断行点能落在行末、把每行填满，配合两端对齐。
+ * 仅作用于 .bib-list 内的 <a>（URL/DOI 链接），普通正文/题名仍按词断、不会被逐字拆开。 */
+.bib-list a { word-break: break-all; }
+.bib-list td:first-child {
+  width: 2rem;                         /* 编号列定宽 2rem = 正文 2em → 内容左缘正好 2em（与首行缩进对齐、稳定精确）*/
+  text-align: left;                    /* 编号左对齐 → 顶格无左间隙 */
+  padding: 0.12rem 0 0.12rem 0;
+  white-space: nowrap;                 /* [N] 不折行 */
+  font-variant-numeric: tabular-nums;  /* 等宽数字：[1] 与 [2]/[10] 宽度对齐、右缘也自然对齐 */
+}
+/* 关键：全局首行中线规则 `table > tbody > tr:first-child > td` 含 :first-child 伪类，特异性 (0,1,4) 高于
+ * `.bib-list td` (0,1,1)，故 midrule（border-bottom + box-shadow + sticky）残留。须用同结构 + .bib-list 前缀 (0,2,4) 压过。 */
+.bib-list table > tr:first-child > td,
+.bib-list table > tbody > tr:first-child > td {
+  border-bottom: none;
+  box-shadow: none;
+  position: static;
+}
+
+/* ==== Footnotes ====
+ * Typst HTML 默认把所有 footnote 收集到末尾 <section role="doc-endnotes">；site.js 在初始化时
+ * 把每个 <li> 按其 backlink 指向的位置就近搬到对应章节末尾，避免章节翻页时所有脚注堆在最后一章。
+ * 每个章节的 footnotes 容器加 .chapter-footnotes 类，套上分隔线 + 缩字号 */
+[role="doc-noteref"] { color: var(--accent); }
+section.chapter-footnotes {
+  margin-top: 3rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+section.chapter-footnotes ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+section.chapter-footnotes li {
+  margin: 0.3rem 0;
+  padding-left: 0;
+}
+section.chapter-footnotes li > a[role="doc-backlink"] {
+  margin-right: 0.3em;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 640px) {
+  html { font-size: 15px; }
+  body { padding: 0.5rem 0.75rem 3rem; }
+  .manual-header h1 { font-size: 1.8rem; }
+  pre { font-size: 0.8rem; }
+}
+
+/* ==== Section anchors ==== */
+.heading-anchor {
+  display: inline-block;
+  width: 0;
+  margin-left: -1.2em;
+  padding-right: 0.4em;
+  visibility: hidden;
+  color: var(--muted);
+  text-decoration: none;
+}
+h1:hover .heading-anchor,
+h2:hover .heading-anchor,
+h3:hover .heading-anchor { visibility: visible; }

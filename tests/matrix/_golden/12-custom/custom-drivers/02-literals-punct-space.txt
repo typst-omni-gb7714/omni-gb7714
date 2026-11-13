@@ -8,13 +8,13 @@
  n−1 个硬空格），或用花括号把空格裹进去。 元字符 ?< &< > { } => | 要字面输出，用花括号 verbatim 裹起来。
 
 
-▸ 软空格：author . title → 句点贴前、后留一空
+▸ 软空格：creator . titles → 句点贴前、后留一空
 
 正文：[1-2]
 [1] 张三，李四，王五，等. 中文专著示例：副标题.
 [2] Brown B，Green G. English Journal Article.
 
-▸ 软空格：title , year → 中文条目逗号转全角、两侧不留空
+▸ 软空格：titles , year → 中文条目逗号转全角、两侧不留空
 
 正文：[1-2]
 [1] 中文专著示例：副标题，2020.
@@ -32,7 +32,7 @@
 [1] 张三，李四，王五，等 中文专著示例：副标题.
 [2] Brown B，Green G English Journal Article.
 
-▸ 花括号把空格裹进去：author { , } title → 原样
+▸ 花括号把空格裹进去：creator { , } titles → 原样
 
 正文：[1-2]
 [1] 张三，李四，王五，等 , 中文专著示例：副标题.
@@ -44,7 +44,7 @@
 [1] 张三，李四，王五，等, 中文专著示例：副标题，2020.
 [2] Brown B，Green G, English Journal Article，2023.
 
-▸ verbatim 吃掉相邻软空格：{《} title {》}
+▸ verbatim 吃掉相邻软空格：{《} titles {》}
 
 正文：[1-2]
 [1] 张三，李四，王五，等《中文专著示例：副标题》2020.
@@ -80,13 +80,13 @@
 [1] 张三，李四，王五，等、中文专著示例：副标题《2020》.
 [2] Brown B，Green G、English Journal Article《2023》.
 
-▸ title 与 mark-medium 贴紧：用中性组 title<mark-medium>
+▸ titles 与 mark-medium 贴紧：用中性组 titles<mark-medium>
 
 正文：[1-2]
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 示例出版社.
 [2] Brown B，Green G. English Journal Article[J].
 
-▸ 对照：title mark-medium（软空格落地 → 有空格）
+▸ 对照：titles mark-medium（软空格落地 → 有空格）
 
 正文：[1-2]
 [1] 张三，李四，王五，等. 中文专著示例：副标题 [M]. 示例出版社.

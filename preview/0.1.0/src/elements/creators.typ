@@ -3,10 +3,12 @@
 #import "../detect/lang.typ" as language
 #import "../detect/pinyin.typ" as pinyin
 #import "../terms/built-in.typ" as terms
-#import "../punct/built-in.typ" as punct
 #import "mark-medium/built-in.typ" as mark-medium
 #import "../parse/latex.typ"
 #import "../field.typ"
+#import "../punct/built-in.typ": pick-separator-by-lang as _pick-separator-by-lang, resolve-separator as _resolve-separator, separator-char-set as _separator-char-set, separator-lang-keys as _separator-lang-keys
+#import "../punct/built-in.typ": get as _punct-get
+#import "../field.typ": stable-name-entry as _stable-name-entry
 
 #let _TEX-DROP-PATTERNS = latex.TEX-DROP-ARG.map(sort-command => regex("\\\\" + sort-command + "\\s*\\{[^{}]*\\}"))
 
@@ -36,8 +38,8 @@
   if given == "" { return false }
   let family = name.at("family", default: "")
   if family == "" { return false }
-  if _written-with-comma(name, entry) { return false }
-  lower(family.split(" ").last().replace(".", "").trim()) in _CORP-DESIGNATORS
+  if lower(family.split(" ").last().replace(".", "").trim()) not in _CORP-DESIGNATORS { return false }
+  not _written-with-comma(name, entry)
 }
 
 #let name-style-keys = ("order", "family-case", "given-form", "given-initial-separator", "given-separator", "given-case", "family-given-separator", "given-family-separator")
@@ -157,16 +159,16 @@
     }
     let given-case = style.at("given-case", default: none)
     let _entry-lang = if entry != none { language.get(entry) } else { none }
-    let _pick(value, fallback) = if type(value) == dictionary { punct.pick-separator-by-lang(value, _entry-lang, fallback) } else { value }
+    let _pick(value, fallback) = if type(value) == dictionary { _pick-separator-by-lang(value, _entry-lang, fallback) } else { value }
     let _dim(key, fallback) = _pick(style.at(key, default: fallback), fallback)
     let _sep(value) = {
-      let resolved = punct.resolve-separator(value, entry, punct-style, custom-punct, value)
+      let resolved = _resolve-separator(value, entry, punct-style, custom-punct, value)
       if type(resolved) == str { resolved } else { value }
     }
 
     let given-initial-separator = {
       let value = _dim("given-initial-separator", "")
-      if type(value) == str and value in punct.separator-char-set { _sep(value).trim(regex("\\s+"), at: end) } else { value }
+      if type(value) == str and value in _separator-char-set { _sep(value).trim(regex("\\s+"), at: end) } else { value }
     }
     let given-separator = {
       let value = _dim("given-separator", none)
@@ -276,8 +278,8 @@
 #let _pick-et-al-by-lang(value, entry, param) = {
   if type(value) != dictionary { return value }
   for key in value.keys() {
-    if key not in punct.separator-lang-keys {
-      errors.raise("et-al.unknown-lang-key", param: param, key: key, keys: punct.separator-lang-keys.join(" / "))
+    if key not in _separator-lang-keys {
+      errors.raise("et-al.unknown-lang-key", param: param, key: key, keys: _separator-lang-keys.join(" / "))
     }
   }
   let lang = if entry != none { language.get(entry) } else { none }
@@ -290,14 +292,14 @@
   if type(value) != dictionary { return value }
   let keys = value.keys()
   for key in keys {
-    if key not in et-al-role-keys and key not in punct.separator-lang-keys {
+    if key not in et-al-role-keys and key not in _separator-lang-keys {
       errors.raise("et-al.unknown-key", param: param, key: key,
         roles: et-al-role-keys.filter(k => k != "rest").join(" / "),
-        langs: punct.separator-lang-keys.filter(k => k != "rest").join(" / "))
+        langs: _separator-lang-keys.filter(k => k != "rest").join(" / "))
     }
   }
   let role-keys = keys.filter(k => k in et-al-role-keys and k != "rest")
-  let lang-keys = keys.filter(k => k in punct.separator-lang-keys and k != "rest")
+  let lang-keys = keys.filter(k => k in _separator-lang-keys and k != "rest")
   if role-keys.len() > 0 and lang-keys.len() > 0 {
     errors.raise("et-al.mixed-keys", param: param, roles: role-keys.join(" / "), langs: lang-keys.join(" / "))
   }
@@ -361,11 +363,11 @@
   }
   let (real-names, show-count, last-count, needs-etal, bare-etal) = truncate(names, et-al-min, et-al-use-first, show-et-al, et-al-use-last: et-al-use-last)
   let _one(name-index) = format-one(real-names.at(name-index), name-style: if name-index == 0 and first-name-style != none { first-name-style } else { name-style }, name-suffix-separator: name-suffix-separator, prefix-last: prefix-last, entry: entry, punct-style: punct-style, custom-punct: custom-punct, name-index: name-index)
-  let comma = if entry != none { punct.get("comma", entry, punct-style, custom-punct) } else { ", " }
+  let comma = if entry != none { _punct-get("comma", entry, punct-style, custom-punct) } else { ", " }
   let result = range(show-count).map(_one).join(comma)
   if last-count > 0 {
     let tail-start = real-names.len() - last-count
-    result += comma + punct.get("ellipsis", entry, punct-style, custom-punct) + range(tail-start, real-names.len()).map(_one).join(comma)
+    result += comma + _punct-get("ellipsis", entry, punct-style, custom-punct) + range(tail-start, real-names.len()).map(_one).join(comma)
   } else if needs-etal {
     result += (if bare-etal { "" } else { comma }) + terms.etal(entry, custom-terms: custom-terms, version: version)
   }
@@ -400,6 +402,7 @@
 }
 
 #let principal(entry, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-anon: false, show-et-al: true, name-style: (:), first-name-style: none, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), name-suffix-separator: auto, roles: auto, prefix-last: false, version: 2025) = {
+  entry = _stable-name-entry(entry)
   let _principal-name = principal-names(entry, roles: roles)
   if _principal-name.role != none {
     return format(entry.parsed_names, role: _principal-name.role, entry: entry, et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, first-name-style: first-name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: custom-terms, name-suffix-separator: name-suffix-separator, prefix-last: prefix-last, version: version)
@@ -410,7 +413,7 @@
 #let _other(entry, role, role-term, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-et-al: true, name-style: (:), punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), name-suffix-separator: auto, prefix-last: false, et-al-translator-separator: auto, version: 2025) = {
   let names = entry.parsed_names.at(role, default: ())
   if names.len() == 0 { return none }
-  let comma = punct.get("comma", entry, punct-style, custom-punct)
+  let comma = _punct-get("comma", entry, punct-style, custom-punct)
   let (min: et-al-min, use-first: et-al-use-first, use-last: et-al-use-last) = resolve-et-al-triple(et-al-min, et-al-use-first, et-al-use-last, role, entry)
 
   let (real-names, show-count, last-count, needs-etal, bare-etal) = truncate(names, et-al-min, et-al-use-first, show-et-al, et-al-use-last: et-al-use-last)
@@ -418,9 +421,9 @@
   let formatted = range(show-count).map(_one).join(comma)
   if last-count > 0 {
     let tail-start = real-names.len() - last-count
-    formatted += comma + punct.get("ellipsis", entry, punct-style, custom-punct) + range(tail-start, real-names.len()).map(_one).join(comma)
+    formatted += comma + _punct-get("ellipsis", entry, punct-style, custom-punct) + range(tail-start, real-names.len()).map(_one).join(comma)
   }
-  let translator-separator = if et-al-translator-separator == auto { auto } else { punct.resolve-separator(et-al-translator-separator, entry, punct-style, custom-punct, auto) }
+  let translator-separator = if et-al-translator-separator == auto { auto } else { _resolve-separator(et-al-translator-separator, entry, punct-style, custom-punct, auto) }
   formatted + terms.role(entry, role-term, needs-etal, comma, bare-etal: bare-etal, custom-terms: custom-terms, et-al-translator-separator: translator-separator, version: version, plural: names.len() > 1)
 }
 #let other-editor(entry, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-et-al: true, name-style: (:), punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), name-suffix-separator: auto, prefix-last: false, version: 2025) = _other(entry, "editor", "ed", et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last, show-et-al: show-et-al, name-style: name-style, punct-style: punct-style, custom-punct: custom-punct, custom-terms: custom-terms, name-suffix-separator: name-suffix-separator, prefix-last: prefix-last, version: version)

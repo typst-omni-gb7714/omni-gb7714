@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 // 配对占位：原生侧没有 `keys:` 概念，放一个普通原生表保证编译状态一致。
 #import "/lib.typ": *
 #show: gb7714.with()

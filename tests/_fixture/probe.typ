@@ -10,11 +10,17 @@
 //   #case("auto · 著者-出版年制", gb7714.with(style: "author-date"), cites: (<bm-noauthor>,))
 //   #case("false", gb7714.with(style: "author-date", show-anon: false), cites: (<bm-noauthor>,))
 #import "/lib.typ": *
+#import "fonts.typ": test-font-stack
 
-/// 区块计数器：每个 `case` 用一个*命名列表*把编号与消歧范围隔离开——
+/// 每个 `case` 用稳定的命名列表把编号与消歧范围隔离开——
 /// 否则同一文档里多个匿名文献表共享编号空间，第二块起的编号会接着往上加，
 /// 正文标注与表内编号对不上（`正文 [1-2]` 而表里印 `[3][4]`）。
-#let _case-n = counter("gb7714-matrix-case")
+/// `id` 缺省取取值名；同名区块须显式传入不同 id，不能用排版计数器生成列表身份。
+#let _case-tag(label, id) = {
+  let value = if id == auto { label } else { id }
+  assert(type(value) == str and value != "", message: "case 的 id 必须为非空字符串")
+  "case-" + value
+}
 
 /// 八份共享语料。矩阵用例按需点名，绝大多数用 `MAIN`。
 #let MAIN = bytes(read("/tests/_fixture/main.bib"))
@@ -41,7 +47,7 @@
 /// 要在同一文件里对照另一种文档语言，用下面的 `in-lang`。
 #let spec(param: "", controls: "", expect: "", doc-lang: "zh", body) = {
   set page(width: 21cm, height: auto, margin: 1.2cm)
-  set text(size: 9.5pt, lang: doc-lang)
+  set text(font: test-font-stack, size: 9.5pt, lang: doc-lang)
   set par(justify: false)
   block(width: 100%, fill: luma(238), inset: 7pt, radius: 2pt)[
     #text(size: 13pt, weight: "bold")[#param]
@@ -74,10 +80,11 @@
 /// - `bib-args`：透传给 `bibliography(..)` 的逐表参数（测「逐表覆盖」用）。
 /// - `own-bib`：本区块要不要由 probe 自己发一张文献表。缺省 `true`；
 ///   `body` 里自己建了列表（多列表用例）时传 `false`，免得多出一张没人要的表。
-#let case(label, config, cites: (), bib: MAIN, body: none, full: true, title: none, bib-args: (:), own-bib: true) = {
-  _case-n.step()
+/// - `id`：稳定唯一的区块身份，缺省取 `label`；同名区块需显式区分。
+#let case(label, config, cites: (), bib: MAIN, body: none, full: true, title: none, bib-args: (:), own-bib: true, id: auto) = {
+  let tag = _case-tag(label, id)
+  [#metadata((kind: "gb7714-matrix-case", id: tag)) <gb7714-matrix-case>]
   context {
-    let tag = "c" + str(_case-n.get().first())
     block(width: 100%, breakable: false, above: 6pt, below: 2pt,
           stroke: (top: 0.6pt + luma(150)), inset: (top: 4pt, bottom: 5pt))[
       #text(weight: "bold", fill: rgb("#166534"))[▸ #label]
@@ -100,10 +107,10 @@
 }
 
 /// 纯正文用例（不渲染文献表）：给只影响标注、不影响著录的参数用（如 `cite-form`）。
-#let cite-only(label, config, cites: (), bib: MAIN, body: none) = {
-  _case-n.step()
+#let cite-only(label, config, cites: (), bib: MAIN, body: none, id: auto) = {
+  let tag = _case-tag(label, id)
+  [#metadata((kind: "gb7714-matrix-case", id: tag)) <gb7714-matrix-case>]
   context {
-  let tag = "c" + str(_case-n.get().first())
   block(width: 100%, breakable: false, above: 6pt, below: 2pt,
         stroke: (top: 0.6pt + luma(150)), inset: (top: 4pt, bottom: 5pt))[
     #text(weight: "bold", fill: rgb("#166534"))[▸ #label]

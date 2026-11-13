@@ -42,32 +42,32 @@
 ▸ 对照：标量 4（roles 语料，四个位置同阈值）
 
 正文：[1-3]
-[1] Smith J，Brown B，Chen C，et al. Component Part[G]. Trans T，Uma U，Vega V，et al.，trans.//Host H，Ivy I，Jones J，et
-     al. Host Book. New York：Univ Press，2023：10-20.
+[1] Smith J，Brown B，Chen C，et al. Component Part[M]. Trans T，Uma U，Vega V，et al.，trans.//Host H，Ivy I，Jones J，et
+    al. Host Book. New York：Univ Press，2023：10-20.
 [2] Smith J，Brown B，Chen C，et al. With Editors[M]. Edgar E，Fisher F，Gray G，et al.，ed. New York：Univ Press，2022.
 [3] 张三，李四，王五，等. 中文专著[M]. 甲编，乙编，丙编，等主编. 北京：科学出版社，2020.
 
 ▸ 语言档 (zh: 3, rest: 9)
 
 正文：[1-3]
-[1] Smith J，Brown B，Chen C，Davis D. Component Part[G]. Trans T，Uma U，Vega V，West W，trans.//Host H，Ivy I，Jones
-     J，King K. Host Book. New York：Univ Press，2023：10-20.
+[1] Smith J，Brown B，Chen C，Davis D. Component Part[M]. Trans T，Uma U，Vega V，West W，trans.//Host H，Ivy I，Jones
+    J，King K. Host Book. New York：Univ Press，2023：10-20.
 [2] Smith J，Brown B，Chen C，Davis D. With Editors[M]. Edgar E，Fisher F，Gray G，Hall H，ed. New York：Univ Press，2022.
 [3] 张三，李四，王五，等. 中文专著[M]. 甲编，乙编，丙编，等主编. 北京：科学出版社，2020.
 
 ▸ 角色档 (principal: 9, host: 2, editor: 2, translator: 3, rest: 4)
 
 正文：[1-3]
-[1] Smith J，Brown B，Chen C，Davis D. Component Part[G]. Trans T，Uma U，Vega V，et al.，trans.//Host H，Ivy I，Jones J，
-     et al. Host Book. New York：Univ Press，2023：10-20.
+[1] Smith J，Brown B，Chen C，Davis D. Component Part[M]. Trans T，Uma U，Vega V，et al.，trans.//Host H，Ivy I，Jones J，
+    et al. Host Book. New York：Univ Press，2023：10-20.
 [2] Smith J，Brown B，Chen C，Davis D. With Editors[M]. Edgar E，Fisher F，Gray G，et al.，ed. New York：Univ Press，2022.
 [3] 张三，李四，王五，赵六. 中文专著[M]. 甲编，乙编，丙编，等主编. 北京：科学出版社，2020.
 
 ▸ 角色×语言两级 (editor: (en: 2, rest: 9), rest: 9)
 
 正文：[1-3]
-[1] Smith J，Brown B，Chen C，Davis D. Component Part[G]. Trans T，Uma U，Vega V，West W，trans.//Host H，Ivy I，Jones
-     J，King K. Host Book. New York：Univ Press，2023：10-20.
+[1] Smith J，Brown B，Chen C，Davis D. Component Part[M]. Trans T，Uma U，Vega V，West W，trans.//Host H，Ivy I，Jones
+    J，King K. Host Book. New York：Univ Press，2023：10-20.
 [2] Smith J，Brown B，Chen C，Davis D. With Editors[M]. Edgar E，Fisher F，Gray G，et al.，ed. New York：Univ Press，2022.
 [3] 张三，李四，王五，赵六. 中文专著[M]. 甲编，乙编，丙编，丁编主编. 北京：科学出版社，2020.
 

@@ -73,7 +73,7 @@ if [ "$api_pp" != "$pids_pp" ]; then
   echo "  pids/built-in.typ:    ($pids_pp)"
   fail=1
 else
-  echo "  ✅ pid-priority 缺省值与补齐序一致（$api_pp）"
+  echo "  ✅ pid-priority 缺省值与补齐序一致（${api_pp}）"
 fi
 
 [ $fail -eq 0 ] && echo "  ✅ 三个公共入口的参数无一遗漏"

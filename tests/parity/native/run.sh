@@ -9,6 +9,7 @@ set -u
 # （曾实测到：oracle 渲染第 5 篇时，pdftotext 读到的是另一进程刚写进去的第 61 篇）。
 TMPD="$(mktemp -d)"; export TMPD; trap 'rm -rf "$TMPD"' EXIT
 cd "$(dirname "$0")"
+source "../../../tests/fonts/env.sh" || exit 1
 TYPST="${TYPST:-typst}"
 # 二进制自检：本套件成对比对「原生与 omni 的编译状态是否一致」，
 # 而 TYPST 指向一个*不存在*的二进制时，两边都失败 → 判成「一致」→ 全绿。假绿比红更糟，先拦住。
@@ -29,7 +30,7 @@ check() {
     say FAIL "$case 编译状态不一致 native=$ne ours=$oe"; fail=$((fail+1)); return
   fi
   if [ "$oe" -eq 0 ]; then
-    local txt; txt=$(pdftotext $TMPD/p-o.pdf - 2>/dev/null)
+    local txt; txt=$(pdftotext $TMPD/p-o.pdf - 2>/dev/null | sed "s/\xe2\x81\xa0//g")  # 去掉零宽的 U+2060（引用号前的防孤悬联接符，不可见、不算版面不变量）
     for pat in "$@"; do
       if ! grep -qF "$pat" <<<"$txt"; then
         say FAIL "$case 缺少不变量「$pat」"; fail=$((fail+1)); return
@@ -55,7 +56,7 @@ check 12-cite-order   "[1] GAMMA C" "[2] ALPHA A" "[3] DELTA D" "[4] BETA B"
 check 13-merge        "[1-3]" "[3] GAMMA C"
 check 14-ay           "(Alpha, 2020)" "ALPHA A, 2020. T1[M]"
 # quan 绘制的圈码与注体在 pdftotext 里分行（golden 15 同形态），圈码与正体分开断言。
-check 15-note         "①" "ALPHA A. T1[M]. P, 2020." "[2] BETA B"
+check 15-note         "①" "ALPHA A. T1[M]. [S.l.]: P, 2020." "[2] BETA B"
 check 16-multibib     "[1] ALPHA A" "[2] GAMMA C"
 check 17-ad-mix       "[1] ALPHA A" "BETA B, 2021" "[2] GAMMA C"
 check 18-ieee-first   "[2] B. Beta" "[3] GAMMA C"
@@ -66,6 +67,25 @@ check 19-note-mix     "[1] BETA B"
 check 20-routed-reorder "早[3-4]" "晚[1-2]" "[3] PONE P" "[1] ALPHA A"
 # native-mode 下显式 `keys:` 点名的未引用条目必须渲染（曾被 routed-empty 误判成空表、只剩标题）。
 check 21-keys-native "KEYTESTAUTH"
+# 多表 · 著者-出版年制年份消歧**按表**：每张 bib 只在自己路由到的条目内分 a/b（原生实测如此）。
+# 表一 Alpha 同年对 → 2020a/b；表二 Beta 同年对 → 2021a/b；⭐a1 同时被两表引用，表二里唯一 Alpha 2020
+# → 无后缀 `2020; Beta`（与表一的 2020a 异形，各随各表）。omni 逐条对齐（BUGS #20 按 bib 实例键修复后）。
+check 27-ay-multibib-disambig "2020a" "2020b" "2021a" "2021b" "2020; Beta"
+# 混排样式：一张 author-date 表 + 一张 numeric 表，cite 各自继承所属表的样式（对齐原生 cite.style ?? bib.style）。
+# 表甲的 @a → author-date `(Alpha, 2020)`；表乙 numeric 表条目 `[1] BETA`。
+check 28-mixed-style-cite "(Alpha, 2020)" "[1] BETA"
+# 跨 bib 相邻组：`@a @b` 分属两表（AD + numeric），按归属 bib 拆成 subgroup、各随其表样式渲染、相邻拼接。
+# 对齐 Typst Works::generate 的 subgroup 拆分（cite.rs CiteGroup）。ours 应出 `(Alpha, 2020)[1]`。
+check 29-crossbib-group "(Alpha, 2020)[1]"
+# form:"full" 原位完整条目（Typst CitationForm::Full）：顺序编码制出 `[1] 著录`，与文献表同款渲染。
+# 30 的两个责任者是刻意的：它是分辨「form:"full" 取文献表侧还是引用侧 et-al 阈值」的临界值。
+# 若误取引用侧（cite-et-al-min=2）会截成「ALPHA A, et al」，本断言即失败。详见 fixture 头注释。
+check 30-form-full "[1] ALPHA A, BRAVO B. 书名[M]. [出版地不详]: 社, 2020"
+# note: "end" + 原生 target：章末尾注按命中区域分表。甲章尾注收 k1（① + ② Ibid. 紧邻重复）、k2（③）；
+#   乙章尾注只收 k3（④，注号全局连续）。断言两区各自的条目与注号在位——若作用域失效（两表都收全部），
+#   ④ 前不会只有 GAMMA、甲章尾注也会混入 GAMMA C。
+check 31-note-end-target "① ALPHA A" "② Ibid." "③ BETA B" "④ GAMMA C"
+check 32-show-heading-pagebreak "A[1-3]" "[1] Alpha A" "[2] Beta B" "[3] Gamma C"
 
 # 22 set-block 改道：omni 经 std.bibliography 哨兵改道后，原生写法 `show std.bibliography: set block` 命中整表，
 # 结果与原生一致——SVG 标记 fill 色都恰好出现 1 次（整表一个框）。同时验证内容未丢（条目在位）。
@@ -73,8 +93,8 @@ sbshow() { $TYPST compile --root ../../.. "$1" $TMPD/p-sb.svg --format svg >/dev
 sb_o=$(sbshow ours-22-setblock-show.typ); sb_n=$(sbshow native-22-setblock-show.typ)
 o_txt=$($TYPST compile --root ../../.. ours-22-setblock-show.typ $TMPD/p-sb.pdf >/dev/null 2>&1 && pdftotext $TMPD/p-sb.pdf - 2>/dev/null)
 if [ "$sb_o" = 1 ] && [ "$sb_n" = 1 ] && grep -q "TA" <<<"$o_txt" && grep -q "TC" <<<"$o_txt"; then
-  say ok "22-setblock-show omni 与原生一致 (框 omni=$sb_o native=$sb_n，内容在位)"; pass=$((pass+1))
-else say FAIL "22-setblock-show 框 omni=$sb_o native=$sb_n（期望均=1）或内容缺失"; fail=$((fail+1)); fi
+   say ok "22-setblock-show omni 与原生一致 (框 omni=${sb_o} native=${sb_n}，内容在位)"; pass=$((pass+1))
+else say FAIL "22-setblock-show 框 omni=${sb_o} native=${sb_n}（期望均=1）或内容缺失"; fail=$((fail+1)); fi
 
 # 23 单 std.bibliography：omni 每个 #bibliography 只发一个 std.bib（路由+渲染合并），原生 query 与包裹类操作
 # 只命中一次、无空框漏出。① query 计数：两个列表恰好是 2（不是 4）；② `it => block(fill)` 只有 1 个标记框。
@@ -82,7 +102,7 @@ cnt=$($TYPST compile --root ../../.. ours-23-stdbib-count.typ $TMPD/p-c.pdf >/de
 wrapn=$($TYPST compile --root ../../.. ours-23b-wrap-once.typ $TMPD/p-w.svg --format svg >/dev/null 2>&1 && grep -o '#123456' $TMPD/p-w.svg | wc -l | tr -d ' ')
 if [ "$cnt" = "STDBIBCOUNT=2=END" ] && [ "$wrapn" = 1 ]; then
   say ok "23-single-stdbib (query 计数=2/两列表、包裹只 1 框，无空框漏出)"; pass=$((pass+1))
-else say FAIL "23-single-stdbib query=$cnt（期望 =2=）或包裹框数=$wrapn（期望 1）"; fail=$((fail+1)); fi
+else say FAIL "23-single-stdbib query=${cnt}（期望 =2=）或包裹框数=${wrapn}（期望 1）"; fail=$((fail+1)); fi
 
 # 26 脚注制 × native 路由：隐形注册让原生表收齐脚注引用的条目（[1]/[2] 跨表连续编号），
 # 重复梯子（同上）照常。

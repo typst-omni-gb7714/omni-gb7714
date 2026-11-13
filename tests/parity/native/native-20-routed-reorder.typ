@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 #[早 @p1 @p2] <sec>
 晚 @a @b
 #bibliography(bytes("@book{a, author={Alpha, A}, title={Book A}, publisher={P}, year={2020}}\n@book{b, author={Beta, B}, title={Book B}, publisher={Q}, year={2021}}"), title: "主表")

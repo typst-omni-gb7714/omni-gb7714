@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 叙引 @k1 。
 #bibliography(bytes("@book{k1, author={Alpha, A}, title={T1}, publisher={P}, year={2020}}
 @book{k2, author={Beta, B}, title={T2}, publisher={Q}, year={2021}}

@@ -1,26 +1,30 @@
  prefix-last
- 西文姓名的前缀（van / de la）排在姓之前还是之后。
- 期望 控制 van der Berg 著录成「Berg J V D」还是「van der Berg J」。 2025 缺省与 2015 缺省不同——版本感知。条目级
- options = {useprefix=true} 与全局 sort-use-prefix 与它联动。
+ 西文姓名前缀（van der / de la）全拼前置还是全拼后置——biblatex `useprefix` 的显示半。
+ 期望 真前缀（.bib 录为 van der Berg, Jan）：false（缺省）全拼前置 van der Berg J（李泽平 .bst 各版本现默认、
+ useprefix=true）； true（≡ useprefix=false）全拼后置 Berg J van der（ISO 690:2021「KARAJAN, H. von」、APA7）——前缀永
+ 不缩、后置时保原小写不随姓大写。 不随版本；版本只改姓的大小写（2015/2005 大写，前置前缀随之大写、后置前缀不
+ 随）。 前缀录进名字段（Veen, P. H. van der）则跟名一起缩、保原大小写 Veen P H v d（GB 示例形态），与本参数无关。
+ 条目级 options = {useprefix=..} 与全局 sort-use-prefix 与它联动。
 
 
-▸ 2025 缺省
+▸ false（缺省）
+          · 全拼前置
 
 正文：[1]
-[1] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
+[1] van der Berg J，de la Cruz M. Name Prefix[M]. NY：P，2020.
 
-▸ 2015 缺省
+▸ true（useprefix=false）· 全拼后置
+
+正文：[1]
+[1] Berg J van der，Cruz M de la. Name Prefix[M]. NY：P，2020.
+
+▸ 2015 · 只改姓大小写、前缀仍前置
 
 正文：[1]
 [1] VAN DER BERG J, DE LA CRUZ M. Name Prefix[M]. NY: P, 2020.
 
-▸ true
+▸ 前缀录进名字段 · Veen, P. H. van der → Veen P H v d
 
 正文：[1]
-[1] Berg J v d，Cruz M d l. Name Prefix[M]. NY：P，2020.
-
-▸ false
-
-正文：[1]
-[1] van der Berg J，de la Cruz M. Name Prefix[M]. NY：P，2020.
+[1] Veen P H v d. Prefix In Given[M]. NY：P，2020.
 

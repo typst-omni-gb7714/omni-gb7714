@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 // P-A 回归守卫：文档序 ≠ 路由号（num↔seen 对齐）。
 // @p1@p2 文档序在前但 within(<sec>) 路由到第二个（副）表 → 高号 [3-4]；
 // @a@b 文档序在后但落 auto 主表 → 低号 [1-2]。若 num↔seen 错配（取全局文档序 key），

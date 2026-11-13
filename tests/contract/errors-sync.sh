@@ -10,7 +10,12 @@ API="$ROOT/src/api.typ"
 fail=0
 
 # A：消息表与调用点双向比对。
-ids_called=$(grep -rhoE '_?errors\.(raise|message)\("[a-z-]+\.[a-z-]+"' "$ROOT/src" "$ROOT/lib.typ" \
+# 调用点两种形态：各处的 `errors.raise("id"` / `_errors.raise("id"`，以及 errors.typ 自己的助手函数
+#   （如 `check-circled-dict`）里的裸 `raise("id"`——助手住在表旁边、发表内消息，也是合法调用点。
+# 定向导入按实际来源识别别名，避免把合法的私有成员绑定误报成消息表死条目。
+ids_called=$({ grep -rhoE '_?errors\.(raise|message)\("[a-z-]+\.[a-z-]+"' "$ROOT/src" "$ROOT/lib.typ"; \
+  grep -hoE '(^|[^a-z_.])(raise|message)\("[a-z-]+\.[a-z-]+"' "$ERR"; \
+  python3 "$ROOT/tests/contract/error-alias-calls.py" "$ROOT"; } \
   | grep -oE '"[a-z-]+\.[a-z-]+"' | tr -d '"' | sort -u)
 ids_table=$(awk '/^#let _MESSAGES = \(/{f=1} f&&/^\)$/{exit} f' "$ERR" \
   | grep -oE '^  "[a-z-]+\.[a-z-]+":' | grep -oE '"[^"]+"' | tr -d '"' | sort -u)
@@ -25,11 +30,15 @@ if [ -n "$dead" ]; then echo "FAIL: _MESSAGES 里这些 id 无任何调用点(�
 enum_params=$(awk '/^#let _ENUMS = \(/{f=1} f&&/^\)$/{exit} f' "$ERR" | grep -oE '^  "[a-z-]+"' | tr -d ' "')
 anchor_of() {
   case "$1" in
-    numbering-style) echo "numbering-style:";;
+    bib-numbering-style) echo "bib-numbering-style:";;
+    cite-numbering-style) echo "cite-numbering-style:";;
+    mark-medium-bracket-style) echo "mark-medium-bracket-style:";;
     number-align) echo "number-align:";;
     number-placement) echo "number-placement:";;
+    number-punct-width) echo "number-punct-width:";;
     cite-form) echo "cite-form:";;
-    footnote-numbering-style) echo "footnote-numbering-style:";;
+    note) echo "note:";;
+    note-numbering-style) echo "note-numbering-style:";;
     supplement-style) echo "cite-supplement-style:";;
     punct-style) echo "cite-punct-style:";;
     bib-punct-style) echo "bib-punct-style:";;

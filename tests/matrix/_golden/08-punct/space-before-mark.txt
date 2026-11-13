@@ -1,8 +1,6 @@
   space-before-mark
   文献类型标识 `[M]` 之前是否留一个空格。
-  期望 false（缺省）
-             ：题名紧接 [M]。true：题名与 [M] 之间留空格。                                           ⚠️
-                                                        只作用于 mark-medium 这个封装 token（内置八驱
+  期望 false（缺省） ：题名紧接 [M]。true：题名与 [M] 之间留空格。 ⚠️ 只作用于 mark-medium 这个封装 token（内置八驱
   动用的就是它）； custom-drivers 里的裸 mark / medium token 不受它管——裸化模板里标识前的空格由模板自己写。
 
 

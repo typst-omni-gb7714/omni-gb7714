@@ -1,0 +1,72 @@
+  access-independence
+  URL 筛选不抑制 PID，也不改变条目载体。
+  期望 普通期刊只有 URL/DOI 不自动加 OL；显式 OL 在隐藏路径或 max:0 后仍保留。 DOI true 不被 URL 筛选或去重抑制，
+  但仍受 max 总额约束。auto 只与实际显示的 URL 去重。 CD 文献不是联机；2005 §4.1.1 允许其著录已有引用日期，不因隐
+  藏 URL 而删除。
+
+
+▸ 01 普通期刊：online-only 不抑制 DOI
+
+正文：[1]
+[1] Alpha A. Plain Link[J]. Journal，2020. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
+
+▸ 02 普通期刊：false 同样保留 DOI
+
+正文：[1]
+[1] Alpha A. Plain Link[J]. Journal，2020. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
+
+▸ 03 普通期刊：true 显示链接，但不推导 OL
+
+正文：[1]
+[1] Alpha A. Plain Link[J]. Journal，2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​p​l​a​i​n. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
+
+▸ 04 显式 OL：关闭全部访问项仍保留载体
+
+正文：[1]
+[1] Beta B. Online Version[J/OL]. Journal，2021.
+
+▸ 05 显式 OL：max:0 不改载体，也不被 doi:true 突破
+
+正文：[1]
+[1] Beta B. Online Version[J/OL]. Journal，2021.
+
+▸ 06 隐藏载体仍按联机属性筛选 URL
+
+正文：[1]
+[1] Beta B. Online Version[J]. Journal，2021. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​o​n​l​i​n​e.
+
+▸ 07 auto：显示 DOI URL 时去重
+
+正文：[1]
+[1] Gamma G. DOI Link[J]. Journal，2022. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e.
+
+▸ 08 auto：隐藏 DOI URL 后不去重
+
+正文：[1]
+[1] Gamma G. DOI Link[J]. Journal，2022. DOI：1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e.
+
+▸ 09 true：URL 去重不抑制显式 DOI
+
+正文：[1]
+[1] Gamma G. DOI Link[J]. Journal，2022. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e. DOI：1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e.
+
+▸ 10 配额与优先级：两个 true 仍只输出 DOI
+
+正文：[1]
+[1] Epsilon E. Identifier Priority[J/OL]. Journal，2024. DOI：1​0​.​1​2​3​4​/​p​r​i​o​r​i​t​y.
+
+▸ 11 CD 引用日期与 URL 显示独立
+
+正文：[1]
+[1] DELTA D. Disc Edition[M/CD]. [S.l.]: Press, 2023[2024-05-06].
+
+▸ 12 CD 日期可由自己的开关关闭
+
+正文：[1]
+[1] DELTA D. Disc Edition[M/CD]. [S.l.]: Press, 2023.
+
+▸ 13 自定义模板共用载体与访问规则
+
+正文：[1]
+[1] Plain Link[J]. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
+

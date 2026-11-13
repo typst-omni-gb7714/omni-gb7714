@@ -1,3 +1,5 @@
+#import "/tests/_fixture/fonts.typ": test-fonts
+#show: test-fonts
 #import "/lib.typ": *
 #show: gb7714(version: 2015, )
 一 @k1 二 @k2 三 @k3

@@ -9,7 +9,7 @@
 
 [1]   张三，李四，王五，等. 中文书[M]. 北京：社，2020.
 [2]   Smith J，Doe J，Roe R，et al. English Book[M]. NY：P，2021.
-[3]   田中太郎，鈴木花子，佐藤次郎，他. 日本語の本[M]. 東京：出版社，2019.
+[3]   田中太郎，鈴木花子，佐藤次郎，ほか. 日本語の本[M]. 東京：出版社，2019.
 [4]   김철수，이영희，박민수，외. 한국어 책[M]. 서울：출판사，2018.
 [5]   Иванов И，Петров П，Сидоров С，и др. Русская книга[M]. Москва：Издательство，2017.
 [6]   Dupont J，Martin M，Bernard P，et al. Livre français[M]. Paris：Éditions，2016.
@@ -36,20 +36,20 @@
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
 周七，无日期. 无年中文[M]. 北京：社.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 Anon，2021. Anonymous English[M]. NY：P.
 Brown B，n.d. No Year English[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
 
 ▸ by-entry-with-space（各条目按自身语言定标点）
 
 [1]   张三，李四，王五，等. 中文书[M]. 北京：社，2020.
 [2]   Smith J, Doe J, Roe R, et al. English Book[M]. NY: P, 2021.
-[3]   田中太郎，鈴木花子，佐藤次郎，他. 日本語の本[M]. 東京：出版社，2019.
+[3]   田中太郎，鈴木花子，佐藤次郎，ほか. 日本語の本[M]. 東京：出版社，2019.
 [4]   김철수, 이영희, 박민수, 외. 한국어 책[M]. 서울: 출판사, 2018.
 [5]   Иванов И, Петров П, Сидоров С, и др. Русская книга[M]. Москва: Издательство, 2017.
 [6]   Dupont J, Martin M, Bernard P, et al. Livre français[M]. Paris: Éditions, 2016.
@@ -76,12 +76,52 @@ Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éd
 张三，李四，王五，等，2020. 中文书[M]. 北京：社.
 张三，Smith J，2020. Mixed 中英 Title[M]. 北京：社.
 周七，无日期. 无年中文[M]. 北京：社.
-田中太郎，鈴木花子，佐藤次郎，他，2019. 日本語の本[M]. 東京：出版社.
+田中太郎，鈴木花子，佐藤次郎，ほか，2019. 日本語の本[M]. 東京：出版社.
 김철수，이영희，박민수，외，2018. 한국어 책[M]. 서울：출판사.
 Anon，2021. Anonymous English[M]. NY：P.
 Brown B，n.d. No Year English[M]. NY：P.
 Müller H，Schmidt A，Weber K，et al.，2015. Deutsches Buch[M]. Berlin：Verlag.
 Smith J，Doe J，Roe R，et al.，2021. English Book[M]. NY：P.
 Dupont J，Martin M，Bernard P，et al.，2016. Livre français[M]. Paris：Éditions.
-Иванов И，Петров П，Сидоров С，и др，2017. Русская книга[M]. Москва：Издательство.
+Иванов И，Петров П，Сидоров С，и др.，2017. Русская книга[M]. Москва：Издательство.
+
+▸ entry-localized-glyphs: false（全跟文档语言，不按条目设 lang）
+
+[1]   张三，李四，王五，等. 中文书[M]. 北京：社，2020.
+[2]   Smith J，Doe J，Roe R，et al. English Book[M]. NY：P，2021.
+[3]   田中太郎，鈴木花子，佐藤次郎，ほか. 日本語の本[M]. 東京：出版社，2019.
+[4]   김철수，이영희，박민수，외. 한국어 책[M]. 서울：출판사，2018.
+[5]   Иванов И，Петров П，Сидоров С，и др. Русская книга[M]. Москва：Издательство，2017.
+[6]   Dupont J，Martin M，Bernard P，et al. Livre français[M]. Paris：Éditions，2016.
+[7]   Müller H，Schmidt A，Weber K，et al. Deutsches Buch[M]. Berlin：Verlag，2015.
+[8]   无责任者中文[M]. 北京：社，2020.
+[9]   Anonymous English[M]. NY：P，2021.
+[10] 周七. 无年中文[M]. 北京：社.
+[11] Brown B. No Year English[M]. NY：P.
+[12] 张三. 没有 langid 字段的中文书[M]. 北京：社，2020.
+[13] 张三，Smith J. Mixed 中英 Title[M]. 北京：社，2020.
+[14] 丁一. 丁书[M]. 北京：社，2020.
+[15] 万二. 万书[M]. 北京：社，2020.
+[16] 习三. 习书[M]. 北京：社，2020.
+[17] 乔四. 乔书[M]. 北京：社，2020.
+
+▸ entry-localized-glyphs 单次覆盖（bibliography 层 true）
+
+[1]   张三，李四，王五，等. 中文书[M]. 北京：社，2020.
+[2]   Smith J，Doe J，Roe R，et al. English Book[M]. NY：P，2021.
+[3]   田中太郎，鈴木花子，佐藤次郎，ほか. 日本語の本[M]. 東京：出版社，2019.
+[4]   김철수，이영희，박민수，외. 한국어 책[M]. 서울：출판사，2018.
+[5]   Иванов И，Петров П，Сидоров С，и др. Русская книга[M]. Москва：Издательство，2017.
+[6]   Dupont J，Martin M，Bernard P，et al. Livre français[M]. Paris：Éditions，2016.
+[7]   Müller H，Schmidt A，Weber K，et al. Deutsches Buch[M]. Berlin：Verlag，2015.
+[8]   无责任者中文[M]. 北京：社，2020.
+[9]   Anonymous English[M]. NY：P，2021.
+[10] 周七. 无年中文[M]. 北京：社.
+[11] Brown B. No Year English[M]. NY：P.
+[12] 张三. 没有 langid 字段的中文书[M]. 北京：社，2020.
+[13] 张三，Smith J. Mixed 中英 Title[M]. 北京：社，2020.
+[14] 丁一. 丁书[M]. 北京：社，2020.
+[15] 万二. 万书[M]. 北京：社，2020.
+[16] 习三. 习书[M]. 北京：社，2020.
+[17] 乔四. 乔书[M]. 北京：社，2020.
 

@@ -1,89 +1,104 @@
- footnote-ibid
+ note-ibid
  *紧邻*重复（上一条脚注引用就是同一文献）是否简化为「同上(: 页码)」。
- 期望 auto（缺省）= true：官方 note CSL 梯子的紧邻档。 false：紧邻不特殊化，与隔开重复一样取 footnote-repeat-
- style 的值。 「紧邻」的判定：上一条脚注引用是同一文献即可，中间夹一条普通脚注不破坏紧邻关系。 「同上」的页码
- 语义走 CSL position 算法：与上次同页码时不重复页码；上次有页码本次没有时降级为隔开。 引语词按被引条目语言取（中
- 文条目「同上」、西文条目 Ibid.）。
+ 期望 auto（缺省）版本感知：version: 2015／2005 = true（紧邻「同上」，对齐 2015 note CSL）；version: 2025 = false
+（弃用 ibid，对齐 2025 note CSL 与 GB 2025 §9.2.1.3，紧邻退回 note-repeat-style）。 true：紧邻「同上(: 页码)」；false：紧
+ 邻不特殊化，与隔开一样取 note-repeat-style 的值（缺省 "number" = 「同③」）。 「紧邻」的判定：上一条脚注引用是同一
+ 文献即可，中间夹一条普通脚注不破坏紧邻关系。 「同上」的页码语义走 CSL position 算法：与上次同页码时不重复页码；
+ 上次有页码本次没有时降级为隔开。 引语词按被引条目语言取（中文条目「同上」、西文条目 Ibid.）。
 
 
-▸ auto（缺省 → true）
+▸ auto · version 2015（→ true，紧邻同上）
 
 首① 邻② 换③ 隔④。
-[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
-[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[1] 张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
+[2] SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
 
-▸ true
+▸ auto · version 2025（→ false，紧邻退回 number = 同③）
 
 首⑤ 邻⑥ 换⑦ 隔⑧。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 
-▸ false（紧邻退回 footnote-repeat-style = number）
+▸ true（紧邻同上，两版通用）
 
 首⑨ 邻⑩ 换⑪ 隔⑫。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 [2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 
+▸ false（紧邻退回 note-repeat-style = number = 同③）
+
+首⑬ 邻⑭ 换⑮ 隔⑯。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
 ▸ true · 页码语义（同页不重复、异页带页码、上次有页码本次没有 → 降级为隔开）
 
-首⑬ 同页⑭ 异页⑮ 无页⑯。
+首⑰ 同页⑱ 异页⑲ 无页⑳。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 
 ▸ true · 中间夹一条普通脚注（不破坏紧邻）
 
-首⑰ 夹⑱ 邻⑲。
+首㉑ 夹㉒ 邻㉓。
 [1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 
 ▸ true · 西文条目（Ibid.）
 
-首⑳ 邻㉑ 换㉒ 隔㉓。
+首㉔ 邻㉕ 换㉖ 隔㉗。
 [1] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 [2] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
 
  ①
-   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+   张三, 李四, 王五, 等. 中文专著示例: 副标题[M]. 3 版. 北京: 示例出版社, 2020: 12-25.
  ②
    同上.
  ③
-   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+   SMITH J, DOE J, ROE R, et al. English Book Example[M]. 2nd ed. New York: Example Press, 2021: 30-45.
  ④
    同①.
  ⑤
-   同上.
+   同①.
  ⑥
-   同上.
+   同①.
  ⑦
    See note ③.
  ⑧
    同①.
  ⑨
-   同①.
+   同上.
  ⑩
-   同①.
+   同上.
  ⑪
    See note ③.
  ⑫
    同①.
  ⑬
-   同上：10.
+   同①.
  ⑭
-   同上.
+   同①.
  ⑮
-   同上：20.
+   See note ③.
  ⑯
    同①.
  ⑰
-   同上.
+   同上：10.
  ⑱
-   一条普通脚注
- ⑲
    同上.
+ ⑲
+   同上：20.
  ⑳
-   See note ③.
- ㉑
-   Ibid.
- ㉒
    同①.
+ ㉑
+   同上.
+ ㉒
+   一条普通脚注
  ㉓
+   同上.
+ ㉔
+   See note ③.
+ ㉕
+   Ibid.
+ ㉖
+   同①.
+ ㉗
    See note ③.
 

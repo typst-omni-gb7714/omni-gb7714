@@ -172,3 +172,9 @@
 }
 
 #let raise(id, ..args) = panic(message(id, ..args.named()))
+
+#let check-circled-dict(param, value) = {
+  if value.keys() != ("circled",) or value.circled not in ("unicode", "quan") {
+    raise("bib-numbering-style.circled-dict", param: param, got: repr(value))
+  }
+}

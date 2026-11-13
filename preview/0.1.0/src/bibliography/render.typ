@@ -6,6 +6,7 @@
 #import "../elements/creators.typ" as creators
 #import "../detect/lang.typ" as language
 #import "../drivers/custom.typ" as custom-driver
+#import "../citation/aux-omni.typ": active-list-at
 
 #let emit-label(key, list-label: none) = {
   let lbl = if list-label == none { "gb7714" + _LSEP + key }
@@ -127,7 +128,7 @@
 }
 
 #let render-entries(filtered, opts) = {
-  let (bib-data, _emit-entry, _emit-entry-author-date, _plabel, _get-related, _disambiguation, _active-list, eff-bib-style, eff-suffixes, eff-numeric-date-suffix, eff-bib-numbering-style, eff-show-related, eff-show-url, eff-show-annotation, eff-show-end-period, eff-custom-drivers, eff-version, eff-punct-style, eff-custom-punct, eff-hyphenate, eff-entry-hanging-indent, eff-entry-first-line-indent, eff-number-gutter, eff-number-width, eff-back-ref, eff-number-placement, _column-mode, _margin-mode, list-label, number-offset, lbl-align, related-indent, eff-creator-idem, eff-entry-localized-glyphs) = opts
+  let (bib-data, _emit-entry, _emit-entry-author-date, _plabel, _get-related, _disambiguation, eff-bib-style, eff-suffixes, eff-numeric-date-suffix, eff-bib-numbering-style, eff-show-related, eff-show-url, eff-show-annotation, eff-show-end-period, eff-custom-drivers, eff-version, eff-punct-style, eff-custom-punct, eff-hyphenate, eff-entry-hanging-indent, eff-entry-first-line-indent, eff-number-gutter, eff-number-width, eff-back-ref, eff-number-placement, _column-mode, _margin-mode, list-label, number-offset, lbl-align, related-indent, eff-creator-idem, eff-entry-localized-glyphs) = opts
 
   let _wrap-lang(lang, body) = {
     let on = if eff-entry-localized-glyphs == false { false }
@@ -143,7 +144,7 @@
 
   let _rows = ()
   let _backref-label(label, key) = {
-    let cites = query(std.cite).filter(c => str(c.key) == key and _active-list.at(c.location()) == list-label)
+    let cites = query(std.cite).filter(c => str(c.key) == key and active-list-at(c.location()) == list-label)
     if cites.len() == 0 { return label }
     if _IS-HTML {
       let lbl-anchor = if list-label == none { "gb7714" + _LSEP + key } else { "gb7714" + _LSEP + list-label + _LSEP + key }

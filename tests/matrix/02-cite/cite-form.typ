@@ -16,3 +16,13 @@
 #cite-only("author · 著者-出版年制", gb7714.with(style: "author-date", cite-form: "author"), body: probe-cites)
 #cite-only("year · 著者-出版年制", gb7714.with(style: "author-date", cite-form: "year"), body: probe-cites)
 #cite-only("none（只注册不显示）", gb7714.with(cite-form: none), body: probe-cites)
+
+// `form: "full"` 的*裸* / 合成 `std.cite`（元素自带 `form: "full"`，非经 omni markup 包装器造，
+//   如 Touying `bibliography-as-footnote` 在 show 规则里重发的、或用户直接写的 `std.cite(k, form:"full")`）：
+//   应原位完整著录，而非退化成 [N]。markup `#cite(form:"full")` 见 14-per-cite/overrides。
+#let _synth = [
+  #show std.cite.where(form: "normal"): it => std.cite(it.key, form: "full")
+  正文 @bm-zh @bm-en。
+]
+#case("form:full · 裸/合成 std.cite · 顺序编码制", gb7714.with(version: 2025), bib: MAIN, body: _synth)
+#case("form:full · 裸/合成 std.cite · 著者-出版年制", gb7714.with(version: 2025, style: "author-date"), bib: MAIN, body: _synth)

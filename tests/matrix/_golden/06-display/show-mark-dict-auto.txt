@@ -1,0 +1,28 @@
+ show-mark 字典 auto
+ `show-mark` 字典的值除 `true` / `false` 外还可写 `auto`——命中该键的条目按*单块退化*显码（单块去码、多块显码），是
+「顶层 `show-mark: auto`」的逐类型 / 码版。任意键（小写 `entry_type` / 大写标识码 / `rest`）都能写 `auto`，逐条目
+ resolve。
+ 期望 applied-value 把字典按「entry_type > 码 > rest」解析到本条目的值；dispatch 判该值是否 auto 决定单块退化，
+ gate 再把 auto 落成显码（多块）      。
+ • (S: auto, rest: true):标准 S 按单块退化(多块 标准多块[S]. 显码、单块 标准单块 去码);其余类型 rest: true 恒显码(图书单
+   块[M] 单块也显)。
+ • (S: false, rest: auto):标准 S 恒不显码(多块单块都无 [S]);其余 rest: auto 按单块退化(图书单块 去码、图书多块[M] 显码)。
+ • 现有 bool / 不含 auto 的字典 / 顶层 auto 行为不受影响,只新增「字典里写 auto」这一档。
+
+
+▸ (S: auto, rest: true)：标准逐条目单块退化、其余恒显码
+
+正文：[1-4]
+[1] GB/T 1—2020   标准多块[S].
+[2] 标准单块
+[3] 图书单块[M]
+[4] 张三. 图书多块[M]. 北京：社，2020.
+
+▸ (S: false, rest: auto)：标准恒不显码、其余逐条目单块退化
+
+正文：[1-4]
+[1] GB/T 1—2020   标准多块.
+[2] 标准单块
+[3] 图书单块
+[4] 张三. 图书多块[M]. 北京：社，2020.
+

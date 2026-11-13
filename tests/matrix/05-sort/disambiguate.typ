@@ -35,6 +35,13 @@
 @book{d11, title={无责任者甲}, address={京}, publisher={社}, year={2013}, langid={chinese}}
 @book{d12, title={无责任者乙}, address={京}, publisher={社}, year={2013}, langid={chinese}}")
 #let cs = (<d1>, <d2>, <d3>, <d4>, <d5>, <d6>, <d7>, <d8>, <d9>, <d10>)
+// 拼音名同姓同年：补名中间级按名类别取形态——拼音名逐音节缩（`Chu Y S` / `Chu Y M`），各版本同；
+//   文献表不跟着改（2025 仍全拼 `Chu Yanshuo`，只有升到全名那级才同步）。
+#let dis-py = bytes("@book{py1, author={Chu, Yanshuo}, title={Alpha}, address={NY}, publisher={P}, year={2020}, langid={english}}
+@book{py2, author={Chu, Yanming}, title={Beta}, address={NY}, publisher={P}, year={2020}, langid={english}}
+@book{py3, author={Smith, John}, title={Gamma}, address={NY}, publisher={P}, year={2020}, langid={english}}
+@book{py4, author={Smith, Jane}, title={Delta}, address={NY}, publisher={P}, year={2020}, langid={english}}")
+#let py-cs = (<py1>, <py2>, <py3>, <py4>)
 #let anon-cs = (<d11>, <d12>)
 #case("auto · 著者-出版年制（三机制全开）", gb7714.with(style: "author-date", bib-et-al-min: 2, cite-et-al-min: 2), bib: dis, cites: cs, full: false)
 #case("无责任者、同年 → 佚名 2013a/b（正文与文献表同源；author-short 返回 none 也要参与消歧）", gb7714.with(style: "author-date", show-anon: true), bib: dis, cites: anon-cs, full: false)
@@ -45,3 +52,5 @@
 #case(`(given-name: true, names: false, date: true)`.text, gb7714.with(style: "author-date", bib-et-al-min: 2, cite-et-al-min: 2, disambiguate: (given-name: true, names: false, date: true)), bib: dis, cites: cs, full: false)
 #case(`(names: true, given-name: false, date: true)`.text, gb7714.with(style: "author-date", bib-et-al-min: 2, cite-et-al-min: 2, disambiguate: (names: true, given-name: false, date: true)), bib: dis, cites: cs, full: false)
 #case("混合制 (cite: numeric, bib: author-date) + 显式 true", gb7714.with(style: (cite: "numeric", bib: "author-date"), bib-et-al-min: 2, disambiguate: true), bib: dis, cites: cs, full: false)
+#case("拼音名同姓同年 · 补名中间级逐音节缩（Chu Y S / Chu Y M；西文 Smith J 撞车再升全名）· 2025 文献表仍全拼", gb7714.with(style: "author-date"), bib: dis-py, cites: py-cs, full: true)
+#case("同上 · 2015（文献表缺省本就逐音节缩，与标注同形）", gb7714.with(style: "author-date", version: 2015), bib: dis-py, cites: py-cs, full: true)

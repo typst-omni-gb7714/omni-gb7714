@@ -7,7 +7,7 @@
 
  组满足条件时，组内走 smart-join 自动清理内部悬空分隔符； 且组前导前缀（第一个数据 token 之前的字面量）恒发——它
  绑定的是「整组非空」，不会被空的首 token 吞掉。 组内尾部字面量保留为后缀（?<editor {,编}> 这类句式）。 语料：bm-
- zh 有 edition 与 pages、bm-noyear 无 year、ti-notitle 无 title、aj-en 有 volume 与 number。
+ zh 有 edition 与 pages、bm-noyear 无 year、ti-notitle 无 titles、aj-en 有 volume 与 number。
 
 
 ▸ ?<> 任一非空：?<volume ( number )>
@@ -33,7 +33,7 @@
 正文：[1-5]
 [1] 张三，李四，王五，等. 中文专著示例：副标题. 附：3 版.
 [2] 周七. 无出版年的中文书.
-[3] 丙.
+[3] 丙
 [4] Brown B，Green G. English Journal Article.
 [5] 陈九，卫十. 中文期刊文章示例.
 
@@ -100,11 +100,11 @@
 [4] Brown B，Green G. English Journal Article. Journal of Examples（12, 4）. 2023.
 [5] 陈九，卫十. 中文期刊文章示例. 计算机学报（45, 3）. 2022.
 
-▸ &< 里嵌 ?<：&<title ?<subtitle>>
+▸ &< 里嵌 ?<：&<titles ?<subtitle>>
 
 正文：[1-5]
 [1] 张三，李四，王五，等. 中文专著示例：副标题 副标题. 2020.
-[2] 周七.
+[2] 周七
 [3] 丙. 2020.
 [4] Brown B，Green G. 2023.
 [5] 陈九，卫十. 2022.
@@ -127,12 +127,12 @@
 [4] Brown B，Green G. English Journal Article. 2023.
 [5] 陈九，卫十. 中文期刊文章示例. 2022.
 
-▸ 整条都在一个组里：&<author title year>
+▸ 整条都在一个组里：&<creator titles year>
 
 正文：[1-5]
-[1] 张三，李四，王五，等. 中文专著示例：副标题. 2020.
+[1] 张三，李四，王五，等. 中文专著示例：副标题. 2020
 [2]
 [3]
-[4] Brown B，Green G. English Journal Article. 2023.
-[5] 陈九，卫十. 中文期刊文章示例. 2022.
+[4] Brown B，Green G. English Journal Article. 2023
+[5] 陈九，卫十. 中文期刊文章示例. 2022
 

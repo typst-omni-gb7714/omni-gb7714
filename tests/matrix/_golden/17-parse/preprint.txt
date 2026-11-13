@@ -5,7 +5,18 @@
  准 8.15 示例的 [PP/OL]）。 版本化默认码：2025 PP / 2015 A / 2005 Z。它落在取码链的「版本化类型默认」层， 因此 custom-
  marks 与条目字段都压得动它（曾经硬给码、绕过整条链）                。 eprint 标签按 archiveprefix / eprinttype 派生（arXiv /
  ChinaXiv / PubMed…），缺省回退 eprint:。 2025 且出版平台已由 eprinttype 著录时抑制 eprint 标签，并合成获取路径。
+  类型推断（vanilla 导出遇 biblatex 无预印本类型时退成 @misc，丢 entrysubtype / pubstate）：@misc 若 publisher 是已知预印
+  本平台、或 eprint / number 带平台 label 前缀（arXiv:…）、或 pubstate=prepublished， 还原成预印本。平台集复用 pids 的
+  内置表（去 PubMed）+ 用户 custom-pids 注册的，不另立清单；publisher=PubMed 的普通 @misc 不误判。
 
+
+▸ 类型推断（@misc → 预印本）：publisher 平台 / number 前缀 / pubstate；PubMed 不误判
+
+正文：[1-4]
+[1] 甲. arXiv vanilla[PP/OL]. arXiv（2012-03-18）[2020-06-24]. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​4​8​5​5​0​/​a​r​X​i​v​.​1​1​1​2​.​6​1​3​6.
+[2] 乙. bioRxiv 平台[PP/OL]. bioRxiv（2015-10-28）[2018-07-12]. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​1​0​1​/​0​2​9​9​8​3.
+[3] 丙. pubstate 预印本[PP]. （2020）.
+[4] 丁. PubMed 非预印本[Z]. [出版地不详]：PubMed，2020.
 
 ▸ 2025（PP）
 
@@ -24,21 +35,21 @@
 ▸ 2005（Z）
 
 [1] 辛. 带 pubstate 的在线条目[EB/OL]. 2023[2024-01-01]. h​t​t​p​s​:​/​/​p​.​c​o​m.
-[2] 壬. 有 eprint 但没有 eprinttype[J]. 2023.
-[3] 酉. 预印本（专用类型）[Z]. 2023.
-[4] 寅. 预印本[Z]. 2023.
+[2] 壬. 有 eprint 但没有 eprinttype[J/OL]. 2023.
+[3] 酉. 预印本（专用类型）[Z/OL]. 2023.
+[4] 寅. 预印本[Z/OL]. 2023.
 
 ▸ custom-marks 压得动版本化默认码：(preprint: "YY")
 
 [1] 辛. 带 pubstate 的在线条目[PP/OL]. （2023）[2024-01-01]. h​t​t​p​s​:​/​/​p​.​c​o​m.
 [2] 壬. 有 eprint 但没有 eprinttype[J/OL]. 2023. eprint：2303.00003.
-[3] 酉. 预印本（专用类型）[YY/OL]. 2023. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​2​.​0​0​0​0​2.
+[3] 酉. 预印本（专用类型）[YY/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​2​.​0​0​0​0​2.
 [4] 寅. 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 
 ▸ show-pid: (eprint: false)（eprint 不出）
 
 [1] 辛. 带 pubstate 的在线条目[PP/OL]. （2023）[2024-01-01]. h​t​t​p​s​:​/​/​p​.​c​o​m.
-[2] 壬. 有 eprint 但没有 eprinttype[J]. 2023.
+[2] 壬. 有 eprint 但没有 eprinttype[J/OL]. 2023.
 [3] 酉. 预印本（专用类型）[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​2​.​0​0​0​0​2.
 [4] 寅. 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 

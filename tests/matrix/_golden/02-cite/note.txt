@@ -1,0 +1,75 @@
+ note
+ 注模式：引用是否走脚注制（完整著录落在脚注里，正文只留注号）。
+ 期望 "foot"：正文出圈码注号，脚注里给出完整著录；首次全著录，紧邻重复「同上」，隔开重复「同③」 （官方 note
+ CSL 的梯子）。相邻引用合成一个脚注。none（缺省）：常规行内标注。 脚注里的引语词（同上 / Ibid.）按被引条目语言取。
+ markup @key 与函数 #cite() 两种写法入脚注完全一致——两者在正文是分开的渲染路径 （markup 走 show ref、函数走 cite
+ 闭包），下面并列出来正是要让 golden 盯住它们同源。
+
+
+▸ none（缺省，行内）
+
+正文：[1-2]
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "foot" · 首次 + 紧邻重复 + 隔开重复
+
+首① 邻② 换③ 隔④。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "foot" · 相邻引用合成一个脚注
+
+合注⑤。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "foot" · 西文条目的引语词（Ibid. / See note）
+
+首⑥ 邻⑦ 换⑧ 隔⑨。
+[1] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+[2] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+
+▸ "foot" · markup @key 入脚注（默认 numeric 样式 + 全局 note 参数，曾漏渲的路径）
+
+markup⑩与函数⑪ 都落到脚注，正文只留注号。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+▸ "foot" · markup @key 与 #cite() 共享注号 / 重复空间（重复位指回前面 #cite 建的首注）
+
+首⑫邻⁠⑬换⁠⑭隔⁠⑮。
+[1] 张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+[2] Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+
+ ①
+   张三，李四，王五，等. 中文专著示例：副标题[M]. 3 版. 北京：示例出版社，2020：12-25.
+ ②
+   同①.
+ ③
+   Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
+ ④
+   同①.
+ ⑤
+   同①；See note ③.
+ ⑥
+   See note ③.
+ ⑦
+   See note ③.
+ ⑧
+   同①.
+ ⑨
+   See note ③.
+ ⑩
+   同①.
+ ⑪
+   See note ③.
+ ⑫
+   同①.
+ ⑬
+   同①.
+ ⑭
+   See note ③.
+ ⑮
+   同①.
+

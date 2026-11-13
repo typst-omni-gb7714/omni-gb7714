@@ -1,0 +1,182 @@
+  引用日期与著录形式
+  日期项由版本和实际出版形式决定，不只看类型码或 OL。
+  期望 2025 图书／期刊形式即使内容码为 DS、CP、EB 也不加引用日期；独立数据集、预印本、网页式保留已有日期。 非
+  联机数据集不因 CD 载体或隐藏 URL 丢失日期。2005／2015 沿用已有日期，缺失不补造。 依据 2025 §8.11.1、§8.14.1 及表 10
+  ／11／14／15，2005 §4.1.1。
+
+
+▸ 01 图书形式数据集不加引用日期
+
+正文：[1]
+[1] Alpha A. Book Dataset[DS/OL]. City：Book Press，2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​b​o​o​k.
+
+▸ 02 期刊形式数据集不加引用日期
+
+正文：[1]
+[1] Beta B. Journal Dataset[DS/OL]. Data Journal，2021，5：23-25.
+
+▸ 03 数据集有图书母体时按析出形式
+
+正文：[1]
+[1] Gamma G. Dataset Chapter[DS]//Host H. Collected Data. City：Book Press，2022：10-12.
+
+▸ 04 数据集有期刊母体时按期刊形式
+
+正文：[1]
+[1] Delta D. Published Dataset[DS]. Data Journal，2022，6：31-34.
+
+▸ 05 独立 CD 数据集仍有引用日期
+
+正文：[1]
+[1] Epsilon E. Independent Disc Data[DS/CD]. V2. Data Platform（2023-01-02）[2024-06-07].
+
+▸ 06 独立数据集不要求 OL 才能显示日期
+
+正文：[1]
+[1] Zeta Z. Independent Data[DS]. [2024-06-07].
+
+▸ 07 独立预印本保留日期
+
+正文：[1]
+[1] Eta E. Preprint Form[PP/OL]. Preprint Platform（2023-03-04）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​p​r​e​p​r​i​n​t.
+
+▸ 08 光盘软件不是下载网页
+
+正文：[1]
+[1] Theta T. Disc Software[CP/CD]. V1.2. City：Software Press，2023.
+
+▸ 09 软件下载网页保留日期
+
+正文：[1]
+[1] Iota I. Download Page[CP/OL]. （2023-04-05）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​o​w​n​l​o​a​d.
+
+▸ 10 网络数据库按网页式处理
+
+正文：[1]
+[1] Kappa K. Database Page[DB/OL]. （2023-05-06）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​a​t​a​b​a​s​e.
+
+▸ 11 图书形式的软件资料不加引用日期
+
+正文：[1]
+[1] Lambda L. Software Book[CP]. City：Book Press，2021.
+
+▸ 12 写 EB 代码不抹去明确的图书形式
+
+正文：[1]
+[1] Mu M. Book With EB Code[EB]. City：Book Press，2021.
+
+▸ 13 网页呈现的图书仍按图书形式
+
+正文：[1]
+[1] Nu N. Book On Web[M/OL]. City：Book Press，2021. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​o​n​l​i​n​e​-⁠b​o​o​k.
+
+▸ 14 网页缺引用日期时不补今天
+
+正文：[1]
+[1] Xi X. Undated Page[EB/OL]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​n​o​-⁠d​a​t​e.
+
+▸ 15 独立数据集的日期可显式关闭
+
+正文：[1]
+[1] Epsilon E. Independent Disc Data[DS/CD]. V2. Data Platform（2023-01-02）.
+
+▸ 16 隐藏网页 URL 仍保留引用日期
+
+正文：[1]
+[1] Iota I. Download Page[CP/OL]. （2023-04-05）[2024-06-07].
+
+▸ 17 图书形式仍可按引用年推定出版年
+
+正文：[1]
+[1] Omicron O. Estimated Book[DS]. City：Book Press，[2024].
+
+▸ 18 独立数据集不从引用日期造出版年
+
+正文：[1]
+[1] Zeta Z. Independent Data[DS]. [2024-06-07].
+
+▸ 19 2015 版保留图书日期
+
+正文：[1]
+[1] ALPHA A. Book Dataset[DS/OL]. City: Book Press, 2020[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​b​o​o​k.
+
+▸ 20 2005 版非联机电子日期任选
+
+正文：[1]
+[1] PI P. Legacy Disc Book[M/CD]. City: Book Press, 2020[2024-06-07].
+
+▸ 21 全局 2015、逐表 2025：图书形式不加日期
+
+正文：[1]
+[1] Alpha A. Book Dataset[DS/OL]. City：Book Press，2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​b​o​o​k.
+
+▸ 22 全局 2025、逐表 2015：保留图书日期
+
+正文：[1]
+[1] ALPHA A. Book Dataset[DS/OL]. City: Book Press, 2020[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​b​o​o​k.
+
+▸ 23 自定义数据集代码仍按独立形式著录
+
+正文：[1]
+[1] Epsilon E. Independent Disc Data[DX/CD]. V2. Data Platform（2023-01-02）[2024-06-07].
+
+▸ 24 自定义预印本代码仍保留日期和平台
+
+正文：[1]
+[1] Eta E. Preprint Form[PX/OL]. Preprint Platform（2023-03-04）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​p​r​e​p​r​i​n​t.
+
+▸ 25 自定义网页代码不添加版本和平台
+
+正文：[1]
+[1] Rho R. Custom Web Form[WX/OL]. （2023-07-08）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​c​u​s​t​o​m​-⁠w​e​b.
+
+▸ 26 模板中的图书日期同样按形式过滤
+
+正文：[1]
+[1] Book Dataset[DS/OL]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​b​o​o​k.
+
+▸ 27 模板中的非联机数据集仍保留日期
+
+正文：[1]
+[1] Independent Disc Data[DS/CD]. [2024-06-07].
+
+▸ 28 自定义软件代码仍识别下载网页
+
+正文：[1]
+[1] Iota I. Download Page[SW/OL]. （2023-04-05）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​o​w​n​l​o​a​d.
+
+▸ 29 自定义数据库代码仍识别网页式
+
+正文：[1]
+[1] Kappa K. Database Page[BX/OL]. （2023-05-06）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​a​t​a​b​a​s​e.
+
+▸ 30 著者出版年制的图书形式推定出版年
+
+正文：（Omicron，[2024]）
+Omicron O，[2024]. Estimated Book[DS]. City：Book Press.
+
+▸ 31 全局旧版推定年不冒充新版资源创建日期
+
+正文：[1]
+[1] Zeta Z. Independent Data[DS]. [2024-06-07].
+
+▸ 32 著者出版年制保留真实声明的网页年份
+
+正文：（Sigma，2020）
+Sigma S，2020. Declared Web Year[EB/OL]. （2020）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​y​e​a​r​-⁠o​n​l​y.
+
+▸ 33 顺序编码制的真实网页年份同样保留
+
+正文：[1]
+[1] Sigma S. Declared Web Year[EB/OL]. （2020）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​y​e​a​r​-⁠o​n​l​y.
+
+▸ 34 模板也不把推定出版年当作创建日期
+
+正文：[1]
+[1] Independent Data[DS]. [2024-06-07].
+
+▸ 35 著者出版年制模板保留真实网页年份
+
+正文：（Sigma，2020）
+Sigma S，2020. Declared Web Year[EB/OL]. （2020）[2024-06-07]. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​y​e​a​r​-⁠o​n​l​y.
+

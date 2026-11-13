@@ -2,11 +2,13 @@
 //! values: auto, length
 #import "/tests/_fixture/probe.typ": *
 #show: spec.with(param: "entry-hanging-indent", controls: "条目回行的悬挂缩进。",
-  expect: [它是条目正文那一段的**段落量**（与原生 `par(hanging-indent:)` 同名同义），量的是
-    「余行相对*正文块*左缘」——**不是**「距版心左缘的绝对位置」。**四种版式下都生效。**
-    `auto`：著者-出版年制 `1.5em`（对齐官方 CSL 的 `hanging-indent="true"`）；顺序编码制 `0pt`
+  expect: [它是条目正文那一段的*段落量*（与原生 `par(hanging-indent:)` 同名同义），量的是
+    「余行相对*正文块*左缘」——*不是*「距版心左缘的绝对位置」。*四种版式下都生效。*
+    `auto`：*无编号*的著者-出版年制 `1.5em`（对齐官方 CSL 的 `hanging-indent="true"`）；顺序编码制 `0pt`；
+    著者-出版年制被显式 `bib-numbering-style` 带上编号时也取 `0pt`——编号列已经提供悬挂效果，再叠 1.5em
+    就是双重缩进（论文模板常全局设 `［1］` 再切著者-出版年制，就会撞上），外观与顺序编码制一致
     ——官方 numeric CSL 根本没有这个属性，它那个「余行贴正文列」的效果全部来自
-    `second-field-align="flush"` 的**编号列**，与本量无关。
+    `second-field-align="flush"` 的*编号列*，与本量无关。
     所以成列档（`"column"` / `"margin"`）下，正文列本身就是那一段，本量相对*正文列左缘*再缩。
     ⚠️「余行顶格」不归本参数管——那是「编号不占一列」，用 `number-placement: "inline"`。
     本量刻意*不*与编号列宽挂钩：编号列宽随条目数变（`[9]` 涨到 `[120]` 宽出 1.4em），
@@ -24,3 +26,5 @@
 #case("两量同时生效：hanging 4em + first-line 2em（成列档）", gb7714.with(entry-hanging-indent: 4em, entry-first-line-indent: 2em), cites: cs, full: false)
 #case("number-width 3em + hanging 4em（成列档：与编号列宽解耦，余行 = 正文列 + 4em）", gb7714.with(number-width: 3em, entry-hanging-indent: 4em), cites: cs, full: false)
 #case("4em · 著者-出版年制", gb7714.with(style: "author-date", entry-hanging-indent: 4em), cites: cs, full: false)
+#case("auto · 著者-出版年制 + 显式编号（= 0pt，余行贴正文列，不再叠 1.5em）", gb7714.with(style: "author-date", bib-numbering-style: "fullwidth-bracket"), cites: cs, full: false)
+#case("2em · 著者-出版年制 + 显式编号（显式值不受派生影响：正文列 + 2em）", gb7714.with(style: "author-date", bib-numbering-style: "fullwidth-bracket", entry-hanging-indent: 2em), cites: cs, full: false)
