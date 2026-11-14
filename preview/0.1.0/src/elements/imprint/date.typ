@@ -1,5 +1,22 @@
 #import "../../field.typ"
 #import "../../parse/latex.typ"
+#import "../../punct/built-in.typ" as punct
+#import "../../errors.typ"
+
+#let validate-range-separator(value) = {
+  if value == auto or type(value) == str { return }
+  if type(value) != dictionary { errors.raise("date-range-separator.bad-value", got: repr(value)) }
+  for (key, item) in value {
+    if key not in punct.separator-lang-keys {
+      errors.raise("separator.unknown-lang-key", key: key, keys: punct.separator-lang-keys.join(" / "))
+    }
+    if type(item) != str { errors.raise("date-range-separator.bad-value", got: repr(value)) }
+  }
+}
+
+#let resolve-range-separator(value, entry, punct-style: "half-with-space", custom-punct: (:)) = {
+  if value == auto { "—" } else { punct.resolve-separator(value, entry, punct-style, custom-punct, "—") }
+}
 
 #let edtf-year(s) = {
   if s.ends-with("~") or s.ends-with("?") or s.ends-with("%") {
@@ -34,8 +51,8 @@
   result
 }
 
-#let format-parsed-date(parsed-date) = {
-  let body = if parsed-date.kind == "between" { format-date-point(parsed-date.start) + "—" + format-date-point(parsed-date.end) } else if parsed-date.kind == "after" { format-date-point(parsed-date.start) + "—" } else if parsed-date.kind == "before" { "—" + format-date-point(parsed-date.end) } else { format-date-point(parsed-date.start) }
+#let format-parsed-date(parsed-date, range-separator: "—") = {
+  let body = if parsed-date.kind == "between" { format-date-point(parsed-date.start) + range-separator + format-date-point(parsed-date.end) } else if parsed-date.kind == "after" { format-date-point(parsed-date.start) + range-separator } else if parsed-date.kind == "before" { range-separator + format-date-point(parsed-date.end) } else { format-date-point(parsed-date.start) }
   if parsed-date.approximate or parsed-date.uncertain { "[" + body + "]" } else { body }
 }
 
@@ -52,12 +69,12 @@
   }
 }
 
-#let date(entry) = {
+#let date(entry, range-separator: "—") = {
   let date-field = field.get(entry, "date")
   if date-field != none {
     let parsed-date = parsed(entry, "date")
     if parsed-date == none { return _literal-date(date-field) }
-    format-parsed-date(parsed-date)
+    format-parsed-date(parsed-date, range-separator: range-separator)
   } else {
     let year-field = field.get(entry, "year")
     if year-field != none { edtf-year(str(year-field)) } else { none }

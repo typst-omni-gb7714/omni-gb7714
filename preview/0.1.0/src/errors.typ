@@ -111,6 +111,7 @@
   "titles-text-case.bad-value": "gb7714: titles-text-case.{key} 收到非法值 {value}；合法值: none / \"sentence\" / \"title\"。",
 
   "separator.unknown-lang-key": "gb7714: 分隔符的多语言字典收到未知键 \"{key}\"；合法键: {keys}（条目语言码，加 rest 回退档——未点名的语言走本参数的预设值）。",
+  "date-range-separator.bad-value": "gb7714: date-range-separator 须是 auto、字符串或值为字符串的语言字典，收到 {got}。",
 
   "et-al.unknown-key": "gb7714: {param} 的字典收到未知键 \"{key}\"；合法键有两套——角色键 {roles}（截断发生的四个位置），或语言键 {langs}（条目语言码）；两套都可以加 rest 回退档，但不能并列在同一层。",
   "et-al.unknown-lang-key": "gb7714: {param} 的语言字典收到未知键 \"{key}\"；合法键: {keys}（条目语言码，加 rest 回退档）。",

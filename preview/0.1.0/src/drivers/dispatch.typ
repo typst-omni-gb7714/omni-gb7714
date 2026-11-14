@@ -3,6 +3,7 @@
 #import "../elements/mark-medium/built-in.typ" as mark-medium
 #import "../punct/built-in.typ" as punct
 #import "../field.typ"
+#import "../elements/imprint/date.typ": resolve-range-separator as _resolve-date-range-separator
 
 #import "built-in.typ": component-part as _render-component-part, preprint as _render-preprint, serial-article as _render-serial-article, serial-newspaper as _render-serial-newspaper
 #import "built-in.typ": patent as _render-patent, electronic as _render-electronic, serial as _render-serial, monograph as _render-monograph
@@ -35,12 +36,13 @@
   [#rendered.#lead#a]
 }
 
-#let entry(entry, registered-marks: (), show-sine-loco: true, show-sine-nomine: true, show-sine-anno: false, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-url: true, show-mark: true, show-medium: true, show-patent-country: false, short-journal: false, show-urldate: true, show-end-period: true, hyperlink: true, emphasis: (:), space-before-mark: false, mark-medium-bracket-style: "half", space-before-pages: true, page-range-separator: "-", page-range-style: none, period-after-creator: true, show-anon: false, show-et-al: true, name-style: (:), hyperlink-title: false, dedup-author-editor: false, skip-date: false, date-suffix: "", pages-override: none, skip-creator: false, creator-override: none, show-degree: false, show-series: false, prefix-last: false, custom-drivers: (:), custom-terms: (:), custom-fields: (:), custom-pids: (:), correct-punct: false, punct-style: "half-with-space", custom-punct: (:), pid-colon-style: auto, url-break-every: 1, url-break-hyphen: true, url-break-hyphen-at-delimiters: true, version: 2015, name-suffix-separator: auto, et-al-translator-separator: auto, component-part-separator: "//", show-pid: (:), pid-priority: (), dedup-url-pid: true, show-annotation: false, space-before-annotation: auto, volume-title-gutter: auto) = {
+#let entry(entry, registered-marks: (), show-sine-loco: true, show-sine-nomine: true, show-sine-anno: false, et-al-min: 4, et-al-use-first: 3, et-al-use-last: 0, show-url: true, show-mark: true, show-medium: true, show-patent-country: false, short-journal: false, show-urldate: true, show-end-period: true, hyperlink: true, emphasis: (:), space-before-mark: false, mark-medium-bracket-style: "half", space-before-pages: true, page-range-separator: "-", page-range-style: none, period-after-creator: true, show-anon: false, show-et-al: true, name-style: (:), hyperlink-title: false, dedup-author-editor: false, skip-date: false, date-suffix: "", pages-override: none, skip-creator: false, creator-override: none, show-degree: false, show-series: false, prefix-last: false, custom-drivers: (:), custom-terms: (:), custom-fields: (:), custom-pids: (:), correct-punct: false, punct-style: "half-with-space", custom-punct: (:), pid-colon-style: auto, url-break-every: 1, url-break-hyphen: true, url-break-hyphen-at-delimiters: true, version: 2015, name-suffix-separator: auto, et-al-translator-separator: auto, component-part-separator: "//", show-pid: (:), pid-priority: (), dedup-url-pid: true, show-annotation: false, space-before-annotation: auto, volume-title-gutter: auto, date-range-separator: auto) = {
   entry = _stable-name-entry(entry)
   let entry-category = category.get(entry, version: version)
   let mark-is-auto = (mark-medium.applied-value(show-mark, entry) == auto)
 
   let _format-args = (
+    date-range-separator: _resolve-date-range-separator(date-range-separator, entry, punct-style: punct-style, custom-punct: custom-punct),
     show-sine-loco: show-sine-loco, show-sine-nomine: show-sine-nomine, show-sine-anno: show-sine-anno,
     et-al-min: et-al-min, et-al-use-first: et-al-use-first, et-al-use-last: et-al-use-last,
     show-url: show-url,

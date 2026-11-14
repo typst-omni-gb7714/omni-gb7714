@@ -1,7 +1,0 @@
-[package]
-name = "easy-zh-manual"
-version = "0.1.0"
-entrypoint = "src/lib.typ"
-authors = ["Schrodinger Blume"]
-license = "MIT"
-description = "面向中文技术文档的 Typst 手册模板"

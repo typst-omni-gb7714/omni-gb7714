@@ -195,6 +195,8 @@
   space-before-annotation: auto,
   /// 页码范围连字符，如 "-" / "～"
   page-range-separator:       "-",
+  /// 日期区间连接符：auto 保留破折号；字符串或按条目语言设置的字典
+  date-range-separator:       auto,
   /// 起讫页码的位数格式：none 原样输出（默认）/ "expanded" 补全 / "minimal" / "minimal-two" / "chicago-15" / "chicago-16"
   page-range-style:    none,
   /// 参考文献表内允许西文断字
@@ -229,6 +231,7 @@
   import "src/errors.typ" as _errors
   import "src/style.typ" as _style
   import "src/elements/creators.typ" as _creators
+  import "src/elements/imprint/date.typ": validate-range-separator as _validate-date-range-separator
   import "src/parse/csl-json.typ" as _csl-json
   import "src/api.typ": apply-note-numbering as _apply-note-numbering, bib-keys as _bib-keys, BIB-ENTRY-RE as _BIB-ENTRY-RE, gb7714 as _create-instance
   import std: type as _std-type, bibliography as _std-bibliography, cite as _std-cite, version as _std-version
@@ -251,6 +254,7 @@
   _errors.check-enum("supplement-style", cite-supplement-style, extra: (auto,), alias: "cite-supplement-style")
   _errors.check-enum("entry-lang-detect", entry-lang-detect)
   _errors.check-enum("date-fallback", date-fallback)
+  _validate-date-range-separator(date-range-separator)
   _errors.check-enum("sort-zh-by", bib-sort-zh-by, alias: "bib-sort-zh-by")
   _errors.check-enum("sort-zh-by", cite-sort-zh-by, alias: "cite-sort-zh-by")
   import "src/bibliography/sort.typ" as _sort
@@ -300,7 +304,7 @@
     titles-text-case: titles-text-case, emphasis: emphasis,
     period-after-creator: period-after-creator, show-end-period: show-end-period,
     space-before-mark: space-before-mark, mark-medium-bracket-style: mark-medium-bracket-style, space-before-pages: space-before-pages, space-before-annotation: space-before-annotation,
-    page-range-separator: page-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, entry-localized-glyphs: entry-localized-glyphs, note-numbering-style: note-numbering-style,
+    page-range-separator: page-range-separator, date-range-separator: date-range-separator, page-range-style: page-range-style, hyphenate: hyphenate, entry-localized-glyphs: entry-localized-glyphs, note-numbering-style: note-numbering-style,
     note-repeat-style: note-repeat-style, note-ibid: note-ibid, note-repeat-reset: note-repeat-reset,
     custom-marks: custom-marks, custom-drivers: custom-drivers, custom-terms: custom-terms, custom-fields: custom-fields, custom-pids: custom-pids, custom-languages: custom-languages, warn-missing-title: warn-missing-title,
   )
@@ -529,6 +533,8 @@
   emphasis: auto,
   /// 页码范围连字符；auto 跟随全局
   page-range-separator:       auto,
+  /// 日期区间连接符；auto 跟随全局
+  date-range-separator:       auto,
   page-range-style:    auto,
   /// 同 gb7714 同名参数；auto 跟随全局
   show-end-period:     auto,
@@ -644,6 +650,7 @@
   import "src/elements/creators.typ": validate-name-style as _validate-name-style
   import "src/parse/csl-json.typ": looks-like-json as _looks-like-json, to-bibtex as _json-to-bibtex, keys as _json-keys
   import "src/style.typ": normalize as _normalize-style
+  import "src/elements/imprint/date.typ": validate-range-separator as _validate-date-range-separator
   import "src/api.typ": bib-keys as _bib-keys, gb7714 as _create-instance, _is-native-mode
   import sys: version as _typst-version
   if _std-type(bib-numbering-style) == dictionary {
@@ -653,6 +660,7 @@
   _check-enum("number-punct-width", number-punct-width, extra: (auto,))
   _check-enum("mark-medium-bracket-style", mark-medium-bracket-style, extra: (auto,))
   _validate-name-style(name-style)
+  _validate-date-range-separator(date-range-separator)
   if _std-type(punct-style) != dictionary { _check-enum("bib-punct-style", punct-style, extra: (auto,), alias: "punct-style") }
 
   let to-bytes(s) = {
@@ -723,9 +731,13 @@
     let eff = if gb-style-cite != none { gb-style-cite } else { state("gb7714-config", (:)).get().at("style", default: (:)).at("cite", default: "numeric") }
     eff == "numeric"
   }
+  let _list-date-range-separator = if date-range-separator == auto {
+    state("gb7714-config", (:)).get().at("date-range-separator", default: auto)
+  } else { date-range-separator }
   state("gb7714-bib-list", ()).update(array => {
     let r = array
-    r.push((target: target, group: group, full: full, native-style: is-native-style, counts-number: counts-number, footnote: eff-footnote, source-keys: _src-keys, auto-key: auto-key, label: label))
+    r.push((target: target, group: group, full: full, native-style: is-native-style, counts-number: counts-number, footnote: eff-footnote, source-keys: _src-keys, auto-key: auto-key, label: label,
+      date-range-separator: _list-date-range-separator))
     r
   })
   if label == none and gb-style-cite != none and not is-native-style {
@@ -899,6 +911,7 @@
     sort-use-prefix: sort-use-prefix,
     emphasis: emphasis,
     page-range-separator: page-range-separator,
+    date-range-separator: date-range-separator,
     page-range-style: page-range-style,
     show-end-period: show-end-period,
     et-al-min: et-al-min,

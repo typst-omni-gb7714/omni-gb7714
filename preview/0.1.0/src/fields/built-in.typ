@@ -137,15 +137,15 @@
     return publication-date.year(entry)
   }
   if name == "date" {
-    if category.is-platform-form(entry, version: opts.version) { return date.modified(entry, fallback-year: true) }
+    if category.is-platform-form(entry, version: opts.version) { return date.modified(entry, fallback-year: true, range-separator: opts.at("date-range-separator", default: "—")) }
     if opts.skip-date { return none }
-    return publication-date.date(entry)
+    return publication-date.date(entry, range-separator: opts.at("date-range-separator", default: "—"))
   }
   if name == "urldate" { return date.urldate(entry, show-urldate: opts.show-urldate, version: opts.version) }
   if name == "address" or name == "location" { return imprint.location(entry) }
   if name == "publisher" { return imprint.publisher(entry) }
   if name == "imprint-block" {
-    return imprint.format(entry, show-sine-loco: opts.show-sine-loco, show-sine-nomine: opts.show-sine-nomine, show-sine-anno: opts.at("show-sine-anno", default: false), skip-date: opts.skip-date, date-suffix: opts.at("date-suffix", default: ""), punct-style: opts.punct-style, custom-punct: opts.custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: opts.version)
+    return imprint.format(entry, show-sine-loco: opts.show-sine-loco, show-sine-nomine: opts.show-sine-nomine, show-sine-anno: opts.at("show-sine-anno", default: false), skip-date: opts.skip-date, date-suffix: opts.at("date-suffix", default: ""), punct-style: opts.punct-style, custom-punct: opts.custom-punct, custom-terms: opts.at("custom-terms", default: (:)), version: opts.version, date-range-separator: opts.at("date-range-separator", default: "—"))
   }
   if name == "serial-block" { return built-in-driver.serial-year-volume(entry, opts).block }
   if name == "access" {

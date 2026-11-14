@@ -252,10 +252,38 @@
   let last-character = none
   let held = ()
   let pending-empty = false
+  let pending-guard = false
+
+  let before-empty-guard = nodes.map(_ => false)
+  let after-guard-content = nodes.map(_ => false)
+  let next-empty-guard = false
+  let next-content = keep-trailing
+  for i in range(nodes.len()).rev() {
+    before-empty-guard.at(i) = next-empty-guard
+    after-guard-content.at(i) = next-content
+    let node = nodes.at(i)
+    if node.at(0) in ("ident", "alias", "group") {
+      next-empty-guard = (node.at(0) == "group" and node.len() > 3 and node.at(3) != none and _is-empty(parts.at(i)))
+      next-content = next-empty-guard or not _is-empty(parts.at(i))
+    }
+  }
   for (i, cur-node) in nodes.enumerate() {
     let next-kind = cur-node.at(0)
     if next-kind == "sp" { buffer.push(("soft",)); continue }
     let p = parts.at(i)
+    if (next-kind == "text" and emitted and not _is-empty(p)
+        and (before-empty-guard.at(i) or (pending-guard and after-guard-content.at(i)))) {
+      let first-char = _first-character(p)
+      let separator = if pending-empty { _collapse-around-empty(held, buffer, first-char) } else { buffer }
+      result += _resolve-separator(separator + (("hard", p, false),), last-character, none)
+      let last-char = _last-character(p)
+      if last-char != none { last-character = last-char }
+      buffer = ()
+      held = ()
+      pending-empty = false
+      pending-guard = false
+      continue
+    }
     if next-kind == "punct" or next-kind == "text" {
       let is-period = next-kind == "punct" and punct.char-to-slot.at(cur-node.at(1), default: none) == "period"
       buffer.push(("hard", p, is-period))
@@ -268,6 +296,7 @@
     if _is-empty(p) {
       held = if pending-empty { _collapse-around-empty(held, buffer, none) } else { buffer }
       pending-empty = true
+      pending-guard = pending-guard or (next-kind == "group" and cur-node.len() > 3 and cur-node.at(3) != none)
       buffer = ()
       phase = "midstream"
       continue
@@ -294,6 +323,7 @@
     buffer = ()
     held = ()
     pending-empty = false
+    pending-guard = false
   }
 
   if keep-trailing and emitted and buffer.len() > 0 {

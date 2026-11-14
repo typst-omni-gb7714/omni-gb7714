@@ -2,11 +2,11 @@
 #import "../category.typ"
 #import "imprint/date.typ" as publication-date
 
-#let modified(entry, fallback-year: false) = {
+#let modified(entry, fallback-year: false, range-separator: "—") = {
   let date-field = field.get(entry, "date")
   if date-field != none {
     let parsed-date = publication-date.parsed(entry, "date")
-    if parsed-date != none { return publication-date.format-parsed-date(parsed-date) }
+    if parsed-date != none { return publication-date.format-parsed-date(parsed-date, range-separator: range-separator) }
   }
   if fallback-year and field.get(entry, "_omni-year-inferred-from") == none {
     let year = field.get(entry, "year")

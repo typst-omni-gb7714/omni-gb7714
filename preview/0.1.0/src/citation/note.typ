@@ -54,13 +54,17 @@
     if index == none { none } else { _supplement-at(index) }
   }
   let first-sidecar = _sidecar-at(base)
-  let opts = options-thunk(if first-sidecar == none { (:) } else { first-sidecar.value.at("overrides", default: (:)) })
+  let source-location = if first-sidecar == none { none } else { first-sidecar.value.at("citation-location", default: first-sidecar.location()) }
+  let first-overrides = if first-sidecar == none { (:) } else { first-sidecar.value.at("overrides", default: (:)) }
+  let opts = options-thunk(first-overrides, source-location)
   let (indent, eff-style, bib-style, show-url, eff-show-annotation, show-end-period, eff-custom-drivers, version, eff-punct-style, eff-custom-punct, eff-pid-colon-style, _emit-entry-author-date, _emit-entry, eff-custom-terms, eff-custom-fields, eff-custom-pids, eff-correct-punct, eff-url-break-every, eff-show-pid, eff-pid-priority, eff-dedup-url-pid, _get-related, _set-redirect, bib-data, note-repeat-style, note-ibid, note-repeat-reset, cite-terms-lang, format-footnote-number, note-super, _bib-link, show-anon, show-et-al, _global-config, show-mark, show-medium, space-before-mark, correct-punct) = opts
   let current-list = active-list-at(here())
   let document-lang = text.lang
 
       let _period-on(single-block) = if show-end-period == auto { not single-block } else { show-end-period }
-      let _footnote-full-body(entry, k, supplement, with-end-period: true) = {
+      let _footnote-full-body(entry, k, supplement, with-end-period: true, render-entry: _emit-entry, render-author-date: _emit-entry-author-date) = {
+        let _emit-entry = render-entry
+        let _emit-entry-author-date = render-author-date
         let skip-date = bib-style == "author-date"
         let annotation-tail = bib.annotation-tail(entry, show-annotation: eff-show-annotation)
         let (formatted, entry-single) = if skip-date { _emit-entry-author-date(entry, suffix-key: k, pages-override: supplement, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, pid-colon-style: eff-pid-colon-style, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) } else { _emit-entry(entry, pages-override: supplement, custom-drivers: eff-custom-drivers, custom-terms: eff-custom-terms, custom-fields: eff-custom-fields, custom-pids: eff-custom-pids, correct-punct: eff-correct-punct, punct-style: eff-punct-style, custom-punct: eff-custom-punct, pid-colon-style: eff-pid-colon-style, url-break-every: eff-url-break-every, show-pid: eff-show-pid, pid-priority: eff-pid-priority, dedup-url-pid: eff-dedup-url-pid, show-annotation: eff-show-annotation) }
@@ -74,20 +78,20 @@
           [#punct.append-end-period(formatted, end-suffix)#linebreak()#indent#punct.append-end-period(related-formatted, if with-end-period { related-end-suffix } else { "" })]
         } else { punct.append-end-period(formatted, if with-end-period { end-suffix } else { "" }) }
       }
-      let _footnote-full-body-by-key(k, supplement, with-end-period: true) = {
+      let _footnote-full-body-by-key(k, supplement, with-end-period: true, render-entry: _emit-entry, render-author-date: _emit-entry-author-date) = {
         let redirect-key = _set-redirect.at(k, default: k)
         let redirect-entry = bib-data.at(redirect-key, default: none)
         if redirect-entry != none and redirect-entry.entry_type == "set" {
           let leaf-keys = entryset.leaves(bib-data, redirect-key)
             .filter(leaf-key => bib-data.at(leaf-key, default: none) != none)
-          let bodies = leaf-keys.enumerate().map(((leaf-index, leaf-key)) => _footnote-full-body(bib-data.at(leaf-key), leaf-key, none, with-end-period: leaf-index < leaf-keys.len() - 1 or supplement != none or with-end-period))
+          let bodies = leaf-keys.enumerate().map(((leaf-index, leaf-key)) => _footnote-full-body(bib-data.at(leaf-key), leaf-key, none, with-end-period: leaf-index < leaf-keys.len() - 1 or supplement != none or with-end-period, render-entry: render-entry, render-author-date: render-author-date))
           let joined = bodies.join(linebreak() + indent)
           if supplement != none {
 
             [#joined #(if with-end-period { punct.append-end-period(supplement, punct.end-period(entry, eff-punct-style, eff-custom-punct)) } else { [#supplement] })]
           } else { joined }
         } else {
-          _footnote-full-body(bib-data.at(k, default: none), k, supplement, with-end-period: with-end-period)
+          _footnote-full-body(bib-data.at(k, default: none), k, supplement, with-end-period: with-end-period, render-entry: render-entry, render-author-date: render-author-date)
         }
       }
 
@@ -150,7 +154,11 @@
           (kind: "shortened", body: _short-body(entry, supplement, with-end-period: not bare))
         } else {
 
-          (kind: "full", body: _footnote-full-body-by-key(k, supplement, with-end-period: not bare))
+          let sidecar = _sidecar-at(base + slot-index)
+          let location = if sidecar == none { none } else { sidecar.value.at("citation-location", default: sidecar.location()) }
+          let item-options = if slot-index == 0 { opts } else { options-thunk(first-overrides, location) }
+          (kind: "full", body: _footnote-full-body-by-key(k, supplement, with-end-period: not bare,
+            render-entry: item-options._emit-entry, render-author-date: item-options._emit-entry-author-date))
         }
       }
 

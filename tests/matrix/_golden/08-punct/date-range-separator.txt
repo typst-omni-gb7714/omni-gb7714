@@ -1,0 +1,161 @@
+ date-range-separator
+ 结构化日期区间两个端点之间的连接符。
+ 期望 默认 auto 保留 —；显式字符串和语言字典可覆盖。闭区间、开放起点和开放终点均使用同一设置，年月日内部连字
+ 符不变。 内置格式、模板、完整引用和脚注共用规则。urldate 仍显示一个端点；出版年、页码和连续出版物年卷期块不受
+ 影响。
+
+
+▸ auto · 保留默认破折号
+
+正文：[1-8]
+[1] Closed day range[EB/OL]. （1996-01-01—2026-05-17）[2026-06-01].
+[2] Open end[EB/OL]. （1996-01-01—）[2026-06-01].
+[3] Open start[EB/OL]. （—2026-05-17）[2026-06-01].
+[4] Month range[EB/OL]. （1996-01—2026-05）.
+[5] Year range[EB/OL]. （1996—2026）.
+[6] Mixed precision[EB/OL]. （1996-01-01—2026-05）.
+[7] Single day[EB/OL]. （2026-05-17）.
+[8] Uncertain range[EB/OL]. （[1996-01-01—2026-05-17]）.
+
+▸ 字符串 / · 开闭区间均替换
+
+正文：[1-8]
+[1] Closed day range[EB/OL]. （1996-01-01/2026-05-17）[2026-06-01].
+[2] Open end[EB/OL]. （1996-01-01/）[2026-06-01].
+[3] Open start[EB/OL]. （/2026-05-17）[2026-06-01].
+[4] Month range[EB/OL]. （1996-01/2026-05）.
+[5] Year range[EB/OL]. （1996/2026）.
+[6] Mixed precision[EB/OL]. （1996-01-01/2026-05）.
+[7] Single day[EB/OL]. （2026-05-17）.
+[8] Uncertain range[EB/OL]. （[1996-01-01/2026-05-17]）.
+
+▸ 字符串 至 · 端点内部仍为 YYYY-MM-DD
+
+正文：[1-8]
+[1] Closed day range[EB/OL]. （1996-01-01 至 2026-05-17）[2026-06-01].
+[2] Open end[EB/OL]. （1996-01-01 至 ）[2026-06-01].
+[3] Open start[EB/OL]. （ 至 2026-05-17）[2026-06-01].
+[4] Month range[EB/OL]. （1996-01 至 2026-05）.
+[5] Year range[EB/OL]. （1996 至 2026）.
+[6] Mixed precision[EB/OL]. （1996-01-01 至 2026-05）.
+[7] Single day[EB/OL]. （2026-05-17）.
+[8] Uncertain range[EB/OL]. （[1996-01-01 至 2026-05-17]）.
+
+▸ verbatim {/} · 不印花括号
+
+正文：[1-8]
+[1] Closed day range[EB/OL]. （1996-01-01/2026-05-17）[2026-06-01].
+[2] Open end[EB/OL]. （1996-01-01/）[2026-06-01].
+[3] Open start[EB/OL]. （/2026-05-17）[2026-06-01].
+[4] Month range[EB/OL]. （1996-01/2026-05）.
+[5] Year range[EB/OL]. （1996/2026）.
+[6] Mixed precision[EB/OL]. （1996-01-01/2026-05）.
+[7] Single day[EB/OL]. （2026-05-17）.
+[8] Uncertain range[EB/OL]. （[1996-01-01/2026-05-17]）.
+
+▸ 空字符串 · 显式不留连接符
+
+正文：[1-8]
+[1] Closed day range[EB/OL]. （1996-01-012026-05-17）[2026-06-01].
+[2] Open end[EB/OL]. （1996-01-01）[2026-06-01].
+[3] Open start[EB/OL]. （2026-05-17）[2026-06-01].
+[4] Month range[EB/OL]. （1996-012026-05）.
+[5] Year range[EB/OL]. （19962026）.
+[6] Mixed precision[EB/OL]. （1996-01-012026-05）.
+[7] Single day[EB/OL]. （2026-05-17）.
+[8] Uncertain range[EB/OL]. （[1996-01-012026-05-17]）.
+
+▸ 单字符标点 · 随标点档转换
+
+正文：[1]
+[1] Closed day range[EB/OL]. （1996-01-01，2026-05-17）[2026-06-01].
+
+▸ verbatim {,} · 保留半角逗号
+
+正文：[1]
+[1] Closed day range[EB/OL]. （1996-01-01,2026-05-17）[2026-06-01].
+
+▸ 连接符的 custom-punct 样式
+
+正文：[1]
+[1] Closed day range[EB/OL]. （1996-01-01/2026-05-17）[2026-06-01].
+
+▸ 语言字典 · 中文破折号／英文斜杠
+
+正文：[1-2]
+[1] 中文日期区间[EB/OL]. （1996-01-01—2026-05-17）[2026-06-01].
+[2] Closed day range[EB/OL]. （1996-01-01/2026-05-17）[2026-06-01].
+
+▸ 语言字典 · 未列出的语言用预设
+
+正文：[1-2]
+[1] 中文日期区间[EB/OL]. （1996-01-01/2026-05-17）[2026-06-01].
+[2] Closed day range[EB/OL]. （1996-01-01—2026-05-17）[2026-06-01].
+
+▸ 语言字典 rest · 未列出的语言用指定值
+
+正文：[1-2]
+[1] 中文日期区间[EB/OL]. （1996-01-01—2026-05-17）[2026-06-01].
+[2] Closed day range[EB/OL]. （1996-01-01/2026-05-17）[2026-06-01].
+
+▸ 逐表覆盖 · 全局斜杠／本表破折号
+
+正文：[1-3]
+[1] Closed day range[EB/OL]. （1996-01-01—2026-05-17）[2026-06-01].
+[2] Open end[EB/OL]. （1996-01-01—）[2026-06-01].
+[3] Open start[EB/OL]. （—2026-05-17）[2026-06-01].
+
+▸ 逐表 auto · 继承全局斜杠
+
+正文：[1]
+[1] Closed day range[EB/OL]. （1996-01-01/2026-05-17）[2026-06-01].
+
+▸ 内置各日期位置
+
+正文：[1-8]
+[1] Smith J. Year only book[M]. City：Press，1996：12-15.
+[2] Smith J. Online first article[J]. Journal，1996-01-01/2026-05-17.
+[3] Smith J. Newspaper range[N]. News，1996-01-01/2026-05-17.
+[4] Smith J. Patent range：N1[P]. 1996-01-01/2026-05-17.
+[5] Smith J. Archival range[A]. City：Archive，1996-01-01/2026-05-17.
+[6] Smith J. Report range[R]. 1996-01-01/2026-05-17.
+[7] Dataset range[DS]. Platform（1996-01-01/2026-05-17）.
+[8] Preprint range[PP]. Platform（1996-01-01/2026-05-17）.
+
+▸ 模板 date／imprint-block／内置回落
+
+正文：[1-5]
+[1] Closed day range | 1996-01-01/2026-05-17 | [2026-06-01].
+[2] Open end | 1996-01-01/ | [2026-06-01].
+[3] Open start | /2026-05-17 | [2026-06-01].
+[4] Report range | 1996-01-01/2026-05-17.
+[5] Smith J. Newspaper range[N]. News，1996-01-01/2026-05-17.
+
+▸ 旧版 2005 · 修改日期使用同一连接符
+
+正文：[1-2]
+[1] Closed day range[EB/OL]. (1996-01-01/2026-05-17)[2026-06-01].
+[2] SMITH J. Newspaper range[N]. News, 1996-01-01/2026-05-17.
+
+▸ 旧版 2015 · 修改日期使用同一连接符
+
+正文：[1-2]
+[1] Closed day range[EB/OL]. (1996-01-01/2026-05-17)[2026-06-01].
+[2] SMITH J. Newspaper range[N]. News, 1996-01-01/2026-05-17.
+
+▸ 不改变出版年／页码／整刊年卷期块
+
+正文：[1-2]
+[1] Smith J. Year only book[M]. City：Press，1996：12-15.
+[2] Serial range[J]. 1957，1（1）—1990，15（4）. City：Press，1957—1990.
+
+▸ 不把推定年用作修改日期
+
+正文：[1]
+[1] Inferred year is not modification date[EB/OL]. [2026-06-01]
+
+▸ 不改变字面日期回退
+
+正文：[1]
+[1] Literal publication date[R]. c1988.
+

@@ -37,14 +37,14 @@
     and empty("title", "journaltitle", "maintitle", "booktitle", "issuetitle", "number"))
 }
 
-#let format(entry, show-sine-loco: auto, show-sine-nomine: auto, show-sine-anno: false, skip-date: false, date-suffix: "", use-full-date: false, date-override: auto, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), version: 2015) = {
+#let format(entry, show-sine-loco: auto, show-sine-nomine: auto, show-sine-anno: false, skip-date: false, date-suffix: "", use-full-date: false, date-override: auto, punct-style: "half-with-space", custom-punct: (:), custom-terms: (:), version: 2015, date-range-separator: "—") = {
   let p = name => _punct-get(name, entry, punct-style, custom-punct)
   let _mark-early = mark-medium.mark(entry)
 
   {
     let _report-has-location = (not is-missing(_field-text(entry, "location"))) or (not is-missing(_field-text(entry, "address")))
     if version == 2025 and _mark-early == "R" and not _report-has-location {
-      let date-value = publication-date.date(entry)
+      let date-value = publication-date.date(entry, range-separator: date-range-separator)
       if date-value != none { return date-value }
       let year-value = publication-date.year(entry)
       if year-value != none { return year-value }
@@ -58,7 +58,7 @@
 
   let year = if date-override != auto { date-override }
     else if skip-date { none }
-    else if use-full-date { publication-date.date(entry) }
+    else if use-full-date { publication-date.date(entry, range-separator: date-range-separator) }
     else { publication-date.year(entry) }
   if year != none and date-suffix != "" { year = publication-date.with-suffix(year, date-suffix) }
 
