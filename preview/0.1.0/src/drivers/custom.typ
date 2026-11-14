@@ -209,14 +209,47 @@
   out
 }
 
+#let _has-text-literal(run) = {
+  run.any(it => it.at(0) == "hard" and it.len() > 3 and it.at(3) == "text")
+}
+
 #let _collapse-around-empty(left, right, next-char) = {
   if next-char == "/" { return () }
-  for run in (left, right) {
-    for item in run {
-      if item.at(0) == "hard" and item.len() > 2 and item.at(2) { return (item,) }
+  // 无 verbatim 字面量时保持原始折叠语义（内置 driver 路径逐字不变）
+  if not (_has-text-literal(left) or _has-text-literal(right)) {
+    for run in (left, right) {
+      for item in run {
+        if item.at(0) == "hard" and item.len() > 2 and item.at(2) { return (item,) }
+      }
     }
+    return right
   }
-  right
+  // 有 verbatim 字面量时：折叠结构句点，但保留字面量及其前导软空格
+  let collect(run) = {
+    let literals = ()
+    let period = none
+    let pending-soft = none
+    for item in run {
+      if item.at(0) == "soft" { pending-soft = item; continue }
+      if item.at(0) == "hard" and item.len() > 2 {
+        if item.at(2) {
+          if period == none { period = item }
+          pending-soft = none
+        } else if item.len() > 3 and item.at(3) == "text" {
+          if pending-soft != none { literals.push(pending-soft); pending-soft = none }
+          literals.push(item)
+        } else {
+          pending-soft = none
+        }
+      }
+    }
+    (literals, period)
+  }
+  let left-col = collect(left)
+  let right-col = collect(right)
+  let period-item = if left-col.at(1) != none { left-col.at(1) } else { right-col.at(1) }
+  if period-item != none { return left-col.at(0) + right-col.at(0) + (period-item,) }
+  left-col.at(0) + right
 }
 
 #let _drop-trailing-period(items) = {
@@ -258,7 +291,7 @@
     let p = parts.at(i)
     if next-kind == "punct" or next-kind == "text" {
       let is-period = next-kind == "punct" and punct.char-to-slot.at(cur-node.at(1), default: none) == "period"
-      buffer.push(("hard", p, is-period))
+      buffer.push(("hard", p, is-period, next-kind))
       continue
     }
     if not seen-data {
@@ -296,8 +329,12 @@
     pending-empty = false
   }
 
-  if keep-trailing and emitted and buffer.len() > 0 {
-    result += _resolve-separator(buffer, last-character, none)
+  // 末尾被空组挂起的 held 仅当含 verbatim 字面量时才参与 flush，
+  // 否则保持原始行为（内置 driver 路径逐字不变）
+  let held-has-text = _has-text-literal(held)
+  if keep-trailing and emitted and (buffer.len() > 0 or (pending-empty and held-has-text)) {
+    let tail-sep = if pending-empty and held-has-text { _collapse-around-empty(held, buffer, none) } else { buffer }
+    result += _resolve-separator(tail-sep, last-character, none)
   }
   if not emitted {
 
