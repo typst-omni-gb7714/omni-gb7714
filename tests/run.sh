@@ -66,6 +66,7 @@ if want contract; then
   bash tests/contract/typography/run.sh || bad "有字形 / 几何开关悄悄失效了"
   python3 tests/contract/convergence/run.py || bad "引用或配置不收敛、局部完整引用错排或矩阵身份重复"
   python3 tests/contract/date-range/run.py || bad "日期区间设置在完整引用或脚注中丢失"
+  python3 tests/contract/medium/run.py || bad "载体推导、online-only筛选或访问项独立控制异常"
 fi
 
 if want parity; then

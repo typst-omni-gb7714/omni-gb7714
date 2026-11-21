@@ -1,24 +1,24 @@
   access-independence
   URL 筛选不抑制 PID，也不改变条目载体。
-  期望 普通期刊只有 URL/DOI 不自动加 OL；显式 OL 在隐藏路径或 max:0 后仍保留。 DOI true 不被 URL 筛选或去重抑制，
-  但仍受 max 总额约束。auto 只与实际显示的 URL 去重。 CD 文献不是联机；2005 §4.1.1 允许其著录已有引用日期，不因隐
-  藏 URL 而删除。
+  期望 普通期刊可按 URL/DOI 推导 OL，online-only 仍按原范围筛选；隐藏路径或 max:0 不删除载体。 DOI true 不被 URL
+  筛选或去重抑制，但仍受 max 总额约束。auto 只与实际显示的 URL 去重。 CD 文献不是联机；2005 §4.1.1 允许其著录已有
+  引用日期，不因隐藏 URL 而删除。
 
 
 ▸ 01 普通期刊：online-only 不抑制 DOI
 
 正文：[1]
-[1] Alpha A. Plain Link[J]. Journal，2020. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
+[1] Alpha A. Plain Link[J/OL]. Journal，2020. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
 
 ▸ 02 普通期刊：false 同样保留 DOI
 
 正文：[1]
-[1] Alpha A. Plain Link[J]. Journal，2020. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
+[1] Alpha A. Plain Link[J/OL]. Journal，2020. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
 
-▸ 03 普通期刊：true 显示链接，但不推导 OL
+▸ 03 普通期刊：访问数据推导 OL，true 显示链接
 
 正文：[1]
-[1] Alpha A. Plain Link[J]. Journal，2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​p​l​a​i​n. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
+[1] Alpha A. Plain Link[J/OL]. Journal，2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​p​l​a​i​n. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
 
 ▸ 04 显式 OL：关闭全部访问项仍保留载体
 
@@ -38,17 +38,17 @@
 ▸ 07 auto：显示 DOI URL 时去重
 
 正文：[1]
-[1] Gamma G. DOI Link[J]. Journal，2022. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e.
+[1] Gamma G. DOI Link[J/OL]. Journal，2022. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e.
 
 ▸ 08 auto：隐藏 DOI URL 后不去重
 
 正文：[1]
-[1] Gamma G. DOI Link[J]. Journal，2022. DOI：1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e.
+[1] Gamma G. DOI Link[J/OL]. Journal，2022. DOI：1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e.
 
 ▸ 09 true：URL 去重不抑制显式 DOI
 
 正文：[1]
-[1] Gamma G. DOI Link[J]. Journal，2022. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e. DOI：1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e.
+[1] Gamma G. DOI Link[J/OL]. Journal，2022. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e. DOI：1​0​.​1​2​3​4​/​d​u​p​l​i​c​a​t​e.
 
 ▸ 10 配额与优先级：两个 true 仍只输出 DOI
 
@@ -68,5 +68,15 @@
 ▸ 13 自定义模板共用载体与访问规则
 
 正文：[1]
-[1] Plain Link[J]. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
+[1] Plain Link[J/OL]. DOI：1​0​.​1​2​3​4​/​p​l​a​i​n.
+
+▸ 14 自动 OL：online-only 不放行 URL 或 DOI
+
+正文：[1]
+[1] Alpha A. Plain Link[J/OL]. Journal，2020.
+
+▸ 15 自动 OL：关闭路径与 PID 配额仍保留载体
+
+正文：[1]
+[1] Alpha A. Plain Link[J/OL]. Journal，2020.
 

@@ -21,7 +21,7 @@
 [2]    Smith J，Doe J，Roe R，et al. English Book Example[M]. 2nd ed. New York：Example Press，2021：30-45.
 [3]    无责任者的中文书[M]. 上海：某社，2019.
 [4]    周七. 无出版年的中文书[M]. 广州：某社.
-[5]    钱八. 带获取路径的书[M]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+[5]    钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
 [6]    van der Berg J，de la Cruz M. Name Prefix[M]. NY：P，2020.
 [7]    King J Martin Luther，Ford I Henry. Name Suffix[M]. NY：P，2020.
 [8]    Picard J-L，Watson M-J. Hyphenated Given[M]. NY：P，2020.
@@ -66,7 +66,7 @@
 [6]    癸. 网络首发无卷期[J]. 学报，2024-05-09：1-9.
 [7]    子. 无页码有文章编号[J]. 学报，2022，5：e12345.
 [8]    丑. 非数字期号[J]. 学报，2022，5（增刊 2）：1-9.
-[9]    未. DOI 与 CSTR 与 URL 齐备[J]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[9]    未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 [10] 申. arXiv 预印本[PP/OL]. arXiv（2023）. h​t​t​p​s​:​/​/​a​r​x​i​v​.​o​r​g​/​a​b​s​/​2​3​0​1​.​0​0​0​0​1.
 
 ▸ mark: "J"（按标识码）
@@ -78,7 +78,7 @@
 [5] 癸. 网络首发无卷期[J]. 学报，2024-05-09：1-9.
 [6] 子. 无页码有文章编号[J]. 学报，2022，5：e12345.
 [7] 丑. 非数字期号[J]. 学报，2022，5（增刊 2）：1-9.
-[8] 未. DOI 与 CSTR 与 URL 齐备[J]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[8] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 [9] 亥. entrytypeid 显式码[J]. 2020.
 
 ▸ mark: ("D", "S")
@@ -89,8 +89,8 @@
 
 ▸ filter: 自定义函数（只留有 doi 字段的；拿到的是条目对象，键在外层、不在 `e` 上）
 
-[1] 钱八. 带获取路径的书[M]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
-[2] 未. DOI 与 CSTR 与 URL 齐备[J]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
+[1] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+[2] 未. DOI 与 CSTR 与 URL 齐备[J/OL]. 学报，2023，1：1-10. h​t​t​p​s​:​/​/​d​o​i​.​o​r​g​/​1​0​.​1​2​3​4​/​e​x​a​m​p​l​e. CSTR：3​2​0​0​3​.​1​1​.​e​x​a​m​p​l​e.
 
 ▸ keys: [@st-zh@bm-en]（点名 + 书写序）
 
@@ -108,5 +108,5 @@
 
 ▸ 组合：entry-type book + filter 有 url
 
-[1] 钱八. 带获取路径的书[M]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
+[1] 钱八. 带获取路径的书[M/OL]. 北京：某社，2022. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​c​o​m​/​b​o​o​k. DOI：1​0​.​1​2​3​4​/​e​x​a​m​p​l​e.
 

@@ -196,7 +196,9 @@
   if medium-field != none { return medium-field }
   let explicit = _explicit-medium(entry)
   if explicit != none { return explicit }
-  if is-online(entry, version: version) { return "OL" }
+  if entry.entry_type in ONLINE-TYPES { return "OL" }
+  let online = if version == 2005 { field.get(entry, "url") != none } else { field.has-online(entry) }
+  if online { return "OL" }
   return none
 }
 

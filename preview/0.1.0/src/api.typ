@@ -485,7 +485,7 @@
     /// - `"fullwidth-paren"`：（1）；
     /// - `"shell"`：〔1〕——六角括号（龟甲括号，旧 GB-1987 体例）；
     /// - `"circled"`：使用 Unicode 带圈数字 ①～㊿，超过 50 显示为 `(N)`。```typc (circled: "quan")``` 使用 quan 包；默认 ①～⑩ 仍为 Unicode，其余编号由文字和圆圈组合绘制。覆盖范围与样式由 quan 的 `quan-init`、`quan-style` 设置；#arg-ref("gb7714", "note-numbering-style")[`note-numbering-style`] 使用相同写法。\
-    ///   quan 通常以 ⑩ 为尺寸和基线参照。默认几何且未指定描边、圆角时，已收录字体按常规、粗体分别校准左右、上下和斜向的线厚，外圈保持正圆，内孔透明；未收录字体使用基础估计。显式 `quan-style(stroke: ...)` 可指定粗细。圈线校准不依赖默认关闭的 `digit-fit` 数字比例匹配。
+    ///   quan 通常以 ⑩ 为尺寸和基线参照。默认几何且未指定描边、圆角时，已收录字体按常规、粗体分别校准左右、上下和斜向的线厚，外圈保持正圆，内孔透明；未收录字体使用基础估计。显式 `quan-style(stroke: ...)` 可指定粗细。数字比例匹配仅在有对应校准数据时自动启用，可用 `digit-fit: false` 关闭。未显式设置 `kern` 时，自动负字距会随字号减弱；超出圈内空间的数字会缩小，圈径和排版占位保持不变。显式字距保持原值。
     /// - `none`：不显示编号。|
   cite-numbering-style: "bracket", /// <- `"bracket"` | `"paren"` | `"fullwidth-bracket"` | `"fullwidth-paren"` | `"shell"` | `"circled"`
     /// 正文标注的编号样式：方括号、圆括号、全角括号、六角括号或圈码；与参考文献表编号样式分别设置。\
@@ -594,13 +594,13 @@
     /// 例如，根据表 8 脚注 a“标准的文献类型标识为可选项”，可用 ```typ show-mark: (rest: true, S: false)``` 隐藏标准的 \[S\]，并保留其他文献类型标识代码。\
     /// 值为 `true`、`false` 或 `auto`。`auto` 在单个著录项目中省略标识，在多个著录项目中显示标识。例如，```typ show-mark: (S: false, rest: auto)``` 始终省略标准的 `[S]`，其他条目采用 `auto`。本参数不接受 `"online-only"`。|
   show-medium:         true,      /// <- `boolean`
-    /// - `true`：显示载体标识（如 OL）；
-    /// - `false`：隐藏。|
+    /// - `true`：显示载体标识（如 OL）。显式 `medium` 和胜出标识中的载体段优先；其他条目按网络类型及访问数据推导。2005 版使用 URL，2015／2025 版使用 URL、DOI 或 eprint；
+    /// - `false`：隐藏载体标识，不改变 URL、PID 或引用日期的处理。|
   show-url:            true,      /// <- `boolean` | `string` | `dictionary`
     /// 只控制获取和访问路径（URL）的显示，不连带抑制 PID、引用日期或载体标识；也可按条目类型设置字典。\
-    /// - `true`（默认）：显示已有 URL，不据此自动添加 OL；
+    /// - `true`（默认）：显示已有 URL；显示设置本身不参与载体推导；
     /// - `false`：隐藏 URL，其他著录项各按其规则处理；
-    /// - `"online-only"`：仅联机条目显示 URL。依次根据显式 `medium`、标识中的载体段、网络文献类型，以及带访问数据的软件、数据集、数据库、预印本判断；普通图书、期刊仅含 URL 或 DOI 不自动添加 OL；
+    /// - `"online-only"`：依次根据显式 `medium`、标识中的载体段、网络文献类型，以及带访问数据的软件、数据集、数据库、预印本筛选。普通图书、期刊仅有 URL 或 DOI 不通过此筛选；这与默认载体推导分别处理，即使推导出 OL，也不因此放行 URL；
     /// - 字典：按条目控制，键与 #arg-ref("gb7714", "show-mark")[`show-mark`] 相同（小写 entry_type > 大写文献类型标识代码 > `rest`），值为布尔值或 `"online-only"`。例如 ```typ show-url: (rest: false, PP: true)``` 仅为预印本著录 URL。\
     /// 所著录的是联机版本时，可在数据中明确写 `medium = {OL}`，或在显式标识中写 `/OL`。隐藏 URL 不会删除该信息；载体是否显示由 `show-medium` 控制：\
     /// ```bib
@@ -942,7 +942,7 @@
     /// 按条目类型设置默认文献类型标识代码，也可覆盖内置类型的默认代码。\
     /// - 键 = entry_type（小写，开放集）：```typ custom-marks: (dissertation: "D", software: "SW")``` 让 `@dissertation` 出 \[D\]、`@software` 改出 \[SW\]；
     /// - 值为非空的文献类型标识代码，也可以是条件表达式 ```typ (misc: "<url ? doi => EB>< => M>")```。表达式采用 `custom-drivers` 的 `<条件 => 结果>` 语法，按字段顺序匹配，`< => X>` 为默认结果。结果用于显示、按码筛选及未明确出版形式时的默认归类。图书、期刊等结构信息优先于DS、CP、EB等资源代码；引用日期按实际形式处理。条件只能读取 .bib 字段和 entry-type。\
-    /// - 载体段不在此写——`/OL` 由 `medium` 字段与联机判据决定。\
+    /// - 载体段不在此写——载体由显式字段或访问数据推导，显隐由 `show-medium` 控制。\
     /// 优先级：条目数据五个字段来源（note 劫持 / usera / entrytypeid / entrysubtype / mark）之下、版本化类型默认之上——条目字段永远压配置，配置压内置默认。\
     /// 登记的自定义代码会加入大写文献类型标识代码的合法集合；`show-mark`、`show-url`、`show-pid` 和 `custom-drivers` 均可用 ```typ (SW: ..)``` 指定。改变显示代码不会抹去条目已明确的出版形式。|
   custom-drivers:    (:),       /// <- `dictionary`

@@ -1,0 +1,144 @@
+  medium-inference
+  载体按数据推导，online-only 保留原筛选范围。
+  期望 显式载体优先。2005 按 URL、2015／2025 按 URL／DOI／eprint 推导 OL；不要求引用日期。 仅引用日期或 CSTR 不
+  推导 OL。隐藏 URL／PID 不删除载体，online-only 不因自动 OL 而放宽。
+
+
+▸ 2005 · URL，无引用日期
+
+正文：[1]
+[1] SMITH A. URL only[J/OL]. Journal, 2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​p​a​p​e​r.
+
+▸ 2005 · 仅 DOI
+
+正文：[1]
+[1] SMITH A. DOI only[J]. Journal, 2020.
+
+▸ 2005 · 仅 eprint
+
+正文：[1]
+[1] SMITH A. Identifier only[J]. Journal, 2020.
+
+▸ 2005 · 仅引用日期
+
+正文：[1]
+[1] SMITH A. Access date only[J]. Journal, 2020[2024-05-06].
+
+▸ 2005 · 显式 CD 与访问字段
+
+正文：[1]
+[1] SMITH A. Disc with a link[J/CD]. Journal, 2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​i​s​c.
+
+▸ 2005 · 标识中的显式 OL，无路径
+
+正文：[1]
+[1] SMITH A. Explicit carrier[J/OL]. Journal, 2020.
+
+▸ 2005 · medium 优先于标识载体段
+
+正文：[1]
+[1] SMITH A. Carrier field wins[J/CD]. Journal, 2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​i​s​c.
+
+▸ 2005 · 仅 CSTR
+
+正文：[1]
+[1] SMITH A. CSTR only[J]. Journal, 2020.
+
+▸ 2005 · 隐藏路径与 PID 配额
+
+正文：[1]
+[1] DUNBAR K L, MITCHELL D A. Revealing Nature’s Synthetic Potential through the Study of Ribosomal Natural Product Biosynthe­
+    sis[J/OL]. ACS Chemical Biology, 2013, 8(3): 473-487[2013-10-16].
+
+▸ 2015 · URL，无引用日期
+
+正文：[1]
+[1] SMITH A. URL only[J/OL]. Journal, 2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​p​a​p​e​r.
+
+▸ 2015 · 仅 DOI
+
+正文：[1]
+[1] SMITH A. DOI only[J/OL]. Journal, 2020. DOI:1​0​.​1​2​3​4​/​p​a​p​e​r.
+
+▸ 2015 · 仅 eprint
+
+正文：[1]
+[1] SMITH A. Identifier only[J/OL]. Journal, 2020. pubmed:12345678.
+
+▸ 2015 · 仅引用日期
+
+正文：[1]
+[1] SMITH A. Access date only[J]. Journal, 2020[2024-05-06].
+
+▸ 2015 · 显式 CD 与访问字段
+
+正文：[1]
+[1] SMITH A. Disc with a link[J/CD]. Journal, 2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​i​s​c. DOI:1​0​.​1​2​3​4​/​d​i​s​c.
+
+▸ 2015 · 标识中的显式 OL，无路径
+
+正文：[1]
+[1] SMITH A. Explicit carrier[J/OL]. Journal, 2020.
+
+▸ 2015 · medium 优先于标识载体段
+
+正文：[1]
+[1] SMITH A. Carrier field wins[J/CD]. Journal, 2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​i​s​c.
+
+▸ 2015 · 仅 CSTR
+
+正文：[1]
+[1] SMITH A. CSTR only[J]. Journal, 2020.
+
+▸ 2015 · 隐藏路径与 PID 配额
+
+正文：[1]
+[1] DUNBAR K L, MITCHELL D A. Revealing Nature’s Synthetic Potential through the Study of Ribosomal Natural Product Biosynthe­
+    sis[J/OL]. ACS Chemical Biology, 2013, 8(3): 473-487[2013-10-16].
+
+▸ 2025 · URL，无引用日期
+
+正文：[1]
+[1] Smith A. URL only[J/OL]. Journal，2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​p​a​p​e​r.
+
+▸ 2025 · 仅 DOI
+
+正文：[1]
+[1] Smith A. DOI only[J/OL]. Journal，2020. DOI：1​0​.​1​2​3​4​/​p​a​p​e​r.
+
+▸ 2025 · 仅 eprint
+
+正文：[1]
+[1] Smith A. Identifier only[J/OL]. Journal，2020. pubmed：12345678.
+
+▸ 2025 · 仅引用日期
+
+正文：[1]
+[1] Smith A. Access date only[J]. Journal，2020.
+
+▸ 2025 · 显式 CD 与访问字段
+
+正文：[1]
+[1] Smith A. Disc with a link[J/CD]. Journal，2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​i​s​c. DOI：1​0​.​1​2​3​4​/​d​i​s​c.
+
+▸ 2025 · 标识中的显式 OL，无路径
+
+正文：[1]
+[1] Smith A. Explicit carrier[J/OL]. Journal，2020.
+
+▸ 2025 · medium 优先于标识载体段
+
+正文：[1]
+[1] Smith A. Carrier field wins[J/CD]. Journal，2020. h​t​t​p​s​:​/​/​e​x​a​m​p​l​e​.​o​r​g​/​d​i​s​c.
+
+▸ 2025 · 仅 CSTR
+
+正文：[1]
+[1] Smith A. CSTR only[J]. Journal，2020. CSTR：1​2​3​4​5​.​6​7​.​p​a​p​e​r.
+
+▸ 2025 · 隐藏路径与 PID 配额
+
+正文：[1]
+[1] Dunbar K L，Mitchell D A. Revealing Nature’s Synthetic Potential through the Study of Ribosomal Natural Product Biosynthe­
+    sis[J/OL]. ACS Chemical Biology，2013，8（3）：473-487.
+

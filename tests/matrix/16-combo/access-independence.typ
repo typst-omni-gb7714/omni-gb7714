@@ -2,7 +2,7 @@
 //! values: URL/PID独立、载体数据优先、去重、配额、内置与模板路径
 #import "/tests/_fixture/probe.typ": *
 #show: spec.with(param: "access-independence", controls: "URL 筛选不抑制 PID，也不改变条目载体。",
-  expect: [普通期刊只有 URL/DOI 不自动加 OL；显式 OL 在隐藏路径或 max:0 后仍保留。
+  expect: [普通期刊可按 URL/DOI 推导 OL，online-only 仍按原范围筛选；隐藏路径或 max:0 不删除载体。
     DOI true 不被 URL 筛选或去重抑制，但仍受 max 总额约束。auto 只与实际显示的 URL 去重。
     CD 文献不是联机；2005 §4.1.1 允许其著录已有引用日期，不因隐藏 URL 而删除。])
 #let DATA = bytes(```bib
@@ -20,7 +20,7 @@
 #let sample(caption, config, key) = case(caption, config, bib: DATA, cites: (label(key),), full: false)
 #sample("01 普通期刊：online-only 不抑制 DOI", gb7714.with(show-url: "online-only", show-pid: (doi: true)), "hit-plain")
 #sample("02 普通期刊：false 同样保留 DOI", gb7714.with(show-url: false, show-pid: (doi: true)), "hit-plain")
-#sample("03 普通期刊：true 显示链接，但不推导 OL", gb7714.with(show-url: true, show-pid: (doi: true)), "hit-plain")
+#sample("03 普通期刊：访问数据推导 OL，true 显示链接", gb7714.with(show-url: true, show-pid: (doi: true)), "hit-plain")
 #sample("04 显式 OL：关闭全部访问项仍保留载体", gb7714.with(show-url: false, show-pid: (rest: false)), "hit-online")
 #sample("05 显式 OL：max:0 不改载体，也不被 doi:true 突破", gb7714.with(show-url: false, show-pid: (doi: true, max: 0)), "hit-online")
 #sample("06 隐藏载体仍按联机属性筛选 URL", gb7714.with(show-medium: false, show-url: "online-only", show-pid: (rest: false)), "hit-online")
@@ -31,3 +31,5 @@
 #sample("11 CD 引用日期与 URL 显示独立", gb7714.with(version: 2005, show-url: "online-only"), "hit-cd")
 #sample("12 CD 日期可由自己的开关关闭", gb7714.with(version: 2005, show-url: "online-only", show-urldate: false), "hit-cd")
 #sample("13 自定义模板共用载体与访问规则", gb7714.with(show-url: "online-only", show-pid: (doi: true), custom-drivers: (article: "<title><mark-medium>. <access>")), "hit-plain")
+#sample("14 自动 OL：online-only 不放行 URL 或 DOI", gb7714.with(show-url: "online-only", show-pid: (doi: "online-only")), "hit-plain")
+#sample("15 自动 OL：关闭路径与 PID 配额仍保留载体", gb7714.with(show-url: false, show-pid: (doi: true, max: 0)), "hit-plain")

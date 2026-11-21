@@ -123,7 +123,7 @@
   show-mark:           true,
   /// 显示文献载体标识（如 /OL）
   show-medium:         true,
-  /// 显示 URL（条目自动标 /OL）：bool / "online-only" 仅网络文献著录 / 字典按条目控（键同 show-mark）
+  /// URL 显示：bool / "online-only" 按网络类型及显式载体筛选 / 字典按条目控（键同 show-mark）；不控制载体推导。
   show-url:            true,
   /// 显示引用日期（urldate 字段）
   show-urldate:        true,

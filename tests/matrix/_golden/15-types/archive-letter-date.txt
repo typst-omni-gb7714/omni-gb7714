@@ -18,27 +18,27 @@
 ▸ 2025：档案保存者后全日期平铺 · 书信全日期平铺（§8.12）
 
 正文：[1-2]
-[1] 湖北省建设厅. 关于检发实业部农工矿业团体登记规则的布告：LS031-001-0001-001[A]. 武汉：湖北省档案馆，1931-11-07. h​t​t​p​
-    s​:​/​/​w​w​w​.​h​b​d​a​.​g​o​v​.​c​n​/​x​.​p​d​f.
-[2] Fitzwilliam H. [Letter to Bess of Hardwick][A]. 1570-07-28. h​t​t​p​s​:​/​/​w​w​w​.​b​e​s​s​o​f​h​a​r​d​w​i​c​k​.​o​r​g​/​l​e​t​t​e​r​.​j​s​p.
+[1] 湖北省建设厅. 关于检发实业部农工矿业团体登记规则的布告：LS031-001-0001-001[A/OL]. 武汉：湖北省档案馆，1931-11-07.
+    h​t​t​p​s​:​/​/​w​w​w​.​h​b​d​a​.​g​o​v​.​c​n​/​x​.​p​d​f.
+[2] Fitzwilliam H. [Letter to Bess of Hardwick][A/OL]. 1570-07-28. h​t​t​p​s​:​/​/​w​w​w​.​b​e​s​s​o​f​h​a​r​d​w​i​c​k​.​o​r​g​/​l​e​t​t​e​r​.​j​s​p.
 
 ▸ 2025：legislation（两家引擎归 archive）随档案出全日期 · @manual（李泽平判 [M]）仍出年
 
 正文：[1-2]
-[1] 某厅. 某法规通知：LS-1[A]. 武汉：某档案馆，2005-07-12. h​t​t​p​s​:​/​/​e​.​c​o​m​/​g.
+[1] 某厅. 某法规通知：LS-1[A/OL]. 武汉：某档案馆，2005-07-12. h​t​t​p​s​:​/​/​e​.​c​o​m​/​g.
 [2] 某公司. 某产品说明书[A]. 深圳：某公司，2024.
 
 ▸ 2015：档案出版年 · 书信圆括号（联机 [A/OL] 式）
 
 正文：[1-2]
-[1] 湖北省建设厅. 关于检发实业部农工矿业团体登记规则的布告: LS031-001-0001-001[A]. 武汉: 湖北省档案馆, 1931. h​t​t​p​s​:​/​/​w​w​w​.​h​
-    b​d​a​.​g​o​v​.​c​n​/​x​.​p​d​f.
-[2] FITZWILLIAM H. [Letter to Bess of Hardwick][A]. (1570-07-28). h​t​t​p​s​:​/​/​w​w​w​.​b​e​s​s​o​f​h​a​r​d​w​i​c​k​.​o​r​g​/​l​e​t​t​e​r​.​j​s​p.
+[1] 湖北省建设厅. 关于检发实业部农工矿业团体登记规则的布告: LS031-001-0001-001[A/OL]. 武汉: 湖北省档案馆, 1931. h​t​t​p​s​:​/​/​w​w​
+    w​.​h​b​d​a​.​g​o​v​.​c​n​/​x​.​p​d​f.
+[2] FITZWILLIAM H. [Letter to Bess of Hardwick][A/OL]. (1570-07-28). h​t​t​p​s​:​/​/​w​w​w​.​b​e​s​s​o​f​h​a​r​d​w​i​c​k​.​o​r​g​/​l​e​t​t​e​r​.​j​s​p.
 
 ▸ 2005：无 [A] 码 → 归其他 [Z]，走电子资源圆括号
 
 正文：[1-2]
-[1] 湖北省建设厅. 关于检发实业部农工矿业团体登记规则的布告[Z]. 武汉: 湖北省档案馆(1931-11-07). h​t​t​p​s​:​/​/​w​w​w​.​h​b​d​a​.​g​o​v​.​c​n​/​x​.​p​
-    d​f.
-[2] FITZWILLIAM H. [Letter to Bess of Hardwick][Z]. (1570-07-28). h​t​t​p​s​:​/​/​w​w​w​.​b​e​s​s​o​f​h​a​r​d​w​i​c​k​.​o​r​g​/​l​e​t​t​e​r​.​j​s​p.
+[1] 湖北省建设厅. 关于检发实业部农工矿业团体登记规则的布告[Z/OL]. 武汉: 湖北省档案馆(1931-11-07). h​t​t​p​s​:​/​/​w​w​w​.​h​b​d​a​.​g​o​v​.​c​n​
+    /​x​.​p​d​f.
+[2] FITZWILLIAM H. [Letter to Bess of Hardwick][Z/OL]. (1570-07-28). h​t​t​p​s​:​/​/​w​w​w​.​b​e​s​s​o​f​h​a​r​d​w​i​c​k​.​o​r​g​/​l​e​t​t​e​r​.​j​s​p.
 
