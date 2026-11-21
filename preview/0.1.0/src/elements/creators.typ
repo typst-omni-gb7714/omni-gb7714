@@ -44,7 +44,7 @@
 
 #let name-style-keys = ("order", "family-case", "given-form", "given-initial-separator", "given-separator", "given-case", "family-given-separator", "given-family-separator")
 #let _ORDER-VALUES = ("family-ahead", "given-ahead")
-#let _FAMILY-CASE-VALUES = (auto, "uppercase", "lowercase", none)
+#let _FAMILY-CASE-VALUES = (auto, "uppercase", "lowercase", "capitalize-first", "capitalize-each", none)
 #let _GIVEN-FORM-VALUES = (auto, none, "initials", "full", "pinyin-initials")
 #let _GIVEN-CASE-VALUES = (none, "uppercase", "lowercase", "capitalize-first", "capitalize-each")
 
@@ -145,9 +145,20 @@
   else {
     let style = name-style
     let family-case = style.at("family-case", default: none)
+    let _cap-seg(s) = {
+      let cl = s.clusters()
+      if cl.len() == 0 { s } else { upper(cl.first()) + lower(cl.slice(1).join("")) }
+    }
     let _apply-family-case(text-value) = {
       if family-case == "uppercase" { upper(text-value) }
       else if family-case == "lowercase" { lower(text-value) }
+      else if family-case == "capitalize-first" {
+        let segs = text-value.split(" ")
+        segs.enumerate().map(((i, s)) => if i == 0 { _cap-seg(s) } else { lower(s) }).join(" ")
+      }
+      else if family-case == "capitalize-each" {
+        text-value.split(" ").map(_cap-seg).join(" ")
+      }
       else { text-value }
     }
     let formatted-family = _apply-family-case(family)
